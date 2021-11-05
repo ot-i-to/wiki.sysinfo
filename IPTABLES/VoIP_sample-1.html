@@ -1,0 +1,86 @@
+<!--
+title: Iptables от сброда для VoiP-SIP 
+description: Iptables simple setup from the rabble for VoiP-SIP
+published: true
+date: 2021-11-05T06:54:49.376Z
+tags: iptables, voip, antihack, security
+editor: ckeditor
+dateCreated: 2021-11-04T14:58:31.690Z
+-->
+
+<h1>Пример:</h1>
+<p>iptables -P INPUT DROP</p>
+<p>iptables -P FORWARD ACCEPT</p>
+<p>iptables -P OUTPUT ACCEPT</p>
+<p>iptables -N bad_sip</p>
+<p>iptables -N tcp_sip</p>
+<p>iptables -N udp_sip</p>
+<p>iptables -A INPUT -i lo -j ACCEPT</p>
+<p>iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</p>
+<p>iptables -A INPUT -p gre -j ACCEPT</p>
+<p>iptables -A INPUT -p icmp -j ACCEPT</p>
+<p>iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j ACCEPT</p>
+<p>iptables -A INPUT -p icmp -m icmp --icmp-type 6 -j ACCEPT</p>
+<p>iptables -A INPUT -p tcp -m tcp --dport 5000:5100 -j tcp_sip</p>
+<p>iptables -A INPUT -p udp -m udp --dport 5000:5100 -j udp_sip</p>
+<p>iptables -A INPUT -p udp -m multiport --dports 5000:5100 -m geoip --source-country RU &nbsp;-j ACCEPT</p>
+<p>iptables -A INPUT -p tcp -m multiport --dports 5000:5100 -m geoip --source-country RU &nbsp;-j ACCEPT</p>
+<p>iptables -A INPUT &nbsp;-p udp -m multiport --dports 10000:65000 -m geoip --source-country RU &nbsp;-j ACCEPT</p>
+<p>iptables -A INPUT &nbsp;-p udp -m multiport --dports 5000:5100 -j ACCEPT</p>
+<p>iptables -A INPUT &nbsp;-p tcp -m multiport --dports 5000:5100 -j ACCEPT</p>
+<p>iptables -A INPUT &nbsp;-p udp -m multiport --dports 10000:65000 -j ACCEPT</p>
+<p>iptables -A INPUT &nbsp;-p tcp -m multiport --dports 22,80,443 -j ACCEPT</p>
+<p>iptables -A bad_sip -m recent --set --name bad_sip --mask 255.255.255.255 --rsource -j DROP</p>
+<p>iptables -A tcp_sip -m string --string "sipp" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sundayddr" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sipsak" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sipvicious" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "friendly-scanner" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "friendly-request" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "iWar" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sip-scan" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sipcli" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "eyeBeam" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "VaxSIPUserAgent" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sip:nm@nm" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sip:carol@chicago.com" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "@1.1.1.1" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "442030930112" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "10.10.10.10" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "pplsip" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "SIVuS" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "CSipSimple" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "Gulp" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "sipv" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "smap" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "friendly-request" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "VaxIPUserAgent" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A tcp_sip -m string --string "siparmyknife" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "SIVuS" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "CSipSimple" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "Gulp" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sipv" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "smap" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "friendly-scanner" --algo bm --to 65535 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "friendly-request" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "VaxIPUserAgent" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "siparmyknife" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sipp" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sundayddr" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sipsak" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sipvicious" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "friendly-scanner" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "iWar" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sip-scan" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sipcli" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "eyeBeam" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "VaxSIPUserAgent" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sip:nm@nm" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "sip:carol@chicago.com" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "@1.1.1.1" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "442030930112" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "10.10.10.10" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "pplsip" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "Frez" --algo bm --to 1500 -j bad_sip</p>
+<p>iptables -A udp_sip -m string --string "3=3--" --algo bm --to 1500 -j bad_sip</p>
+<p>&nbsp;</p>

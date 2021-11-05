@@ -1,0 +1,40 @@
+<!--
+title: Iptables с фильтрацией GeoIP в Debian 11
+description: Itables with GeoIP filtering in Debian 11
+published: true
+date: 2021-11-05T06:55:48.948Z
+tags: iptables, geoip
+editor: ckeditor
+dateCreated: 2021-11-04T14:18:45.151Z
+-->
+
+<h2>Установка и настройка</h2>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Ставим необходимое:</span></p>
+<h6>sudo apt install xtables-addons-common libnet-cidr-lite-perl libtext-csv-xs-perl libgeoip2-perl</h6>
+<p>&nbsp;</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Загрузка модуля GeoIP ядра:</span></p>
+<h6>sudo modprobe xt_geoip</h6>
+<p>&nbsp;</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Делаем, чтобы модуль загружался автоматически (выполняется с root правами):</span></p>
+<h6>echo "xt_geoip" | sudo tee -a /etc/modules-load.d/xt_geoip</h6>
+<p>&nbsp;</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Надо получить файла с GeoIP данными.</span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># ... но предварительно надо создать временную директорию:</span></p>
+<h6>mkdir /tmp/geoip</h6>
+<h6>cd /tmp/geoip</h6>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Загружаем:</span></p>
+<h6>/usr/libexec/xtables-addons/xt_geoip_dl</h6>
+<p>&nbsp;</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># создаем директория где будут хранится данные для модуля xt_geoip:</span></p>
+<h6>sudo mkdir -p /usr/share/xt_geoip</h6>
+<p>&nbsp;</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Т.к. формат полученного файла с GeoIP данными не подходит для модуля xt_geoip его надо преобразовать:</span></p>
+<h6>sudo /usr/libexec/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip</h6>
+<p>&nbsp;</p>
+<h2>Использование</h2>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Блокируем порт SSH всем, кто не из РФ</span></p>
+<h6>iptables -A INPUT ! -i lo -p tcp --dport 22 -m geoip ! --src-cc RU -j DROP</h6>
+<p>&nbsp;</p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;"># Блокируем несколько портов, разрешаем только для РФ</span></p>
+<h6>iptables -A INPUT ! -i lo -p udp -m multiport --dports 25,500,10011 -m geoip ! --source-country RU &nbsp;-j DROP</h6>
+<p>&nbsp;</p>
