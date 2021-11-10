@@ -2,7 +2,7 @@
 title: Пример 1 ... Строки
 description: Вырезание, вставка, образание, разложение
 published: false
-date: 2021-11-10T20:38:38.299Z
+date: 2021-11-10T20:52:16.965Z
 tags: lua, sample, string
 editor: ckeditor
 dateCreated: 2021-11-10T20:14:01.231Z
@@ -55,6 +55,15 @@ end
 
 s = char_change( str, 6, "!!" )
 print( s )                        -- 12345!!8901234567890</code></pre>
+<p>или&nbsp;</p>
+<pre><code class="language-plaintext">str = "12345678901234567890"
+
+function char_change(str1, str2, pos)
+    return str1:sub(1,pos)..str2..str1:sub(pos+(str2:len()+1))
+end
+
+s = char_change(str, "!!", 6)
+print(s)                        -- 12345!!8901234567890 </code></pre>
 <p><strong>Задача 2</strong>: &nbsp;вставить строку <strong>“!!!”</strong> начина с 6 символа без удаления</p>
 <pre><code class="language-plaintext">str = "12345678901234567890" 
 
@@ -64,4 +73,16 @@ end
 
 s = char_insert( str, 6, "!!!" )  
 print( s )                        -- 12345!!!678901234567890 </code></pre>
+<p>или&nbsp;</p>
+<pre><code class="language-plaintext">str = "12345678901234567890"
+
+function char_insert(str1, str2, pos)
+    return str1:sub(1,pos)..str2..str1:sub(pos+1)
+end
+
+s = char_insert(str, "!!!", 6)
+print(s)                        -- 12345!!!678901234567890 
+</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
