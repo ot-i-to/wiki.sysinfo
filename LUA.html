@@ -2,7 +2,7 @@
 title: Пример 1 ... Строки
 description: Вырезание, вставка, образание, разложение
 published: false
-date: 2021-11-10T20:14:01.231Z
+date: 2021-11-10T20:18:48.918Z
 tags: lua, sample, string
 editor: ckeditor
 dateCreated: 2021-11-10T20:14:01.231Z
@@ -28,8 +28,22 @@ print(out)  -- 45678901234567890</code></pre>
 <p><strong>Задача 2</strong>: &nbsp;удалить у строки последние 3 символа&nbsp;</p>
 <pre><code class="language-plaintext">str = "12345678901234567890"
 out = ""
+for i = 3 + 1 , #str[10] do
+    local st = string.reverse(str[10]):sub(i, i)
+    out = out .. st
+    print(st)
+end
+print(out:reverse())  -- 12345678901234567
 </code></pre>
-<p>&nbsp;</p>
+<p>или&nbsp;</p>
+<pre><code class="language-plaintext">str = "12345678901234567890"
+out = ""
+for i = 3 + 1, string.len(str) do
+    local st = string.sub(string.reverse(str), i, i)
+    out = out .. st
+    print(st)
+end
+print(out:reverse())  -- 12345678901234567</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
