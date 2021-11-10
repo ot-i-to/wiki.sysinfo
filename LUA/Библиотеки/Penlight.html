@@ -1,12 +1,151 @@
 <!--
-title: Penlight Lua 1.11.0
+title: Penlight 1.11.0
 description: Penlight - это набор чистых библиотек Lua для упрощения работы с общими задачами, такими как перебор каталогов, чтение файлов конфигурации и тому подобное. Обеспечивает функциональные операции с таблицами и последовательностями. 
 published: false
-date: 2021-11-10T16:52:52.288Z
+date: 2021-11-10T17:09:56.146Z
 tags: lua, penlight, libraries
 editor: ckeditor
 dateCreated: 2021-11-10T16:51:58.981Z
 -->
 
-<h3><strong>Библиотеки Penlight Lua 1.11.0</strong></h3>
-<p>Penlight - это набор чистых библиотек Lua для упрощения работы с общими задачами, такими как перебор каталогов, чтение файлов конфигурации и тому подобное. Обеспечивает функциональные операции с таблицами и последовательностями. Посетите <a href="https://github.com/lunarmodules/Penlight"><strong>проект GitHub,</strong></a> чтобы просмотреть код или проблемы с файлами. Перейти к <a href="manual/01-introduction.md.html#"><strong>введению</strong></a> .</p>
+<h3>Библиотеки Penlight Lua 1.11.0</h3>
+<p>Penlight - это набор чистых библиотек Lua для упрощения работы с общими задачами, такими как перебор каталогов, чтение файлов конфигурации и тому подобное. Обеспечивает функциональные операции с таблицами и последовательностями. Посетите <a href="https://github.com/lunarmodules/Penlight"><strong>проект,</strong></a> чтобы просмотреть код или проблемы с файлами.&nbsp;</p>
+<h4><strong>Библиотеки</strong></h4>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>pl</strong></td>
+        <td>Точка входа для загрузки всех библиотек PL только по запросу в глобальное пространство.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.app</strong></td>
+        <td>Функции поддержки приложений.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.array2d</strong></td>
+        <td>Операции с двумерными массивами.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.class</strong></td>
+        <td>Предоставляет повторно используемую и удобную структуру для создания классов в Lua.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.compat</strong></td>
+        <td>Совместимость с Lua 5.1 / 5.2 / 5.3.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.comprehension</strong></td>
+        <td>Понимание списков, реализованное в Lua.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.config</strong></td>
+        <td>Читает файлы конфигурации в таблицу Lua.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.data</strong></td>
+        <td>Чтение и запрос простых табличных данных.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.dir</strong></td>
+        <td>Список файлов в каталогах и создание / удаление путей к каталогам.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.file</strong></td>
+        <td>Функции работы с файлами: чтение, запись, перемещение и копирование.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.func</strong></td>
+        <td>Функциональные помощники, такие как состав, привязка и выражения-заполнители.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.import_into</strong></td>
+        <td>Загрузчик PL, для загрузки всех библиотек PL, только по запросу.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.input</strong></td>
+        <td>Итераторы для извлечения слов или чисел из источника ввода.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.lapp</strong></td>
+        <td>Простой синтаксический анализ командной строки с использованием удобочитаемой спецификации.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.lexer</strong></td>
+        <td>Лексический сканер для создания последовательности токенов из текста.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.luabalanced</strong></td>
+        <td>Извлекает из строк последовательности Lua с разделителями.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.operator</strong></td>
+        <td>Операторы Lua доступны как функции.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.path</strong></td>
+        <td>Управление путями и файловые запросы.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.permute</strong></td>
+        <td>Операции перестановки.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.pretty</strong></td>
+        <td>Красиво-печатные таблицы Lua.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.seq</strong></td>
+        <td>Управление итераторами как последовательностями.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.sip</strong></td>
+        <td>Простые шаблоны ввода (SIP).</td>
+      </tr>
+      <tr>
+        <td><strong>pl.strict</strong></td>
+        <td>Проверяет использование необъявленных глобальных переменных.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.stringio</strong></td>
+        <td>Чтение и запись строк с использованием файловых объектов.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.stringx</strong></td>
+        <td>Расширенная строковая библиотека в стиле Python.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.tablex</strong></td>
+        <td>Расширенные операции с таблицами Lua.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.template</strong></td>
+        <td>Препроцессор шаблона.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.test</strong></td>
+        <td>Полезные тестовые утилиты.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.text</strong></td>
+        <td>Утилиты для обработки текстов.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.types</strong></td>
+        <td>Работа с подробной информацией о типах</td>
+      </tr>
+      <tr>
+        <td><strong>pl.url</strong></td>
+        <td>Библиотека цитирования URL-адресов в стиле Python.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.utils</strong></td>
+        <td>Обычно полезные рутины.</td>
+      </tr>
+      <tr>
+        <td><strong>pl.xml</strong></td>
+        <td>Утилиты XML LOM.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
