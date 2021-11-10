@@ -2,7 +2,7 @@
 title: Пример 1 ... Строки
 description: Вырезание, вставка, образание, разложение
 published: true
-date: 2021-11-10T21:17:13.823Z
+date: 2021-11-10T21:18:20.015Z
 tags: lua, sample, string
 editor: ckeditor
 dateCreated: 2021-11-10T20:14:01.231Z
@@ -84,8 +84,9 @@ s = char_insert(str, "!!!", 6)
 print(s)                        -- 12345!!!678901234567890 
 </code></pre>
 <h3>Разложение</h3>
-<p><strong>Задача</strong>: &nbsp;разложить строку на символы и поместить в массив array = {}</p>
+<p><strong>Задача</strong>: &nbsp;разложить строку на символы и поместить в массив&nbsp;</p>
 <pre><code class="language-plaintext">str = "12345678901234567890"
+array = {}
 
 for i = 1 , #str do
    array[i] = str[10]:sub(i, i)
