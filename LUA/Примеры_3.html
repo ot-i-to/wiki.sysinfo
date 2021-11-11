@@ -1,0 +1,35 @@
+<!--
+title: Пример 3 ... Поиск по файлу
+description: Разныее примеры
+published: true
+date: 2021-11-11T23:46:44.422Z
+tags: lua, samples, file, find
+editor: ckeditor
+dateCreated: 2021-11-11T23:46:44.422Z
+-->
+
+<h6>Функция, которая анализирует /proc/meminfo и возвращает его в виде таблицы:</h6>
+<pre><code class="language-plaintext">function get_meminfo(fn)
+   local r={}
+   local f=assert(io.open(fn,"r"))
+   -- read the whole file into s
+   local s=f:read("*a")
+   -- now enumerate all occurances of "SomeName: SomeValue"
+   -- and assign the text of SomeName and SomeValue to k and v
+   for k,v in string.gmatch(s,"(%w+): *(%d+)") do
+           -- Save into table:
+       r[k]=v
+   end
+   f:close()
+   return r
+end
+-- use it
+m=get_meminfo("/proc/meminfo")
+print(m.MemTotal, m.MemFree)</code></pre>
+<h6>Можно использовать io.lines :</h6>
+<pre><code class="language-plaintext">for line in io.lines("/proc/meminfo") do
+   if line:find("MemTotal") then --// Syntactic sugar for string.find(line, "MemTotal")
+       --// If logic here...
+   elseif --// I don't quite understand this part in your code.
+   end
+end</code></pre>
