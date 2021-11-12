@@ -1,0 +1,146 @@
+<!--
+title: Прав доступа к файлам и т. д.
+description: Различные способы установки прав доступа.
+published: true
+date: 2021-11-12T20:52:00.315Z
+tags: security, file, linux
+editor: ckeditor
+dateCreated: 2021-11-12T20:52:00.315Z
+-->
+
+<h2><br>chmod: изменить биты режима файла</h2>
+<p>Использование (восьмеричный режим):</p>
+<pre><code class="language-plaintext">    chmod &lt;octal-mode&gt; files...
+</code></pre>
+<p>Использование (символьный режим):</p>
+<pre><code class="language-plaintext">    chmod &lt;references&gt;&lt;operator&gt;&lt;modes&gt; files..
+</code></pre>
+<p><code><strong>references</strong></code>является комбинацией букв <code>ugoa</code>, которые определяют, какой доступ пользователя <code>files</code>будет изменен:</p>
+<ul>
+  <li><code>u</code> пользователь, которому он принадлежит</li>
+  <li><code>g</code>другие пользователи в <code>file</code>группе</li>
+  <li><code>o</code> другие пользователи, не входящие в группу файла</li>
+</ul>
+<p><code>a</code> все пользователи</p>
+<p>Если он опущен, он используется по умолчанию для всех пользователей, но <code>umask</code>изменяются только разрешения, разрешенные пользователем .</p>
+<p><code><strong>operator</strong></code>это один из персонажей <code>+-=</code>:</p>
+<ul>
+  <li><code>+</code> добавить указанные биты режима файла к существующим битам режима файла каждого <code>file</code></li>
+  <li><code>-</code> удаляет указанные биты режима файла в существующие биты режима файла каждого <code>file</code></li>
+  <li><code>=</code>добавляет указанные биты и удаляет неуказанные биты, за исключением <code>setuid</code>и <code>setgid</code>бит для каталогов, если явно не указано.</li>
+  <li><code>r</code> читать</li>
+  <li><code>w</code> записывать</li>
+  <li><code>x</code> выполнить (или поиск по каталогам)</li>
+  <li><code>X</code> выполнять / искать, только если файл является каталогом или уже имеет бит выполнения, установленный для какого-либо пользователя</li>
+  <li><code>s</code>setuid или setgid (в зависимости от указанного <code>references</code>)</li>
+  <li><code>t</code> ограниченный флаг удаления или закрепленный бит</li>
+</ul>
+<h2>Различные биты <code>chmod</code>объяснили:</h2>
+<ul>
+  <li>Контроль доступа (см. Также <code>setfacl</code>)<ul>
+      <li><code>rwx</code> - права чтения (r), записи (w) и выполнения / пересечения (x).<ul>
+          <li>Read (r) влияет, если файл может быть прочитан или каталог может быть указан.</li>
+          <li>Запись (w) влияет, если файл может быть записан или каталог может быть отредактирован (файлы добавлены, удалены, переименованы).</li>
+          <li>Выполнение (x) влияет на возможность запуска файла, использования для сценариев (см. <code>#!</code>) И других исполняемых файлов.</li>
+          <li>Cross (x) влияет на возможность обхода каталога.</li>
+        </ul>
+      </li>
+      <li><code>s</code>и <code>t</code>- липкий бит (t) и setgid (s) для каталогов<ul>
+          <li>Заклепка влияет только на каталоги. Предотвратит удаление файлов в каталоге всем, кроме владельца файла и пользователя root.</li>
+          <li>бит setgid для каталогов приведет к тому, что в новых файлах и каталогах будет установлена ​​группа для той же группы, а в новых каталогах будет установлен бит setgid (см. также значения по умолчанию в setfacl).</li>
+        </ul>
+      </li>
+      <li><code>s</code> - setuid, setgid, для исполняемых файлов.<ul>
+          <li>Это может плохо повлиять на безопасность, если вы не знаете, что делаете.</li>
+          <li>Когда исполняемый файл запущен, и если установлен один из этих битов, то действующий пользователь / группа исполняемого файла станет таковым файла. Таким образом, программа запускается от имени этого пользователя. Посмотрите <code>setcap</code>на более современный способ сделать это.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<hr>
+<h2>chown, chgrp:</h2>
+<hr>
+<h2>chattr: изменить атрибуты файла</h2>
+<p>Использование:</p>
+<pre><code class="language-plaintext">    chattr &lt;operator&gt;&lt;attribute&gt; files...
+</code></pre>
+<p><code><strong>operator</strong></code>является одним из символов <code>+-=</code>: * <code>+</code>добавляет выбранные атрибуты к существующим <code>attributes</code>из <code>files</code> * <code>-</code>удаляет выбранные <code>attributes</code> * <code>=</code>перезаписывает текущий набор атрибутов, которые файлы имеют с указанными <code>attributes</code>.</p>
+<p><code><strong>attribute</strong></code>является комбинацией букв <code>acdeijstuADST</code>, которые соответствуют атрибутам:</p>
+<ul>
+  <li><code>a</code> добавить только</li>
+  <li><code>c</code> сжатый</li>
+  <li><code>d</code> нет свалки</li>
+  <li><code>e</code> формат экстента</li>
+  <li><code>i</code> неизменный</li>
+  <li><code>j</code> журналирование данных</li>
+  <li><code>s</code> безопасное удаление</li>
+  <li><code>t</code> без слияния хвостов</li>
+  <li><code>u</code> неудаляемости</li>
+  <li><code>A</code>нет <code>atime</code>обновлений</li>
+  <li><code>D</code> синхронные обновления каталогов</li>
+  <li><code>S</code> синхронные обновления</li>
+  <li><code>T</code> вершина иерархии каталогов</li>
+</ul>
+<hr>
+<h2>setfattr: изменить расширенные атрибуты файла</h2>
+<p>Использование (установить атрибут):</p>
+<pre><code class="language-plaintext">    setfattr -n &lt;name&gt; -v &lt;value&gt; files...
+</code></pre>
+<p>Использование (удалить):</p>
+<pre><code class="language-plaintext">    setfattr -x &lt;name&gt; files...
+</code></pre>
+<p><code><strong>name</strong></code> Имя расширенного атрибута для установки или удаления</p>
+<p><code><strong>value</strong></code> это новое значение расширенного атрибута</p>
+<hr>
+<h2>setfacl: изменить списки контроля доступа к файлам</h2>
+<p>Использование:</p>
+<pre><code class="language-plaintext">    setfacl &lt;option&gt; [default:][&lt;target&gt;:][&lt;param&gt;][:&lt;perms&gt;] files...
+</code></pre>
+<p><code><strong>option</strong></code> должен включать одно из следующего:</p>
+<ul>
+  <li><code>--set</code> установить ACL для файла или каталога, заменив предыдущий ACL</li>
+  <li><code>-m</code>| <code>--modify</code>изменить ACL файла или каталога</li>
+</ul>
+<p><code>-x</code>| <code>--remove</code> удалить записи ACL из файла или каталога</p>
+<p><code><strong>target</strong></code>это одна из букв <code>ugmo</code>(или более длинная форма, показанная ниже):</p>
+<p><code>u</code>, <code>users</code>разрешение именованного пользователя, идентифицированного пользователем <code>param</code>, по умолчанию указывается владелец файла, <code>uid</code>если он опущен</p>
+<ul>
+  <li><code>g</code>, <code>group</code>разрешение именованной группы, идентифицируемой по <code>param</code>умолчанию, группе-владельцу, <code>uid</code>если опущено</li>
+  <li><code>m</code>, <code>mask</code>Эффективные права маски</li>
+</ul>
+<p><code>o</code>, <code>other</code>разрешения других</p>
+<p><code><strong>perms</strong></code>это комбинация букв <code>rwxX</code>, которые соответствуют разрешениям:</p>
+<p><code>r</code> читать</p>
+<ul>
+  <li><code>w</code> записывать</li>
+  <li><code>x</code> выполнять</li>
+</ul>
+<p><code>X</code> выполнять только если файл является каталогом или уже имеет разрешение на выполнение для какого-либо пользователя</p>
+<p>В качестве альтернативы, <code>perms</code>может быть восьмеричная цифра ( <code>0</code>- <code>7</code>), обозначающая набор разрешений.</p>
+<hr>
+<h2>setcap: изменить возможности файла</h2>
+<p>Использование:</p>
+<pre><code class="language-plaintext">    setcap &lt;capability-clause&gt; file 
+</code></pre>
+<p>A <code><strong>capability-clause</strong></code>состоит из разделенного запятыми списка имен возможностей, за которым следует список пар флаг-оператор.</p>
+<p>Доступные операторы <code>=</code>, <code>+</code>и <code>-</code>. Доступные флаги <code>e</code>, <code>i</code>и <code>p</code>которые соответствуют <i>Действуют</i> , <i>наследуемые</i> и <i>Разрешенные</i> наборами возможностей.</p>
+<p><code>=</code>Оператор поднимет указанные наборы возможностей и сбросить другие. Если вместе с <code>=</code>оператором не указаны флаги, все наборы возможностей будут сброшены. <code>+</code>И <code>-</code>операторы будут повышать или понижать один или более указанных наборы возможностей соответственно.</p>
+<hr>
+<h2>chcon: изменить контекст безопасности файла SELinux</h2>
+<p>Использование:</p>
+<pre><code class="language-plaintext">    chcon [-u &lt;user&gt;] [-r &lt;role&gt;] [-t &lt;type&gt;] files...
+</code></pre>
+<p><strong>пользователь</strong> - это пользователь SELinux, например <code>user_u</code>, <code>system_u</code>или <code>root</code>.</p>
+<p><strong>роль</strong> - это роль SELinux (всегда <code>object_r</code>для файлов)</p>
+<p><strong>тип</strong> - это тип субъекта SELinux</p>
+<hr>
+<h2>chsmack: изменить SMACK расширенные атрибуты</h2>
+<p>Использование:</p>
+<pre><code class="language-plaintext">    chsmack -a &lt;value&gt; file
+</code></pre>
+<p><code><strong>value</strong></code>метка SMACK, которая будет установлена ​​для <code>SMACK64</code>расширенного атрибута файла</p>
+<hr>
+<h2>setrichacl : изменить расширенный список контроля доступа.</h2>
+<p><code><strong>richacl</strong></code> - это функция, которая добавляет более продвинутые списки ACL. В настоящее время ведутся работы.&nbsp;</p>
+<p>&nbsp;</p>
