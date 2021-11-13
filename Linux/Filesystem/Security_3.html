@@ -1,0 +1,379 @@
+<!--
+title: Прав доступа capabilities
+description: Список мандатов
+published: true
+date: 2021-11-13T07:39:16.111Z
+tags: security, linux, разрешения, filesystem, capabilities
+editor: ckeditor
+dateCreated: 2021-11-13T07:39:16.111Z
+-->
+
+<p>capabilities<i>(7)</i> обзор мандатов Linux</p>
+<h2>ОПИСАНИЕ</h2>
+<p>Для выполнения проверки прав доступа в обычных реализациях UNIX процессы разделяют на две категории: <i>привилегированные</i> (ID эффективного пользователя равен 0, как у суперпользователя или root), и <i>не привилегированные</i> (ID эффективного пользователя не равен нулю). Для привилегированных процессов все проверки прав в ядре не выполняются, а для не привилегированных процессов выполняется полная проверка на основе мандатов процесса (обычно, эффективного UID, эффективного GID и списка дополнительных групп).</p>
+<p>В ядре Linux начиная с версии 2.2, все привилегии, обычно связываемые с суперпользователем, разделены на несколько частей, называемых <i>мандатами</i> (capabilities), которые можно разрешать и запрещать независимо друг от друга. Мандаты являются атрибутом нити.</p>
+<h2>Список мандатов</h2>
+<p>В следующим списке показаны мандаты, реализованные в Linux, а также операции или поведение, которые эти мандаты разрешают:&nbsp;</p>
+<p><strong>CAP_AUDIT_CONTROL</strong> (начиная с Linux 2.6.11)</p>
+<p>Позволяет включать или выключать аудит ядра; изменять фильтрующие правила аудита; получать состояние аудита и фильтрующие правила.</p>
+<p><strong>CAP_AUDIT_READ</strong> (начиная с Linux 3.16)</p>
+<p>Позволяет читать протокол аудита через мультикастовый сокет netlink.</p>
+<p><strong>CAP_AUDIT_WRITE</strong> (начиная с Linux 2.6.11)</p>
+<p>Позволяет записывать данные в журнал аудита ядра.</p>
+<p><strong>CAP_BLOCK_SUSPEND</strong> (начиная с Linux 3.5)</p>
+<p>Позволяет использовать возможности, которые могут приводить к блокированию приостановки системы (<a href="http://ru.manpages.org/epoll/7"><strong>epoll</strong></a>(7) <strong>EPOLLWAKEUP</strong>, <i>/proc/sys/wake_lock</i>).</p>
+<p><strong>CAP_CHOWN</strong></p>
+<p>Позволяет выполнять произвольные изменения файловых UID и GID (смотрите <a href="http://ru.manpages.org/chown/2"><strong>chown</strong></a>(2)).</p>
+<p><strong>CAP_DAC_OVERRIDE</strong></p>
+<p>Позволяет пропускать проверки доступа к файлу на чтение, запись и выполнение (DAC (discretionary access control) — избирательный контроль доступа).</p>
+<p><strong>CAP_DAC_READ_SEARCH</strong></p>
+<p>*</p>
+<p>Позволяет пропускать проверки доступа к файлу на чтение и доступа к каталогу на чтение и выполнение;</p>
+<p>*</p>
+<p>Позволяет вызывать <a href="http://ru.manpages.org/open_by_handle_at/2"><strong>open_by_handle_at</strong></a>(2).</p>
+<p>&nbsp;</p>
+<p><strong>CAP_FOWNER</strong></p>
+<p>*</p>
+<p>Позволяет пропускать проверки доступа для операций, которые обычно требуют совпадения UID файловой системы процесса и UID файла (например, <a href="http://ru.manpages.org/chmod/2"><strong>chmod</strong></a>(2), <a href="http://ru.manpages.org/utime/2"><strong>utime</strong></a>(2)), исключая операции, охватываемые <strong>CAP_DAC_OVERRIDE</strong> и <strong>CAP_DAC_READ_SEARCH</strong>;</p>
+<p>*</p>
+<p>Позволяет устанавливать расширенные атрибуты (смотрите <a href="http://ru.manpages.org/chattr"><strong>chattr</strong></a>(1)) произвольных файлов;</p>
+<p>*</p>
+<p>Позволяет устанавливать списки контроля доступа (ACL) произвольных файлов;</p>
+<p>*</p>
+<p>Позволяет игнорировать закрепляющий бит при удалении файла;</p>
+<p>*</p>
+<p>Позволяет задавать <strong>O_NOATIME</strong> для произвольных файлов в <a href="http://ru.manpages.org/open/2"><strong>open</strong></a>(2) и <a href="http://ru.manpages.org/fcntl/2"><strong>fcntl</strong></a>(2).</p>
+<p><strong>CAP_FSETID</strong></p>
+<p>Позволяет не очищать биты режима set-user-ID и set-group-ID при изменении файла; устанавливать бит set-group-ID на файл, у которого GID не совпадает с битом файловой системы или любыми дополнительными GID вызывающего процесса.</p>
+<p><strong>CAP_IPC_LOCK</strong></p>
+<p>Позволяет блокировать память (<a href="http://ru.manpages.org/mlock/2"><strong>mlock</strong></a>(2), <a href="http://ru.manpages.org/mlockall/2"><strong>mlockall</strong></a>(2), <a href="http://ru.manpages.org/mmap/2"><strong>mmap</strong></a>(2), <a href="http://ru.manpages.org/shmctl/2"><strong>shmctl</strong></a>(2)).</p>
+<p><strong>CAP_IPC_OWNER</strong></p>
+<p>Позволяет не выполнять проверки доступа для операций с объектами System V IPC.</p>
+<p><strong>CAP_KILL</strong></p>
+<p>Позволяет не выполнять проверки при отправке сигналов (смотрите <a href="http://ru.manpages.org/kill/2"><strong>kill</strong></a>(2)). Сюда относится использование <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2) с операцией <strong>KDSIGACCEPT</strong>.</p>
+<p><strong>CAP_LEASE</strong> (начиная с Linux 2.4)</p>
+<p>Позволяет устанавливать аренду на произвольные файлы (смотрите <a href="http://ru.manpages.org/fcntl/2"><strong>fcntl</strong></a>(2)).</p>
+<p><strong>CAP_LINUX_IMMUTABLE</strong></p>
+<p>Позволяет устанавливать inode-флаги <strong>FS_APPEND_FL</strong> и <strong>FS_IMMUTABLE_FL</strong> (смотрите <a href="http://ru.manpages.org/chattr"><strong>chattr</strong></a>(1)).</p>
+<p><strong>CAP_MAC_ADMIN</strong> (начиная с Linux 2.6.25)</p>
+<p>Позволяет замещать мандатный контроль доступа (MAC). Реализован в Smack Linux Security Module (LSM).</p>
+<p><strong>CAP_MAC_OVERRIDE</strong> (начиная с Linux 2.6.25)</p>
+<p>Разрешает изменять настройку MAC или состояние. Реализован в Smack LSM.</p>
+<p><strong>CAP_MKNOD</strong> (начиная с Linux 2.4)</p>
+<p>Позволяет создавать специальные файлы с помощью <a href="http://ru.manpages.org/mknod/2"><strong>mknod</strong></a>(2).</p>
+<p><strong>CAP_NET_ADMIN</strong></p>
+<p>Позволяет выполнять различные сетевые операции:</p>
+<p>*</p>
+<p>настройку интерфейса;</p>
+<p>*</p>
+<p>управление IP МЭ, трансляцией адресов и ведением учёта;</p>
+<p>*</p>
+<p>изменять таблицы маршрутизации;</p>
+<p>*</p>
+<p>привязываться к любому адресу для прозрачного проксирования;</p>
+<p>*</p>
+<p>назначать тип сервиса (TOS)</p>
+<p>*</p>
+<p>очищать статистику драйвера;</p>
+<p>*</p>
+<p>включать режим захвата (promiscuous);</p>
+<p>*</p>
+<p>включать многоадресные рассылки (multicasting);</p>
+<p>*</p>
+<p>использовать <a href="http://ru.manpages.org/setsockopt/2"><strong>setsockopt</strong></a>(2) для включения следующих параметров сокета: <strong>SO_DEBUG</strong>, <strong>SO_MARK</strong>, <strong>SO_PRIORITY</strong> (для приоритетов вне диапазона 0 - 6), <strong>SO_RCVBUFFORCE</strong> и <strong>SO_SNDBUFFORCE</strong>.</p>
+<p><strong>CAP_NET_BIND_SERVICE</strong></p>
+<p>Позволяет привязывать сокет к привилегированным портам домена интернета (номера портов меньше 1024).</p>
+<p><strong>CAP_NET_BROADCAST</strong></p>
+<p>(не используется) Позволяет осуществлять широковещание с сокета и прослушивание многоадресных рассылок.</p>
+<p><strong>CAP_NET_RAW</strong></p>
+<p>*</p>
+<p>позволяет использовать сокеты RAW и PACKET;</p>
+<p>*</p>
+<p>позволяет привязываться к любому адресу для прозрачного проксирования.</p>
+<p><strong>CAP_SETGID</strong></p>
+<p>Позволяет выполнять произвольные действия с GID процесса и списком дополнительных GID; подделывать GID при передаче мандатов сокета через доменные сокеты UNIX; записывать отображение ID группы в пользовательское пространство имён (смотрите <a href="http://ru.manpages.org/user_namespaces/7"><strong>user_namespaces</strong></a>(7)).</p>
+<p><strong>CAP_SETFCAP</strong> (начиная с Linux 2.6.24)</p>
+<p>Позволяет назначать файловые мандаты.</p>
+<p><strong>CAP_SETPCAP</strong></p>
+<p>Если файловые мандаты не поддерживаются: позволяет предоставлять и отзывать любой мандат в списке разрешённых мандатов вызывающего или любого другого процесса (это свойство <strong>CAP_SETPCAP</strong> недоступно, если ядро собрано с поддержкой файловых мандатов, так как <strong>CAP_SETPCAP</strong> имеет полностью другую семантику у таких ядер).</p>
+<p>Если файловые мандаты поддерживаются: позволяет добавлять любой мандат из ограничивающего набора вызывающей нити в её наследуемый набор; отзывать мандаты из ограничивающего набора (с помощью <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2) с операцией <strong>PR_CAPBSET_DROP</strong>); изменять флаги <i>securebits</i>.</p>
+<p><strong>CAP_SETUID</strong></p>
+<p>Позволяет выполнять произвольные действия с UID процесса (<a href="http://ru.manpages.org/setuid/2"><strong>setuid</strong></a>(2), <a href="http://ru.manpages.org/setreuid/2"><strong>setreuid</strong></a>(2), <a href="http://ru.manpages.org/setresuid/2"><strong>setresuid</strong></a>(2), <a href="http://ru.manpages.org/setfsuid/2"><strong>setfsuid</strong></a>(2)); подделывать UID при передаче мандатов сокета через доменные сокеты UNIX; записывать отображение ID пользователя в пользовательское пространство имён (смотрите <a href="http://ru.manpages.org/user_namespaces/7"><strong>user_namespaces</strong></a>(7)).</p>
+<p><strong>CAP_SYS_ADMIN</strong></p>
+<p>*</p>
+<p>Позволяет выполнять следующие задачи управления системой: <a href="http://ru.manpages.org/quotactl/2"><strong>quotactl</strong></a>(2), <a href="http://ru.manpages.org/mount/2"><strong>mount</strong></a>(2), <a href="http://ru.manpages.org/umount/2"><strong>umount</strong></a>(2), <a href="http://ru.manpages.org/swapon/2"><strong>swapon</strong></a>(2), <a href="http://ru.manpages.org/swapoff/2"><strong>swapoff</strong></a>(2), <a href="http://ru.manpages.org/sethostname/2"><strong>sethostname</strong></a>(2) и <a href="http://ru.manpages.org/setdomainname/2"><strong>setdomainname</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет выполнять привилегированные операции <a href="http://ru.manpages.org/syslog/2"><strong>syslog</strong></a>(2) (начиная с Linux 2.6.37, для этих операций нужно использовать <strong>CAP_SYSLOG</strong>);</p>
+<p>*</p>
+<p>Позволяет выполнять команду <strong>VM86_REQUEST_IRQ</strong> <a href="http://ru.manpages.org/vm86/2"><strong>vm86</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет выполнять операции <strong>IPC_SET</strong> и <strong>IPC_RMID</strong> над произвольными объектами System V IPC;</p>
+<p>*</p>
+<p>Позволяет перезаписывать ограничение ресурса <strong>RLIMIT_NPROC</strong>;</p>
+<p>*</p>
+<p>Позволяет выполнять операции над расширенными атрибутами <i>trusted</i> и <i>security</i> (смотрите <a href="http://ru.manpages.org/xattr/7"><strong>xattr</strong></a>(7));</p>
+<p>*</p>
+<p>Позволяет использовать <a href="http://ru.manpages.org/lookup_dcookie/2"><strong>lookup_dcookie</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет использовать <a href="http://ru.manpages.org/ioprio_set/2"><strong>ioprio_set</strong></a>(2) для назначения классов планирования ввода-вывода <strong>IOPRIO_CLASS_RT</strong> и (до Linux 2.6.25) <strong>IOPRIO_CLASS_IDLE</strong>;</p>
+<p>*</p>
+<p>Позволяет подделывать PID при передаче мандатов сокета через доменные сокеты UNIX;</p>
+<p>*</p>
+<p>Позволяет превышать <i>/proc/sys/fs/file-max</i>, системное ограничение на количество открытых файлов, в системных вызовах, открывающих файлы (например, <a href="http://ru.manpages.org/accept/2"><strong>accept</strong></a>(2), <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2), <a href="http://ru.manpages.org/open/2"><strong>open</strong></a>(2), <a href="http://ru.manpages.org/pipe/2"><strong>pipe</strong></a>(2));</p>
+<p>*</p>
+<p>Позволяет задействовать флаги <strong>CLONE_*</strong>, которые создают новые пространства имён с помощью <a href="http://ru.manpages.org/clone/2"><strong>clone</strong></a>(2) и <a href="http://ru.manpages.org/unshare/2"><strong>unshare</strong></a>(2)) (начиная с Linux 3.8 для создания пользовательских пространств имён больше никаких мандатов не требуется);</p>
+<p>*</p>
+<p>Позволяет вызывать <a href="http://ru.manpages.org/perf_event_open/2"><strong>perf_event_open</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет получать доступ к информации о привилегированном событии <i>perf</i>;</p>
+<p>*</p>
+<p>Позволяет вызывать <a href="http://ru.manpages.org/setns/2"><strong>setns</strong></a>(2) (требуется <strong>CAP_SYS_ADMIN</strong> в пространстве имён <i>назначения</i>);</p>
+<p>*</p>
+<p>Позволяет вызывать <a href="http://ru.manpages.org/fanotify_init/2"><strong>fanotify_init</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет вызывать <a href="http://ru.manpages.org/bpf/2"><strong>bpf</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет выполнять операции <strong>KEYCTL_CHOWN</strong> и <strong>KEYCTL_SETPERM</strong> в <a href="http://ru.manpages.org/keyctl/2"><strong>keyctl</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет выполнять операцию <strong>MADV_HWPOISON</strong> в <a href="http://ru.manpages.org/madvise/2"><strong>madvise</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет задействовать <strong>TIOCSTI</strong> в <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2) для вставки символов во входную очередь терминала, отличного от управляющего терминала вызывающего;</p>
+<p>*</p>
+<p>Позволяет задействовать устаревший системный вызов <a href="http://ru.manpages.org/nfsservctl/2"><strong>nfsservctl</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет задействовать устаревший системный вызов <a href="http://ru.manpages.org/bdflush/2"><strong>bdflush</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет выполнять различные привилегированные операции <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2) над блочными устройствами;</p>
+<p>*</p>
+<p>Позволяет выполнять различные привилегированные операции <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2) над файловой системой;</p>
+<p>*</p>
+<p>Позволяет выполнять административные операции над многими драйверами устройств.</p>
+<p><strong>CAP_SYS_BOOT</strong></p>
+<p>Позволяет использовать <a href="http://ru.manpages.org/reboot/2"><strong>reboot</strong></a>(2) и <a href="http://ru.manpages.org/kexec_load/2"><strong>kexec_load</strong></a>(2).</p>
+<p><strong>CAP_SYS_CHROOT</strong></p>
+<p>Позволяет использовать <a href="http://ru.manpages.org/chroot/2"><strong>chroot</strong></a>(2).</p>
+<p><strong>CAP_SYS_MODULE</strong></p>
+<p>Позволяет загружать и выгружать модули ядра (смотрите <a href="http://ru.manpages.org/init_module/2"><strong>init_module</strong></a>(2) и <a href="http://ru.manpages.org/delete_module/2"><strong>delete_module</strong></a>(2)); в ядрах до версии 2.6.25: позволяет отзывать мандаты из системного ограничивающего набора мандатов.</p>
+<p><strong>CAP_SYS_NICE</strong></p>
+<p>*</p>
+<p>Позволяет повышать значение уступчивости процесса (<a href="http://ru.manpages.org/nice/2"><strong>nice</strong></a>(2), <a href="http://ru.manpages.org/setpriority/2"><strong>setpriority</strong></a>(2)) и изменять значение уступчивости у произвольных процессов;</p>
+<p>*</p>
+<p>Позволяет назначать политики планирования реального времени для вызывающего процесса и назначать политики планирования и приоритеты для произвольных процессов (<a href="http://ru.manpages.org/sched_setscheduler/2"><strong>sched_setscheduler</strong></a>(2), <a href="http://ru.manpages.org/sched_setparam/2"><strong>sched_setparam</strong></a>(2), <a href="http://ru.manpages.org/shed_setattr/2"><strong>shed_setattr</strong></a>(2));</p>
+<p>*</p>
+<p>Позволяет выполнять привязку к ЦП для произвольных процессов (<a href="http://ru.manpages.org/sched_setaffinity/2"><strong>sched_setaffinity</strong></a>(2));</p>
+<p>*</p>
+<p>Позволяет назначать класс планирования ввода-вывода и приоритет для произвольных процессов (<a href="http://ru.manpages.org/ioprio_set/2"><strong>ioprio_set</strong></a>(2));</p>
+<p>*</p>
+<p>Позволяет применять <a href="http://ru.manpages.org/migrate_pages/2"><strong>migrate_pages</strong></a>(2) к произвольным процессам для их перемещения на произвольные узлы;</p>
+<p>*</p>
+<p>Позволяет применять <a href="http://ru.manpages.org/move_pages/2"><strong>move_pages</strong></a>(2) к произвольным процессам;</p>
+<p>*</p>
+<p>Позволяет использовать флаг <strong>MPOL_MF_MOVE_ALL</strong> в <a href="http://ru.manpages.org/mbind/2"><strong>mbind</strong></a>(2) и <a href="http://ru.manpages.org/move_pages/2"><strong>move_pages</strong></a>(2).</p>
+<p><strong>CAP_SYS_PACCT</strong></p>
+<p>Позволяет использовать <a href="http://ru.manpages.org/acct/2"><strong>acct</strong></a>(2).</p>
+<p><strong>CAP_SYS_PTRACE</strong></p>
+<p>*</p>
+<p>Позволяет трассировать любой процесс с помощью <a href="http://ru.manpages.org/ptrace/2"><strong>ptrace</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет применять <a href="http://ru.manpages.org/get_robust_list/2"><strong>get_robust_list</strong></a>(2) к произвольным процессам;</p>
+<p>*</p>
+<p>Позволяет перемещать данные в/из памяти произвольного процесса с помощью <a href="http://ru.manpages.org/process_vm_readv/2"><strong>process_vm_readv</strong></a>(2) и <a href="http://ru.manpages.org/process_vm_writev/2"><strong>process_vm_writev</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет изучать процессы с помощью <a href="http://ru.manpages.org/kcmp/2"><strong>kcmp</strong></a>(2).</p>
+<p><strong>CAP_SYS_RAWIO</strong></p>
+<p>*</p>
+<p>Позволяет выполнять операции ввода-вывода из портов (<a href="http://ru.manpages.org/iopl/2"><strong>iopl</strong></a>(2) и <a href="http://ru.manpages.org/ioperm/2"><strong>ioperm</strong></a>(2));</p>
+<p>*</p>
+<p>Разрешает доступ к <i>/proc/kcore</i>;</p>
+<p>*</p>
+<p>Позволяет задействовать операцию <strong>FIBMAP</strong> в <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет открывать устройства для доступа к специальным регистрам x86 (MSR, смотрите <a href="http://ru.manpages.org/msr/4"><strong>msr</strong></a>(4));</p>
+<p>*</p>
+<p>Позволяет обновлять <i>/proc/sys/vm/mmap_min_addr</i>;</p>
+<p>*</p>
+<p>Позволяет создавать отображения памяти по адресам меньше значения, заданного в <i>/proc/sys/vm/mmap_min_addr</i>;</p>
+<p>*</p>
+<p>Позволяет отображать файлы в <i>/proc/bus/pci</i>;</p>
+<p>*</p>
+<p>Позволяет открывать <i>/dev/mem</i> и <i>/dev/kmem</i>;</p>
+<p>*</p>
+<p>Позволяет выполнять различные команды устройств SCSI;</p>
+<p>*</p>
+<p>Позволяет выполнять определённые операции с устройствами <a href="http://ru.manpages.org/hpsa/4"><strong>hpsa</strong></a>(4) и <a href="http://ru.manpages.org/cciss/4"><strong>cciss</strong></a>(4);</p>
+<p>*</p>
+<p>Позволяет выполнять некоторые специальные операции с другими устройствами.</p>
+<p><strong>CAP_SYS_RESOURCE</strong></p>
+<p>*</p>
+<p>Позволяет использовать зарезервированное пространство файловых систем ext2;</p>
+<p>*</p>
+<p>Позволяет делать вызовы <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2), управляющие журналированием ext3;</p>
+<p>*</p>
+<p>Позволяет превышать ограничение дисковой квоты;</p>
+<p>*</p>
+<p>Позволяет увеличивать ограничения по ресурсам (смотрите <a href="http://ru.manpages.org/setrlimit/2"><strong>setrlimit</strong></a>(2));</p>
+<p>*</p>
+<p>Позволяет перезаписывать ограничение ресурса <strong>RLIMIT_NPROC</strong>;</p>
+<p>*</p>
+<p>Позволяет превышать максимальное количество консолей при выделении консоли;</p>
+<p>*</p>
+<p>Позволяет превышать максимальное количество раскладок;</p>
+<p>*</p>
+<p>Позволяет использовать более чем 64hz прерывания из часов реального времени;</p>
+<p>*</p>
+<p>Позволяет назначать значение <i>msg_qbytes</i> очереди сообщений System V больше ограничения <i>/proc/sys/kernel/msgmnb</i> (смотрите <a href="http://ru.manpages.org/msgop/2"><strong>msgop</strong></a>(2) и <a href="http://ru.manpages.org/msgctl/2"><strong>msgctl</strong></a>(2));</p>
+<p>*</p>
+<p>Позволяет превышать ограничение <i>/proc/sys/fs/pipe-size-max</i> при назначении вместимости канала с помощью команды <strong>F_SETPIPE_SZ</strong> у <a href="http://ru.manpages.org/fcntl/2"><strong>fcntl</strong></a>(2).</p>
+<p>*</p>
+<p>Позволяет использовать <strong>F_SETPIPE_SZ</strong> для увеличения вместимости канала больше чем ограничение, задаваемое в <i>/proc/sys/fs/pipe-max-size</i>;</p>
+<p>*</p>
+<p>Позволяет превышать ограничение <i>/proc/sys/fs/mqueue/queues_max</i> при создании очередей сообщений POSIX (смотрите <a href="http://ru.manpages.org/mq_overview/7"><strong>mq_overview</strong></a>(7));</p>
+<p>*</p>
+<p>Позволяет задействовать операцию <strong>PR_SET_MM</strong> в <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2);</p>
+<p>*</p>
+<p>Позволяет устанавливать <i>/proc/PID/oom_score_adj</i> в значение меньшее, чем последнее установленное значение процессом с помощью <strong>CAP_SYS_RESOURCE</strong>.</p>
+<p><strong>CAP_SYS_TIME</strong></p>
+<p>Позволяет настраивать системные часы (<a href="http://ru.manpages.org/settimeofday/2"><strong>settimeofday</strong></a>(2), <a href="http://ru.manpages.org/stime/2"><strong>stime</strong></a>(2), <a href="http://ru.manpages.org/adjtimex/2"><strong>adjtimex</strong></a>(2)) и часы реального времени (аппаратные).</p>
+<p><strong>CAP_SYS_TTY_CONFIG</strong></p>
+<p>Позволяет использовать <a href="http://ru.manpages.org/vhangup/2"><strong>vhangup</strong></a>(2); задействовать различные привилегированные операции <a href="http://ru.manpages.org/ioctl/2"><strong>ioctl</strong></a>(2) с виртуальными терминалами.</p>
+<p><strong>CAP_SYSLOG</strong> (начиная с Linux 2.6.37)</p>
+<p>*</p>
+<p>Позволяет выполнять привилегированные операции <a href="http://ru.manpages.org/syslog/2"><strong>syslog</strong></a>(2). Смотрите в <a href="http://ru.manpages.org/syslog/2"><strong>syslog</strong></a>(2) какие операции требуют прав.</p>
+<p>*</p>
+<p>Позволяет просматривать адреса ядра, показываемые в <i>/proc</i> и других интерфейсах, когда значение <i>/proc/sys/kernel/kptr_restrict</i> равно 1 (смотрите описание <i>kptr_restrict</i> в <a href="http://ru.manpages.org/proc/5"><strong>proc</strong></a>(5)).</p>
+<p><strong>CAP_WAKE_ALARM</strong> (начиная с Linux 3.0)</p>
+<p>Позволяет вызывать что-либо при пробуждении системы (устанавливать таймеры <strong>CLOCK_REALTIME_ALARM</strong> и <strong>CLOCK_BOOTTIME_ALARM</strong>).</p>
+<h2>Старая и текущая реализации</h2>
+<p>Для полной реализации мандатов требуется:&nbsp;</p>
+<p>1.</p>
+<p>Для всех привилегированных операций ядро должно проверять, имеет ли нить требуемый мандат в его эффективном наборе.</p>
+<p>2.</p>
+<p>Ядро должно предоставлять системные вызовы, позволяющие получать и изменять наборы мандатов нити.</p>
+<p>3.</p>
+<p>Файловая система должна поддерживать присоединение мандатов к исполняемому файлу для того, чтобы при исполнении файла у процесса повышались права согласно этим мандатам.</p>
+<p>До ядра версии 2.6.24 были реализованы только первые два пункта; начиная с версии 2.6.24 реализованы все три пункта.</p>
+<h2>Наборы мандатов нити</h2>
+<p>Каждая нить имеет три набора мандатов, содержащих ноль или более перечисленных выше мандатов:&nbsp;</p>
+<p><i>Permitted</i>:</p>
+<p>Ограничивающий набор эффективных мандатов, которыми наделяется нить. Этот набор также ограничивает список мандатов, которые могут быть добавлены в наследуемый набор для нити, которая не имеет мандата <strong>CAP_SETPCAP</strong> в своём эффективном наборе.</p>
+<p>Если нить сбрасывает мандат в своём разрешительном наборе, то она не сможет получить его назад (если только не выполняется <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) для программы с set-user-ID-root или программа, чьи соответствующие мандаты файла предоставляют этот мандат).</p>
+<p><i>Inheritable</i>:</p>
+<p>Этот набор мандатов сохраняется при вызове <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2). Наследуемые мандаты остаются наследуемыми при выполнении любой программы, и наследуемые мандаты добавляются в разрешительный набор, если выполняющаяся программа имеет соответствующие установленные биты в файловом наследуемом наборе.</p>
+<p>Так как наследуемые мандаты, обычно, не сохраняются после <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2), если выполнение происходит не от суперпользователя, то для приложений, которым нужно выполнять вспомогательные программы с повышенными мандатами, нужно использовать наружные мандаты (ambient capabilities), описанные ниже.</p>
+<p><i>Effective</i>:</p>
+<p>Данный набор мандатов используется ядром при выполнении проверок прав нити.</p>
+<p><i>Ambient</i> (начиная с Linux 4.3):</p>
+<p>Данный набор мандатов сохраняется после <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) для непривилегированных программ. Для набора наружных мандатов (ambient capability set) соблюдается правило, что ни один мандат не сможет быть наружным, если он одновременно разрешающий и наследуемый.</p>
+<p>Набор наружных мандатов можно непосредственно изменять с помощью <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2). Наружные мандаты автоматически понижаются, если понижаются соответствующие разрешительные или наследуемые мандаты.</p>
+<p>У выполняющейся программы, у которой изменились UID или GID из-за бит set-user-ID или set-group-ID, или у выполняющейся программы установлен любой набор файловых мандатов,очищается наружный набор. Наружные мандаты добавляются в разрешающий набор и назначаются в эффективный набор при вызове <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2).</p>
+<p>Потомок, созданный <a href="http://ru.manpages.org/fork/2"><strong>fork</strong></a>(2), наследует копии наборов мандатов своего родителя. Далее смотрите описание отношения к мандатами при <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2).</p>
+<p>С помощью <a href="http://ru.manpages.org/capset/2"><strong>capset</strong></a>(2) нить может изменять свои наборы мандатов (смотрите далее).</p>
+<p>Начиная с Linux 3.2, файл <i>/proc/sys/kernel/cap_last_cap</i> содержит числовое значение самого большого мандата, поддерживаемого работающим ядром; это может быть использовано для определения наибольшего бита, который может быть установлен в наборе мандатов.</p>
+<h2>Файловые мандаты</h2>
+<p>Начиная с ядра версии 2.6.24, поддерживается связь наборов мандатов с исполняемым файлом с помощью <a href="http://ru.manpages.org/setcap/8"><strong>setcap</strong></a>(8). Наборы мандатов файла хранятся в расширенном атрибуте (смотрите <a href="http://ru.manpages.org/setxattr/2"><strong>setxattr</strong></a>(2)) с именем <i>security.capability</i>. Для записи в этот расширенный атрибут требуется мандат <strong>CAP_SETFCAP</strong>. Наборы файловых мандатов вместе с наборами мандатов нити определяют наборы мандатов нити после выполнения <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2).</p>
+<p>Три файловых набора мандатов:</p>
+<p><i>Permitted</i> (ранее называвшийся <i>forced</i>):</p>
+<p>Эти мандаты автоматически разрешаются нити независимо от унаследованных мандатов нити.</p>
+<p><i>Inheritable</i> (ранее называвшийся <i>allowed</i>):</p>
+<p>Этот набор объединяется (AND) с унаследованным набором нити для определения, какие унаследованные мандаты будут включены в разрешительный набор нити после <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2).</p>
+<p><i>Effective</i>:</p>
+<p>В действительности, это не набор, а одиночный бит. Если бит включён, то при вызове <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) все новые разрешённые мандаты нити будут также добавлены в эффективный набор. Если бит выключен, то после <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) ни один из новых разрешённых мандатов не будет добавлен в новый эффективный набор.</p>
+<p>Включение эффективного файлового мандатного бита подразумевает, что любой файловый разрешительный или наследуемый мандат, который позволяет нити получить соответствующий разрешительный мандат при <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) (смотрите правила преобразования, описанные далее), также получит этот мандат в эффективном наборе. Поэтому, когда назначаются мандаты файлу (<a href="http://ru.manpages.org/setcap/8"><strong>setcap</strong></a>(8), <a href="http://ru.manpages.org/cap_set_file/3"><strong>cap_set_file</strong></a>(3), <a href="http://ru.manpages.org/cap_set_fd/3"><strong>cap_set_fd</strong></a>(3)), если мы укажем эффективный флаг как включённый для любого мандата, то эффективный флаг должен также быть указан включённым для всех остальных мандатов, для которых включён соответствующий разрешительный или наследуемый флаги.</p>
+<h2>Преобразование мандатов при execve()</h2>
+<p>При <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) ядро вычисляет новые мандаты процесса по следующему алгоритму:</p>
+<p>P'(ambient) = (привилегированный файл) ? 0 : P(ambient)
+  P'(permitted) = (P(inheritable) &amp; F(inheritable)) |
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(F(permitted) &amp; cap_bset) | P'(ambient)
+  P'(effective) = F(effective) ? P'(permitted) : P'(ambient)
+  P'(inheritable) = P(inheritable) &nbsp; &nbsp;[т. е., не изменяется]
+  где:</p>
+<p>P</p>
+<p>значение набора мандатов нити до <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2)</p>
+<p>P'</p>
+<p>значение набора мандатов после <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2)</p>
+<p>F</p>
+<p>файловый набор мандатов</p>
+<p>cap_bset</p>
+<p>значение ограничивающего набора мандатов (описано далее).</p>
+<p>Привилегированный файл — это файл, имеющий мандаты или для него установлен бит set-user-ID или set-group-ID.</p>
+<h2>Мандаты и выполнение программы с правами root</h2>
+<p>Чтобы предоставить всю мощь набора мандатов <i>root</i> в <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2):&nbsp;</p>
+<p>1.</p>
+<p>Если выполняется программа с установленным битом set-user-ID-root, или ID реального пользователя процесса равен 0 (root), то предоставляются полные файловые и наследуемые наборы мандатов (т. е., разрешены все мандаты).</p>
+<p>2.</p>
+<p>Если выполняется программа с установленным битом set-user-ID-root, то эффективный файловый бит равен единице (установлен).</p>
+<p>Результат вышеупомянутых правил, объединённых с преобразованиями мандатов описанными выше, таков: когда процесс выполняет <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) для программы с битом set-user-ID-root, или когда процесс с эффективным UID 0 выполняет <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2), то он получает все мандаты из разрешительного и эффективного наборов, за исключением тех, которые отменены ограничивающим набором мандатов. Это предоставляет семантику, совпадающую с обычными системами UNIX.</p>
+<h2>Ограничивающий набор мандатов</h2>
+<p>Ограничивающий набор мандатов — это механизм безопасности, который можно использовать для ограничения мандатов, которые могут быть получены при <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2). Ограничивающий набор используется так:&nbsp;</p>
+<p>*</p>
+<p>При <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) ограничивающий набор мандатов складывается (AND) с файловым разрешительным набором мандатов, и результат этой операции назначается разрешительному набору мандатов нити. Таким образом, ограничивающий набор мандатов ограничивает разрешённые мандаты, которые может предоставить исполняемый файл.</p>
+<p>*</p>
+<p>(начиная с Linux 2.6.25) Ограничивающий набор мандатов служит ограничивающим набором мандатов, которые нить может добавить в свой наследуемый набор с помощью <a href="http://ru.manpages.org/capset/2"><strong>capset</strong></a>(2). Это означает, что если мандат отсутствует в ограничивающем наборе мандатов, то нить не может добавить этот мандат в свой наследуемый набор даже, если он есть в разрешительном наборе мандатов и поэтому не может сохранить данный мандат в разрешительный набор при вызове <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) для файла, который имеет мандат в своём наследуемом наборе.</p>
+<p>Заметим, что ограничивающий набор скрывает файловые разрешительные мандаты, но не наследуемые мандаты. Если нить имеет мандат в своём наследуемом наборе, который отсутствует в ограничивающем наборе, то она по-прежнему обладает этим мандатом в своём разрешительном наборе при выполнении файла, который имеет мандат в своём наследуемом наборе.</p>
+<p>В зависимости от версии ядра ограничивающий набор мандатов является либо системным свойством, либо атрибутом процесса.</p>
+<p><strong>Ограничивающий набор мандатов до Linux 2.6.25</strong></p>
+<p>В ядрах до версии 2.6.25 ограничивающий набор мандатов был системным атрибутом, который влиял на все нити системы. Ограничивающий набор доступен через файл <i>/proc/sys/kernel/cap-bound</i> (по непонятной причине, данный параметр, битовая маска, в <i>/proc/sys/kernel/cap-bound</i> записывался в виде знакового десятичного числа).</p>
+<p>Только процесс <strong>init</strong> может задавать мандаты в ограничивающем наборе мандатов; помимо этого, суперпользователь (точнее, программы с мандатом <strong>CAP_SYS_MODULE</strong>) могут только удалять мандаты из набора.</p>
+<p>В стандартной системе в ограничивающем наборе мандатов всегда удаляется мандат <strong>CAP_SETPCAP</strong>. Чтобы убрать это ограничение (опасно!), нужно изменить определение <strong>CAP_INIT_EFF_SET</strong> в <i>include/linux/capability.h</i> и пересобрать ядро.</p>
+<p>Системное свойство, ограничивающий набор мандатов, было добавлено в ядро Linux версии 2.2.11.</p>
+<p><strong>Ограничивающий набор мандатов начиная с Linux 2.6.25</strong></p>
+<p>Начиная с Linux 2.6.25, <i>ограничивающий набор мандатов</i> является атрибутом нити (системного ограничивающего набора мандатов больше нет).</p>
+<p>Ограничивающий набор наследуется при <a href="http://ru.manpages.org/fork/2"><strong>fork</strong></a>(2) от нити родителя и сохраняется при <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2).</p>
+<p>Нить может удалять мандаты из своего ограничивающего набора мандатов с помощью вызова <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2) с операцией <strong>PR_CAPBSET_DROP</strong> при наличии мандата <strong>CAP_SETPCAP</strong>. После удаления мандата из ограничивающего набора обратно его восстановить невозможно. Нить может определить наличие мандата в своём ограничивающем наборе с помощью вызова <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2) с операцией <strong>PR_CAPBSET_READ</strong>.</p>
+<p>Удаление мандатов из ограничивающего набора доступно только, если ядро собрано с поддержкой файловых мандатов. В ядре Linux до версии 2.6.33 файловые мандаты являлись необязательным свойством, настраиваемым параметром <strong>CONFIG_SECURITY_FILE_CAPABILITIES</strong>. Начиная с Linux 2.6.33, параметр настройки был удалён и теперь файловые мандаты всегда являются частью ядра. Когда файловые мандаты в ядре, процесс <strong>init</strong> (предок всех процессов) запускается с полным ограничивающим набором. Если файловые мандаты не добавлены в ядро, то <strong>init</strong> запускается с полным ограничивающим набором минус <strong>CAP_SETPCAP</strong>, так как этот мандат имеет другое значение, если файловые мандаты отсутствуют.</p>
+<p>Удаление мандата из ограничивающего набора не удаляет его из наследуемого набора нити. Однако это предотвращает от добавления мандата обратно в наследуемый набор нити в будущем.</p>
+<h2>Влияние на мандаты при изменении пользовательского ID</h2>
+<p>Для сохранения привычной семантики при переходе от 0 к ненулевым пользовательским ID, ядро делает следующие изменения наборов мандатов нити при изменении у нити реального, эффективного, сохранённого ID и пользовательского ID файловой системы (с помощью <a href="http://ru.manpages.org/setuid/2"><strong>setuid</strong></a>(2), <a href="http://ru.manpages.org/setresuid/2"><strong>setresuid</strong></a>(2) или подобных):&nbsp;</p>
+<p>1.</p>
+<p>Если ранее реальный, эффективный или сохранённый пользовательский ID не был равен 0, и в результате изменения UID все эти ID получили ненулевое значение, то все мандаты удаляются из разрешительного и эффективного наборов мандатов.</p>
+<p>2.</p>
+<p>Если эффективный пользовательский ID изменяется с 0 на ненулевое значение, то все мандаты удаляются из эффективного набора мандатов.</p>
+<p>3.</p>
+<p>Если эффективный пользовательский ID изменяется с ненулевого значения на 0, то разрешительный набор копируется в эффективный набор.</p>
+<p>4.</p>
+<p>Если пользовательский ID файловой системы изменяется с 0 на ненулевое значение (смотрите <a href="http://ru.manpages.org/setfsuid/2"><strong>setfsuid</strong></a>(2)), то следующие мандаты удаляются из эффективного набора: <strong>CAP_CHOWN</strong>, <strong>CAP_DAC_OVERRIDE</strong>, <strong>CAP_DAC_READ_SEARCH</strong>, <strong>CAP_FOWNER</strong>, <strong>CAP_FSETID</strong>, <strong>CAP_LINUX_IMMUTABLE</strong> (начиная с Linux 2.6.30), <strong>CAP_MAC_OVERRIDE</strong> и <strong>CAP_MKNOD</strong> (начиная с Linux 2.6.30). Если пользовательский ID файловой системы изменяется с ненулевого значения на 0, то любой из мандатов, включённых в разрешительный набор, включается в эффективном наборе.</p>
+<p>Если нить, у которой один или более пользовательских ID равно 0, хочет предотвратить удаление разрешительных мандатов при сбросе всех пользовательских ID в ненулевые значения, то она может использовать вызов <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2) с операцией <strong>PR_SET_KEEPCAPS</strong> или флагом безопасности <strong>SECBIT_KEEP_CAPS</strong>, описанном далее.</p>
+<h2>Программное изменение наборов мандатов</h2>
+<p>Нить может получать и изменять свои наборы мандатов с помощью системных вызовов <a href="http://ru.manpages.org/capget/2"><strong>capget</strong></a>(2) и <a href="http://ru.manpages.org/capset/2"><strong>capset</strong></a>(2). Однако для этой цели лучше использовать <a href="http://ru.manpages.org/cap_get_proc/3"><strong>cap_get_proc</strong></a>(3) и <a href="http://ru.manpages.org/cap_set_proc/3"><strong>cap_set_proc</strong></a>(3) из пакета <i>libcap</i>. Следующие правила применяются при изменении наборов нити:&nbsp;</p>
+<p>1.</p>
+<p>Если вызывающий не имеет мандата <strong>CAP_SETPCAP</strong>, то новый наследуемый набор должен быть поднабором комбинации существующего наследуемого и разрешительного наборов.</p>
+<p>2.</p>
+<p>(начиная с Linux 2.6.25) Новый наследуемый набор должен быть поднабором комбинации существующего наследуемого и ограничивающего наборов.</p>
+<p>3.</p>
+<p>Новый разрешительный набор должен быть поднабором существующего разрешительного набора (т. е., невозможно приобрести разрешительные мандаты, которых нить не имеет).</p>
+<p>4.</p>
+<p>Новый эффективный набор должен быть поднабором нового разрешительного набора.</p>
+<h2>Флаги securebits: организация исключительно мандатного окружения</h2>
+<p>Начиная с ядра версии 2.6.26 с включённой поддержкой файловых мандатов, в Linux реализован набор флагов <i>securebits</i> (для каждой нити), который можно использовать для отключения специальных действий мандатов для UID 0 (<i>root</i>). К этим флагам относятся:&nbsp;</p>
+<p><strong>SECBIT_KEEP_CAPS</strong></p>
+<p>Установка этого флага позволяет нити, у которой один и более UID равен 0, сохранить свои мандаты при изменении всех её UID на ненулевые значения. Если этот флаг не установлен, то изменение UID приведёт к тому, что нить потеряет все мандаты. Этот флаг всегда сбрасывается при <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) (этот флаг предоставляет те же возможности, что и старый вызов <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2) с операцией <strong>PR_SET_KEEPCAPS</strong>).</p>
+<p><strong>SECBIT_NO_SETUID_FIXUP</strong></p>
+<p>Установка этого флага не даёт ядру изменить наборы мандатов при изменении эффективного UID и UID файловой системы с 0 на ненулевое значение (смотрите раздел <i>Влияние на мандаты от изменения пользовательского ID</i>).</p>
+<p><strong>SECBIT_NOROOT</strong></p>
+<p>Если этот бит установлен, то ядро не предоставляет мандаты при исполнении программы, имеющей бит set-user-ID-root, или когда процесс с эффективным или реальным UID равным 0 вызывает <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) (смотрите раздел <i>Мандаты и выполнение программа от root</i>).</p>
+<p><strong>SECBIT_NO_CAP_AMBIENT_RAISE</strong></p>
+<p>Установка этого флага запрещает повышение наружных мандатов посредством <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2)с операцией <strong>PR_CAP_AMBIENT_RAISE</strong>.</p>
+<p>Каждый из перечисленных выше «базовых» флагов имеет дополнительный флаг «блокировки». Установка любого из флагов «блокировки» необратима и запрещает дальнейшие изменения соответствующего «базового» флага. Флаги блокировки: <strong>SECBIT_KEEP_CAPS_LOCKED</strong>, <strong>SECBIT_NO_SETUID_FIXUP_LOCKED</strong>, <strong>SECBIT_NOROOT_LOCKED</strong> и <strong>SECBIT_NO_CAP_AMBIENT_RAISE</strong>.</p>
+<p>Флаги <i>securebits</i> можно изменять и получать с помощью вызова <a href="http://ru.manpages.org/prctl/2"><strong>prctl</strong></a>(2) с операциями <strong>PR_SET_SECUREBITS</strong> и <strong>PR_GET_SECUREBITS</strong>. Для изменения флагов требуется мандат <strong>CAP_SETPCAP</strong>.</p>
+<p>Флаги <i>securebits</i> наследуются дочерними процессами. При <a href="http://ru.manpages.org/execve/2"><strong>execve</strong></a>(2) все флаги сохраняются, за исключением <strong>SECBIT_KEEP_CAPS</strong>, который всегда сбрасывается.</p>
+<p>Приложение может использовать следующий вызов для собственной блокировки и помещение всех своих потомков в окружение, в котором есть только один способ добавить права — запустить программу со связанными с ней файловыми мандатами:</p>
+<p>prctl(PR_SET_SECUREBITS,
+  &nbsp; &nbsp; &nbsp; &nbsp;SECBIT_KEEP_CAPS_LOCKED |
+  &nbsp; &nbsp; &nbsp; &nbsp;SECBIT_NO_SETUID_FIXUP |
+  &nbsp; &nbsp; &nbsp; &nbsp;SECBIT_NO_SETUID_FIXUP_LOCKED |
+  &nbsp; &nbsp; &nbsp; &nbsp;SECBIT_NOROOT |
+  &nbsp; &nbsp; &nbsp; &nbsp;SECBIT_NOROOT_LOCKED);
+</p>
+<h2>Взаимодействие с пользовательскими пространствами имён</h2>
+<p>Обсуждение связи мандатов с пространствами пользователя смотрите в <a href="http://ru.manpages.org/user_namespaces/7"><strong>user_namespaces</strong></a>(7).</p>
+<h2>СООТВЕТСТВИЕ СТАНДАРТАМ</h2>
+<p>Стандарты, описывающие мандаты, отсутствуют, но реализация мандатов в Linux основывается на изъятом черновике стандарта POSIX.1e; смотрите</p>
+<h2>ЗАМЕЧАНИЯ</h2>
+<p>Начиная с ядра версии 2.5.27 по 2.6.26, мандаты являются необязательным компонентом ядра, и могут быть включены/выключены с помощью параметра настройки ядра <strong>CONFIG_SECURITY_CAPABILITIES</strong>.</p>
+<p>Файл <i>/proc/PID/task/TID/status</i> можно использовать для просмотра набора мандатов нити. В файле <i>/proc/PID/status</i> отражён набор мандатов главной нити процесса. До Linux 3.8, несуществующие мандаты в этих наборах показывались как включённые (1). Начиная с Linux 3.8, все несуществующие мандаты (после <strong>CAP_LAST_CAP</strong>) показываются выключенными (0).</p>
+<p>В пакете <i>libcap</i> содержится набор процедур для установки и получения мандатов; он удобнее и менее подвержен изменениям, чем интерфейс предоставляемый <a href="http://ru.manpages.org/capset/2"><strong>capset</strong></a>(2) и <a href="http://ru.manpages.org/capget/2"><strong>capget</strong></a>(2). Также данный пакет предоставляет программы <a href="http://ru.manpages.org/setcap/8"><strong>setcap</strong></a>(8) и <a href="http://ru.manpages.org/getcap/8"><strong>getcap</strong></a>(8) . Его можно найти здесь:&nbsp;<br>&nbsp;</p>
+<p>До ядра версии 2.6.24, и начиная с версии 2.6.24 по 2.6.32, если файловые мандаты не включены, то нить с мандатом <strong>CAP_SETPCAP</strong> может управлять мандатами других нитей. Однако, это возможно только теоретически, так как ни одна из нитей не имеет <strong>CAP_SETPCAP</strong> в любом из двух случаев:</p>
+<p>*</p>
+<p>Реализация в версии pre-2.6.25 системного ограничивающего набора мандатов, <i>/proc/sys/kernel/cap-bound</i>, всегда запрещала этот мандат, и это нельзя было изменить без изменения исходного кода ядра и пересборки.</p>
+<p>*</p>
+<p>Если файловые мандаты выключены в текущей реализации, то у запускаемого <strong>init</strong> данный мандат отозван из ограничивающего набора мандатов нити, и этот ограничивающий набор наследуется всеми остальными процессами, создаваемыми в системе.</p>
