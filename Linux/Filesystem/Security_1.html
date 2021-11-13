@@ -2,7 +2,7 @@
 title: Прав доступа к файлам и т. д.
 description: Различные способы установки прав доступа.
 published: true
-date: 2021-11-12T21:06:21.965Z
+date: 2021-11-13T07:41:56.300Z
 tags: security, file, linux
 editor: ckeditor
 dateCreated: 2021-11-12T20:52:00.315Z
@@ -123,7 +123,7 @@ dateCreated: 2021-11-12T20:52:00.315Z
 <p>Использование:</p>
 <pre><code class="language-plaintext">    setcap &lt;capability-clause&gt; file 
 </code></pre>
-<p>A <code><strong>capability-clause</strong></code>состоит из разделенного запятыми списка имен возможностей, за которым следует список пар флаг-оператор.</p>
+<p>A <a href="https://sysinfo.pro/ru/Linux/Filesystem/capabilities"><code><strong>capability-clause</strong></code></a>состоит из разделенного запятыми списка имен возможностей, за которым следует список пар флаг-оператор.</p>
 <p>Доступные операторы <code>=</code>, <code>+</code>и <code>-</code>. Доступные флаги <code>e</code>, <code>i</code>и <code>p</code>которые соответствуют <i>Действуют</i> , <i>наследуемые</i> и <i>Разрешенные</i> наборами возможностей.</p>
 <p><code>=</code>Оператор поднимет указанные наборы возможностей и сбросить другие. Если вместе с <code>=</code>оператором не указаны флаги, все наборы возможностей будут сброшены. <code>+</code>И <code>-</code>операторы будут повышать или понижать один или более указанных наборы возможностей соответственно.</p>
 <p><i>Пример предоставления доступа открытия TCP порта для Wine:</i></p>
