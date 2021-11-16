@@ -2,7 +2,7 @@
 title: bash/sh: оператор if
 description: условный оператор if и его структура
 published: true
-date: 2021-11-16T20:28:43.355Z
+date: 2021-11-16T20:40:00.210Z
 tags: linux, bash, sh, shell, if
 editor: ckeditor
 dateCreated: 2021-11-16T20:26:08.624Z
@@ -42,53 +42,110 @@ fi</code></pre>
 <pre><code class="language-plaintext">if [ "$a" = "$b" -o "$c" = "$d" ]; then
  echo "Одно из выражений - истинно"
 fi</code></pre>
-<p><br><br><br><strong>Инвентирование результата</strong><br><br>Для этого используется восклицательный знак, поставленный перед сравнением (!):<br><br>&nbsp;</p>
-<p>if [ ! -f "/home/user/file" ]; then<br>&nbsp;echo "Файл не найден"<br>fi</p>
-<p><br><br><br><strong>Теперь немного об операторах сравнения</strong><br><br><strong>=</strong><br><br>Равенство строк (не чисел!). Так, "0" = "0" - истина, а вот "0" = "00" - уже ложь!<br><br>&nbsp;</p>
-<p>if [ "$a" = "mystring" ]; then<br>&nbsp;echo "равно"<br>fi</p>
-<p><br>ВНИМАНИЕ! Нельзя использовать такую запись:<br>&nbsp;</p>
-<p>if [ "$a" = "" ]; then<br>&nbsp;echo "Это ошибка! такой скрипт не сработает!"<br>fi</p>
-<p>нужно делать так:<br>&nbsp;</p>
-<p>if [ -z "$a" ]; then<br>&nbsp;echo "Переменная a - пустая строка с нулевой длинной"<br>fi</p>
-<p><br><br><strong>!=</strong><br><br>Неравенство строк (не чисел!).<br><br>&nbsp;</p>
-<p>if [ "$a" != "mystring" ]; then<br>&nbsp;echo "не равно"<br>fi</p>
-<p><br>ВНИМАНИЕ! Нельзя использовать такую запись:<br>&nbsp;</p>
-<p>if [ "$a" != "" ]; then<br>&nbsp;echo "Это ошибка! такой скрипт не сработает!"<br>fi</p>
-<p>нужно делать так:<br>&nbsp;</p>
-<p>if [ -n "$a" ]; then<br>&nbsp;echo "Переменная a - НЕ пустая строка с нулевой длинной"<br>fi</p>
-<p><br><br><strong>-eq</strong><br><br>Числовое равенство. Так, "01" -eq "1" - будет истиной.<br><br>&nbsp;</p>
-<p>a=123<br>b=0123<br><br>if [ "$a" -eq "$b" ]; then<br>&nbsp;echo "Они равны!"<br>fi</p>
+<p><br><br><br><strong>Инвентирование результата</strong><br><br>Для этого используется восклицательный знак, поставленный перед сравнением (!):&nbsp;</p>
+<pre><code class="language-plaintext">if [ ! -f "/home/user/file" ]; then
+ echo "Файл не найден"
+fi</code></pre>
+<p><br><strong>Теперь немного об операторах сравнения</strong><br><br><strong>=</strong><br><br>Равенство строк (не чисел!). Так, "0" = "0" - истина, а вот "0" = "00" - уже ложь!</p>
+<pre><code class="language-plaintext">if [ "$a" = "mystring" ]; then
+ echo "равно"
+fi</code></pre>
+<p><br>ВНИМАНИЕ! Нельзя использовать такую запись:</p>
+<pre><code class="language-plaintext">if [ "$a" = "" ]; then
+ echo "Это ошибка! такой скрипт не сработает!"
+fi</code></pre>
+<p>нужно делать так:</p>
+<pre><code class="language-plaintext">if [ -z "$a" ]; then
+ echo "Переменная a - пустая строка с нулевой длинной"
+fi</code></pre>
+<p><br><strong>!=</strong><br><br>Неравенство строк (не чисел!).</p>
+<pre><code class="language-plaintext">if [ "$a" != "mystring" ]; then
+ echo "не равно"
+fi</code></pre>
+<p><br>ВНИМАНИЕ! Нельзя использовать такую запись:</p>
+<pre><code class="language-plaintext">if [ "$a" != "" ]; then
+ echo "Это ошибка! такой скрипт не сработает!"
+fi</code></pre>
+<p>нужно делать так:</p>
+<pre><code class="language-plaintext">if [ -n "$a" ]; then
+ echo "Переменная a - НЕ пустая строка с нулевой длинной"
+fi</code></pre>
+<p><br><strong>-eq</strong><br><br>Числовое равенство. Так, "01" -eq "1" - будет истиной.<br><br>&nbsp;</p>
+<pre><code class="language-plaintext">a=123
+b=0123
+
+if [ "$a" -eq "$b" ]; then
+ echo "Они равны!"
+fi</code></pre>
 <p><br><br><strong>-ne</strong><br><br>Числовое неравенство.<br><br>&nbsp;</p>
-<p>a=123<br>b=234<br><br>if [ "$a" -ne "$b" ]; then<br>&nbsp;echo "Переменная a неравна b - числовое сравнение"<br>fi</p>
+<pre><code class="language-plaintext">a=123
+b=234
+
+if [ "$a" -ne "$b" ]; then
+ echo "Переменная a неравна b - числовое сравнение"
+fi</code></pre>
 <p><br><br><strong>-gt</strong>&nbsp;и&nbsp;<strong>-ge</strong><br><br>Больше (-gt); больше или равно (-ge) - числовое сравнение.<br><br>&nbsp;</p>
-<p>a=5<br>b=10<br><br>if [ "$b" -gt "$a" ]; then<br>&nbsp;echo "Переменная b больше, чем a"<br>fi</p>
+<pre><code class="language-plaintext">a=5
+b=10
+
+if [ "$b" -gt "$a" ]; then
+ echo "Переменная b больше, чем a"
+fi</code></pre>
 <p><br>&nbsp;</p>
-<p>a=5<br>b=10<br><br>if [ "$b" -ge "$a" ]; then<br>&nbsp;echo "Переменная b больше или равна a"<br>fi</p>
-<p><br><br><strong>-lt</strong>&nbsp;и&nbsp;<strong>-le</strong><br><br>Меьнше (-lt); меньше или равно (-le) - числовое сравнение.<br><br>&nbsp;</p>
-<p>a=5<br>b=10<br><br>if [ "$a" -lt "$b" ]; then<br>&nbsp;echo "Переменная a меньше, чем b"<br>fi</p>
-<p><br>&nbsp;</p>
-<p>a=5<br>b=10<br><br>if [ "$a" -le "$b" ]; then<br>&nbsp;echo "Переменная a меньше или равна b"<br>fi</p>
-<p><br><br><strong>&lt;</strong><br><br>Строковое сравнение. Алфавитно (ASCII) меньше.<br><br>&nbsp;</p>
-<p>a="A"<br>b="B"<br><br>if [[ "$a" &lt; "$b" ]]; then<br>&nbsp;echo "ASCII переменной a меньше, чем b"<br>fi</p>
-<p><br>Заметьте, что здесь мы экранируем знак "&lt;" через двойные скобки "[[" и "]]"!<br><br>другая запись (без двойных кавычек):<br>&nbsp;</p>
-<p>if [ "$a" \&lt; "$b" ]; then</p>
-<p><br><br><br><strong>&gt;</strong><br><br>Строковое сравнение. Алфавитно (ASCII) больше.<br><br>&nbsp;</p>
-<p>a="A"<br>b="B"<br><br>if [[ "$a" &gt; "$b" ]]; then<br>&nbsp;echo "ASCII переменной a больше, чем b"<br>fi</p>
-<p><br>Заметьте, что здесь мы экранируем знак "&gt;" через двойные скобки "[[" и "]]"!<br><br>другая запись (без двойных кавычек):<br>&nbsp;</p>
-<p>if [ "$a" \&lt; "$b" ]; then</p>
-<p><br><br><br><strong>-z</strong><br><br>Истинно если строка пустая (имеет нулевую длинну).<br><br>&nbsp;</p>
-<p>a=""<br><br>if [ -z "$a" ]; then<br>&nbsp;echo "Переменная a - пустая"<br>fi</p>
-<p><br><br><strong>-n</strong><br><br>Истинно если строка не пустая.</p>
+<pre><code class="language-plaintext">a=5
+b=10
+
+if [ "$b" -ge "$a" ]; then
+ echo "Переменная b больше или равна a"
+fi</code></pre>
+<p><strong>-lt</strong>&nbsp;и&nbsp;<strong>-le</strong><br>Меьнше (-lt); меньше или равно (-le) - числовое сравнение.&nbsp;</p>
+<pre><code class="language-plaintext">a=5
+b=10
+
+if [ "$a" -lt "$b" ]; then
+ echo "Переменная a меньше, чем b"
+fi </code></pre>
+<pre><code class="language-plaintext">a=5
+b=10
+
+if [ "$a" -le "$b" ]; then
+ echo "Переменная a меньше или равна b"
+fi</code></pre>
+<p><strong>&lt;</strong><br>Строковое сравнение. Алфавитно (ASCII) меньше.</p>
+<pre><code class="language-plaintext">a="A"
+b="B"
+
+if [[ "$a" &lt; "$b" ]]; then
+ echo "ASCII переменной a меньше, чем b"
+fi</code></pre>
+<p>Заметьте, что здесь мы экранируем знак "&lt;" через двойные скобки "[[" и "]]"!<br>другая запись (без двойных кавычек):</p>
+<pre><code class="language-plaintext">if [ "$a" \&lt; "$b" ]; then</code></pre>
+<p><strong>&gt;</strong><br>Строковое сравнение. Алфавитно (ASCII) больше.</p>
+<pre><code class="language-plaintext">a="A"
+b="B"
+
+if [[ "$a" &gt; "$b" ]]; then
+ echo "ASCII переменной a больше, чем b"
+fi</code></pre>
+<p>Заметьте, что здесь мы экранируем знак "&gt;" через двойные скобки "[[" и "]]"!<br>другая запись (без двойных кавычек):</p>
+<pre><code class="language-plaintext">if [ "$a" \&lt; "$b" ]; then</code></pre>
+<p><strong>-z</strong><br>Истинно если строка пустая (имеет нулевую длинну).</p>
+<pre><code class="language-plaintext">a=""
+
+if [ -z "$a" ]; then
+ echo "Переменная a - пустая"
+fi</code></pre>
+<p><strong>-n</strong><br>Истинно если строка не пустая.</p>
 <pre><code class="language-plaintext">a="something"
 
 if [ -n "$a" ]; then
  echo "Строка 'a' не пустая"
 fi</code></pre>
-<p><br><strong>-f</strong><br><br>Существование файла</p>
+<p><strong>-f</strong><br>Существование файла</p>
 <pre><code class="language-plaintext">if [ -f "/home/user/file" ]; then
  echo "Файл найден"
 fi</code></pre>
-<p><br><strong>-d</strong><br><br>Существование каталога</p>
+<p><strong>-d</strong><br>Существование каталога</p>
 <pre><code class="language-plaintext">if [ -d "/home/user/directory" ]; then
  echo "Каталог найден"
 fi</code></pre>
