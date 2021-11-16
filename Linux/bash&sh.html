@@ -2,7 +2,7 @@
 title: bash/sh: оператор if
 description: условный оператор if и его структура
 published: true
-date: 2021-11-16T20:43:04.834Z
+date: 2021-11-16T20:46:44.562Z
 tags: linux, bash, sh, shell, if
 editor: ckeditor
 dateCreated: 2021-11-16T20:26:08.624Z
@@ -17,8 +17,8 @@ fi</code></pre>
 fi</code></pre>
 <p>Как видно, начинается с "if", далее идет сравнение, далее "; then", и со следующей строки - операции, которые нужно выполнить при успешном сравнении.<br>Если нужно добавить "else" - то так и пишем на отдельной строке, после чего, со следующей строки - описание того, что нужно сделать, если сравнение не истинно.<br>Заканчивается это все строкой "fi".<br><br>Заметка. Частая ошибка - опускание пробелов. SH очень трепетно к этому относится и запись вида</p>
 <pre><code class="language-plaintext">if ["$a"!="$b"]; then
-fi</code></pre>
-<p>работать не будет!<br><br>Вот несколько примеров:</p>
+fi  					#работать не будет!			</code></pre>
+<p>Вот несколько примеров:</p>
 <pre><code class="language-plaintext">a="value1"
 b="value2"
 
@@ -27,6 +27,7 @@ if [ "$a" = "$b" ]; then
 else
  echo "a не равно b"
 fi</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">if [ -f "/home/user/thefile" ]; then
  echo "Файл в папке пользователя найден"
 fi </code></pre>
@@ -39,6 +40,7 @@ fi</code></pre>
 <pre><code class="language-plaintext">if [ "$a" = "$b" -a "$c" = "$d" ]; then
  echo "Оба выражения истинны"
 fi</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">if [ "$a" = "$b" -o "$c" = "$d" ]; then
  echo "Одно из выражений - истинно"
 fi</code></pre>
@@ -46,7 +48,7 @@ fi</code></pre>
 <pre><code class="language-plaintext">if [ ! -f "/home/user/file" ]; then
  echo "Файл не найден"
 fi</code></pre>
-<p><br><strong>Теперь немного об операторах сравнения</strong><br><br><strong>=</strong><br>Равенство строк (не чисел!). Так, "0" = "0" - истина, а вот "0" = "00" - уже ложь!</p>
+<p><br><strong>Теперь немного об операторах сравнения</strong><br><strong>=</strong><br>Равенство строк (не чисел!). Так, "0" = "0" - истина, а вот "0" = "00" - уже ложь!</p>
 <pre><code class="language-plaintext">if [ "$a" = "mystring" ]; then
  echo "равно"
 fi</code></pre>
@@ -91,6 +93,7 @@ b=10
 if [ "$b" -gt "$a" ]; then
  echo "Переменная b больше, чем a"
 fi</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">a=5
 b=10
 
