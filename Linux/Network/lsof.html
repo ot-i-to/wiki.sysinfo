@@ -1,0 +1,53 @@
+<!--
+title: lsof
+description: Проверка открытых портов в Linux с помощью утилиты lsof
+published: true
+date: 2021-11-16T21:50:06.774Z
+tags: linux, lsof, network, ports
+editor: ckeditor
+dateCreated: 2021-11-16T21:50:06.774Z
+-->
+
+<h3>Проверка открытых портов в Linux с помощью утилиты lsof</h3>
+<p>Утилита lsof в основном отображает список открытых файлов. Однако с некоторыми настройками параметров мы можем в состоянии также проверить открытые порты в Linux.</p>
+<p>Команда:</p>
+<pre><code class="language-plaintext"># lsof -i -P -n</code></pre>
+<p>Вывод:</p>
+<pre><code class="language-plaintext"># lsof -i -P -n
+COMMAND       PID USER   FD   TYPE   DEVICE SIZE/OFF NODE NAME
+pulseaudi    1853  vlk   17u  IPv4  5104582      0t0  TCP 127.0.0.1:4713-&gt;127.0.0.1:45128 (ESTABLISHED)
+pulseaudi    1853  vlk   24u  IPv4  7190973      0t0  TCP 127.0.0.1:4713-&gt;127.0.0.1:43714 (ESTABLISHED)
+pulseaudi    1853  vlk   85u  IPv6   427194      0t0  TCP *:4713 (LISTEN)
+pulseaudi    1853  vlk   86u  IPv6  5110261      0t0  TCP *:44817 (LISTEN)
+pulseaudi    1853  vlk   87u  IPv6  1091372      0t0  TCP *:36135 (LISTEN)
+pulseaudi    1853  vlk   93u  IPv4  1091373      0t0  TCP *:38383 (LISTEN)
+pulseaudi    1853  vlk   95u  IPv4   427195      0t0  TCP *:4713 (LISTEN)
+pulseaudi    1853  vlk   96u  IPv4  5110262      0t0  TCP *:41475 (LISTEN)
+vncserver    2086  vlk    8u  IPv4    50346      0t0  TCP 127.0.0.1:42843-&gt;127.0.0.1:37192 (ESTABLISHED)
+GeckoMain    3564  vlk   37u  IPv4 24826742      0t0  TCP 192.168.45.100:50236-&gt;140.82.114.26:443 (ESTABLISHED)
+GeckoMain    3564  vlk   68u  IPv4 24857364      0t0  TCP 192.168.45.100:48766-&gt;213.167.39.58:443 (ESTABLISHED)
+GeckoMain    3564  vlk   78u  IPv4 12051584      0t0  TCP 192.168.45.100:51820-&gt;52.35.82.120:443 (ESTABLISHED)
+GeckoMain    3564  vlk  108u  IPv4 24866909      0t0  TCP 192.168.45.100:56240-&gt;10.0.0.222:80 (ESTABLISHED)
+GeckoMain    3564  vlk  120u  IPv4 24859682      0t0  TCP 192.168.45.100:43594-&gt;85.10.194.48:443 (ESTABLISHED)
+GeckoMain    3564  vlk  132u  IPv4 24767143      0t0  TCP 192.168.45.100:45320-&gt;84.21.74.45:443 (ESTABLISHED)
+GeckoMain    3564  vlk  137u  IPv4 24848082      0t0  TCP 192.168.45.100:46094-&gt;10.255.3.108:8006 (ESTABLISHED)
+GeckoMain    3564  vlk  143u  IPv6 24769828      0t0  TCP [2001:470:1f15:23a:57d5:cb76:4a86:33e4]:40574-&gt;[2606:4700::6810:f9f9]:443 (ESTABLISHED)
+GeckoMain    3564  vlk  154u  IPv4   433322      0t0  UDP *:5353</code></pre>
+<p>В случае, если вы хотите получить более подробную информацию о порте 443 можно использовать следующую команду:</p>
+<pre><code class="language-plaintext">$ lsof -i :443
+COMMAND       PID USER   FD   TYPE   DEVICE SIZE/OFF NODE NAME
+GeckoMain    3564  vlk   37u  IPv4 24826742      0t0  TCP vlk-N56VB:50236-&gt;lb-140-82-114-26-iad.github.com:https (ESTABLISHED)
+GeckoMain    3564  vlk   68u  IPv4 24906912      0t0  TCP vlk-N56VB:49224-&gt;sbc-fspbx.telsys.pro:https (ESTABLISHED)
+GeckoMain    3564  vlk   78u  IPv4 12051584      0t0  TCP vlk-N56VB:51820-&gt;ec2-52-35-82-120.us-west-2.compute.amazonaws.com:https (ESTABLISHED)
+GeckoMain    3564  vlk  130u  IPv6 24871924      0t0  TCP vlk-N56VB:47838-&gt;mc.yandex.ru:https (ESTABLISHED)
+GeckoMain    3564  vlk  143u  IPv6 24769828      0t0  TCP vlk-N56VB:40574-&gt;[2606:4700::6810:f9f9]:https (ESTABLISHED)
+GeckoMain    3564  vlk  182u  IPv4 24877897      0t0  TCP vlk-N56VB:46798-&gt;om.almatel.msk.ru:https (ESTABLISHED)
+GeckoMain    3564  vlk  183u  IPv6 24899252      0t0  TCP vlk-N56VB:53046-&gt;[2001:41d0:2:bfcd::111]:https (ESTABLISHED)
+GeckoMain    3564  vlk  191u  IPv4 24899253      0t0  TCP vlk-N56VB:44024-&gt;static.85.10.194.48.clients.your-server.de:https (ESTABLISHED)
+GeckoMain    3564  vlk  210u  IPv4 24876904      0t0  TCP vlk-N56VB:46790-&gt;om.almatel.msk.ru:https (ESTABLISHED)
+GeckoMain    3564  vlk  246u  IPv4 20861787      0t0  TCP vlk-N56VB:36782-&gt;185.30.96.8:https (ESTABLISHED)
+Telegram  1625116  vlk   40u  IPv4 24256762      0t0  TCP vlk-N56VB:45684-&gt;149.154.167.51:https (ESTABLISHED)
+Telegram  1625116  vlk   54u  IPv4 24818414      0t0  TCP vlk-N56VB:45592-&gt;149.154.167.50:https (ESTABLISHED)
+Telegram  1625116  vlk   79u  IPv4 24256014      0t0  TCP vlk-N56VB:33534-&gt;149.154.167.50:https (ESTABLISHED)</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
