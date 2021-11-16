@@ -2,7 +2,7 @@
 title: bash/sh: оператор if
 description: условный оператор if и его структура
 published: true
-date: 2021-11-16T20:53:53.190Z
+date: 2021-11-16T21:29:41.521Z
 tags: linux, bash, sh, shell, if
 editor: ckeditor
 dateCreated: 2021-11-16T20:26:08.624Z
@@ -27,6 +27,7 @@ if [ "$a" = "$b" ]; then
 else
  echo "a не равно b"
 fi</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">if [ -f "/home/user/thefile" ]; then
  echo "Файл в папке пользователя найден"
 fi </code></pre>
@@ -39,6 +40,7 @@ fi</code></pre>
 <pre><code class="language-plaintext">if [ "$a" = "$b" -a "$c" = "$d" ]; then
  echo "Оба выражения истинны"
 fi</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">if [ "$a" = "$b" -o "$c" = "$d" ]; then
  echo "Одно из выражений - истинно"
 fi</code></pre>
@@ -91,6 +93,7 @@ b=10
 if [ "$b" -gt "$a" ]; then
  echo "Переменная b больше, чем a"
 fi</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">a=5
 b=10
 
@@ -148,4 +151,70 @@ fi</code></pre>
 <pre><code class="language-plaintext">if [ -d "/home/user/directory" ]; then
  echo "Каталог найден"
 fi</code></pre>
+<h3>Заявление if..else</h3>
+<p>В зависимости от введенного числа, сценарий выведет сообщение от того, больше это число или меньше/равно 10.</p>
+<pre><code class="language-plaintext">#!/bin/bash
+
+echo -n "Введите число: "
+read VAR
+
+if [[ $VAR -gt 10 ]]
+then
+  echo "Больше, чем 10."
+else
+  echo "Равно или меньше 10."
+fi</code></pre>
+<h3>Заявление if..elif..else</h3>
+<p>В зависимости от введенного числа, сценарий выдает сообщение относительно &nbsp;числа 10.</p>
+<pre><code class="language-plaintext">#!/bin/bash
+
+echo -n "Введите число: "
+read VAR
+
+if [[ $VAR -gt 10 ]]
+then
+  echo "Переменная больше, чем 10."
+elif [[ $VAR -eq 10 ]]
+then
+  echo "Переменная равна 10."
+else
+  echo "Переменная меньше, чем 10."
+fi</code></pre>
+<h3>Несколько условий</h3>
+<p>Логические операторы OR и&nbsp;AND&nbsp;позволяют использовать несколько условий в выражениях if.</p>
+<p>Вот еще одна версия скрипта для печати наибольшего числа среди трех чисел.&nbsp;В этой версии вместо вложенных выражениях if&nbsp;мы будем использовать логический оператор&nbsp;AND (&amp;&amp;).</p>
+<pre><code class="language-plaintext">#!/bin/bash
+
+echo -n "Введите первое число: "
+read VAR1
+echo -n "Введите второй номер: "
+read VAR2
+echo -n "Введите третий номер: "
+read VAR3
+
+if [[ $VAR1 -ge $VAR2 ]] &amp;&amp; [[ $VAR1 -ge $VAR3 ]]
+then
+  echo "$VAR1 наибольшее число"
+elif [[ $VAR2 -ge $VAR1 ]] &amp;&amp; [[ $VAR2 -ge $VAR3 ]]
+then
+  echo "$VAR2 наибольшее число"
+else
+  echo "$VAR3 наибольшее число"
+fi</code></pre>
+<h3>Проверьте, содержит ли строка подстроку</h3>
+<p>Один из подходов заключается в использовании подстроки с символами звездочки *, что означает совпадение всех символов.</p>
+<pre><code class="language-plaintext">#!/bin/bash
+
+VAR='GNU / Linux - это операционная система'
+if [[ $VAR == *"Linux"* ]]; then
+  echo "Здесь присутствует"
+fi</code></pre>
+<p>Другой вариант – использовать оператор регулярного выражения =~, как показано ниже:</p>
+<pre><code class="language-plaintext">#!/bin/bash
+
+VAR='GNU / Linux - это операционная система'
+if [[ $VAR =~ .*Linux.* ]]; then
+  echo "Здесь присутствует"
+fi</code></pre>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
