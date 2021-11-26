@@ -2,7 +2,7 @@
 title: Анализ трафика
 description: ... для голоса поверх IP
 published: false
-date: 2021-11-26T21:12:29.247Z
+date: 2021-11-26T22:02:56.787Z
 tags: voip, analiz
 editor: ckeditor
 dateCreated: 2021-11-26T20:25:52.170Z
@@ -1150,1465 +1150,457 @@ dateCreated: 2021-11-26T20:25:52.170Z
 <p><br>&nbsp;</p>
 <p><br>&nbsp;</p>
 <p>Таблица 4 описывает влияние полезной нагрузки на требования к пропускной способности для различных кодеков.</p>
-<p><br>&nbsp;</p>
-<p><br>&nbsp;</p>
-<p><br>&nbsp;</p>
-<p><strong><u>Таблица 4. Характеристики голосового кодека</u></strong></p>
 <figure class="table">
   <table>
     <tbody>
       <tr>
-        <td style="border-bottom:1px solid #aba899;border-left:1px solid #ece9d8;border-right:none;border-top:none;padding:0cm 0cm 0cm 0.01cm;vertical-align:top;" colspan="10">&nbsp;</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Алгоритм</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Полоса пропускания голоса (Кбит/с)</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Размер кадра (байт)</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Полезная нагрузка (байты)</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Количество пакетов в секунду</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Заголовок IP/UDP/RTP (байты)</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Заголовок CRTP (байты)</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>L2</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Заголовок уровня2 (байты)</strong></td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;"><strong>Обща пропуск способно (Кбит/с) VAD</strong></td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>Алгоритм</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><strong>Полоса пропускания голоса (Кбит/с)</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>Размер кадра (байт)</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><strong>Полезная нагрузка Cisco (байты)</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>Количество пакетов в секунду</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>Заголовок IP/UDP/RTP</strong></p>
-          <p><strong>(байты)</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>Заголовок CRTP</strong></p>
-          <p><strong>(байты)</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>L2</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p><br>&nbsp;</p>
-          <p><strong>Заголовок уровня2 (байты)</strong></p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><strong>Об пропу спосо (Кбит</strong></p>
-          <p style="text-align:right;"><strong>V</strong></p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">160</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">85,6</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>160</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>85,6</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">160</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">70,4</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>160</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>70,4</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">160</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">82,4</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>160</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>82,4</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">160</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">67,2</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>160</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>67,2</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">160</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">81,6</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>160</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>81,6</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">160</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">66,4</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>160</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>66,4</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">107,2</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>100</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>107,2</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">76,8</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>100</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>76,8</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100,8</td>
       </tr>
       <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>100</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
-          <p><br>&nbsp;</p>
-          <p>100,8</p>
-        </td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">70,4</td>
       </tr>
       <tr>
-        <td style="border-bottom:none;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">&nbsp;</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">99,2</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">68,8</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">29,6</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">26,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">11,2</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">25,6</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">22,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">12,3</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20,3</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10,1</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">19,7</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">9,6</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.723.1</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6,3</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">26</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">17,6</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.723.1</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6,3</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">26</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">9,7</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">70,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">99,2</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.711</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">64</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">80</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">100</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">68,8</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">29,6</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">26,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">PPP</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">6</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">11,2</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">25,6</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">20</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">50</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">2</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">FR</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">4</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">G.729</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">8</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">10</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">30</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">33</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">40</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">.</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">Ether</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">14</td>
+        <td style="border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;border-top:1px solid #000000;">22,4</td>
       </tr>
     </tbody>
   </table>
 </figure>
-<figure class="table">
-  <table>
-    <tbody>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">G.711</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">64</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">80</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">80</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">100</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">2</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">PPP</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">6</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:none;padding:0cm 0cm 0cm 0.04cm;">70,4</td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>100</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>99,2</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.711</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>64</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>80</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>100</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>68,8</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>29,6</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14,4</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>26,4</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>11,2</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>25,6</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>50</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10,4</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>33</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22,4</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>33</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>12,3</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>33</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>20,3</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>33</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10,1</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>33</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>19,7</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.729</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>10</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>33</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>9,6</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>26</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>17,6</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>26</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>9,7</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:none;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">&nbsp;</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-<p><br>&nbsp;</p>
-<figure class="table">
-  <table>
-    <tbody>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">G.723.1</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">6,3</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">30</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">30</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">26</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">40</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">PPP</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">6</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:none;padding:0cm 0cm 0cm 0.04cm;">16,0</td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>26</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8,0</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>26</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>15,5</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>26</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>7,6</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>5,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14,8</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>5,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>Ether</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>14</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>8,1</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>5,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>13,4</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>5,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>PPP</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,7</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>5,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>40</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>13,1</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>G.723.1</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>5,3</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>30</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>22</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">&nbsp;</td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>2</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>FR</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>4</p>
-        </td>
-        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
-          <p><br>&nbsp;</p>
-          <p>6,4</p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-<p><br>&nbsp;</p>
-<p><br>&nbsp;</p>
-<p><br>&nbsp;</p>
-<p><br>&nbsp;</p>
+<p>&nbsp;</p>
 <h2>Сравнение интерфейсов «точка-точка» и «точка-группа точек»</h2>
 <p>Так как каналы сетей ТфОП построены по схеме «точка-точка», а сети VoIP обычно используют схему «точка-группа точек», следует учитывать место прохождения трафика и группировать его соответствующим образом. Это группирование начинает играть большую роль при определении пропускной способности в переключаемых соединениях.</p>
 <p>Рисунок 4. Топология нормального функционирования</p>
