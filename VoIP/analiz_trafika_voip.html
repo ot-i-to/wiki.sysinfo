@@ -1,0 +1,2741 @@
+<!--
+title: Анализ трафика
+description: ... для голоса поверх IP
+published: true
+date: 2021-11-26T20:25:52.170Z
+tags: voip, analiz
+editor: ckeditor
+dateCreated: 2021-11-26T20:25:52.170Z
+-->
+
+<h1>Содержание</h1>
+<h3>Анализ трафика для голоса поверх IP Обзор анализа трафика</h3>
+<p><strong>Основы теории массового обслуживания</strong></p>
+<p>Измерение нагрузки трафика</p>
+<p>Трафик в часы наибольшей нагрузки (Busy Hour Traffic, BHT) Измерение пропускной способности сети</p>
+<p>Уровень обслуживания Типы трафика Методика измерений</p>
+<h3>Критерии выбора модели трафика</h3>
+<p>Модели поступления вызовов</p>
+<p>Модель плавного поступления вызовов Модель пикового поступления вызовов Модель случайного поступления вызовов</p>
+<p>Заблокированные вызовы Количество источников Время удержания</p>
+<h3>Модели трафика</h3>
+<p>Эрланг B</p>
+<p>Пример 1: Использование модели трафика Эрланг B Расширенный Эрланг B</p>
+<p>Пример 2: Использование модели трафика Эрланг B Эрланг C</p>
+<p>Пример 3: Использование модели трафика Эрланг C для голоса Пример 4: Использование модели трафика Эрланг C для голоса</p>
+<p>Энгсет Пуассон</p>
+<p>Пример 5: Использование модели трафика Пуассона EART/EARC и Нил-Уилкерсон</p>
+<h3>Использование анализа трафика для сетей VoIP</h3>
+<p>Голосовые кодеки Сегменты</p>
+<p>Определение активности речи Сжатие заголовков RTP</p>
+<p>Сравнение интерфейсов «точка-точка» и «точка-группа точек»</p>
+<h3>Пример анализа сквозного трафика Дополнительная документация</h3>
+<p><strong>Анализ трафика для голоса поверх IP</strong></p>
+<p><i>Анализ трафика для голоса поверх IP </i>описывает различные понятия и особенности анализа трафика, относящиеся к технологии VoIP. В этом документе представлены основы теории массового обслуживания, несколько статистических моделей трафика, использование анализа трафика для сетей VoIP и пример анализа сквозного трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Документ содержит следующие разделы:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Обзор анализа трафика</p>
+<p>Основы теории массового обслуживания Критерии выбора модели трафика Модели трафика</p>
+<p>Использование анализа трафика для сетей VoIP Пример анализа сквозного трафика Дополнительная документация</p>
+<p><br>&nbsp;</p>
+<h1>Обзор анализа трафика</h1>
+<p><br>&nbsp;</p>
+<p>Сети (для передачи голоса или данных) создаются с учетом множества различных переменных. Два наиболее важных фактора, которые необходимо учитывать при проектировании сети, — это качество связи и затраты. Качество связи важно для удовлетворения клиента. Затраты всегда влияют на полученную прибыль. Один из способов учета некоторых элементов качества связи и затрат при проектировании сети — оптимизация использования канала связи.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В этом документе описаны различные приемы, используемые при проектировании и отладке сетей передачи голоса, чувствительных к трафику. Здесь обсуждаются несколько различных моделей трафика и объясняется, как использовать таблицы вероятности трафика при проектировании эффективно работающих сетей передачи голоса.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h1>Основы теории массового обслуживания</h1>
+<p><br>&nbsp;</p>
+<p>Проектировщики сетей нуждаются в методе правильного определения пропускной способности сети, особенно, если сеть расширяется. Теория массового обслуживания дает возможность проектировщикам сетей делать предположения о работе сетей на основе прошлого опыта.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Трафик — это объем данных или количество сообщений, переданных через канал за определенный промежуток времени. Трафик также включает отношение между попытками вызова оборудования, чувствительного к трафику, и скоростью выполнения этих вызовов.</p>
+<p>Анализ трафика дает возможность определить необходимую ширину полосы пропускания каналов передачи данных и голосовых вызовов. Проектирование трафика направлено на решение проблем качества связи, так как дает возможность определить уровень обслуживания и коэффициент блокирования. Сеть, спроектированная надлежащим образом, имеет низкий коэффициент блокирования и высокий уровень использования канала, т. е. качество обслуживания повышается, а затраты уменьшаются.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Существует множество факторов, которые необходимо учитывать при анализе трафика. Наиболее важные факторы описаны в следующих разделах:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Измерение нагрузки трафика Уровень обслуживания Типы трафика</p>
+<p>Методика измерений</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Безусловно, на результаты расчета анализа трафика могут влиять и другие факторы, но перечисленные выше являются основными. В отношении других факторов можно делать предположения.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Измерение нагрузки трафика</h2>
+<p><br>&nbsp;</p>
+<p>В теории массового обслуживания измеряется интенсивность трафика. Интенсивностьтрафика — это отношение количества поступающих вызовов за определенный период времени к среднему времени, затрачиваемому на обслуживание каждого вызова в течение этого периода. Эти единицы измерения основаны на среднем времени удержания (Average Hold Time, AHT). AHT — это суммарная продолжительность всех вызовов за указанный период, поделенная на количество вызовов за этот период, как показано в</p>
+<p>следующем примере:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(3976 total call seconds)/(23 calls) = 172.87 sec per call = AHT of 172.87 seconds</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Две основных единицы измерения, которые используются сегодня для измерения нагрузки трафика, — это эрланги и сто вызовосекунд (centum call seconds, CCS).</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Один эрланг — это 3600 секунд вызовов в одном канале или интенсивность трафика, достаточная для загрузки канала в течение 1 часа. Трафик в эрлангах — это произведение количества вызовов на среднее время удержания вызова (AHT), поделенное на 3600, как показано в следующем примере:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(23 calls * 172.87 AHT)/3600 = 1.104 erlangs</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>100 вызовосекунд (CCS) — это 100 секунд вызовов в одном канале. Голосовые коммутаторы обычно измеряют объем трафика в сотнях вызовосекунд.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Трафик в эрлангах — это произведение количества вызовов на среднее время удержания вызова (CCS), поделенное на 100, как показано в следующем примере:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(23 calls * 172.87 AHT)/100 = 39.76 CCS</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Выбор единицы измерения зависит во многом от используемого оборудования и единиц измерения, в которых ведется запись. Вызовосекунды (CCS) применяются во многих коммутаторах по той причине, что число 100 является более практичной базовой единицей периода, чем 3600. Обе единицы измерения считаются стандартными в этой сфере. Они соотносятся следующим образом: 1 эрланг = 3600 вызовосекунд.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Несмотря на то, что можно разделить общее число вызовосекунд за час на 3600 секунд, чтобы определить интенсивность трафика в эрлангах, столь же целесообразно использовать средние значения по различным временным периодам. Работая со средними значениями по большому числу периодов измерения, можно получить более точную характеристику трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Трафик в час наибольшей нагрузки (BHT)</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Нагрузка сети обычно измеряется в час наибольшей нагрузки, потому что этот период характеризуется максимальной интенсивностью трафика, которую должна выдерживать сеть. Результатом является величина интенсивности трафика, которая обычно называется трафиком в час наибольшей нагрузки (BHT). Бывают ситуации, когда невозможно произвести точное измерение, и имеется только приблизительная оценка числа вызовов, обрабатываемых за день. В таких случаях уместно исходить в своих оценках из специфики конкретного окружения, например, из среднего количества вызовов за день или среднего времени удержания (AHT). В стандартном деловом окружении час наибольшей нагрузки данного дня занимает приблизительно от 15 до 20 % трафика за день. В расчетах обычно используется значение в 17 % общего трафика за день для характеристики трафика в пиковый период. Для многих деловых организаций приемлемой оценкой среднего времени удержания (AHT) будет интервал от 180 до 210 секунд. Эти оценки можно использовать, если необходимо определить требования к магистральным каналам без более полных данных.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Измерение пропускной способности сети</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Некоторые из многих способов измерения пропускной способности сети:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Количество попыток вызовов в час наибольшей нагрузки (BHCA) Количество попыток вызовов в час наибольшей нагрузки (BHCC) Вызовы в секунду (CPS)</p>
+<p><br>&nbsp;</p>
+<p>Все эти измерения основаны на количестве вызовов. Хотя эти измерения действительно описывают пропускную способность сети, они практически бесполезны для анализа трафика, так как не учитывают время удержания вызова. Эти измерения необходимо использовать вместе со значением среднего времени удержания, чтобы вычислить трафик в час наибольшей нагрузки и использовать полученное значение для анализа трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Уровень обслуживания</h2>
+<p>Уровень обслуживания (GoS) определяется как вероятность блокировки вызовов во время попытки занять канал. Это значение записывается как блокировка (или коэффициент блокировки) Р.хх, где хх — это процент заблокированных вызов в системе трафика. Например, система, в которой требуется уровень обслуживания (GoS) Р.01, характеризуется однопроцентной вероятностью недоступности для абонентов. Уровень обслуживания (GoS) Р.00 запрашивается редко, и такой уровень маловероятен на практике: чтобы быть уверенным на 100 %, что блокировки не будет, необходимо проектировать сеть с соотношением абонент-канал 1:1. Также большинство формул трафика предполагают, что имеется неограниченное количество абонентов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Типы трафика</h2>
+<p><br>&nbsp;</p>
+<p>Можно использовать телекоммуникационное оборудование, где фиксируются описанные данные трафика. К сожалению, большинство из полученных измерений основаны на фактическом трафике в системе, а не на предложенной нагрузке трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Фактический трафик — это трафик, который фактически обработан телекоммуникационным оборудованием. Предложенный трафик — это фактическое количество попыток обмена данными в системе. Обратите внимание, что разница между этими двумя значениями может привести к некоторым неточностям в расчетах.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Чем больше объем блокирования, тем больше разница между фактической и предложенной нагрузкой. Для расчета предложенной нагрузки из фактической нагрузки можно использовать такую формулу:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Offered load = carried load/(1 - blocking factor)</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>К сожалению, эта формула не учитывает повторные вызовы, которые могут совершаться при блокировке абонента. Для учета доли повторных вызовов можно использовать такую формулу:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Offered load = carried load * Offered Load Adjustment Factors (OAF) OAF = [1.0 - (R * blocking factor)]/(1.0 - blocking factor)</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Где R — процент вероятности повторного вызова. Например, R = 0,6 означает 60 % повторных вызовов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Методика измерений</h2>
+<p><br>&nbsp;</p>
+<p>Точность анализа трафика всегда зависит от точности методов измерения. Вид нагрузки изменяют следующие параметры:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рабочие и выходные дни Праздники</p>
+<p>Тип трафика (модемный и традиционный голосовой) Фактическая и абонентская нагрузка</p>
+<p>Период измерения</p>
+<p>Общее количество измерений Стабильность периода измерения</p>
+<p><br>&nbsp;</p>
+<p>Теория вероятности утверждает, что для точной оценки трафика сети передачи голоса период измерения должен включать по крайней мере 30 часов наибольшей нагрузки сети голосовой связи. Хотя это хорошая отправная точка, другие переменные могут исказить точность этого измерения. Нельзя выбрать 30 наибольших из 32 измерений и полагать, что эта выборка является точной картиной работы сети. Чтобы получить наиболее точные результаты, необходимо выполнить как можно больше измерений предложенной нагрузки. Кроме того, если измерения проводятся на протяжении года, результаты могут искажаться, так как нагрузка трафика на протяжении года увеличивается и уменьшается. Отдел стандартизации телекоммуникаций Международного союза телекоммуникаций (ITU-T) издает рекомендации, как необходимо проводить измерения в сети, чтобы получить точные результаты.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Отдел ITU-T рекомендует, чтобы периоды измерения или считывания данных для соединений телефонной коммутируемой сети общего пользования (ТфОП) были по 60 минут и/или с 15-минутным интервалом. Эти интервалы имеют важное значение, потому что они позволяют суммировать интенсивность трафика в течение определенного периода времени. Если измерения выполняются на протяжении дня, можно обнаружить час пиковой нагрузки трафика в любой день. Рекомендуется использовать два способа определения пикового дневного трафика:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Пиковый период за день </strong>(<strong>DPP</strong>) фиксирует наибольший объем трафика, измеренного за день. Этот метод требует непрерывного измерения и обычно используется в окружении, где пиковый час может различаться в зависимости от дня.</p>
+<p><strong>Фиксированный интервал измерений за день </strong>(<strong>FDMI</strong>) требует измерений только в течение заранее определенных пиковых</p>
+<p>периодов. Этот метод используется, когда модели трафика в определенной степени предсказуемы, и пиковые периоды наступают с регулярными интервалами. Деловой трафик обычно достигает своего пика приблизительно с 10:00 до 11:00 и с 14:00 до 15:00.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В примере из таблицы 1 с помощью метода измерений FDMI можно увидеть, что время наибольшей общей интенсивности трафика — 10:00, причем общая интенсивность трафика равна 60,6 эрлангов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Таблица 1. Измерение пикового периода за день</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:1px solid #aba899;border-left:1px solid #ece9d8;border-right:1px solid #aba899;border-top:1px solid #ece9d8;padding:0cm 0.01cm;vertical-align:top;" colspan="7"><br>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Час</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Понедельник</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Вторник</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Среда</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Четверг</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Пятница</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Общая нагрузка</strong></td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,7</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,5</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,0</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>8,6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>54,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,5</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,5</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><strong>60,6</strong></p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,0</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>58,3</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>8,4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>8,9</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9,4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>45,2</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>13:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9,8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>51,0</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>14:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,7</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,9</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,0</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>59,2</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>15:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9,8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,5</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>55,7</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>16:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11,1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,5</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>52,7</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В примере в таблице 2 используется метод DPP для расчета общей интенсивности трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Таблица 2. Использование метода DPP для расчета общей интенсивности трафика</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:none;border-left:1px solid #ece9d8;border-right:1px solid #aba899;border-top:1px solid #ece9d8;padding:0cm 0.01cm;vertical-align:top;" colspan="7"><br>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #aba899;border-left:1px solid #ece9d8;border-right:1px solid #aba899;border-top:none;padding:0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:1px solid #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Понедельник</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Вторник</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Среда</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Четверг</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Пятница</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Общая нагрузка</strong></td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Пиковый трафик</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,7</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,5</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>12,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>61,9</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><strong>Пиковое время</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>9:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>14:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>10:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>11:00</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><br>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>Также необходимо разделить измерения за день по группам с одинаковым статистическим поведением. Согласно спецификации ITU-T, такими группами являются: рабочие дни, выходные дни и особые дни в году. Группирование измерений с одинаковым статистическим поведением является важным, так как дни с исключительно высоким количеством вызовов (например, Рождество или 8 марта) могут исказить результаты.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рекомендация отдела стандартизации телекоммуникаций Е.492 включает рекомендации по определению обычной и высокой интенсивности трафика в течение месяца. В соответствии с рекомендацией отдела стандартизации коммуникаций Е.492 обычная интенсивность трафика в течение месяца определяется как четвертый сверху наивысший пиковый трафик за день. Если выбирается второй сверху наивысший результат измерений за месяц, это приводит к завышению интенсивности трафика за месяц. Этот результат позволяет определить прогнозируемую интенсивность трафика за месяц.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h1>Критерии выбора модели трафика</h1>
+<p><br>&nbsp;</p>
+<p>Теперь известно, какие измерения необходимы, и вы можете решить, как их использовать. Далее необходимо выбрать соответствующую модель трафика. Основные параметры выбора модели описаны в следующих разделах:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модели поступления вызовов Заблокированные вызовы Количество источников Время удержания</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Модели поступления вызовов</h2>
+<p><br>&nbsp;</p>
+<p>Первый шаг в выборе модели трафика —- определение модели поступления вызовов. Модели поступления вызовов важны для выбора модели трафика, поскольку они различным образом описывают воздействие трафика на систему.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Три основных модели поступления вызовов перечислены ниже и рассмотрены в следующих разделах:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модель плавного поступления вызовов Модель пикового поступления вызовов Модель случайного поступления вызовов</p>
+<p><br>&nbsp;</p>
+<h3>Модель плавного поступления вызовов</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Плавная или гипоэкспоненциальная модель трафика используется, если в трафике нет особых изменений. Время удержания вызова и время между поступлениями вызовов является прогнозируемым, что позволяет прогнозировать трафик в любой момент времени, если есть ограниченное количество источников. В качестве примера рассмотрим проектирование сети голосовой связи для компании, занимающейся исходящим телефонным маркетингом, где несколько агентов проводят весь день за телефоном. Предположим, что за один час ожидается 30 последовательных вызовов каждый длительностью по 2 минуты. Тогда необходимо выделить один магистральный канал для обработки вызовов в течение часа.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для модели плавного поступления вызовов график распределения числа вызовов во времени может выглядеть примерно, как на рис. 1.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Рисунок 1. Модель плавного поступления вызовов</h3>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:230px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_4e54d89670edff05.png"></figure>
+<p><br>&nbsp;</p>
+<p><strong>Модель пикового поступления вызовов</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модель пикового поступления вызовов характеризуется значительными отклонениями трафика от среднего значения. Эта модель поступления вызовов также известна как модель гиперэкспоненциального поступления. Модели пикового трафика показывают, что не стоит включать 8 марта или Рождество в период изучения трафика. Возможны ситуации, когда необходимо проектировать переключаемые группы магистральных каналов для обработки этого вида трафика. В общем случае обработка подобного трафика с учетом периодов пиковой нагрузки требует выделения достаточного количества ресурсов. Например, чтобы одновременно обработать 30 вызовов, необходимо 30 магистральных каналов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для модели пикового поступления вызовов график соотношения вызовов и времени может выглядеть примерно, как на рис. 2.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Рисунок 2 Модель пикового поступления вызовов</h3>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:232px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_4ade237987a1c923.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Модель случайного поступления вызовов</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модели случайного поступления вызовов характеризуются именно случайностью. Они также известны как распределение Пуассона или экспоненциальное распределение. Пуассон — математик, первым описавший этот тип распределения. Модели случайного трафика применяются в случае, когда имеется множество абонентов, каждый из которых создает небольшой объем трафика. Этот тип модели случайного трафика обычно наблюдается в офисных АТС. Количество каналов, необходимое в этой ситуации, может колебаться от 1 до 30.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для модели пикового поступления вызовов график соотношения вызовов и времени может выглядеть примерно, как на рис. 3.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Рисунок 3. Модель случайного поступления вызовов</strong></p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:232px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_25a27924522e0fe6.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Заблокированные вызовы</h2>
+<p><br>&nbsp;</p>
+<p>Заблокированный вызов — это вызов, который нельзя обслужить сразу. Вызовы считаются заблокированными, если они перенаправляются на другую группу магистральных каналов, помещаются в очередь или для них включается тоновый сигнал или объявление. Выбираемая модель определяется типом заблокированных вызовов, поскольку заблокированные вызовы приводят к различиям в нагрузке трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Основные типы заблокированных вызовов:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Утраченные удержанные вызовы </strong>(<strong>LCH</strong>) — эти заблокированные вызовы безвозвратно утрачиваются. Первоначально модель утраченного удержанного вызова была основана на предположении, что все вызовы, которые поступают в систему трафика, удерживаются в течение определенного периода времени. Все вызовы включают любой из заблокированных вызовов. Это означает, что такие вызовы удерживались до тех пор, пока не истекло время вызова.</p>
+<p><strong>Утраченные перенаправленные вызовы </strong>(<strong>LCC</strong>) — эти заблокированные вызовы выводятся из системы, т.е. когда вызов</p>
+<p>блокируется, он перенаправляется в другое место (в основном, на другие телекоммуникационные системы, чувствительные к трафику).</p>
+<p><strong>Утраченные задержанные вызовы </strong>(<strong>LCD</strong>) — эти заблокированные вызовы остаются в системе до момента, пока телекоммуникационная система сможет обслужить этот вызов. Модель утраченного задержанного вызова используется главным образом в центрах телефонного обслуживания или в каналах передачи данных, так как основным фактором для модели LCD является задержка в связи с нагрузкой трафика.</p>
+<p><strong>Утраченные повторные вызовы </strong>(<strong>LCR</strong>) — модель LCR предполагает, что после блокирования вызова определенный процент заблокированных абонентов выполняет повторный вызов, а все другие заблокированные абоненты выполняют повторные вызовы, пока они не будут обслужены. Модель LCR является производной от модели LCC и используется в модели Расширенный Эрланг B.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Количество источников</h2>
+<p><br>&nbsp;</p>
+<p>Количество источников вызовов также имеет отношение к выбираемой модели трафика. Например, если есть только один источник и один магистральный канал, вероятность блокирования вызова равна нулю. По мере увеличения количества источников вероятность блокирования повышается. Количество источников играет роль при проектировании небольшой офисной АТС или станции с малой абонентской емкостью, где можно получить требуемый уровень обслуживания (GoS) при меньшем числе магистральных каналов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Время удержания</h2>
+<p><br>&nbsp;</p>
+<p>Некоторые модели трафика учитывают время удержания вызова. Большинство моделей не учитывают время удержания, так как предполагается, что время удержания вызова подчиняется экспоненциальному распределению. В общем случае вызовы имеют скорее непродолжительное, чем продолжительное время удержания, т.е. время удержания вызова имеет отрицательное экспоненциальное распределение.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h1>Модели трафика</h1>
+<p><br>&nbsp;</p>
+<p>После определения моделей поступления вызовов и заблокированных вызовов, количества источников и времени удержания вызова можно выбирать модель трафика, которая наилучшим образом подходит для вашего окружения. Хотя никакая модель трафика не может точно соответствовать реальной ситуации, эти модели предполагают средние значения для каждой ситуации. Существует множество различных моделей трафика, и главным является выбор модели, наиболее подходящей существующему окружению.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модели трафика, которые используются чаще всего, — это Эрланг B, Расширенный Эрланг В и Эрланг С. Другие распространенные модели трафика — Энгсет, Пуассон, EART/EARC и Нил-Уилкерсон. Сравнение характеристик моделей трафика содержится в таблице 3.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Таблица 3. Сравнение моделей трафика</h3>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:1px solid #aba899;border-left:1px solid #ece9d8;border-right:1px solid #aba899;border-top:1px solid #ece9d8;padding:0cm 0.01cm;vertical-align:top;" colspan="5"><br>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><strong>Модель трафика</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Количество источников</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Модель поступления</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;"><strong>Обработка заблокированного вызова</strong></td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:1.50pt solid #aba899;border-top:1px solid #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><strong>Время удержания</strong></p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Пуассон</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Удержание</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Эрланг B</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Перенаправление</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Расширенный Эрланг B</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Повтор</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Эрланг C</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Задержка</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:none;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.01cm;"><br>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">Энгсет</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">Ограниченное</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">Плавная</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">Перенаправление</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">Экспоненциальное</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>EART/EARC</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Пиковая</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Перенаправление</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Нил-Уилкерсон</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Пиковая</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Удержание</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Кроммелин</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Неограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Задержка</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Постоянное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Биноминальная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Удержание</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Задержка</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ограниченное</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Случайная</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Задержка</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Экспоненциальное</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Следующие разделы описывают различные модели трафика, которые можно выбирать во время расчета количества магистральных каналов, необходимого для вашей конфигурации сети. Размер данного документа не позволяет привести таблицы для всех моделей трафика, но эту информацию можно найти в Интернете или в других источниках. Вы можете рассчитать коэффициент блокирования при помощи:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Формул в этом документе</p>
+<p>Интерактивных калькуляторов, например, по следующему адресу:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><a href="http://www.erlang.com/calculator/index.htm">http://www.erlang.com/calculator/index.htm</a></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Таблиц трафика, доступных в Интернете или в справочниках</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Эрланг B</h2>
+<p><br>&nbsp;</p>
+<p>Модель трафика Эрланг В основана на следующих предположениях:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Неограниченное количество источников Модель случайного поступления трафика Перенаправленные заблокированные вызовы</p>
+<p>Время удержания с экспоненциальным распределением</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модель Эрланг В используется, когда заблокированные вызовы перенаправляются без возврата к исходной группе магистральных каналов. Эта модель предполагает случайное поступление вызовов. Абонент делает только одну попытку; если вызов блокируется, то вызов перенаправляется. Модель Эрланг В обычно используется для групп магистральных каналов первой попытки, когда не нужно учитывать процент повторных вызовов, так как абоненты перенаправляются или ожидается низкий коэффициент блокирования.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для вычисления модели трафика Эрланг В используется следующая формула:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:112px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_68e89344d4e584c.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Где</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В(с,а) — вероятность блокирования вызова; с — количество каналов;</p>
+<p>а — интенсивность трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Пример 1. Использование модели трафика Эрланг B</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Постановка задачи</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Требуется перепроектировать исходящие группы магистральных каналов для междугородных вызовов, которые сейчас блокируются во время часа наибольшей нагрузки. Отчеты коммутаторов показывают, что в час наибольшей нагрузки на группу магистральных каналов поступает 17 эрлангов трафика. Необходимо снизить коэффициент блокирования, поэтому требуется проект с коэффициентом блокирования менее 1 %.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Решение</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В таблицах Эрланг В можно увидеть, что для 17 эрлангов трафика и уровня обслуживания GoS 0,64 процента требуется 27 каналов, чтобы обработать эту нагрузку трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Также можно проверить коэффициент блокирования с помощью уравнения Эрланг В на основе указанных данных. Другой способ проверки коэффициента блокирования — использование функции POISSON электронной таблицы Microsoft Excel следующим образом.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>=(POISSON(&lt;circuits&gt;,&lt;traffic load&gt;,FALSE))/(POISSON(&lt;circuits&gt;,&lt;traffic load&gt;,TRUE))</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>По этому адресу можно найти калькуляторы: Эрланг В (Erlang B), Расширенный Эрланг В (Extended Erlang B) и Эрланг С (Erlang C): <a href="http://www.erlang.com/calculator/index.htm">http://www.erlang.com/calculator/index.htm</a></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Расширенный Эрланг B</h2>
+<p><br>&nbsp;</p>
+<p>Модель трафика Расширенный Эрланг В основана на следующих предположениях:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Неограниченное количество источников Модель случайного поступления трафика Перенаправленные заблокированные вызовы</p>
+<p>Время удержания с экспоненциальным распределением</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модель Расширенный Эрланг В учитывает определенный процент повторных вызовов. Эта модель предполагает, что вызовы поступают случайно, заблокированные абоненты делают несколько попыток вызовов, а перегрузка не допускается. Модель Расширенный Эрланг В обычно используется для отдельных групп магистральных каналов с определенной вероятностью повторных вызовов (например, модемный пул).</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Пример 2. Использование модели трафика Расширенный Эрланг B</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Постановка задачи</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Необходимо определить, сколько каналов требуется для сервера коммутируемого доступа. Известно, что в час наибольшей нагрузки трафик составляет порядка 28 эрлангов, и во время этого периода допускается 5 % блокирования. Вы также предполагаете, что 50 % пользователей сразу же осуществляют повторный вызов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Решение</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В таблицах для модели Расширенный Эрланг В можно увидеть, что для нагрузки 28 эрлангов с вероятностью повторного вызова 50 % и коэффициентом блокирования 4,05 % требуется 35 каналов.</p>
+<p>По этому адресу можно найти удобные калькуляторы Эрланг В, Расширенный Эрланг В и Эрланг С: <a href="http://www.erlang.com/calculator/index.htm">http://www.erlang.com/calculator/index.htm</a></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Эрланг C</h2>
+<p><br>&nbsp;</p>
+<p>Модель трафика Эрланг C основана на следующих предположениях:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Неограниченное количество источников Модель случайного поступления трафика Задержанные заблокированные вызовы</p>
+<p>Время удержания с экспоненциальным распределением</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Модель Эрланг С построена на теории очередей. Эта модель предполагает случайное поступление вызовов; абонент совершает один вызов и удерживается в очереди до ответа на вызов. Модель Эрланг С чаще используется при проектировании устойчивого устройства автоматического распределения вызовов (ACD), чтобы определить необходимое количество агентов. Она также может использоваться для определения ширины полосы пропускания в каналах передачи данных, но это не лучшая модель для этой цели.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В модели Эрланг С необходимо знать количество вызовов или пакетов в час наибольшей нагрузки, среднюю продолжительность вызова или размер пакета и прогнозируемую длительность задержки в секундах.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для вычисления модели трафика Эрланг C используется следующая формула:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:139px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_99ce0241be749cbb.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Где</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>С(с,а) — вероятность задержки вызова; с — количество каналов;</p>
+<p>а — нагрузка трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Пример 3. Использование модели трафика Эрланг C для голоса</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Постановка задачи</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Ожидается, что центр телефонного обслуживания будет принимать приблизительно 600 звонков or телефонных вызовов каждый по 3 минуты, и у каждого агента будет рабочая пауза между вызовами в 20 секунд. Требуется, чтобы пребывание в очереди длилось в среднем приблизительно 10 секунд.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Решение</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рассчитайте объем ожидаемой нагрузки трафика. Известно, что имеется приблизительно 600 звонков or телефонных вызовов длительностью по 3 минуты. К этому числу следует добавить 20 секунд, потому что каждый агент не отвечает на вызов приблизительно 20 секунд. Дополнительные 20 секунд — это часть объема времени, которое требуется на обслуживание вызова, как показано в этой формуле:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(600 calls * 200 seconds AHT)/3600 = 33.33 erlangs of traffic</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Коэффициент задержки вычисляется делением прогнозируемого времени задержки на среднее время удержания:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(10 sec delay)/(200 seconds) = 0.05 delay factor</p>
+<h3>Пример 4. Использование модели трафика Эрланг C для данных</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Постановка задачи</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Проектируется магистральное соединение между двумя маршрутизаторами. Известно, что обычно передается около 600 пакетов в секунду по 200 байт (1600 бит) в пакете. Умножая 600 пакетов в секунду на 1600 бит в пакете, получаем необходимую ширину полосы пропускания: 960 000 бит в секунду (бит/с). Известно, что есть возможность покупать каналы по 64000 бит/с — это объем данных, необходимый для занятия канала на 1 секунду. Сколько каналов требуется, чтобы время задержки было менее 10 мс?</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Решение</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рассчитайте интенсивность трафика:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(960,000 bps)/(64,000 bps) = 15 erlangs of traffic load</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рассчитайте среднее время передачи данных. Умножьте количество байт в пакете на 8, чтобы получить количество бит в пакете, а потом разделите это число на 64000 бит/с (скорость канала), чтобы получить среднее время передачи пакета:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>(200 bytes per packet) * (8 bits) = (1600 bits per packet)/(64000 bps)</p>
+<p>= 0.025 seconds (25 ms) to transmit</p>
+<p>(Delay factor 10 ms)/(25 ms) = 0.4 delay factor</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В таблице Эрланг С можно увидеть, что для нагрузки трафика 15,47 эрлангов и коэффициента задержки 0,4 требуется 17 каналов. Этот расчет основан на предположении, что в каналах нет потери пакетов.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>По этому адресу можно найти удобные калькуляторы Эрланг В, Расширенный Эрланг В и Эрланг С: <a href="http://www.erlang.com/calculator/index.htm">http://www.erlang.com/calculator/index.htm</a></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Энгсет</h2>
+<p><br>&nbsp;</p>
+<p>Модель трафика Энгсета основана на следующих предположениях:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Ограниченное количество источников Модель плавного поступления трафика</p>
+<p>Заблокированные вызовы перенаправляются из системы Время удержания распределено экспоненциально</p>
+<p><br>&nbsp;</p>
+<p>Формула Энгсета обычно используется для окружения, где предполагается, что в группе магистральных каналов используется ограниченное количество источников. Зная количество источников, можно поддерживать высокий уровень обслуживания. Формула Энгсета используется для такого окружения, как соты системы мобильной связи GSM и концентраторы абонентский линий. Так как модель трафика Энгсета описана во многих книгах, посвященных анализу трафика, она здесь не обсуждается.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Пуассон</h2>
+<p><br>&nbsp;</p>
+<p>Модель Пуассона основана на следующих предположениях:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Неограниченное количество источников Модель случайного поступления трафика Заблокированные вызовы удержаны</p>
+<p>Время удержания распределено экспоненциально</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В модели Пуассона заблокированные вызовы удерживаются, пока канал не станет доступным. Эта модель предполагает случайное поступление вызовов; абонент делает только одну попытку совершить вызов, и заблокированные вызовы утрачиваются. Модель Пуассона обычно используется для расчета отдельных групп магистральных каналов групп с запасом.</p>
+<p>Для вычисления модели трафика Пуассона используется следующая формула:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:134px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_fbf8f437b8399dfd.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Где</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В(с,а) — вероятность блокирования вызова; е — основание натурального логарифма;</p>
+<p>с — количество каналов; а — нагрузка трафика.</p>
+<p><br>&nbsp;</p>
+<h3>Пример 5. Использование модели трафика Пуассона</h3>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Постановка задачи</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Создается новая группа магистральных каналов, которая должна использоваться в новом офисе, и необходимо определить, сколько требуется каналов. Существует прогноз, что офис будет совершать и принимать приблизительно 300 вызовов в день со средним временем удержания 4 минуты (240 секунд). Целевые показатели — Р.01 GoS или 1 процент блокирования. Чтобы расчитать параметры с некоторым запасом, сделано предположение, — что во время часа наибольшей нагрузки совершается приблизительно 20</p>
+<p>% вызовов. Трафик в час наибольшей нагрузки рассчитывается следующим образом:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>300 calls * 20% = 60 calls during the busy hour</p>
+<p>(60 calls * 240 AHT)/3600 = 4 erlangs during the busy hour</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Решение</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Согласно таблицам распределения Пуассона, для обработки нагрузки 4 эрланга с вероятностью блокирования 0,81 % (достаточно близкой к 1 %) требуется 10 магистральных каналов. Это число можно проверить путем подстановки переменных в формулу Пуассона:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:330px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_fb584bf8447cb56c.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Другой способ проверки коэффициента блокирования — использование функции POISSON электронной таблицы Microsoft Excel следующим образом.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>=1 - POISSON(&lt;circuits&gt; - 1,&lt;traffic load&gt;,TRUE)</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>EART/EARC и Нил-Уилкерсон</h2>
+<p><br>&nbsp;</p>
+<p>Модели EART/EARC и Нила-Уилкерсона используются для моделей пикового трафика. Большинство телефонных компаний используют эти модели для переключаемых групп магистральных каналов, где наблюдается пиковое поступление вызовов. Модель EART/EARC рассматривает заблокированные вызовы как перенаправленные, а модель Нила-Уилкерсона рассматривает их как удержанные. Так как модели трафика EART/EARC и Нила-Уилкерсона описаны во многих книгах, посвященных анализу трафика, они здесь не обсуждаются.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h1>Использование анализа трафика для сетей VoIP</h1>
+<p><br>&nbsp;</p>
+<p>Поскольку для передачи голосового трафика в VoIP используется транспортный протокол реального времени (RTP), можно использовать те же самые принципы для определения ширины полосы пропускания в глобальных сетях.</p>
+<p>При определении ширины полосы пропускания возникает ряд проблем. Факторы, которые обсуждаются в следующих разделах, влияют на ширину полосы пропускания в сетях голосовой связи:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Голосовые кодеки Сегменты</p>
+<p>Определение активности речи Сжатие заголовков протокола RTP</p>
+<p>Сравнение интерфейсов «точка-точка» и «точка-группа точек»</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Голосовые кодеки</h2>
+<p><br>&nbsp;</p>
+<p>В IP-телефонии используется множество голосовых кодеков. Все эти кодеки характеризуются разной скоростью передачи данных в битах и различными уровнями вычислительной сложности. Некоторыми из стандартных голосовых кодеков являются G.711, G.729, G.726, G.723.1 и G.728. Все маршрутизаторы и серверы доступа с поддержкой передачи голоса, произведенные компанией Cisco, поддерживают некоторые или все из этих кодеков.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Кодеки влияют на пропускную способность, поскольку именно они определяют объем полезной нагрузки в пакетах, передаваемых через IP-участок вызова. В голосовых шлюзах Cisco можно настроить полезную нагрузку, чтобы контролировать ширину полосы пропускания. За счет увеличения размера полезной нагрузки уменьшается общее количество пересылаемых пакетов и, таким образом, уменьшается ширина полосы пропускания при уменьшении количества заголовков, требуемых для вызова.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Сегменты</h2>
+<p><br>&nbsp;</p>
+<p>Количество сегментов в пакете — это еще один фактор, определяющий ширину полосы пропускания голосового вызова. Кодек определяет размер отдельного сегмента, но на количество пакетов, передаваемых в секунду, влияет общее количество сегментов в пакете. Таким образом, общая полоса пропускания вызова зависит от числа сегментов в пакете.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Например, 10-миллисекундный сегмент G.711 содержит 80 байт. Вызов только с одним сегментом в пакете дает такой результат:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>80 bytes + 20 bytes IP + 12 UDP + 8 RTP = 120 bytes per packet</p>
+<p>120 bytes per packet * 100 pps = (12000 * 8 bits)/1000 = 96 kbps per call</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Тот же вызов, в котором используется по два 10-миллисекундных сегмента в пакете, дает такой результат:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:11px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_d5d840d73349873c.png"></figure>
+<p>(80 bytes * 2 samples) + 20 bytes IP + 12 UDP + 8 RTP = 200 bytes per packet (200 bytes per packet) * (50 pps) = (10000 * 8 bits)/1000 = 80 kbps per call</p>
+<p><br>&nbsp;</p>
+<p><strong>Примечание. </strong>Заголовки уровня 2 не включены в приведенные выше расчеты.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Эти результаты показывают, что между двумя вызовами имеется разница в 16 Кбит/с. Путем изменения количества сегментов в пакете можно точно изменить ширину полосы пропускания, используемую вызовом, но здесь есть компромисс. В случае увеличения количества сегментов пакета также увеличивается длительность задержки каждого вызова. При обработке каждого вызова ресурсы цифрового сигнального процессора (DSP) должны отводиться под буферизацию сегментов на протяжении значительного времени. Это следует учитывать при проектирования сети голосовой связи.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Определение активности речи</h2>
+<p><br>&nbsp;</p>
+<p>Обычный разговор может содержать от 35 до 50 % молчания. В традиционных сетях передачи голоса с коммутацией каналов все голосовые вызовы имеют фиксированную ширину полосы пропускания 64 Кбит/с, независимо от того, какой объем в разговоре занимает речь и молчание. В сетях VoIP весь разговор и молчание разбивается на пакеты. Функция определения активности речи (VAD) посылает пакеты RTP, только если распознается голос. При планировании пропускной способности VoIP предполагается, что функция VAD уменьшает полосу пропускания на 35 %. Хотя это значение может быть меньше величины фактического уменьшения, оно представляет консервативную оценку, учитывающую различные диалекты и модели речевого поведения.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Кодеки G.729 Annex-B и G.723.1 Annex-A содержат интегрированные функции VAD, но в остальном работают так же, как и G.729 и G.723.1.</p>
+<h2>Сжатие заголовков протокола RTP</h2>
+<p><br>&nbsp;</p>
+<p>Все пакеты протокола VoIP состоят из двух частей: голосовых сегментов и заголовков IP/UDP/RTP. Хотя голосовые сегменты сжимаются с помощью цифрового процессора сигналов (DSP), и их размер зависит от используемого кодека, заголовки всегда содержат 40 байт. По сравнению с 20 байтами голосовых сегментов в вызове по умолчанию G.729 эти заголовки составляют значительную величину служебных данных. С помощью сжатия заголовков протокола RTP (cRTP), которое используется для каждого соединения, эти заголовки могут сжиматься до 2-4 байт. Такое сжатие может обеспечить значительную экономию пропускной способности VoIP. Например, стандартный вызов G.729 VoIP использует 24 Кбит/с без cRTP и только 12 Кбит/с с cRTP.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Тип кодека, количество сегментов в пакете, функция VAD и сжатие заголовков cRTP так или иначе влияет на ширину полосы пропускания вызова. В каждом случае существует зависимость между качеством голоса и пропускной способностью. Таблица 1-4 показывает использование полосы пропускания в различных ситуациях. В графике предполагается, что эффективность VAD равна 50</p>
+<p>%.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Таблица 4 описывает влияние полезной нагрузки на требования к пропускной способности для различных кодеков.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong><u>Таблица 4. Характеристики голосового кодека</u></strong></p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:1px solid #aba899;border-left:1px solid #ece9d8;border-right:none;border-top:none;padding:0cm 0cm 0cm 0.01cm;vertical-align:top;" colspan="10"><br>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>Алгоритм</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><strong>Полоса пропускания голоса (Кбит/с)</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>Размер кадра (байт)</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><strong>Полезная нагрузка Cisco (байты)</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>Количество пакетов в секунду</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>Заголовок IP/UDP/RTP</strong></p>
+          <p><strong>(байты)</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>Заголовок CRTP</strong></p>
+          <p><strong>(байты)</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>L2</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p><br>&nbsp;</p>
+          <p><strong>Заголовок уровня2 (байты)</strong></p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:1px solid #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><strong>Об пропу спосо (Кбит</strong></p>
+          <p style="text-align:right;"><strong>V</strong></p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>160</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>85,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>160</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>70,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>160</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>82,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>160</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>67,2</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>160</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>81,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>160</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>66,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>100</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>107,2</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>100</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>76,8</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>100</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;">
+          <p><br>&nbsp;</p>
+          <p>100,8</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:none;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.01cm;"><br>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">G.711</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">64</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">80</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">80</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">100</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">2</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">PPP</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">6</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:none;padding:0cm 0cm 0cm 0.04cm;">70,4</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>100</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>99,2</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.711</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>64</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>80</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>100</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>68,8</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>29,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>26,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>11,2</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>25,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>50</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>33</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>33</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>12,3</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>33</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>20,3</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>33</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10,1</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>33</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>19,7</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.729</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>10</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>33</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>9,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>26</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>17,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>26</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>9,7</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:none;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:none;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;"><br>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><br>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">G.723.1</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">6,3</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">30</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">30</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">26</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">40</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">PPP</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:none;padding:0cm 0.04cm;">6</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:none;padding:0cm 0cm 0cm 0.04cm;">16,0</td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>26</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8,0</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>26</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>15,5</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>26</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>7,6</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>5,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14,8</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>5,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>Ether</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>14</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>8,1</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>5,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>13,4</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>5,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>PPP</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,7</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>5,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>40</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>13,1</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #ece9d8;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>G.723.1</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>5,3</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>30</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>22</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;"><br>&nbsp;</td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>2</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>FR</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:2.25pt double #aba899;border-top:2.25pt double #aba899;padding:0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>4</p>
+        </td>
+        <td style="border-bottom:2.25pt double #aba899;border-left:2.25pt double #aba899;border-right:none;border-top:2.25pt double #aba899;padding:0cm 0cm 0cm 0.04cm;">
+          <p><br>&nbsp;</p>
+          <p>6,4</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h2>Сравнение интерфейсов «точка-точка» и «точка-группа точек»</h2>
+<p><br>&nbsp;</p>
+<p>Так как каналы сетей ТфОП построены по схеме «точка-точка», а сети VoIP обычно используют схему «точка-группа точек», следует учитывать место прохождения трафика и группировать его соответствующим образом. Это группирование начинает играть большую роль при определении пропускной способности в переключаемых соединениях.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>На рис. 4 изображена сеть, где все соединения WAN функционируют нормально.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Рисунок 4. Топология нормального функционирования</h3>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:285px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_9fb6ac59286d6131.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Требуемая пропускная способность для соединений «точка-точка» не превышает суммарную нагрузку от голосовых вызовов, которые поступают и исходят из соединений ТфОП, хотя качество голоса может ухудшаться при приближении к скорости соединения. Если одно из этих соединений теряется, необходимо убедиться, что переключаемые соединения имеют достаточную пропускную способность для обработки увеличившегося трафика. На рис. 5 соединение WAN между узлами А и В потеряно. В этом случае увеличивается объем трафика между узлами А и С и С и В. Этот дополнительный трафик требует, чтобы эти соединения проектировались с учетом дополнительной нагрузки.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Рисунок 5. Топология с неисправным соединением</strong></p>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:288px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_7f99345c28d0709c.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h1>Пример анализа сквозного трафика</h1>
+<p><br>&nbsp;</p>
+<p>По соответствующим таблицам трафика довольно легко определить количество каналов, необходимое для обработки вызовов. Установив количество вызовов на стороне соединения ТфОП, также можно определить ширину полосы пропускания, необходимую для участка IP вызова. К сожалению, их сопоставление может быть проблематичным.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рис. 6 показывает топологию сети, используемую для этого примера.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h3>Рисунок 6. Пример топологии</h3>
+<p><br>&nbsp;</p>
+<figure class="image image_resized" style="width:254px;"><img src="file:///tmp/lu16619me224f.tmp/lu16619me23if_tmp_7a6b70a44a64de9e.png"></figure>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Постановка задачи</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>В примере, показанном на рис. 6, у вас есть офисы в США, Китае и Великобритании (обозначенные на Рис. 6 как US, China и UK). Так как главный офис находится в Великобритании, приобретаются выделенные каналы из Великобритании в США и Китай. Большая часть трафика исходит из Великобритании в США или Китай, но некоторая часть трафика проходит между Китаем и США. Журналы детальной регистрации вызовов (CDR) показывают такую статистику:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Великобритания 36000 минут в день Трафик 12882,4 минут в день</p>
+<p>Китай 28235,3 минут в день</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для этой сети делаются такие предположения:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Трафик на каждом узле имеет модель случайного поступления вызовов</p>
+<p>Время удержания экспоненциально</p>
+<p>Заблокированные вызовы перенаправляются из системы Число абонентов не ограничено</p>
+<p><br>&nbsp;</p>
+<p>Эти предположения указывают на то, что можно использовать модель Эрланг В для определения размера групп магистральных каналов в сети ТфОП. Для каждой из групп магистральных каналов требуется уровень обслуживания (GoS) Р.01.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><strong>Решение</strong></p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Вычислите нагрузку трафика для соединений ТфОП на каждом узле следующим образом:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>U.K. = (36,000 min per day) * 17% = (6,120 min per busy hour)/60 = 102 BHT</p>
+<p>U.S. = (12,882.4 min per day) * 17% = (2,190 min per busy hour)/60 = 36.5 BHT China = (28,235.3 min per day) * 17% = (4,800 min per busy hour)/60 = 80 BHT</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Эти значения точно указывают на количество каналов, необходимое для соединений ТфОП на каждом из узлов. Располагая приемлемыми сведениями об объеме трафика, можно найти в таблице ближайшее подходящее значение.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для Великобритании значения трафика в час наибольшей нагрузки (BHT) 102 и уровня обслуживания (GoS) Р.01 показывают, что для поддержки этой нагрузки требуется 120 линий DS-0.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Трафик США показывает, что для коэффициента блокирования Р.01 с нагрузкой трафика 36,108 требуется 48 каналов. Так как трафик в час наибольшей нагрузки (ВНТ) равен 36,5 эрлангов, может наблюдаться немного более высокий коэффициент блокирования, чем Р.01. С помощью формулы Эрланг В можно рассчитать, что коэффициент блокирования будет равен ~0,01139.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Для 80 эрлангов трафика BHT с уровнем обслуживания GoS P.01 таблица Эрланг В показывает, что можно использовать одно из двух чисел. При коэффициенте блокирования Р.01 для 80,303 эрлангов трафика требуется 96 каналов. Так как каналы располагаются блоками по 24 и 30 во время работы с цифровыми носителями, необходимо выбрать 4 линии Т1 (96 линий DS-0) или 4 линии Е1 (120 линий DS-0). Четыре линии Е1 — слишком много для ожидаемого объема трафика, но вы учитываете коэффициент блокирования.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>После того, как стало известно необходимое количество каналов ТфОП, следует определить пропускную способность в сетях с интерфейсом «точка-точка». Так как объем трафика, необходимый для участка IP, определяется объемом трафика, который имеется на участке ТфОП, можно непосредственно соотнести количество линий DS-0 с объемом необходимой пропускной способности.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Сначала следует выбрать кодек, который используется между точками присутствия. Кодек G.729 наиболее популярен, так как он характеризуется хорошим соотношением качества голоса и уровня сжатия.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Вызов G.729 использует такую ширину полосы пропускания:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Полный объем 26,4 Кбит/с на вызов с заголовками 11,2 Кбит/с на вызов с VAD</p>
+<p>9,6 Кбит/с на вызов с cRTP</p>
+<p>6,3 Кбит/с на вызов с VAD и CRTP</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Таким образом, пропускная способность для соединения между Великобританией и США равна:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Полный объем: 96 DS0 * 26,4 Кбит/с = 2,534 Мбит/с VAD: 96 DS0 * 11,2 Кбит/с = 1,075 Мбит/с</p>
+<p>cRTP: 96 DS0 * 17,2 Кбит/с = 1,651 Мбит/с</p>
+<p>VAD/cRTP: 96 DS0 * 7,3 Кбит/с = 700,8 Мбит/с</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Таким образом, пропускная способность для соединения между Великобританией и Китаем равна:</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Полный объем: 72 DS0 * 26,4 Кбит/с = 1,9 Мбит/с VAD: 72 DS0 * 11,2 Кбит/с = 806,4 Мбит/с</p>
+<p>RTP: 72 DS0 * 17,2 Кбит/с = 1,238 Мбит/с</p>
+<p>VAD/cRTP: 72 DS0 * 7,3 Кбит/с = 525,6 Мбит/с</p>
+<p>Можно заметить, что функции VAD и cRTP имеют значительное влияние на пропускную способность, требуемую для соединения WAN.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<h1>Дополнительная документация</h1>
+<p><br>&nbsp;</p>
+<p>Руководство по конфигурированию голосовой связи, видеоконференций и факсимильной связи для Cisco IOS</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><i>Основы технологии VoIP</i>, Cisco Press, 2000</p>
+<p><br>&nbsp;</p>
+<p>Рекомендация ITU-T E.500. Принципы измерения интенсивности трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>Рекомендация ITU-T E.492. Контрольный период для измерения трафика.</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p><br>&nbsp;</p>
+<p>© 1992-2010 Cisco Systems, Inc. Все права защищены.</p>
+<p><br>&nbsp;</p>
+<p>Дата генерации PDF файла: Jan 05, 2010</p>
+<p><br>&nbsp;</p>
+<p><a href="http://www.cisco.com/support/RU/customer/content/9/97422/tech_tk652_tk701_tech_white_paper09186a00800d6b74.shtml">http://www.cisco.com/support/RU/customer/content/9/97422/tech_tk652_tk701_tech_white_paper09186a00800d6b74.shtml</a></p>
+<p><br>&nbsp;</p>
