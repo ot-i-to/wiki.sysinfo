@@ -2,7 +2,7 @@
 title: OpenVPN на Debian 11
 description: как настроить сервер
 published: false
-date: 2021-12-07T14:35:30.531Z
+date: 2021-12-07T14:45:04.772Z
 tags: openvpn
 editor: ckeditor
 dateCreated: 2021-12-07T08:55:58.043Z
@@ -44,6 +44,12 @@ set_var EASYRSA_REQ_OU         "Testing"
 . . .
 set_var EASYRSA_KEY_SIZE       2048
 . . .</code></pre>
+<p>Выполняем инициализацию структуры открытого ключа на сервере:</p>
+<pre><code class="language-plaintext"> ./easyrsa init-pki </code></pre>
+<p>Результат выполнения:</p>
+<pre><code class="language-plaintext">       . . .
+init-pki complete; you may now create a CA or requests.
+Your newly created PKI dir is: /etc/openvpn/easy-rsa/pki</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
