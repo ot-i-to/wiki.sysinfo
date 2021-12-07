@@ -2,7 +2,7 @@
 title: OpenVPN на Debian 11
 description: как настроить сервер
 published: false
-date: 2021-12-07T09:28:05.679Z
+date: 2021-12-07T14:30:21.760Z
 tags: openvpn
 editor: ckeditor
 dateCreated: 2021-12-07T08:55:58.043Z
@@ -18,6 +18,32 @@ dateCreated: 2021-12-07T08:55:58.043Z
 <pre><code class="language-plaintext"># cp -r /usr/share/easy-rsa /etc/openvpn</code></pre>
 <p>Переходим в каталог EasyRSA:</p>
 <pre><code class="language-plaintext"># cd /etc/openvpn/easy-rsa</code></pre>
+<p>Внутри этого каталога находится файл с именем <code>vars.example</code>. Сделайте копию этого файла и назовите копию <code>vars</code>без расширения:</p>
+<pre><code class="language-plaintext"># cp vars.example vars </code></pre>
+<p>&nbsp;Откройте этот новый файл с помощью предпочитаемого вами текстового редактора:</p>
+<pre><code class="language-plaintext"># nano vars </code></pre>
+<p>&nbsp;Найдите настройки, которые устанавливают значения полей по умолчанию для новых сертификатов. Это будет выглядеть примерно так:</p>
+<pre><code class="language-plaintext">. . .
+
+#set_var EASYRSA_REQ_COUNTRY    "US"
+#set_var EASYRSA_REQ_PROVINCE   "California"
+#set_var EASYRSA_REQ_CITY       "San Francisco"
+#set_var EASYRSA_REQ_ORG        "Copyleft Certificate Co"
+#set_var EASYRSA_REQ_EMAIL      "me@example.net"
+#set_var EASYRSA_REQ_OU         "My Organizational Unit"
+
+. . .</code></pre>
+<p>Раскомментируйте эти строки и обновите выделенные значения так, как хотите, но не оставляйте их пустыми:</p>
+<pre><code class="language-plaintext">. . .
+
+set_var EASYRSA_REQ_COUNTRY    "RU"
+set_var EASYRSA_REQ_PROVINCE   "Moscow"
+set_var EASYRSA_REQ_CITY       "Moscow City"
+set_var EASYRSA_REQ_ORG        "VPN_test"
+set_var EASYRSA_REQ_EMAIL      "admin@example.com"
+set_var EASYRSA_REQ_OU         "Testing"
+
+. . .</code></pre>
 <p>&nbsp;</p>
 <p>https://www-digitalocean-com.translate.goog/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-10?_x_tr_sl=en&amp;_x_tr_tl=ru&amp;_x_tr_hl=ru</p>
 <p>https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-10</p>
