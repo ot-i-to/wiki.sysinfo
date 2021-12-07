@@ -1,0 +1,22 @@
+<!--
+title: OpenVPN на Debian 11
+description: как настроить сервер
+published: false
+date: 2021-12-07T08:55:58.043Z
+tags: openvpn
+editor: ckeditor
+dateCreated: 2021-12-07T08:55:58.043Z
+-->
+
+<h2>Шаг 1 - Установка OpenVPN и EasyRSA</h2>
+<p>Для начала обновите индекс пакетов вашего будущего <strong>VPN-сервера</strong> и установите OpenVPN. OpenVPN доступен в репозиториях Debian по умолчанию, поэтому вы можете использовать <code>apt</code>для установки:</p>
+<pre><code class="language-plaintext"># apt-get update
+# apt-get install openvpn</code></pre>
+<p>Для генерации ключей установим пакет EasyRSA:</p>
+<pre><code class="language-plaintext"># apt-get install easy-rsa</code></pre>
+<p>Копируем файлы для&nbsp;генерации ключей в&nbsp;/etc/openvpn</p>
+<pre><code class="language-plaintext"># cp -r /usr/share/easy-rsa /etc/openvpn</code></pre>
+<p>Переходим в каталог EasyRSA:</p>
+<pre><code class="language-plaintext"># cd /etc/openvpn/easy-rsa</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
