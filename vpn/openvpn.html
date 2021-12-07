@@ -2,7 +2,7 @@
 title: OpenVPN на Debian 11
 description: как настроить сервер
 published: false
-date: 2021-12-07T14:45:04.772Z
+date: 2021-12-07T14:50:30.915Z
 tags: openvpn
 editor: ckeditor
 dateCreated: 2021-12-07T08:55:58.043Z
@@ -50,8 +50,17 @@ set_var EASYRSA_KEY_SIZE       2048
 <pre><code class="language-plaintext">       . . .
 init-pki complete; you may now create a CA or requests.
 Your newly created PKI dir is: /etc/openvpn/easy-rsa/pki</code></pre>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p>После этого <code>easyrsa</code>снова вызовите скрипт с <code>build-ca</code>опцией.</p>
+<pre><code class="language-plaintext">./easyrsa build-ca nopass</code></pre>
+<p>В выводе вам будет предложено подтвердить <i>общее имя</i> для вашего CA:</p>
+<pre><code class="language-plaintext">       . . .
+Common Name (eg: your user, host, or server name) [Easy-RSA CA]:</code></pre>
+<p>Общее имя - это имя, используемое для обозначения этого аппарата в контексте центра сертификации. Вы можете ввести любую строку символов для общего имени CA, но для простоты нажмите, <code>ENTER</code>чтобы принять имя по умолчанию.</p>
+<p>В результате будет созданы два важных файла - <code>ca.crt</code>и <code>ca.key</code>-, которые составляют публичную и частную стороны сертификата SSL.</p>
+<ul>
+  <li><code>ca.crt</code>- это общедоступный файл сертификата ЦС, который в контексте OpenVPN сервер и клиент используют для информирования друг друга о том, что они являются частью одной и той же сети доверия, а не кем-то, выполняющим атаку типа «злоумышленник в середине». По этой причине вашему серверу и всем вашим клиентам потребуется копия <code>ca.crt</code>файла.</li>
+  <li><code>ca.key</code>- это закрытый ключ, который CA-машина использует для подписи ключей и сертификатов для серверов и клиентов. Если злоумышленник получит доступ к вашему ЦС и, в свою очередь, к вашему <code>ca.key</code>файлу, он сможет подписывать запросы сертификатов и получать доступ к вашей VPN, что снижает ее безопасность. Вот почему ваш <code>ca.key</code>файл должен находиться <strong>только</strong> на вашем компьютере CA, и что, в идеале, ваш компьютер CA должен оставаться в автономном режиме, когда вы не подписываете запросы сертификатов, в качестве дополнительной меры безопасности.</li>
+</ul>
 <p>&nbsp;</p>
 <p>https://www-digitalocean-com.translate.goog/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-10?_x_tr_sl=en&amp;_x_tr_tl=ru&amp;_x_tr_hl=ru</p>
 <p>https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-debian-10</p>
