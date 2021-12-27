@@ -2,7 +2,7 @@
 title: Bot
 description: 
 published: false
-date: 2021-12-27T16:31:41.818Z
+date: 2021-12-27T16:37:31.264Z
 tags: telegram, notification, оповещение, мониторинг, bot, бот
 editor: ckeditor
 dateCreated: 2021-12-27T14:55:04.141Z
@@ -53,7 +53,7 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
             "last_name":"FAMALE",
             "username":"User_1",
             "language_code":"ru"},
-            "chat":{"id":-618704998,
+            "chat":{"id":-688770998,
                     "title":"CAMERs",
                     "type":"group",
                     "all_members_are_administrators":true},
@@ -66,10 +66,10 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
                     }
           }]
 }</code></pre>
-<p>Тут нас интересует только ID чата(группы) <code>-618704998</code></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p>Тут нас интересует только ID чата(группы) <code>-688770998</code></p>
+<p>-→ Теперь пробуем отправить тестовое текстовое сообщение командой:</p>
+<pre><code class="language-plaintext">curl -s -X POST "https://api.telegram.org/bot5075403553:AAE7KgyWqSMfoj-14V0ULUXMxIb6-0e8XMc/sendMessage" -F chat_id="-688770998" -F text="Heloyyyy"</code></pre>
+<p>В случае удачи Вы идите в общей группе <strong>CAMERs </strong>сообщение<strong> “</strong><i>Heloyyyy</i>” от вашего бота <code>@CAMERA_1_bot</code></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
