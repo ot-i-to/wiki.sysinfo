@@ -2,7 +2,7 @@
 title: Bot
 description: 
 published: false
-date: 2021-12-27T16:46:57.842Z
+date: 2021-12-27T16:56:21.205Z
 tags: telegram, notification, оповещение, мониторинг, bot, бот
 editor: ckeditor
 dateCreated: 2021-12-27T14:55:04.141Z
@@ -69,8 +69,8 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
 <p>Тут нас интересует только ID чата(группы) <code>-688770998</code></p>
 <p><mark class="marker-yellow">-→</mark> Теперь пробуем отправить тестовое текстовое сообщение командой:</p>
 <pre><code class="language-plaintext">curl -s -X POST "https://api.telegram.org/bot5075403553:AAE7KgyWqSMfoj-14V0ULUXMxIb6-0e8XMc/sendMessage" -F chat_id="-688770998" -F text="Heloyyyy"</code></pre>
-<p>В случае удачи Вы идите в общей группе <strong>CAMERs </strong>сообщение<strong> “</strong><i>Heloyyyy</i>” от вашего бота <code>@CAMERA_1_bot</code></p>
-<p>Для отправки результатов от программы Monit, сделаем shell скрипт:</p>
+<p>В случае удачи Вы идите в общей группе <strong>CAMERs </strong>сообщение<strong> “</strong><i><strong>Heloyyyy</strong></i>” от вашего бота <code>@CAMERA_1_bot</code></p>
+<p>Для отправки результатов от программы <strong>Monit</strong>, сделаем <strong>shell</strong> скрипт <strong>/etc/motion/telegramm_sends.sh</strong>:</p>
 <pre><code class="language-plaintext">#!/bin/bash
 
 # узнаем где установлен bash - whereis bash
@@ -105,6 +105,18 @@ done
 # Пример curl -s -X POST "https://api.telegram.org/bot&lt;token&gt;/sendPhoto" -F chat_id=&lt;chatid&gt; -F photo="@/path/to/your/photo.jpg"
 
 # Запускать командой ./название-скрипта.sh</code></pre>
+<p><mark class="marker-yellow">-→</mark> И последний штрих это добавление скрипта <strong>/etc/motion/telegramm_sends.sh</strong> в конфигурационный файл <strong>/etc/motion/motion.conf </strong>программы Monit на желаемые события:</p>
+<pre><code class="language-plaintext"># Command to be executed when an event starts. (default: none)
+# An event starts at first motion detected after a period of no motion defined by event_gap
+; on_event_start value
+on_event_start /usr/bin/curl -s -X POST "https://api.telegram.org/bot5075403553:AAE7KgyWqSMfoj-14V0ULUXMxIb6-0e8XMc/sendMessage" -F chat_id="-688770998" -F text="ON Event Start !"
+
+# Command to be executed when an event ends after a period of no motion
+# (default: none). The period of no motion is defined by option event_gap.
+; on_event_end value
+on_event_end /etc/motion/telegramm_sends.sh</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <hr>
 <p>&nbsp;</p>
