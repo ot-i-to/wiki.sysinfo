@@ -2,7 +2,7 @@
 title: Bot
 description: 
 published: false
-date: 2021-12-27T15:57:38.103Z
+date: 2021-12-27T15:58:56.131Z
 tags: telegram, notification, оповещение, мониторинг, bot, бот
 editor: ckeditor
 dateCreated: 2021-12-27T14:55:04.141Z
@@ -27,8 +27,9 @@ Keep your token secure and store it safely, it can be used by anyone to control 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api</code></pre>
 <p>Итак мы получили токен <code>5975403111:AAE7KgyWqSMfoj-13V0ULeXMxIb6-0e8XMc</code></p>
 <p>Обязательно проверим, что бот создался выполнив команду:</p>
-<pre><code class="language-plaintext"># curl -s -X POST "https://api.telegram.org/bot5975403111:AAE7KgyWqSMfoj-13V0ULeXMxIb6-0e8XMc/getMe"
-{"ok":true,"result":
+<pre><code class="language-plaintext"># curl -s -X POST "https://api.telegram.org/bot5975403111:AAE7KgyWqSMfoj-13V0ULeXMxIb6-0e8XMc/getMe"</code></pre>
+<p>... ответ в JSON формате:</p>
+<pre><code class="language-plaintext">{"ok":true,"result":
   {"id":5975403111,
     "is_bot":true,
     "first_name":"CAMERA_1_bot",
