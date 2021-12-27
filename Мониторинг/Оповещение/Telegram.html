@@ -2,7 +2,7 @@
 title: Bot
 description: 
 published: false
-date: 2021-12-27T16:37:31.264Z
+date: 2021-12-27T16:43:43.037Z
 tags: telegram, notification, оповещение, мониторинг, bot, бот
 editor: ckeditor
 dateCreated: 2021-12-27T14:55:04.141Z
@@ -67,10 +67,49 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
           }]
 }</code></pre>
 <p>Тут нас интересует только ID чата(группы) <code>-688770998</code></p>
-<p>-→ Теперь пробуем отправить тестовое текстовое сообщение командой:</p>
+<p><mark class="marker-yellow">-→</mark> Теперь пробуем отправить тестовое текстовое сообщение командой:</p>
 <pre><code class="language-plaintext">curl -s -X POST "https://api.telegram.org/bot5075403553:AAE7KgyWqSMfoj-14V0ULUXMxIb6-0e8XMc/sendMessage" -F chat_id="-688770998" -F text="Heloyyyy"</code></pre>
 <p>В случае удачи Вы идите в общей группе <strong>CAMERs </strong>сообщение<strong> “</strong><i>Heloyyyy</i>” от вашего бота <code>@CAMERA_1_bot</code></p>
-<p>&nbsp;</p>
+<p>Для отправки результатов от программы Monit, сделаем shell скрипт:</p>
+<pre><code class="language-plaintext">#!/bin/bash
+
+# узнаем где установлен bash - whereis bash
+# Нужно указать сверху (!)
+# при указании переменных нельзя использовать пробелы.
+#File=`/usr/bin/find /var/lib/motion -type f -mmin -1`
+##File="/var/mnt/storage1/camera/motion/lastsnap.jpg"
+
+BotToken="5075403553:AAE7KgyWqSMfoj-14V0ULUXMxIb6-0e8XMc"
+chatid="-688770998"
+
+for File in `/usr/bin/find /var/lib/motion/*.jpg -type f -mmin -1`
+do
+   # комманда отправки изображения
+   curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id="$chatid" -F photo="@$File";
+   #curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendDocument" -F chat_id="$chatid" -F document="@$File";
+done
+
+for File in `/usr/bin/find /var/lib/motion/*.mkv -type f -mmin -1`
+do
+   # комманда отправки изображения
+   curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendVideo" -F chat_id="$chatid" -F video="@$File";
+   #curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendDocument" -F chat_id="$chatid" -F document="@$File";
+done
+
+for File in `/usr/bin/find /var/lib/motion/*.mp4 -type f -mmin -1`
+do
+   # комманда отправки изображения
+   curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendVideo" -F chat_id="$chatid" -F video="@$File";
+   #curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendDocument" -F chat_id="$chatid" -F document="@$File";
+done
+
+# Не забываем, что для того, чтоб скрипт можно было запустить, надо изменить права доступа к нему, 
+# добавив возможность исполнения файла, например командой
+# chmod a+x script.sh
+
+# Пример curl -s -X POST "https://api.telegram.org/bot&lt;token&gt;/sendPhoto" -F chat_id=&lt;chatid&gt; -F photo="@/path/to/your/photo.jpg"
+
+# Запускать командой ./название-скрипта.sh</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
