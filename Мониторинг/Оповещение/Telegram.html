@@ -2,7 +2,7 @@
 title: Bot
 description: 
 published: false
-date: 2021-12-27T16:43:43.037Z
+date: 2021-12-27T16:44:13.811Z
 tags: telegram, notification, оповещение, мониторинг, bot, бот
 editor: ckeditor
 dateCreated: 2021-12-27T14:55:04.141Z
@@ -86,21 +86,18 @@ for File in `/usr/bin/find /var/lib/motion/*.jpg -type f -mmin -1`
 do
    # комманда отправки изображения
    curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id="$chatid" -F photo="@$File";
-   #curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendDocument" -F chat_id="$chatid" -F document="@$File";
 done
 
 for File in `/usr/bin/find /var/lib/motion/*.mkv -type f -mmin -1`
 do
    # комманда отправки изображения
    curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendVideo" -F chat_id="$chatid" -F video="@$File";
-   #curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendDocument" -F chat_id="$chatid" -F document="@$File";
 done
 
 for File in `/usr/bin/find /var/lib/motion/*.mp4 -type f -mmin -1`
 do
    # комманда отправки изображения
    curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendVideo" -F chat_id="$chatid" -F video="@$File";
-   #curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendDocument" -F chat_id="$chatid" -F document="@$File";
 done
 
 # Не забываем, что для того, чтоб скрипт можно было запустить, надо изменить права доступа к нему, 
