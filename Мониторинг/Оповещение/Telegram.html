@@ -2,7 +2,7 @@
 title: Bot
 description: 
 published: false
-date: 2021-12-27T16:17:55.790Z
+date: 2021-12-27T16:27:06.675Z
 tags: telegram, notification, оповещение, мониторинг, bot, бот
 editor: ckeditor
 dateCreated: 2021-12-27T14:55:04.141Z
@@ -40,5 +40,31 @@ For a description of the Bot API, see this page: https://core.telegram.org/bots/
     "supports_inline_queries":false}
 }</code></pre>
 <p>… &nbsp;по команде <mark class="pen-red"><strong>/help</strong></mark> можно получить справку.</p>
-<p>-→ Создаем группу <strong>CAMERs</strong> для получения сообщений от вашего бота и добеливаем в нее своего бота <code>@CAMERA_1_bot</code> &nbsp;&nbsp;</p>
+<p>-→ Создаем группу <strong>CAMERs</strong> для получения сообщений от вашего бота и добеливаем в нее своего бота <code>@CAMERA_1_bot</code> .</p>
+<p>Потом получаем ID группы, т.к. он нужен для API телеграмма. Для этого даем команду:</p>
+<pre><code class="language-plaintext"># curl -s -X POST "https://api.telegram.org/bot5975403111:AAE7KgyWqSMfoj-13V0ULeXMxIb6-0e8XMc/getUpdates"</code></pre>
+<p>&nbsp; ... в ответ мы должны получить следующее сообщение в JSON формате:</p>
+<pre><code class="language-plaintext">{"ok":true,
+ "result":[{"update_id":372143158,
+            "message":{"message_id":5,
+            "from":{"id":190343897,
+            "is_bot":false,
+            "first_name":"Vladimir",
+            "last_name":"Kondratenko",
+            "username":"oT_i_To",
+            "language_code":"ru"},
+            "chat":{"id":-618704998,
+                    "title":"CAMERs",
+                    "type":"group",
+                    "all_members_are_administrators":true},
+            "date":1640601323,
+            "text":"/start",
+            "entities":[{"offset":0,
+                         "length":6,
+                         "type":"bot_command"
+                       }]
+                    }
+          }]
+}</code></pre>
+<p><br>&nbsp;</p>
 <p>&nbsp;</p>
