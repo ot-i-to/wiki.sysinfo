@@ -2,7 +2,7 @@
 title: MikroTik downgrade FW
 description: Как вернуть старую прошивку MikroTik
 published: true
-date: 2022-01-08T08:03:27.358Z
+date: 2022-01-08T08:07:11.055Z
 tags: mikrotik, firmware, downgrade, router
 editor: ckeditor
 dateCreated: 2022-01-08T07:56:17.789Z
@@ -11,8 +11,8 @@ dateCreated: 2022-01-08T07:56:17.789Z
 <p style="text-align:justify;">В этой статье описана пошаговая инструкция, как откатить прошивку MikroTik RouterOS к старой версии не используясь Netinstall даже если вы желаете с 7 версии вернутся к 6 версии.</p>
 <p style="text-align:justify;">1) Откройте сайт <a href="https://www.mikrotik.com">www.mikrotik.com</a> и перейдите в меню <a href="https://mikrotik.com/download">Software - Downloads</a> и скачиваем старую версию прошивки.</p>
 <p style="text-align:justify;"><strong>Внимание! </strong>Производитель MikroTik выпускает оборудование на разных процессорах с разной архитектурой, поэтому для разных устройств нужна разная прошивка. Первым делом определим, в WebFig интерфейсе меню System, раздел Resources в параметре Architecture Name смотрим архитектуру.</p>
-<figure class="image image_resized" style="width:26.86%;"><img src="/mikrotik_webfigsystemresources.png"></figure>
+<figure class="image image_resized" style="width:100%;"><img src="/mikrotik_webfigsystemresources.png"></figure>
 <p style="text-align:justify;">А на сайте в таблице, первом столбце указаны архитектуры MIPSBE, SMIPS, TILE, PPC, ARM, X86, MMIPS. Справа указаны серии устройств, которые относятся к данной архитектуре.</p>
 <p style="text-align:justify;">Мы будем устанавливать старую прошивку на роутер hAP&nbsp;ac&nbsp;lite&nbsp;tower. Ищем среди серий устройств, похожее название. Находим серию <strong>hAP&nbsp;ac</strong> и видим слева, что она относится к архитектуре <strong>MIPSBE</strong>. Значит для нашего роутера нужен будет файл прошивки, у которого в названии будет присутствовать <strong>MIPSBE</strong>, например, <strong>routeros-mipsbe-6.48.5.npk</strong></p>
-<p style="text-align:justify;">&nbsp;</p>
+<figure class="image image_resized" style="width:100%;"><img src="https://www.technotrade.com.ua/userfiles/images/Mikrotik_as_a_return_to_the_old_firmware/architecture.jpg" alt="Определяем архитектуру устройства MikroTik"></figure>
 <p>&nbsp;</p>
