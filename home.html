@@ -2,7 +2,7 @@
 title: Номе
 description: 
 published: true
-date: 2022-01-10T21:36:09.440Z
+date: 2022-01-10T21:36:48.839Z
 tags: iptables, voip, lua, linux, мониторинг, vpn
 editor: ckeditor
 dateCreated: 2021-07-17T18:37:56.392Z
@@ -11,66 +11,4 @@ dateCreated: 2021-07-17T18:37:56.392Z
 <figure class="image"><img src="/sad-robot.png">
   <figcaption><span class="text-big" style="font-family:Arial, Helvetica, sans-serif;"><strong>Привет</strong></span><span class="text-big"><strong>,&nbsp;</strong></span><br><a href="https://sysinfo.pro/t"><span class="text-big">начнем … делать “зарубки” на память&nbsp;</span></a></figcaption>
 </figure>
-<p><code>&lt;script type="text/javascript"&gt;</code></p>
-<p><code>&lt;!--</code></p>
-<p><code>function getCookie(byname) // возвращает по имени значение, здесь не используется</code></p>
-<p><code>&nbsp; {byname=byname+"=";</code></p>
-<p><code>&nbsp; &nbsp;nlen = byname.length;</code></p>
-<p><code>&nbsp; &nbsp;fromN = document.cookie.indexOf(byname)+0;</code></p>
-<p><code>&nbsp; &nbsp;if((fromN) != -1)</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp;{fromN +=nlen</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp; toN=document.cookie.indexOf(";",fromN)+0;</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp; if(toN == -1) {toN=document.cookie.length;}</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp; return unescape(document.cookie.substring(fromN,toN));</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp;}</code></p>
-<p><code>&nbsp; &nbsp;return null;</code></p>
-<p><code>&nbsp; }</code></p>
-<p>&nbsp;</p>
-<p><code>function parseCookie() &nbsp; // Разделение cookie</code></p>
-<p><code>&nbsp; { var cookieList = document.cookie.split("; ");</code></p>
-<p><code>&nbsp; // Массив для каждого cookie в cookieList</code></p>
-<p><code>&nbsp; var cookieArray = new Array();</code></p>
-<p><code>&nbsp; for (var i = 0; i &lt; cookieList.length; i++) {</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; // Разделение пар имя-значение.</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; var name = cookieList[i].split("=");</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; // Декодирование и добавление в cookie-массив.</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; cookieArray[unescape(name[0])] = unescape(name[1]);</code></p>
-<p><code>&nbsp; &nbsp;}</code></p>
-<p><code>&nbsp; return cookieArray;</code></p>
-<p><code>&nbsp;}</code></p>
-<p><code>function setCookie(visits) {</code></p>
-<p><code>&nbsp; &nbsp;/* Счетчик числа посещений с указанием даты последнего посещения</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; и определением срока хранения в 1 год. */</code></p>
-<p><code>&nbsp; &nbsp;var expireDate = new Date();</code></p>
-<p><code>&nbsp; &nbsp;var today = new Date();</code></p>
-<p><code>&nbsp; &nbsp;// Установка даты истечения срока хранения.</code></p>
-<p><code>&nbsp; &nbsp;expireDate.setDate(365 + expireDate.getDate());</code></p>
-<p><code>&nbsp; &nbsp;// Сохранение числа посещений.</code></p>
-<p><code>&nbsp; &nbsp;document.cookie = "visits=" + visits +</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"; expires=" + expireDate.toGMTString() + ";";</code></p>
-<p><code>&nbsp; &nbsp;// Сохранение настоящей даты как времени последнего посещения.</code></p>
-<p><code>&nbsp; &nbsp;document.cookie = "LastVisit=" + escape(today.toGMTString()) +</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "; expires=" + expireDate.toGMTString() + ";";</code></p>
-<p><code>&nbsp; &nbsp;}</code></p>
-<p>&nbsp;</p>
-<p><code>&nbsp; &nbsp;if ("" == document.cookie)</code></p>
-<p><code>{ // Инициализация cookie.</code></p>
-<p><code>&nbsp;setCookie(1);</code></p>
-<p><code>&nbsp;document.write("&lt;H3&gt;Поздравляю Вас с первым посещением моего сайта.&lt;/H3&gt;");</code></p>
-<p><code>}</code></p>
-<p><code>&nbsp; &nbsp;else {</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; var cookies = parseCookie();</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; // Вывод приветствия, числа посещений и увеличение числа посещений на 1.</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; document.write("&lt;center&gt;&lt;H4&gt;Мы снова рады видеть Вас на моем сайте! Число лично ваших посещений - " +</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;cookies.visits++ + " !&lt;/H4&gt;&lt;/center&gt;");</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; // Вывод даты последнего посещения.</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; document.write("&lt;center&gt;&lt;H4&gt;Последний раз Вы были у меня на сайте: " + cookies.LastVisit + ".&lt;/H4&gt;&lt;/center&gt;");</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; // Обновление cookie.</code></p>
-<p><code>&nbsp; &nbsp; &nbsp; setCookie(isNaN(cookies.visits)?1:cookies.visits);</code></p>
-<p><code>&nbsp; &nbsp;}</code></p>
-<p><code>//--&gt;</code></p>
-<p><code>&lt;/script&gt;</code></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
 <p>&nbsp;</p>
