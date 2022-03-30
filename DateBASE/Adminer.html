@@ -2,18 +2,19 @@
 title: Install Debian-11
 description: Установка программы управления базами данных
 published: true
-date: 2022-03-30T20:54:24.252Z
+date: 2022-03-30T20:56:57.084Z
 tags: datebase, adminer, gui, web, postgresql, mysql, php
 editor: ckeditor
 dateCreated: 2022-03-30T20:48:26.327Z
 -->
 
 <p>&nbsp;</p>
-<p>apt-get install libapache2-mod-php libapache2-mod-php7.4 libsodium23 php-common php-mysql php-pgsql php-sqlite3 php7.4-cli php7.4-common php7.4-json php7.4-mysql php7.4-opcache php7.4-pgsql php7.4-readline php7.4-sqlite3 psmisc</p>
+<p><mark class="pen-green"><strong>Установим необходимые программы и библиотеки:</strong></mark></p>
+<pre><code class="language-plaintext">#apt-get install libapache2-mod-php libapache2-mod-php7.4 libsodium23 php-common php-mysql php-pgsql php-sqlite3 php7.4-cli php7.4-common php7.4-json php7.4-mysql php7.4-opcache php7.4-pgsql php7.4-readline php7.4-sqlite3 psmisc</code></pre>
 <p>mkdir /usr/share/adminer</p>
 <p>/usr/bin/wget https://www.adminer.org/latest.php -O /usr/share/adminer/index.php</p>
 <p>chown -R www-data:www-data /var/www/html/adminer.php<br>&nbsp;chmod 755 /var/www/html/adminer.php</p>
-<p>Создадим файл настройки для Apache:</p>
+<p><mark class="pen-green"><strong>Создадим файл настройки для Apache:</strong></mark></p>
 <pre><code class="language-plaintext">#nano /etc/apache2/conf-available/adminer.conf
 
 — пример содержимого -------------------------------------
