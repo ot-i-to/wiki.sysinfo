@@ -2,7 +2,7 @@
 title: Install Debian-11
 description: Установка программы управления базами данных
 published: true
-date: 2022-03-30T21:00:06.452Z
+date: 2022-03-30T21:01:30.990Z
 tags: datebase, adminer, gui, web, postgresql, mysql, php
 editor: ckeditor
 dateCreated: 2022-03-30T20:48:26.327Z
@@ -47,7 +47,7 @@ AllowOverride None
 
 &lt;/Directory&gt;</code></pre>
 <p><mark class="pen-green"><strong>… или более просто командой:</strong></mark></p>
-<pre><code class="language-plaintext">#echo "Alias /adminer.php /usr/share/adminer/adminer.php" | sudo tee /etc/apache2/conf-available/adminer.conf</code></pre>
+<pre><code class="language-plaintext">#echo "Alias /adminer.php /usr/share/adminer/index.php" | sudo tee /etc/apache2/conf-available/adminer.conf</code></pre>
 <p>&nbsp;</p>
 <p>systemctl restart apache2</p>
 <p>&nbsp;</p>
