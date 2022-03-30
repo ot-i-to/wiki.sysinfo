@@ -2,17 +2,51 @@
 title: Install Debian-11
 description: Установка программы управления базами данных
 published: true
-date: 2022-03-30T20:48:26.327Z
+date: 2022-03-30T20:54:24.252Z
 tags: datebase, adminer, gui, web, postgresql, mysql, php
 editor: ckeditor
 dateCreated: 2022-03-30T20:48:26.327Z
 -->
 
+<p>&nbsp;</p>
 <p>apt-get install libapache2-mod-php libapache2-mod-php7.4 libsodium23 php-common php-mysql php-pgsql php-sqlite3 php7.4-cli php7.4-common php7.4-json php7.4-mysql php7.4-opcache php7.4-pgsql php7.4-readline php7.4-sqlite3 psmisc</p>
 <p>mkdir /usr/share/adminer</p>
 <p>/usr/bin/wget https://www.adminer.org/latest.php -O /usr/share/adminer/index.php</p>
 <p>chown -R www-data:www-data /var/www/html/adminer.php<br>&nbsp;chmod 755 /var/www/html/adminer.php</p>
-<p>nano /etc/apache2/conf-available/adminer.conf</p>
+<p>Создадим файл настройки для Apache:</p>
+<pre><code class="language-plaintext">#nano /etc/apache2/conf-available/adminer.conf
+
+— пример содержимого -------------------------------------
+&lt;Directory /usr/share/adminer&gt;
+&lt;IfModule mod_dir.c&gt;
+   DirectoryIndex index.php
+&lt;/IfModule&gt;
+
+AllowOverride None
+# Only allow connections from localhost:
+#Require local
+
+&lt;IfModule mod_php.c&gt;
+ php_flag magic_quotes_gpc Off
+ php_flag track_vars On
+ #php_value include_path .
+&lt;/IfModule&gt;
+&lt;IfModule !mod_php.c&gt;
+ &lt;IfModule mod_actions.c&gt;
+   &lt;IfModule mod_cgi.c&gt;
+     AddType application/x-httpd-php .php
+     Action application/x-httpd-php /cgi-bin/php
+   &lt;/IfModule&gt;
+   &lt;IfModule mod_cgid.c&gt;
+     AddType application/x-httpd-php .php
+     Action application/x-httpd-php /cgi-bin/php
+   &lt;/IfModule&gt;
+ &lt;/IfModule&gt;
+&lt;/IfModule&gt;
+
+&lt;/Directory&gt;</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>systemctl restart apache2</p>
 <p>&nbsp;</p>
 <p>sudo mkdir /usr/share/adminer</p>
