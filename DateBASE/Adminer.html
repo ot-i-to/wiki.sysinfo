@@ -2,7 +2,7 @@
 title: Install Debian-11
 description: Установка программы управления базами данных
 published: true
-date: 2022-03-30T21:04:09.056Z
+date: 2022-03-30T21:10:21.226Z
 tags: datebase, adminer, gui, web, postgresql, mysql, php
 editor: ckeditor
 dateCreated: 2022-03-30T20:48:26.327Z
@@ -11,10 +11,13 @@ dateCreated: 2022-03-30T20:48:26.327Z
 <p>&nbsp;</p>
 <p><mark class="pen-green"><strong>Установим необходимые программы и библиотеки:</strong></mark></p>
 <pre><code class="language-plaintext">#apt-get install libapache2-mod-php libapache2-mod-php7.4 libsodium23 php-common php-mysql php-pgsql php-sqlite3 php7.4-cli php7.4-common php7.4-json php7.4-mysql php7.4-opcache php7.4-pgsql php7.4-readline php7.4-sqlite3 psmisc</code></pre>
-<p>mkdir /usr/share/adminer</p>
-<p>chown -R www-data:www-data /var/www/html/adminer.php<br>&nbsp;chmod 755 /var/www/html/adminer.php</p>
-<p>/usr/bin/wget https://www.adminer.org/latest.php -O /usr/share/adminer/index.php</p>
-<p><mark class="pen-green"><strong>Создадим файл настройки для Apache:</strong></mark></p>
+<p><mark class="pen-green"><strong>Создаем и место размещения:</strong></mark></p>
+<pre><code class="language-plaintext">#sudo mkdir /usr/share/adminer
+#sudo chown -R www-data:www-data /usr/share/adminer
+#sudo chmod -R 755 /usr/share/adminer</code></pre>
+<p><mark class="pen-green"><strong>Качаем/получаем с сайта программу:</strong></mark></p>
+<pre><code class="language-plaintext">#wget https://www.adminer.org/latest.php -O /usr/share/adminer/index.php</code></pre>
+<p><mark class="pen-green"><strong>Файл настроек Apache:</strong></mark></p>
 <pre><code class="language-plaintext">#nano /etc/apache2/conf-available/adminer.conf
 
 — пример содержимого -------------------------------------
@@ -48,7 +51,7 @@ AllowOverride None
 &lt;/Directory&gt;</code></pre>
 <p><mark class="pen-green"><strong>… или более просто командой:</strong></mark></p>
 <pre><code class="language-plaintext">#echo "Alias /adminer /usr/share/adminer/index.php" | sudo tee /etc/apache2/conf-available/adminer.conf</code></pre>
-<p>далее …&nbsp;</p>
+<p><mark class="pen-green"><strong>далее …&nbsp;</strong></mark></p>
 <pre><code class="language-plaintext">#sudo a2enconf adminer.conf
 #sudo service apache2 restart </code></pre>
 <p>&nbsp;</p>
