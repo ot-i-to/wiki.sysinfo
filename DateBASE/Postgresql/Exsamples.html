@@ -1,0 +1,23 @@
+<!--
+title: INSERT если не прошел UPDATE
+description: Postgresq - выполняем INSERT если не прошел UPDATE
+published: true
+date: 2022-04-20T15:22:49.341Z
+tags: if, postgresql, insert, update, error
+editor: ckeditor
+dateCreated: 2022-04-20T15:22:49.341Z
+-->
+
+<pre><code class="language-plaintext">create function UPDATE_OR_INSERT (p_query_update text,p_query_insert text) returns void as 
+$$ 
+declare 
+begin
+	execute p_query_update;
+	if FOUND=false then 
+	execute(p_query_insert);
+	end if;
+end
+$$ language plpgsql;</code></pre>
+<p>Пример:</p>
+<p>SELECT UPDATE_OR_INSERT('UPDATE _1SSTREAM SET DATE_TIME_DOCID = '||?||' WHERE ID = '||?, 'INSERT INTO _insert__1SSTREAM (ID, DATE_TIME_DOCID) VALUES ('||?||', '||?||')'::text)</p>
+<p>&nbsp;</p>
