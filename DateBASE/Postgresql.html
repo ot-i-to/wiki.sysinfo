@@ -1,8 +1,8 @@
 <!--
 title: Convert hex to number
-description: Преобразовать шестнадцатеричное представление в текстовом виде в десятичное число
+description: Postgresql - преобразовать шестнадцатеричное представление в текстовом виде в десятичное число
 published: true
-date: 2022-04-20T08:21:48.313Z
+date: 2022-04-20T15:10:44.485Z
 tags: postgresql, hex, convert, numeric
 editor: ckeditor
 dateCreated: 2022-04-20T08:21:09.497Z
@@ -50,6 +50,7 @@ from (
 ) as a;
 $$
 language sql strict immutable;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">create or replace function hex_to_int(hexval text) returns int as $$
 select
   (get_byte(x,0)::int&lt;&lt;(3*8)) |
@@ -64,5 +65,6 @@ language sql strict immutable;</code></pre>
 <p>SELECT hex_to_bigint('1f'); --&gt; 31</p>
 <p>SELECT hex_to_int('1f'); --&gt; 31</p>
 <hr>
+<p>Проверено на Postgresql ≥ 10 и выше.</p>
 <p>… источник <a href="https://stackoverflow.com/questions/8316164/convert-hex-in-text-representation-to-decimal-number">тут</a></p>
 <p>&nbsp;</p>
