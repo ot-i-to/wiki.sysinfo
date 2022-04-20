@@ -1,0 +1,69 @@
+<!--
+title: Convert hex to number
+description: Преобразовать шестнадцатеричное представление в текстовом виде в десятичное число
+published: true
+date: 2022-04-20T08:21:09.497Z
+tags: postgresql, hex, convert, numeric
+editor: ckeditor
+dateCreated: 2022-04-20T08:21:09.497Z
+-->
+
+<h3>1) Простой вариант на штатных функциях</h3>
+<p>SELECT ('x' || lpad('1f', 8, '0'))::bit(32)::int; --&gt; 31</p>
+<p>SELECT ('x' || lpad('1f', 16, '0'))::bit(64)::bigint; --&gt; 31</p>
+<p>&nbsp;</p>
+<h3>2) &nbsp;Варианты с функциями</h3>
+<pre><code class="language-plaintext">create function hex_to_decimal(hex_string text)
+returns text
+language plpgsql immutable as $pgsql$
+declare
+    bits bit varying;
+    result numeric := 0;
+    exponent numeric := 0;
+    chunk_size integer := 31;
+    start integer;
+begin
+    execute 'SELECT x' || quote_literal(hex_string) INTO bits;
+    while length(bits) &gt; 0 loop
+        start := greatest(1, length(bits) - chunk_size);
+        result := result + (substring(bits from start for chunk_size)::bigint)::numeric * pow(2::numeric, exponent);
+        exponent := exponent + chunk_size;
+        bits := substring(bits from 1 for greatest(0, length(bits) - chunk_size));
+    end loop;
+    return trunc(result, 0);
+end
+$pgsql$;</code></pre>
+<p>SELECT hex_to_decimal('1f'); --&gt; 31</p>
+<hr>
+<pre><code class="language-plaintext">create or replace function hex_to_bigint(hexval text) returns bigint as $$
+select
+  (get_byte(x,0)::int8&lt;&lt;(7*8)) |
+  (get_byte(x,1)::int8&lt;&lt;(6*8)) |
+  (get_byte(x,2)::int8&lt;&lt;(5*8)) |
+  (get_byte(x,3)::int8&lt;&lt;(4*8)) |
+  (get_byte(x,4)::int8&lt;&lt;(3*8)) |
+  (get_byte(x,5)::int8&lt;&lt;(2*8)) |
+  (get_byte(x,6)::int8&lt;&lt;(1*8)) |
+  (get_byte(x,7)::int8)
+from (
+  select decode(lpad($1, 16, '0'), 'hex') as x
+) as a;
+$$
+language sql strict immutable;</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">create or replace function hex_to_int(hexval text) returns int as $$
+select
+  (get_byte(x,0)::int&lt;&lt;(3*8)) |
+  (get_byte(x,1)::int&lt;&lt;(2*8)) |
+  (get_byte(x,2)::int&lt;&lt;(1*8)) |
+  (get_byte(x,3)::int)
+from (
+  select decode(lpad($1, 8, '0'), 'hex') as x
+) as a;
+$$
+language sql strict immutable;</code></pre>
+<p>SELECT hex_to_bigint('1f'); --&gt; 31</p>
+<p>SELECT hex_to_int('1f'); --&gt; 31</p>
+<hr>
+<p>… источник <a href="https://stackoverflow.com/questions/8316164/convert-hex-in-text-representation-to-decimal-number">тут</a></p>
+<p>&nbsp;</p>
