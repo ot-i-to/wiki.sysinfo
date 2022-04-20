@@ -2,12 +2,14 @@
 title: INSERT если не прошел UPDATE
 description: Postgresq - выполняем INSERT если не прошел UPDATE
 published: true
-date: 2022-04-20T15:22:49.341Z
+date: 2022-04-20T15:25:53.891Z
 tags: if, postgresql, insert, update, error
 editor: ckeditor
 dateCreated: 2022-04-20T15:22:49.341Z
 -->
 
+<h3>Если не прошел UPDATE то делаем INSERT</h3>
+<p>Создаем функцию:</p>
 <pre><code class="language-plaintext">create function UPDATE_OR_INSERT (p_query_update text,p_query_insert text) returns void as 
 $$ 
 declare 
