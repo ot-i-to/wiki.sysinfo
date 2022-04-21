@@ -1,0 +1,24 @@
+<!--
+title: SHA1 OpenSIP
+description: Генератор чеша SHA1 для OpenSIPS пользователей
+published: true
+date: 2022-04-21T06:14:26.997Z
+tags: postgresql, function, sha1, oprnsips, user, python
+editor: ckeditor
+dateCreated: 2022-04-21T06:14:26.997Z
+-->
+
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">CREATE FUNCTION "user_get_ha1" ("user_" text, "domain_" text, "password_" text) RETURNS text LANGUAGE plpython3u AS '
+    import hashlib
+    string = "{}:{}:{}".format(user_, domain_, password_)
+    return hashlib.md5(string.encode(''utf-8'')).hexdigest()
+    ';</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">CREATE FUNCTION "user_get_ha1b" ("user_" text, "domain_" text, "password_" text) RETURNS text LANGUAGE plpython3u AS '
+    import hashlib
+    string = "{}@{}:{}:{}".format(user_, domain_, domain_, password_)
+    return hashlib.md5(string.encode(''utf-8'')).hexdigest()
+    ';</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
