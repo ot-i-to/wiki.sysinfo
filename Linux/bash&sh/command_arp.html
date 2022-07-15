@@ -1,0 +1,30 @@
+<!--
+title: Command "arp"
+description: Команда arp опции, ключи и примеры использования
+published: true
+date: 2022-07-15T10:32:25.729Z
+tags: linux, bash, sh, arp
+editor: ckeditor
+dateCreated: 2022-07-15T10:32:25.729Z
+-->
+
+<h1>arp</h1>
+<blockquote>
+  <p>Позволяет просматривать и управлять ARP-кэшем в вашей системе.</p>
+</blockquote>
+<ul>
+  <li>Показать содержимое arp-кэша:</li>
+</ul>
+<p><code>arp -a</code></p>
+<ul>
+  <li>Полностью очистить arp-кэш:</li>
+</ul>
+<p><code>sudo arp -a -d</code></p>
+<ul>
+  <li>Удалить конкретную запись из кэша:</li>
+</ul>
+<p><code>arp -d {{address}}</code></p>
+<ul>
+  <li>Создать статическую запись в кэше:</li>
+</ul>
+<p><code>arp -s {{address}} {{mac address}}</code></p>
