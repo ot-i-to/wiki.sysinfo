@@ -1,0 +1,39 @@
+<!--
+title: Command "arping"
+description: Команда arping опции, ключи и примеры использования
+published: true
+date: 2022-07-15T10:30:35.357Z
+tags: linux, bash, sh, arping
+editor: ckeditor
+dateCreated: 2022-07-15T10:30:35.357Z
+-->
+
+<h1>arping</h1>
+<blockquote>
+  <p>Discover and probe hosts in a network using the ARP protocol. Useful for MAC address discovery. More information: <a href="https://github.com/ThomasHabets/arping">https://github.com/ThomasHabets/arping</a>.</p>
+</blockquote>
+<ul>
+  <li>Ping a host by ARP request packets:</li>
+</ul>
+<p><code>arping {{host_ip}}</code></p>
+<ul>
+  <li>Ping a host on a specific interface:</li>
+</ul>
+<p><code>arping -I {{interface}} {{host_ip}}</code></p>
+<ul>
+  <li>Ping a host and stop at the first reply:</li>
+</ul>
+<p><code>arping -f {{host_ip}}</code></p>
+<ul>
+  <li>Ping a host a specific number of times:</li>
+</ul>
+<p><code>arping -c {{count}} {{host_ip}}</code></p>
+<ul>
+  <li>Broadcast ARP request packets to update neighbours' ARP caches:</li>
+</ul>
+<p><code>arping -U {{ip_to_broadcast}}</code></p>
+<ul>
+  <li>Detect duplicated IP addresses in the network by sending ARP requests with a 3 seconds timeout:</li>
+</ul>
+<p><code>arping -D -w {{3}} {{ip_to_check}}</code></p>
+<p>&nbsp;</p>
