@@ -1,0 +1,28 @@
+<!--
+title: Русская клавиатура для MATE через shell
+description: Добавление русской клавиатуры в графический интерфейс MATE через shell консоль
+published: true
+date: 2022-07-20T08:46:43.394Z
+tags: linux, bash, sh, shell, console, mate, desktop, keyboard, rus
+editor: ckeditor
+dateCreated: 2022-07-20T08:46:43.394Z
+-->
+
+<h5>1.1. Использование <i><strong>gsettings</strong></i></h5>
+<p>Ниже мой пример с двумя раскладками (us и ru) с использованием<strong> Ctrl+Shift</strong> в качестве переключателя раскладок и светодиода <strong>ScrollLock</strong> в качестве индикатора второй раскладки:</p>
+<pre><code class="language-plaintext">gsettings set org.mate.peripherals-keyboard-xkb.kbd layouts "['us', 'ru']"
+gsettings set org.mate.peripherals-keyboard-xkb.kbd model "''"
+gsettings set org.mate.peripherals-keyboard-xkb.kbd options "['grp_led\tgrp_led:scroll', 'grp\tgrp:ctrl_shift_toggle']"</code></pre>
+<h5>1.2. Использование <i><strong>dconf</strong></i></h5>
+<p>Альтернативный метод — использовать команду <strong>dconf</strong>:</p>
+<pre><code class="language-plaintext">cat &lt;&lt;EOF | dconf load /org/mate/desktop/peripherals/keyboard/
+[kbd]
+layouts=['us', 'ru']
+model=''
+options=['grp_led\tgrp_led:scroll', 'grp\tgrp:ctrl_shift_toggle']
+EOF</code></pre>
+<h5>2. Терминальная/консольная сессия и некоторые случаи графического интерфейса (более простой и действенный вариант)</h5>
+<p>Даем команду <strong>sudo dpkg-reconfigure keyboard-configuration</strong>, чтобы перенастроить раскладки клавиатуры для терминала и некоторых сеансов графического интерфейса.</p>
+<p>Настройки сохраняются в <strong>/etc/default/keyboard</strong>.</p>
+<p>После изменения этого файла вы должны обновить образы <strong>initramfs</strong> с помощью команды <strong>sudo update-initramfs -k all -u</strong>.</p>
+<p>&nbsp;</p>
