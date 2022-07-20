@@ -2,7 +2,7 @@
 title: MATE  Rus клавиатура в терминал
 description: Добавление русской клавиатуры в графический интерфейс MATE через shell терминал/консоль
 published: true
-date: 2022-07-20T08:51:20.309Z
+date: 2022-07-20T09:02:49.891Z
 tags: linux, bash, sh, shell, console, mate, desktop, keyboard, rus, terminal
 editor: ckeditor
 dateCreated: 2022-07-20T08:46:43.394Z
@@ -24,5 +24,5 @@ EOF</code></pre>
 <h5>2. Терминальная/консольная сессия и некоторые случаи графического интерфейса (более простой и действенный вариант)</h5>
 <p>Даем команду <strong>sudo dpkg-reconfigure keyboard-configuration</strong>, чтобы перенастроить раскладки клавиатуры для терминала и некоторых сеансов графического интерфейса.</p>
 <p>Настройки сохраняются в <strong>/etc/default/keyboard</strong>.</p>
-<p>После изменения этого файла вы должны обновить образы <strong>initramfs</strong> с помощью команды <strong>sudo update-initramfs -k all -u</strong>.</p>
+<p>После изменения этого файла, обязательно надо обновить образ <strong>initramfs</strong> с помощью команды <strong>sudo update-initramfs -k all -u</strong>.</p>
 <p>&nbsp;</p>
