@@ -1,0 +1,15 @@
+<!--
+title: Parameter Placeholder Syntax
+description: Синтаксис параметров-заполнителей
+published: true
+date: 2022-07-20T15:10:11.745Z
+tags: postgresql, mysql, sql, oracle, syntax, parametr, placeholder
+editor: ckeditor
+dateCreated: 2022-07-20T15:10:11.745Z
+-->
+
+<p>Синтаксис параметров-заполнителей в подготовленных операторах зависит от базы данных. Например, сравнение MySQL, PostgreSQL и Oracle:</p>
+<pre><code class="language-plaintext">MySQL               PostgreSQL            Oracle
+=====               ==========            ======
+WHERE col = ?       WHERE col = $1        WHERE col = :col
+VALUES(?, ?, ?)     VALUES($1, $2, $3)    VALUES(:val1, :val2, :val3)</code></pre>
