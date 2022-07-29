@@ -1,14 +1,13 @@
 <!--
-title: Сравнение с NULL¶
+title: Сравнение с NULL
 description: 
 published: true
-date: 2022-07-29T14:59:54.685Z
+date: 2022-07-29T15:00:37.252Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-07-29T14:59:54.685Z
 -->
 
-<h1>Сравнение с NULL</h1>
 <p>Любое сравнение произвольного значения с <i>NULL</i> возвращает <i>NULL</i> (неопределенное значение):</p>
 <p>Примеры:</p>
 <pre><code class="language-plaintext">denis=# select coalesce((1 &lt;&gt; null)::varchar, '&lt;null&gt;');
