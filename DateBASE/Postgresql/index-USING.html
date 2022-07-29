@@ -1,0 +1,205 @@
+<!--
+title: Insert, не срабатывает уникальность индекса
+description: Особености индексирования при null'евом значение полей
+published: true
+date: 2022-07-29T14:53:02.219Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-07-29T14:53:02.219Z
+-->
+
+<h1>Уникальный индекс, при полях таблицы с null'евым значеним</h1>
+<p>Частенько разработчики и администраторы PostgreSQL сталкиваются с вроде бы ошибкой PostgreSQL - на таблицу создан уникальный индекс, который "не работает". То есть в таблице есть строки, которые должны содержать некоторый набор полей, значение которых должно быть уникальным для всей таблице, но это условие не выполняется. Более подробный анализ дублей показывает, что все проблемные строки содержат хотя бы одно null'евое значение в одном из полей. А <strong>null != null</strong> (см. статью <a href="https://pgcookbook.ru/article/comparison_with_null.html#comparison-with-null"><i>Сравнение с NULL</i></a>). Отсюда и все "проблемы".</p>
+<p>Пример описанной проблемы</p>
+<p>Есть таблица <i>test_func_index</i> и уникальный индекс по полям <i>name</i>, <i>cdate</i></p>
+<pre><code class="language-plaintext">CREATE TABLE test_func_index(
+  id serial PRIMARY KEY,
+  name varchar,
+  cdate date
+);
+
+CREATE UNIQUE INDEX i_test_func_index_unique
+  ON test_func_index
+  USING btree(name, cdate);
+</code></pre>
+<p>Проверим работу уникального индекса.</p>
+<p>Инициализация таблицы начальными значениями</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-01');
+insert 0 1
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-02');
+insert 0 1
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-03');
+insert 0 1
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', null);
+insert 0 1
+</code></pre>
+<p>Проверяю работу уникального индекса с ненулевыми значениями. Индекс работает</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-03');
+ERROR:  duplicate key value violates unique constraint "i_test_func_index_unique"
+DETAIL:  key (name, cdate)=(name1, 2012-01-03) already exists.
+</code></pre>
+<p>Проверяю работу уникального индекса с NULL'евыми значениями. Индекс не работает</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', null);
+insert 0 1
+</code></pre>
+<p>Проблема уникальности присутствует.</p>
+<p>На данный момент есть три самых популярных решений описанной проблемы:</p>
+<ul>
+  <li>Применение функционального индекса</li>
+  <li>Использование частичного индекса</li>
+  <li>Применение суррогатного уникального индекса</li>
+</ul>
+<h2>Функциональный индекс</h2>
+<p>Каждое поле уникального индекса оборачивается функцией COALESCE, в итоге NULL'евые значения полей в индексе заменяются специальными предопределенными значениями.</p>
+<p>В данном примере нулевая строка заменяется пустой строкой, а нулевая дата - бесконечной датой</p>
+<pre><code class="language-plaintext">CREATE UNIQUE INDEX i_test_func_index_func_unique
+  ON test_func_index
+  USING btree(COALESCE(name, ''), COALESCE(cdate, 'infinity'));
+</code></pre>
+<p>Проверим работу индекса.</p>
+<p>Инициализация таблицы</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-01');
+INSERT 0 1
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-02');
+INSERT 0 1
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', null);
+INSERT 0 1
+</code></pre>
+<p>Проверка работы уникального индекса для нулевых значений. Индекс работает.</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', null);
+ERROR:  duplicate key value violates unique constraint "i_test_func_index_func_unique"
+DETAIL:  Key ((COALESCE(name, ''::character varying)), (COALESCE(cdate, 'infinity'::date)))=(name1, infinity) already exists.
+</code></pre>
+<p>Работа индекса в обычных запросах. Индекс не работает.</p>
+<pre><code class="language-plaintext">denis=# EXPLAIN SELECT * FROM test_func_index WHERE cdate &lt; now();
+                                      QUERY PLAN
+--------------------------------------------------------------------------------
+ Seq Scan on test_func_index  (cost=10000000000.00..10000000027.40 rows=387 widt
+   Filter: (cdate &lt; now())
+(2 rows)
+
+Работа индекса при использовании функции COALESCE, но с другими константами. Не работает
+denis=# EXPLAIN SELECT * FROM test_func_index WHERE COALESCE(cdate, now()) &lt; now();
+                                      QUERY PLAN
+--------------------------------------------------------------------------------
+ Seq Scan on test_func_index  (cost=10000000000.00..10000000033.20 rows=387 widt
+   Filter: (COALESCE((cdate)::timestamp with time zone, now()) &lt; now())
+(2 rows)
+
+Работа индекса при использовании функции COALESCE и теми же параметрами. Работает.
+denis=# EXPLAIN SELECT * FROM test_func_index WHERE COALESCE(cdate, 'infinity') &lt; now();
+                                          QUERY PLAN
+--------------------------------------------------------------------------------
+ Bitmap Heap Scan on test_func_index  (cost=17.05..32.85 rows=387 width=40)
+   Recheck Cond: (COALESCE(cdate, 'infinity'::date) &lt; now())
+   -&gt;  Bitmap Index Scan on i_test_func_index_func_unique  (cost=0.00..16.95 row
+         Index Cond: (COALESCE(cdate, 'infinity'::date) &lt; now())
+(4 rows)
+</code></pre>
+<p><strong>Плюсы</strong></p>
+<ul>
+  <li>Уникальность достигается без дополнительных ухищрений в момент внесения данных в таблицу</li>
+  <li>Индекс работает не только как уникальный, но и годен для фильтрации данных</li>
+</ul>
+<p><strong>Минусы</strong></p>
+<ul>
+  <li>Специальные значения, которыми заменяются NULL'евые, должны быть вне допустимого диапазона ненулевых значений</li>
+  <li>Фильтрация работает только при использовании COALESCE с константами, которые были определены в индексе</li>
+</ul>
+<h2>Частичный индекс</h2>
+<p>Для каждого NULL'евого поля и/или комбинации NULL'евых полей создаётся свой индекс. Это необходимо, чтобы индексы не перекрывали друг друга (меньше нагрузки при вставке данных и меньше места для хранения индекс)</p>
+<pre><code class="language-plaintext">CREATE UNIQUE INDEX i_test_func_index_unique_1
+  ON test_func_index
+  USING btree(name, cdate)
+  WHERE name IS NOT NULL AND cdate IS NOT NULL;
+
+CREATE UNIQUE INDEX i_test_func_index_unique_2
+  ON test_func_index
+  USING btree(name, cdate)
+  WHERE name IS NOT NULL AND cdate IS NULL;
+
+CREATE UNIQUE INDEX i_test_func_index_unique_3
+  ON test_func_index
+  USING btree(name, cdate)
+  WHERE name IS NULL AND cdate IS NOT NULL;
+
+CREATE UNIQUE INDEX i_test_func_index_unique_4
+  ON test_func_index
+  USING btree(name, cdate)
+  WHERE name IS NULL AND cdate IS NULL; -- Этот индекс "хранит" одну запись
+</code></pre>
+<p>Индексы не перекрываются, но при этом поддерживают уникальность по полям <i>name</i> и <i>cdate</i></p>
+<p><strong>Плюсы</strong></p>
+<ul>
+  <li>Никаких искусственно созданных ограничений при работе со значениями полей.</li>
+  <li>Фильтрация работает без ограничений</li>
+  <li>Никакого оверхеда при хранении</li>
+</ul>
+<p><strong>Минусы</strong></p>
+<ul>
+  <li>Сложность создания индексов. Количество индексов должно быть количество_полей в степени двойки (для трех полей - 8, для 4 - 16)</li>
+</ul>
+<h2>"Суррогатный" индекс</h2>
+<p>Все поля, по которым надо поддерживать уникальность, склеиваются/складываются особым образом, чтобы получилось уникальное значение, которое и будет обеспечивать уникальность.</p>
+<p>Функция склеивания полей</p>
+<pre><code class="language-plaintext">CREATE OR REPLACE FUNCTION uniq(_name varchar, _cdate date) RETURNS varchar AS
+$$
+  SELECT (COALESCE(_name, '') || '-' || COALESCE(_cdate::varchar, 'NULL'))
+$$ LANGUAGE sql IMMUTABLE;
+</code></pre>
+<p>Функциональный индекс</p>
+<p>CREATE UNIQUE INDEX i_test_func_index_unique
+  &nbsp;ON test_func_index
+  &nbsp;USING btree(uniq(name, cdate));
+</p>
+<p>Заполнение таблицы</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-01');
+INSERT 0 1
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', NULL);
+INSERT 0 1
+</code></pre>
+<p>Проверка работы индекса</p>
+<pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', NULL);
+ERROR:  duplicate key value violates unique constraint "i_test_func_index_unique"
+DETAIL:  Key (uniq(name, cdate))=(name1-NULL) already exists.
+
+denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-01');
+ERROR:  duplicate key value violates unique constraint "i_test_func_index_unique"
+DETAIL:  Key (uniq(name, cdate))=(name1-2012-01-01) already exists.
+</code></pre>
+<p>Индекс работает как и ожидалось.</p>
+<p><strong>Плюсы</strong></p>
+<ul>
+  <li>Поддерживает уникальность</li>
+</ul>
+<p><strong>Минусы</strong></p>
+<ul>
+  <li>Требуется создавать склеивающую поля функцию</li>
+  <li>Индекс работает только на уникальность, на фильтрацию - не работает.</li>
+</ul>
+<h2>Резюме</h2>
+<blockquote>
+  <p>Самым технологичным и удобным в использовании является способ с использованием частичных индексов. Затраты времени на создание всех необходимых индексов компенсируются полноценной работой индексов как для поддержания уникальности, так и для фильтрации данных.</p>
+  <p>Использование функционального индекса (первый способ) не всегда возможен и очень плох в поддержке (необходимо выделять специальные значения для NULL'ов и фильтрация работает только при соблюдении определенных условий).</p>
+  <p>Третий способ с суррогатным индексом можно применять только, если необходимо только поддержка уникальности, так как большего он предоставить не может.</p>
+</blockquote>
+<h2>P.S.</h2>
+<p>Хорошим компромиссом может стать синергия обычного уникального индекса и суррогатного индекса для нулевых полей. Для вышеописанной таблицы это будет выглядеть так.</p>
+<p>Обычный уникальный индекс, обеспечивающий уникальность для ненулевых полей и полноценную фильтрацию</p>
+<pre><code class="language-plaintext">CREATE UNIQUE INDEX i_test_func_index_unique
+  ON test_func_index
+  USING btree(name, cdate);
+</code></pre>
+<p>Суррогатный индекс, обеспечивающих уникальность для нулевых полей</p>
+<pre><code class="language-plaintext">CREATE UNIQUE INDEX i_test_func_index_unique_1
+  ON test_func_index
+  USING btree(uniq(name, cdate))
+  WHERE name IS NULL OR cdate IS NULL;
+</code></pre>
+<p>Да, индексы в некоторых случаях дублируют друг друга, но это компенсируется их простотой (как в архитектуре, так и поддержке / использовании)</p>
