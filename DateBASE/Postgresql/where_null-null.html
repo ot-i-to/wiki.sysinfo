@@ -1,0 +1,174 @@
+<!--
+title: Сравнение с NULL¶
+description: 
+published: true
+date: 2022-07-29T14:59:54.685Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-07-29T14:59:54.685Z
+-->
+
+<h1>Сравнение с NULL</h1>
+<p>Любое сравнение произвольного значения с <i>NULL</i> возвращает <i>NULL</i> (неопределенное значение):</p>
+<p>Примеры:</p>
+<pre><code class="language-plaintext">denis=# select coalesce((1 &lt;&gt; null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((1 = null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((1 &lt; null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((1 &gt; null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((null = null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((null &lt;&gt; null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+</code></pre>
+<p>Поэтому выражения/переменные, которые могут принимать неопределенные значения, надо осторожно использовать в сравнениях. Если в выражении попадётся неопределенное значение, то результат всего выражения может быть очень неожиданным.</p>
+<p>Использование неопределенного значения в сложном сравнении с использование булевых операторов AND, OR, NOT тоже не несет в себе какого-нибудь позитива - хотя и результаты логических операция не противоречат болевой логики, но их сложно анализировать разработчикам.</p>
+<pre><code class="language-plaintext">denis=# select coalesce((null or true)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ true
+(1 row)
+
+denis=# select coalesce((null and true)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((null and false)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ false
+(1 row)
+
+denis=# select coalesce((null or false)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+
+denis=# select coalesce((not null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ &lt;null&gt;
+(1 row)
+</code></pre>
+<p>Для сравнения на равенство двух значение, которые могут принимать неопределенные значения, можно использовать конструкцию <strong>IS DISTINCT FROM</strong>, которая возвращает <i>True</i>, если значения отличаются друг от друга:</p>
+<pre><code class="language-plaintext">denis=# select coalesce((null is distinct from null)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ false
+(1 row)
+
+denis=# select coalesce((null is distinct from 1)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ true
+(1 row)
+
+denis=# select coalesce((1 is distinct from 1)::varchar, '&lt;null&gt;');
+ coalesce
+----------
+ false
+(1 row)
+</code></pre>
+<blockquote>
+  <h6><mark class="pen-red"><strong>Предупреждение</strong></mark></h6>
+  <p>При использовании операторов <strong>is distinct from</strong> и <strong>is not distinct from</strong> в запросе индексы задействованы не будут.</p>
+  <pre><code class="language-plaintext">denis=# explain select * from customers where id is not distinct from 222;
+                         QUERY PLAN
+------------------------------------------------------------
+ Seq Scan on customers  (cost=0.00..803.00 rows=1 width=17)
+   Filter: (NOT (id IS DISTINCT FROM 222))
+(2 rows)
+
+denis=# explain select * from customers where id = 222;
+                                   QUERY PLAN
+--------------------------------------------------------------------------------
+ Index Scan using customers_pkey on customers  (cost=0.00..8.28 rows=1 width=17)
+   Index Cond: (id = 222)
+(2 rows)
+</code></pre>
+</blockquote>
+<p>Это частично решает проблему сравнения неопределенных значений. Однако осталась проблема сравнений на больше-меньше. Это можно решить через функцию <strong>COALESCE</strong>:</p>
+<pre><code class="language-plaintext">denis=# select coalesce(1 &lt; null, false);
+ coalesce
+----------
+ f
+(1 row)
+
+denis=# select coalesce(2 &gt; null, true);
+ coalesce
+----------
+ t
+(1 row)
+</code></pre>
+<p>При разработке разработке хранимых процедур на pl/pgsql вышеописанная проблема так же сохраняется, но не так остро. Хотя остаётся не менее коварной:</p>
+<pre><code class="language-plaintext">DECLARE
+  _str text;
+  _int int4;
+BEGIN
+  _str := NULL;
+  _int := NULL;
+  IF _str &lt;&gt; '' THEN
+    RAISE NOTICE 'str: True';
+  ELSE
+    RAISE NOTICE 'str: False';
+  END IF;
+  IF _int &gt; 0 THEN
+    RAISE NOTICE 'int: True';
+  ELSE
+   RAISE NOTICE 'int: False';
+  END IF;
+  IF NULL THEN
+    RAISE NOTICE 'NULL: True';
+  ELSE
+   RAISE NOTICE 'NULL: False';
+  END IF;
+RAISE NOTICE 'end';
+END
+</code></pre>
+<p>Результатом будет:</p>
+<pre><code class="language-plaintext">NOTICE:  str: False
+NOTICE:  int: False
+NOTICE:  NULL: False
+NOTICE:  end</code></pre>
+<p>Неопределенное значение результата операции сравнения с <i>NULL</i> интерпретируется конструкцией <strong>IF NULL THEN ELSE END</strong> как <i>False</i>. Поэтому при простом сравнении переменной (которая может принимать <i>NULL</i>) с какой-либо константой можно проверки на <i>NULL</i> не делать:</p>
+<pre><code class="language-plaintext">IF _var IS NOT NULL AND _var &gt; 0 THEN
+-- можно заменить на
+IF _var &gt; 0 THEN
+
+
+IF _var IS NOT NULL AND _var = 'token' THEN
+-- можно за менить на
+IF _var = 'token' THEN
+...
+</code></pre>
+<p>В общем, будьте внимательны.</p>
+<p>&nbsp;</p>
