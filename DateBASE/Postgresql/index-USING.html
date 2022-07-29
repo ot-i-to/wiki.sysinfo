@@ -2,14 +2,14 @@
 title: Insert, не срабатывает уникальность индекса
 description: Особености индексирования при null'евом значение полей
 published: true
-date: 2022-07-29T14:53:02.219Z
+date: 2022-07-29T15:01:39.222Z
 tags: 
 editor: ckeditor
 dateCreated: 2022-07-29T14:53:02.219Z
 -->
 
 <h1>Уникальный индекс, при полях таблицы с null'евым значеним</h1>
-<p>Частенько разработчики и администраторы PostgreSQL сталкиваются с вроде бы ошибкой PostgreSQL - на таблицу создан уникальный индекс, который "не работает". То есть в таблице есть строки, которые должны содержать некоторый набор полей, значение которых должно быть уникальным для всей таблице, но это условие не выполняется. Более подробный анализ дублей показывает, что все проблемные строки содержат хотя бы одно null'евое значение в одном из полей. А <strong>null != null</strong> (см. статью <a href="https://pgcookbook.ru/article/comparison_with_null.html#comparison-with-null"><i>Сравнение с NULL</i></a>). Отсюда и все "проблемы".</p>
+<p>Частенько разработчики и администраторы PostgreSQL сталкиваются с вроде бы ошибкой PostgreSQL - на таблицу создан уникальный индекс, который "не работает". То есть в таблице есть строки, которые должны содержать некоторый набор полей, значение которых должно быть уникальным для всей таблице, но это условие не выполняется. Более подробный анализ дублей показывает, что все проблемные строки содержат хотя бы одно null'евое значение в одном из полей. А <strong>null != null</strong> (см. статью <a href="https://sysinfo.pro/ru/DateBASE/Postgresql/where_null-null"><i>Сравнение с NULL</i></a>). Отсюда и все "проблемы".</p>
 <p>Пример описанной проблемы</p>
 <p>Есть таблица <i>test_func_index</i> и уникальный индекс по полям <i>name</i>, <i>cdate</i></p>
 <pre><code class="language-plaintext">CREATE TABLE test_func_index(
@@ -153,10 +153,7 @@ $$
 $$ LANGUAGE sql IMMUTABLE;
 </code></pre>
 <p>Функциональный индекс</p>
-<p>CREATE UNIQUE INDEX i_test_func_index_unique
-  &nbsp;ON test_func_index
-  &nbsp;USING btree(uniq(name, cdate));
-</p>
+<p>CREATE UNIQUE INDEX i_test_func_index_unique &nbsp;ON test_func_index &nbsp;USING btree(uniq(name, cdate));</p>
 <p>Заполнение таблицы</p>
 <pre><code class="language-plaintext">denis=# INSERT INTO test_func_index(name, cdate) VALUES('name1', '2012-01-01');
 INSERT 0 1
