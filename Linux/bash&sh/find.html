@@ -1,0 +1,31 @@
+<!--
+title: find - поиск по дате
+description: Работа с датами и временем
+published: true
+date: 2022-08-13T07:05:30.173Z
+tags: find, linux
+editor: ckeditor
+dateCreated: 2022-08-13T07:05:30.173Z
+-->
+
+<p>Поиск файлов, модифицированных после указанной даты:</p>
+<pre><code class="language-plaintext">find /path/to/dir -newermt "date"
+find /path/to/dir -newermt "Feb 07"
+find /path/to/dir -newermt "yyyy-mm-dd"</code></pre>
+<p>Поиск файлов, доступ к которым был между указанными датами:</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -newerat 2008-09-29 ! -newerat 2008-09-30</code></pre>
+<p>Поиск всех модифицированных файлов в промежутке дат</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -name "*" -newermt 2013-02-07 ! -newermt 2013-02-08</code></pre>
+<p>Поиск файлов новее файла /tmp/foo</p>
+<pre><code class="language-plaintext">find /path/to/dir -newer /tmp/foo</code></pre>
+<p>Поиск текстовых файлов, которые были модифицированы за последние 60 дней:</p>
+<pre><code class="language-plaintext">find /path/to/dir -iname "*.txt" -mtime -60</code></pre>
+<p>Подсчёт количества изменённых за последние 60 дней текстовых файлов с помощью wc:</p>
+<pre><code class="language-plaintext">find /path/to/dir -iname "*.txt" -mtime -60 | wc -l</code></pre>
+<p>Поиск всех mp3-шек, которые были прослушаны за последние 10 дней:</p>
+<pre><code class="language-plaintext">find /path/to/dir -iname "*.mp3" -atime 10 -type -f</code></pre>
+<p>Использование опции -ls для детализации вывода:</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt 2013-02-07 ! -newermt 2013-02-08 -ls</code></pre>
+<p>Использование опции -delete для удаления найденных файлов:</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt 2013-02-07 ! -newermt 2013-02-08 -delete</code></pre>
+<p>&nbsp;</p>
