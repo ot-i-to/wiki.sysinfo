@@ -2,7 +2,7 @@
 title: find - поиск по дате и т.д.
 description: Работа с датами и временем
 published: true
-date: 2022-08-13T07:27:08.724Z
+date: 2022-08-13T07:33:08.960Z
 tags: find, linux
 editor: ckeditor
 dateCreated: 2022-08-13T07:05:30.173Z
@@ -14,6 +14,12 @@ find /path/to/dir -newermt "Feb 07"
 find /path/to/dir -newermt "yyyy-mm-dd"</code></pre>
 <p>Поиск файлов, доступ к которым был между указанными датами:</p>
 <pre><code class="language-plaintext">find /path/to/dir -type f -newerat '2008-09-29' ! -newerat '2008-09-30'</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -newerat '2008-09-29' -newerat '2008-09-30'</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -newerat '2008-09-29' -o -newerat '2008-09-30'</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">find /path/to/dir -type f -newerat '2008-09-29' -not -newerat '2008-09-30'</code></pre>
 <p>Поиск всех модифицированных файлов в промежутке дат</p>
 <pre><code class="language-plaintext">find /path/to/dir -type f -name "*" -newermt '2013-02-07' ! -newermt '2013-02-08'</code></pre>
 <p>Поиск файлов новее файла /tmp/foo</p>
