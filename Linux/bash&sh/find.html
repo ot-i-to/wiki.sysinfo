@@ -2,7 +2,7 @@
 title: find - поиск по дате и т.д.
 description: Работа с датами и временем
 published: true
-date: 2022-08-13T07:13:45.771Z
+date: 2022-08-13T07:27:08.724Z
 tags: find, linux
 editor: ckeditor
 dateCreated: 2022-08-13T07:05:30.173Z
@@ -13,9 +13,9 @@ dateCreated: 2022-08-13T07:05:30.173Z
 find /path/to/dir -newermt "Feb 07"
 find /path/to/dir -newermt "yyyy-mm-dd"</code></pre>
 <p>Поиск файлов, доступ к которым был между указанными датами:</p>
-<pre><code class="language-plaintext">find /path/to/dir -type f -newerat 2008-09-29 ! -newerat 2008-09-30</code></pre>
+<pre><code class="language-plaintext">find /path/to/dir -type f -newerat '2008-09-29' ! -newerat '2008-09-30'</code></pre>
 <p>Поиск всех модифицированных файлов в промежутке дат</p>
-<pre><code class="language-plaintext">find /path/to/dir -type f -name "*" -newermt 2013-02-07 ! -newermt 2013-02-08</code></pre>
+<pre><code class="language-plaintext">find /path/to/dir -type f -name "*" -newermt '2013-02-07' ! -newermt '2013-02-08'</code></pre>
 <p>Поиск файлов новее файла /tmp/foo</p>
 <pre><code class="language-plaintext">find /path/to/dir -newer /tmp/foo</code></pre>
 <p>Поиск текстовых файлов, которые были модифицированы за последние 60 дней:</p>
@@ -25,9 +25,9 @@ find /path/to/dir -newermt "yyyy-mm-dd"</code></pre>
 <p>Поиск всех mp3-шек, которые были прослушаны за последние 10 дней:</p>
 <pre><code class="language-plaintext">find /path/to/dir -iname "*.mp3" -atime 10 -type -f</code></pre>
 <p>Использование опции -ls для детализации вывода:</p>
-<pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt 2013-02-07 ! -newermt 2013-02-08 -ls</code></pre>
+<pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt '2013-02-07' ! -newermt '2013-02-08' -ls</code></pre>
 <p>Использование опции -delete для удаления найденных файлов:</p>
-<pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt 2013-02-07 ! -newermt 2013-02-08 -delete</code></pre>
+<pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt '2013-02-07' ! -newermt '2013-02-08' -delete</code></pre>
 <p>Сменит расширение найденных файлов с .htm на .html</p>
 <pre><code class="language-plaintext">find /home/user/job/ -name "*.htm" -exec rename 's/.htm/.html/g' {} \;</code></pre>
 <p>Найти файлы размер которых больше 100Мб:</p>
