@@ -2,7 +2,7 @@
 title: find - поиск по дате
 description: Работа с датами и временем
 published: true
-date: 2022-08-13T07:05:30.173Z
+date: 2022-08-13T07:12:38.354Z
 tags: find, linux
 editor: ckeditor
 dateCreated: 2022-08-13T07:05:30.173Z
@@ -28,4 +28,18 @@ find /path/to/dir -newermt "yyyy-mm-dd"</code></pre>
 <pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt 2013-02-07 ! -newermt 2013-02-08 -ls</code></pre>
 <p>Использование опции -delete для удаления найденных файлов:</p>
 <pre><code class="language-plaintext">find /path/to/dir -type f -name "*.py" -newermt 2013-02-07 ! -newermt 2013-02-08 -delete</code></pre>
+<p>Сменит расширение найденных файлов с .htm на .html</p>
+<pre><code class="language-plaintext">find /home/user/job/ -name "*.htm" -exec rename 's/.htm/.html/g' {} \;</code></pre>
+<p>Найти файлы размер которых больше 100Мб:</p>
+<pre><code class="language-plaintext">find /home/user/ -type f -size +100M</code></pre>
+<p>Бывает такое, что в консоли файлы отображаются как кракозябры, не правильная кодировка. Как их удалить, исправить?</p>
+<ol>
+  <li>Смотрим inode файлов в текущей директории;</li>
+  <li>Hаходим файл с помощью find и делаем с ним все что угодно, например переименовываем</li>
+</ol>
+<pre><code class="language-plaintext">$ ls -li
+394509 -rw-r--r-- 1 user user  16005 Июн 20 10:38 ??????.docx
+$ find -inum 394509 -exec mv {} "MyDOCfile.docx" \;
+$ ls -l
+-rw-r--r-- 1 user user  16005 Июн 20 10:38 MyDOCfile.docx</code></pre>
 <p>&nbsp;</p>
