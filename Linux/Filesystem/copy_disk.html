@@ -2,7 +2,7 @@
 title: DD command
 description: Примеры
 published: true
-date: 2022-08-18T08:16:04.296Z
+date: 2022-08-18T08:17:03.465Z
 tags: linux, dd, copy, disk, ssh
 editor: ckeditor
 dateCreated: 2022-08-18T08:16:04.296Z
@@ -33,11 +33,11 @@ dateCreated: 2022-08-18T08:16:04.296Z
   <li><strong>GB</strong> - 1000 мегабайт;</li>
   <li><strong>G</strong> - 1024 мегабайт.</li>
 </ul>
-<p>- Пример частичной очистки / заполнение нулями диска :<br>dd if=/dev/zero of=file.img bs=1M count=512</p>
-<p>- Пример создания резервной копии локального диска на удаленной сервере через ssh:<br>sudo dd if=/dev/sda | gzip -9 - | ssh user@host “dd of=/tmp/sda.image.gz bs=8M status=progress”</p>
-<p>- Пример востановления локального диска из резервной копии с удаленого серевера через ssh:<br>ssh user@host &nbsp;“sudo dd if=/tmp/sda.image.gz | gunzip -” | sudo dd of=/dev/sda bs=2M status=progress</p>
-<p>- Пример прямого копирования удаленого диска на локальный через ssh:<br>ssh user@host &nbsp;“sudo dd if=/dev/sda | gzip -9 -" | gunzip - | dd of=/dev/sda bs=2M status=progress</p>
-<p><mark class="marker-yellow">Обрашаю внимание, что команды gzip и gunzip используемы для сжатия потока данных при прямом копирование можно е использовать.&nbsp;</mark></p>
+<p>- Пример частичной очистки / заполнение нулями диска :<br><i>dd if=/dev/zero of=file.img bs=1M count=512</i></p>
+<p>- Пример создания резервной копии локального диска на удаленной сервере через ssh:<br><i>sudo dd if=/dev/sda | gzip -9 - | ssh user@host “dd of=/tmp/sda.image.gz bs=8M status=progress”</i></p>
+<p>- Пример востановления локального диска из резервной копии с удаленого серевера через ssh:<br><i>ssh user@host &nbsp;“sudo dd if=/tmp/sda.image.gz | gunzip -” | sudo dd of=/dev/sda bs=2M status=progress</i></p>
+<p>- Пример прямого копирования удаленого диска на локальный через ssh:<br><i>ssh user@host &nbsp;“sudo dd if=/dev/sda | gzip -9 -" | gunzip - | dd of=/dev/sda bs=2M status=progress</i></p>
+<p><mark class="marker-yellow">Обрашаю внимание, что команды gzip и gunzip используемы для сжатия потока данных при прямом копирование можно и не использовать.&nbsp;</mark></p>
 <p><mark class="marker-pink">Иногда при использование ssh и <strong>sudo</strong> возникает ошибка: “<strong>sudo: sorry, you must have a tty to run sudo</strong>” … для ее устранения достаточно в файл<strong> /etc/sudoers</strong> добавить строчку “<strong>Defaults:имя_пользователя !requiretty”</strong> для определеного пользователя … в некоторых случаях может потребоваться строка “<strong>Defaults!/path/to/bin !requiretty”</strong> с указвнием пути <strong>/path/to/bin</strong> расположения к исполняему файлу.</mark></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
