@@ -2,7 +2,7 @@
 title: lm_sensors fine tuning
 description: /etc/sensors.d - параметров
 published: true
-date: 2022-08-18T16:21:26.663Z
+date: 2022-08-18T16:23:02.093Z
 tags: linux, lm-sensors, lm_sensors, sensors, sensors.d
 editor: ckeditor
 dateCreated: 2022-08-18T15:42:24.556Z
@@ -41,7 +41,17 @@ lm78-*</code></pre>
 <blockquote>
   <p>chip "lm78-*" "lm79-*"</p>
 </blockquote>
-<p>Описание чипа строится из нескольких элементов, разделенных типом. Первый элемент — это тип микросхемы, второй элемент — имя шины, а третий элемент — шестнадцатеричный адрес микросхемы. Такие описания чипов печатаются командой <strong>sensors</strong> в первой строке для каждого чипа.<br><br>Имя шины: isa, pci, virtual, spi-* или i2c-N, где N — номер шины, связанный с оператором bus. Этот список не обязательно является исчерпывающим, так как в будущем может быть добавлена ​​поддержка других типов шин.<br><br>Вы можете заменить подстановочный знак * для каждого элемента. Обратите внимание, однако, что не имеет смысла указывать адрес без типа шины, поэтому адресная часть просто опускается, если тип шины не указан. Вот как бы вы выразили следующие совпадения:<br>Чип LM78 по адресу 0x2d на шине I2C 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; lm78-i2c-1-2d<br>Чип LM78 по адресу 0x2d на любой шине I2C &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; lm78-i2c-*-2d<br>Микросхема LM78 по адресу 0x290 на шине ISA &nbsp; &nbsp; &nbsp; lm78-isa-0290<br>Любой чип LM78 на шине I2C 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; lm78-i2c-1-*<br>Любой LM78 на любой шине I2C &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;lm78-i2c-*-*<br>Любой чип LM78 на шине ISA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;lm78-isa-*<br>Любой чип LM78 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; lm78-*<br>Любой чип по адресу 0x2d на шине I2C 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*-i2c-1-2d<br>Любой чип по адресу 0x290 на шине ISA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; *-isa-0290<br><br>Если несколько утверждений чипа соответствуют определенному чипу, учитываются все они.</p>
+<p>Описание чипа строится из нескольких элементов, разделенных типом. Первый элемент — это тип микросхемы, второй элемент — имя шины, а третий элемент — шестнадцатеричный адрес микросхемы. Такие описания чипов печатаются командой <strong>sensors</strong> в первой строке для каждого чипа.<br><br>Имя шины: isa, pci, virtual, spi-* или i2c-N, где N — номер шины, связанный с оператором bus. Этот список не обязательно является исчерпывающим, так как в будущем может быть добавлена ​​поддержка других типов шин.<br><br>Вы можете заменить подстановочный знак * для каждого элемента. Обратите внимание, однако, что не имеет смысла указывать адрес без типа шины, поэтому адресная часть просто опускается, если тип шины не указан. Вот как бы вы выразили следующие совпадения:</p>
+<pre><code class="language-plaintext">Чип LM78 по адресу 0x2d на шине I2C 1            lm78-i2c-1-2d
+Чип LM78 по адресу 0x2d на любой шине I2C        lm78-i2c-*-2d
+Микросхема LM78 по адресу 0x290 на шине ISA      lm78-isa-0290
+Любой чип LM78 на шине I2C 1                     lm78-i2c-1-*
+Любой LM78 на любой шине I2C                     lm78-i2c-*-*
+Любой чип LM78 на шине ISA                       lm78-isa-*
+Любой чип LM78                                   lm78-*
+Любой чип по адресу 0x2d на шине I2C 1           *-i2c-1-2d
+Любой чип по адресу 0x290 на шине ISA            *-isa-0290</code></pre>
+<p>Если несколько утверждений чипа соответствуют определенному чипу, учитываются все они.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
