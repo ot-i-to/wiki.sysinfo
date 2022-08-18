@@ -2,7 +2,7 @@
 title: lm_sensors fine tuning
 description: /etc/sensors.d - параметров
 published: true
-date: 2022-08-18T15:45:14.112Z
+date: 2022-08-18T15:48:49.186Z
 tags: linux, lm-sensors, lm_sensors, sensors, sensors.d
 editor: ckeditor
 dateCreated: 2022-08-18T15:42:24.556Z
@@ -14,12 +14,12 @@ dateCreated: 2022-08-18T15:42:24.556Z
 <p><strong>sensors --bus-list</strong></p>
 <p><u>Описание</u><strong>:</strong><br><strong>sensors</strong> используется для отображения текущих показаний всех сенсорных чипов.<br><strong>sensors -s</strong> используется для установки всех ограничений, указанных в файле конфигурации.<br><strong>sensors --bus-list</strong> используются для генерации операторов шины, подходящих для файла конфигурации.</p>
 <p><u>Опции</u>:</p>
-<p><strong><u>-c</u></strong> config-file … Укажите файл конфигурации. Если файл не указан, используется файл конфигурации по умолчанию. Используйте '-c /dev/null', чтобы временно отключить этот файл конфигурации по умолчанию.</p>
-<p><strong><u>-h</u></strong> … Распечатать текст справки и выйти.</p>
-<p><strong><u>-s</u></strong> .. Evaluate all 'set' statements in the configuration file and exit. You must be 'root' to do this. If this parameter is not specified, no 'set' statement is evaluated.</p>
-<p><strong><u>-A</u></strong> .. do not show the adapter for each chip.</p>
-<p><strong><u>-u</u></strong> … Raw output. This mode is only meant for debugging.</p>
-<p><strong><u>-v</u></strong> … Print the program version and exit.</p>
+<p><strong><u>-c, --config-file</u></strong> config-file … Укажите файл конфигурации. Если файл не указан, используется файл конфигурации по умолчанию. Используйте '-c /dev/null', чтобы временно отключить этот файл конфигурации по умолчанию.</p>
+<p><strong><u>-h, --config-file</u></strong> … Распечатать текст справки и выйти.</p>
+<p><strong><u>-s</u></strong> .. Оцените все операторы set в файле конфигурации и выйдите. Вы должны быть «root», чтобы сделать это. Если этот параметр не указан, оператор set не оценивается.</p>
+<p><strong><u>-A</u></strong> .. не показывать адаптер для каждого чипа.</p>
+<p><strong><u>-u</u></strong> … Сырой вывод. Этот режим предназначен только для отладки.</p>
+<p><strong><u>-v</u></strong> … Распечатайте версию программы и выйдите.</p>
 <p><strong><u>-f</u></strong> …Print the temperatures in degrees Fahrenheit instead of Celsius.</p>
 <p><strong><u>--bus-list</u></strong> … Generate bus statements suitable for using in sensors.conf. Such bus statements are only needed if you have several chips sharing the same address on different buses of the same type. As bus numbers are usually not guaranteed to be stable over reboots, these statements let you refer to each bus by its name rather than numbers.</p>
 <p>&nbsp;</p>
