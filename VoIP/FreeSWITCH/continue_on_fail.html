@@ -1,0 +1,31 @@
+<!--
+title: Continue on Fail dial 
+description: переключение на резервный канала связи
+published: true
+date: 2022-08-19T21:02:10.864Z
+tags: 
+editor: ckeditor
+dateCreated: 2022-08-19T21:02:10.864Z
+-->
+
+<p>На&nbsp;freeswitch-е,&nbsp;помощью инструкции&nbsp;<strong>continue_on_fail</strong>, можно отправлять вызовы на резервного оператора, если по какой либо причине не получилось сделать вызов через основного оператора.</p>
+<p><u>Синтаксис&nbsp;</u><strong><u>continue_on_fail</u></strong></p>
+<pre><code class="language-plaintext">&lt;action application="set" data="continue_on_fail=true"/&gt;</code></pre>
+<p>Диалплан будет выполнятся при любом коде отбоя</p>
+<pre><code class="language-plaintext">&lt;action application="set" data="continue_on_fail=false"/&gt;</code></pre>
+<p>При любом коде отбоя выполнение диалплана останавливается</p>
+<p>Так же можно перечислить коды Q.850 при которых выполнение диалплана будет продолжено, например</p>
+<pre><code class="language-plaintext">&lt;action application="set" data="continue_on_fail=NORMAL_TEMPORARY_FAILURE,USER_BUSY,NO_ANSWER,NO_ROUTE_DESTINATION"/&gt;</code></pre>
+<p>или</p>
+<pre><code class="language-plaintext">&lt;action application="set" data="continue_on_fail=3,17,18,27"/&gt;</code></pre>
+<p>Полную таблицу кодов можно взять&nbsp;<a href="https://wiki.freeswitch.org/wiki/Hangup_Causes">здесь</a></p>
+<p>Пример диалплана для переключения на другого оператора при &nbsp;ошибки с каналом.</p>
+<pre><code class="language-plaintext"> &lt;extension name="operator1-operator2" &gt;
+ &lt;condition field="destination_number" expression="^(7|8)(\d{10})$" &gt;
+ &lt;action application="set" data="hangup_after_bridge=true"/&gt;.
+ &lt;action application="set" data="continue_on_fail=GATEWAY_DOWN,NORMAL_TEMPORARY_FAILURE,NO_ROUTE_DESTINATION,CALL_REJECTED,SERVICE_UNAVAILABLE"/&gt;
+ &lt;action application="bridge" data="sofia/gateway/operator1/$1" /&gt;
+ &lt;action application="bridge" data="sofia/gateway/operator2/$1" /&gt;
+ &lt;/condition&gt;
+ &lt;/extension&gt;</code></pre>
+<p>&nbsp;</p>
