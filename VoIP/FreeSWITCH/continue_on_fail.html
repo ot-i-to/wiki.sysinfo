@@ -2,7 +2,7 @@
 title: Continue on Fail dial 
 description: переключение на резервный канала связи
 published: true
-date: 2022-08-20T08:58:34.913Z
+date: 2022-08-20T08:59:48.359Z
 tags: freeswitch, continue_on_fail, dialplan, hangup_after_bridge
 editor: ckeditor
 dateCreated: 2022-08-19T21:02:10.864Z
@@ -32,7 +32,7 @@ dateCreated: 2022-08-19T21:02:10.864Z
  &lt;action application="bridge" data="sofia/gateway/operator2/$1" /&gt;
  &lt;/condition&gt;
  &lt;/extension&gt;</code></pre>
-<p style="text-align:justify;">&nbsp; &nbsp; &nbsp;Если у вас <strong>continue_on_fail=true</strong> и <strong>hangup_after_bridge=false</strong>, вы можете увидеть, что «на самом деле» произошло с вызовом. Например, вы можете выполнить <strong>execute_extension</strong> после моста, выполнить проверку условия <strong>${bridge_hangup_cause}</strong>, чтобы увидеть, содержит ли он <strong>MEDIA_TIMEOUT</strong>, а затем инициировать повторный набор вызова или перевод на мобильный телефон.&nbsp;</p>
+<p style="text-align:justify;">&nbsp; &nbsp; &nbsp;Если у вас <strong>continue_on_fail=true</strong> и <strong>hangup_after_bridge=false</strong>, вы можете увидеть, что «на самом деле» произошло с вызовом. Например, вы можете выполнить проверку условия <strong>${bridge_hangup_cause}</strong>, чтобы увидеть, содержит ли он <strong>MEDIA_TIMEOUT</strong>, а затем инициировать повторный набор вызова или перевод на мобильный телефон.&nbsp;</p>
 <p><u>Пример использования:</u></p>
 <pre><code class="language-plaintext">&lt;action application="log" data="1 B-leg hangup cause: ${bridge_hangup_cause}"/&gt;</code></pre>
 <p>&nbsp;</p>
