@@ -2,7 +2,7 @@
 title: Continue on Fail dial 
 description: переключение на резервный канала связи
 published: true
-date: 2022-08-20T08:58:03.034Z
+date: 2022-08-20T08:58:34.913Z
 tags: freeswitch, continue_on_fail, dialplan, hangup_after_bridge
 editor: ckeditor
 dateCreated: 2022-08-19T21:02:10.864Z
@@ -11,7 +11,7 @@ dateCreated: 2022-08-19T21:02:10.864Z
 <p>На&nbsp;<i><u>freeswitch</u></i>,&nbsp;cпомощью инструкции&nbsp;<strong>continue_on_fail</strong>, можно отправлять вызовы на резервного оператора, если по какой либо причине не получилось сделать вызов через основного оператора.</p>
 <blockquote>
   <p><mark class="pen-red"><strong>Внимание!</strong></mark> Обязательно предварительно включите <strong>hangup_after_bridge</strong> : <code><strong>&lt;action application="set" data="hangup_after_bridge=true"/&gt;</strong></code></p>
-  <p style="text-align:justify;"><strong>hangup_after_bridge ---- у</strong>правляет тем, что происходит с вызывающей стороной (<i>A</i>), когда она находится в состоянии моста, и вызываемая сторона (Б) вешает трубку. Если <i><strong>true</strong></i>, диалплан прекратит обработку, и этап <i>A</i> будет завершен, когда завершится этап Б. Если <i><strong>false</strong></i> (по умолчанию), диалплан продолжает обрабатываться после завершения ветви Б.</p>
+  <p style="text-align:justify;"><strong>hangup_after_bridge ---- </strong>управляет тем, что происходит с вызывающей стороной (<i>A</i>), когда она находится в состоянии моста, и вызываемая сторона (Б) вешает трубку. Если <i><strong>true</strong></i>, диалплан прекратит обработку, и этап <i>A</i> будет завершен, когда завершится этап Б. Если <i><strong>false</strong></i> (по умолчанию), диалплан продолжает обрабатываться после завершения ветви Б.</p>
 </blockquote>
 <p>Синтаксис&nbsp;<strong>continue_on_fail :</strong></p>
 <p>Диалплан будет выполнятся при любом коде отбоя</p>
