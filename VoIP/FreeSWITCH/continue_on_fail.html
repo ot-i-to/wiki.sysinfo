@@ -2,13 +2,17 @@
 title: Continue on Fail dial 
 description: переключение на резервный канала связи
 published: true
-date: 2022-08-19T21:09:13.129Z
+date: 2022-08-20T08:53:16.128Z
 tags: freeswitch, continue_on_fail, dialplan, hangup_after_bridge
 editor: ckeditor
 dateCreated: 2022-08-19T21:02:10.864Z
 -->
 
 <p>На&nbsp;freeswitch,&nbsp;cпомощью инструкции&nbsp;<strong>continue_on_fail</strong>, можно отправлять вызовы на резервного оператора, если по какой либо причине не получилось сделать вызов через основного оператора.</p>
+<blockquote>
+  <p><mark class="pen-red"><strong>Внимание!</strong></mark> Обязательно предварительно включите <strong>hangup_after_bridge</strong> : <code><strong>&lt;action application="set" data="hangup_after_bridge=true"/&gt;</strong></code></p>
+  <p><strong>hangup_after_bridge ---- у</strong>правляет тем, что происходит с вызывающей стороной (<i>A</i>), когда она находится в состоянии моста, и вызываемая сторона (<i>B</i>) вешает трубку. Если <i><strong>true</strong></i>, диалплан прекратит обработку, и этап <i>A</i> будет завершен, когда завершится этап <i>B</i>. Если <i><strong>false</strong></i> (по умолчанию), диалплан продолжает обрабатываться после завершения ветви <i>B</i>.</p>
+</blockquote>
 <p>Синтаксис&nbsp;<strong>continue_on_fail :</strong></p>
 <p>Диалплан будет выполнятся при любом коде отбоя</p>
 <pre><code class="language-plaintext">&lt;action application="set" data="continue_on_fail=true"/&gt;</code></pre>
@@ -22,10 +26,11 @@ dateCreated: 2022-08-19T21:02:10.864Z
 <p>Пример диалплана для переключения на другого оператора при &nbsp;ошибки с каналом.</p>
 <pre><code class="language-plaintext"> &lt;extension name="operator1-operator2" &gt;
  &lt;condition field="destination_number" expression="^(7|8)(\d{10})$" &gt;
- &lt;action application="set" data="hangup_after_bridge=true"/&gt;.
+ &lt;action application="set" data="hangup_after_bridge=true"/&gt;
  &lt;action application="set" data="continue_on_fail=GATEWAY_DOWN,NORMAL_TEMPORARY_FAILURE,NO_ROUTE_DESTINATION,CALL_REJECTED,SERVICE_UNAVAILABLE"/&gt;
  &lt;action application="bridge" data="sofia/gateway/operator1/$1" /&gt;
  &lt;action application="bridge" data="sofia/gateway/operator2/$1" /&gt;
  &lt;/condition&gt;
  &lt;/extension&gt;</code></pre>
+<p>Если у вас <strong>continue_on_fail=true</strong> и <strong>hangup_after_bridge=false</strong>, вы можете проверить это, чтобы увидеть, что «на самом деле» произошло с вызовом. Например, вы можете выполнить execute_extension после моста, выполнить проверку условия <strong>${bridge_hangup_cause}</strong>, чтобы увидеть, содержит ли он <strong>MEDIA_TIMEOUT</strong>, а затем инициировать повторный набор вызова или перевод на мобильный телефон.&nbsp;</p>
 <p>&nbsp;</p>
