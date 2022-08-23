@@ -2,71 +2,10 @@
 title: Мои заметки
 description: ... 
 published: true
-date: 2022-08-23T13:24:58.344Z
+date: 2022-08-23T13:26:49.953Z
 tags: iptables, voip, lua, linux, мониторинг, vpn
 editor: code
 dateCreated: 2021-07-17T18:37:56.392Z
 -->
 
 <a href=https://sysinfo.pro/t ><p><img alt="word_art(22).png" src="/word_art(22).png"></p></a>
-
-
-<script type="text/javascript">
-<!--
- function getCookie(byname)	// возвращает по имени значение, здесь не используется
-   {byname=byname+"=";
-    nlen = byname.length;
-    fromN = document.cookie.indexOf(byname)+0;
-    if((fromN) != -1)
-        {fromN +=nlen
-         toN=document.cookie.indexOf(";",fromN)+0;
-         if(toN == -1) {toN=document.cookie.length;}
-         return unescape(document.cookie.substring(fromN,toN));
-        }
-    return null;
-   }
-
- function parseCookie()   // Разделение cookie
-   { var cookieList = document.cookie.split("; ");
-   // Массив для каждого cookie в cookieList
-   var cookieArray = new Array();
-   for (var i = 0; i < cookieList.length; i++) {
-       // Разделение пар имя-значение.
-       var name = cookieList[i].split("=");
-       // Декодирование и добавление в cookie-массив.
-       cookieArray[unescape(name[0])] = unescape(name[1]);
-    }
-   return cookieArray;
-  }
- function setCookie(visits) {
-    /* Счетчик числа посещений с указанием даты последнего посещения
-       и определением срока хранения в 1 год. */
-    var expireDate = new Date();
-    var today = new Date();
-    // Установка даты истечения срока хранения.
-    expireDate.setDate(365 + expireDate.getDate());
-    // Сохранение числа посещений.
-    document.cookie = "visits=" + visits +
-                      "; expires=" + expireDate.toGMTString() + ";";
-    // Сохранение настоящей даты как времени последнего посещения.
-    document.cookie = "LastVisit=" + escape(today.toGMTString()) +
-                       "; expires=" + expireDate.toGMTString() + ";";
-    }
-
-    if ("" == document.cookie)
-	{ // Инициализация cookie.
-	 setCookie(1);
-	 document.write("<center><H3>Поздравляю Вас с первым посещением моего сайта.</H3></center>");
-	}
-    else {
-       var cookies = parseCookie();
-       // Вывод приветствия, числа посещений и увеличение числа посещений на 1.
-       document.write("<center><H4>Я рад видеть Вас на моем сайте! Число ваших посещений - " +
-          cookies.visits++ + " !</H4></center>");
-       // Вывод даты последнего посещения.
-       document.write("<center><H4>Последний раз Вы были у меня на сайте: " + cookies.LastVisit + ".</H4></center>");
-       // Обновление cookie.
-       setCookie(isNaN(cookies.visits)?1:cookies.visits);
-    }
-//-->
-</script>
