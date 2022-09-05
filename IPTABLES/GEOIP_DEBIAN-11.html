@@ -2,7 +2,7 @@
 title: Iptables с фильтрацией GeoIP в Debian 11
 description: Itables with GeoIP filtering in Debian 11
 published: true
-date: 2022-08-17T16:48:34.469Z
+date: 2022-09-05T15:08:52.183Z
 tags: iptables, geoip
 editor: ckeditor
 dateCreated: 2021-11-04T14:18:45.151Z
@@ -13,6 +13,7 @@ dateCreated: 2021-11-04T14:18:45.151Z
 <h6>sudo apt install xtables-addons-common libnet-cidr-lite-perl libtext-csv-xs-perl libgeoip2-perl</h6>
 <p>&nbsp;</p>
 <p><span style="font-family:Arial, Helvetica, sans-serif;"># Загрузка модуля GeoIP ядра:</span></p>
+<h6>sudo &nbsp;depmod -a</h6>
 <h6>sudo modprobe xt_geoip</h6>
 <p>&nbsp;</p>
 <p><span style="font-family:Arial, Helvetica, sans-serif;"># Делаем, чтобы модуль загружался автоматически (выполняется с root правами):</span></p>
