@@ -1,0 +1,24 @@
+<!--
+title: Доступ Wine к открытию TCP соединений
+description: Решение проблемы для серверных приложений 
+published: true
+date: 2022-09-07T19:17:43.394Z
+tags: tcp, wine, setcap, cap_net
+editor: ckeditor
+dateCreated: 2022-09-07T19:17:43.394Z
+-->
+
+<p>Если Вы сталкиваетесь с ситуацией, когда наприммер вы пытаетесь запустить Windows приложение TFTP сервера под Wine, но оно выдает ошибку на открытие 67 тпорта в последних версиях Linux … тогда &nbsp;надо предоставить Wine<a href="https://sysinfo.pro/ru/Linux/Filesystem/capabilities"> расширенные права</a> на данные дествия выполнив следующие команды:</p>
+<pre><code class="language-plaintext">sudo setcap cap_net_admin+epi /usr/lib/wine/wine
+sudo setcap cap_net_admin+epi /usr/lib/wine/wine64
+sudo setcap cap_net_admin+epi /usr/lib/wine/wineserver
+sudo setcap cap_net_admin+epi /usr/lib/wine/wineserver32
+sudo setcap cap_net_admin+epi /usr/lib/wine/wineserver64
+sudo setcap cap_net_admin+epi /usr/lib/wine/wineapploader
+sudo setcap cap_net_bind_service+epi /usr/lib/wine/wine
+sudo setcap cap_net_bind_service+epi /usr/lib/wine/wine64
+sudo setcap cap_net_bind_service+epi /usr/lib/wine/wineserver
+sudo setcap cap_net_bind_service+epi /usr/lib/wine/wineserver32
+sudo setcap cap_net_bind_service+epi /usr/lib/wine/wineserver64
+sudo setcap cap_net_bind_service+epi /usr/lib/wine/wineapploader</code></pre>
+<p>&nbsp;</p>
