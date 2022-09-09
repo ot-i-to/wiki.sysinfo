@@ -2,7 +2,7 @@
 title: $() и ${} в сценарии оболочки
 description: как использовать
 published: true
-date: 2022-09-09T10:38:36.666Z
+date: 2022-09-09T10:40:31.538Z
 tags: linux, sh, shell, ${, $(
 editor: ckeditor
 dateCreated: 2022-09-09T10:34:47.370Z
@@ -24,20 +24,17 @@ dateCreated: 2022-09-09T10:34:47.370Z
 <p>Например, следующие эхо-команды заменяют вывод команды date в качестве ввода:</p>
 <pre><code class="language-plaintext">$ echo $ ( date )
 $ echo `date`</code></pre>
-<p>&nbsp;</p>
-<figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/2-7.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/2-7.png 337w, https://linuxhint.com/wp-content/uploads/2020/04/2-7-300x92.png 300w" sizes="100vw" width="337"></figure>
+<figure class="image image_resized" style="width:30.18%;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/2-7.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/2-7.png 337w, https://linuxhint.com/wp-content/uploads/2020/04/2-7-300x92.png 300w" sizes="100vw" width="337"></figure>
 <p>Вы также можете использовать подстановку команд для присвоения значения переменной. Например, мы будем печатать сегодняшнюю дату через переменную TODAY следующим образом:</p>
 <pre><code class="language-plaintext">$ TODAY=$(date)
 $ echo "$TODAY"</code></pre>
-<p>&nbsp;</p>
-<figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/3-7.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/3-7.png 342w, https://linuxhint.com/wp-content/uploads/2020/04/3-7-300x65.png 300w" sizes="100vw" width="342"></figure>
+<figure class="image image_resized" style="width:29.28%;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/3-7.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/3-7.png 342w, https://linuxhint.com/wp-content/uploads/2020/04/3-7-300x65.png 300w" sizes="100vw" width="342"></figure>
 <p>Другая полезность подстановки команд заключается в циклах оболочки для получения ввода. Здесь мы попытаемся распечатать все файлы .txt в нашей домашней папке, используя подстановку команд:</p>
 <pre><code class="language-plaintext">for f in /home/sana/*.txt
 do
   echo "$f"
-done</code></pre>
-<p>&nbsp;</p>
-<figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/4-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/4-6.png 569w, https://linuxhint.com/wp-content/uploads/2020/04/4-6-300x78.png 300w" sizes="100vw" width="569"></figure>
+done </code></pre>
+<figure class="image image_resized" style="width:48.96%;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/4-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/4-6.png 569w, https://linuxhint.com/wp-content/uploads/2020/04/4-6-300x78.png 300w" sizes="100vw" width="569"></figure>
 <h3><strong>Использование подстановки команд в сценарии оболочки</strong></h3>
 <p>Приведенные выше примеры — это несколько способов, которыми вы можете использовать силу подстановки команд в сценарии оболочки. Вот пример отчета о состоянии, который мы можем распечатать с помощью следующего сценария оболочки:</p>
 <pre><code class="language-plaintext">#!/bin/sh
@@ -56,7 +53,7 @@ echo "Время безотказной работы равно $UPTIME "</code>
 <pre><code class="language-plaintext">$ chmod + x status.sh
 $ . /statys.sh _</code></pre>
 <p>Вот вывод нашего скрипта status.sh:</p>
-<figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/6-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/6-6.png 735w, https://linuxhint.com/wp-content/uploads/2020/04/6-6-300x114.png 300w" sizes="100vw" width="735"></figure>
+<figure class="image image_resized" style="width:48.14%;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/6-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/6-6.png 735w, https://linuxhint.com/wp-content/uploads/2020/04/6-6-300x114.png 300w" sizes="100vw" width="735"></figure>
 <p>Вы можете, конечно, создавать более осмысленные сценарии, следуя примерам, которые мы только что упомянули.</p>
 <h3><strong>${} Подстановка/расширение параметра</strong></h3>
 <p>Параметр в Bash — это сущность, которая используется для хранения значений. На параметр можно ссылаться по номеру, имени или специальному символу. Когда на параметр ссылается число, он называется <strong>позиционным параметром</strong> . Когда на параметр ссылаются по имени, он называется <strong>переменной</strong> . Когда на параметр ссылается специальный символ, это означает, что это автоматически устанавливаемые параметры для специального использования.</p>
@@ -68,9 +65,9 @@ $ . /statys.sh _</code></pre>
 <pre><code class="language-plaintext">$ name="john doe"
 $ echo “${name}”</code></pre>
 <p>Эта команда заменит значение переменной «name» для использования командой echo:</p>
-<figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/7-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/7-6.png 317w, https://linuxhint.com/wp-content/uploads/2020/04/7-6-300x143.png 300w" sizes="100vw" width="317"></figure>
+<figure class="image image_resized" style="width:30.38%;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/7-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/7-6.png 317w, https://linuxhint.com/wp-content/uploads/2020/04/7-6-300x143.png 300w" sizes="100vw" width="317"></figure>
 <p>Вы можете подумать, что того же можно добиться, избегая фигурных скобок следующим образом:</p>
-<figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/8-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/8-6.png 355w, https://linuxhint.com/wp-content/uploads/2020/04/8-6-300x79.png 300w" sizes="100vw" width="355"></figure>
+<figure class="image image_resized" style="width:29.83%;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/8-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/8-6.png 355w, https://linuxhint.com/wp-content/uploads/2020/04/8-6-300x79.png 300w" sizes="100vw" width="355"></figure>
 <p>Ответ заключается в том, что при расширении параметра эти фигурные скобки помогают разграничить имя переменной. Поясним, что мы подразумеваем под ограничением здесь. Позвольте мне запустить следующую команду в моей системе:</p>
 <pre><code class="language-plaintext">$ echo "Имя человека $name_ "</code></pre>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/9-5.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/9-5.png 561w, https://linuxhint.com/wp-content/uploads/2020/04/9-5-300x21.png 300w" sizes="100vw" width="561"></figure>
