@@ -2,7 +2,7 @@
 title: $() и ${} в сценарии оболочки
 description: как использовать
 published: true
-date: 2022-09-09T10:34:47.370Z
+date: 2022-09-09T10:38:36.666Z
 tags: linux, sh, shell, ${, $(
 editor: ckeditor
 dateCreated: 2022-09-09T10:34:47.370Z
@@ -24,16 +24,19 @@ dateCreated: 2022-09-09T10:34:47.370Z
 <p>Например, следующие эхо-команды заменяют вывод команды date в качестве ввода:</p>
 <pre><code class="language-plaintext">$ echo $ ( date )
 $ echo `date`</code></pre>
+<p>&nbsp;</p>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/2-7.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/2-7.png 337w, https://linuxhint.com/wp-content/uploads/2020/04/2-7-300x92.png 300w" sizes="100vw" width="337"></figure>
 <p>Вы также можете использовать подстановку команд для присвоения значения переменной. Например, мы будем печатать сегодняшнюю дату через переменную TODAY следующим образом:</p>
 <pre><code class="language-plaintext">$ TODAY=$(date)
 $ echo "$TODAY"</code></pre>
+<p>&nbsp;</p>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/3-7.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/3-7.png 342w, https://linuxhint.com/wp-content/uploads/2020/04/3-7-300x65.png 300w" sizes="100vw" width="342"></figure>
 <p>Другая полезность подстановки команд заключается в циклах оболочки для получения ввода. Здесь мы попытаемся распечатать все файлы .txt в нашей домашней папке, используя подстановку команд:</p>
 <pre><code class="language-plaintext">for f in /home/sana/*.txt
 do
   echo "$f"
 done</code></pre>
+<p>&nbsp;</p>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/4-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/4-6.png 569w, https://linuxhint.com/wp-content/uploads/2020/04/4-6-300x78.png 300w" sizes="100vw" width="569"></figure>
 <h3><strong>Использование подстановки команд в сценарии оболочки</strong></h3>
 <p>Приведенные выше примеры — это несколько способов, которыми вы можете использовать силу подстановки команд в сценарии оболочки. Вот пример отчета о состоянии, который мы можем распечатать с помощью следующего сценария оболочки:</p>
@@ -60,44 +63,45 @@ $ . /statys.sh _</code></pre>
 <p><strong>Расширение/подстановка параметра</strong> — это процесс извлечения значения из указанного объекта/параметра. Это похоже на то, как вы расширяете переменную, чтобы получить ее значение.</p>
 <p>Простейший возможный синтаксис расширения параметра следующий:</p>
 <p>Вот как вы можете использовать расширение параметра в Bash:</p>
-<p><i>${параметр}</i></p>
+<pre><code class="language-plaintext">${параметр}</code></pre>
 <p>Например, самое простое использование — заменить параметр его значением:</p>
-<p>$ имя = "Джон Доу"<br>$ эхо " <i>$ {имя}</i> "</p>
+<pre><code class="language-plaintext">$ name="john doe"
+$ echo “${name}”</code></pre>
 <p>Эта команда заменит значение переменной «name» для использования командой echo:</p>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/7-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/7-6.png 317w, https://linuxhint.com/wp-content/uploads/2020/04/7-6-300x143.png 300w" sizes="100vw" width="317"></figure>
 <p>Вы можете подумать, что того же можно добиться, избегая фигурных скобок следующим образом:</p>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/8-6.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/8-6.png 355w, https://linuxhint.com/wp-content/uploads/2020/04/8-6-300x79.png 300w" sizes="100vw" width="355"></figure>
 <p>Ответ заключается в том, что при расширении параметра эти фигурные скобки помогают разграничить имя переменной. Поясним, что мы подразумеваем под ограничением здесь. Позвольте мне запустить следующую команду в моей системе:</p>
-<p><i>$ </i>echo "Имя человека $name_ "</p>
+<pre><code class="language-plaintext">$ echo "Имя человека $name_ "</code></pre>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/9-5.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/9-5.png 561w, https://linuxhint.com/wp-content/uploads/2020/04/9-5-300x21.png 300w" sizes="100vw" width="561"></figure>
 <p>Результат не печатал значение имени переменной, так как система думала, что я имел в виду переменную «name_». Таким образом, мое имя переменной не было «разделено». Фигурные скобки в следующем примере будут ограничивать имя переменной и возвращать результаты следующим образом:</p>
-<p><i>$ </i>echo "Имя человека ${имя} _"</p>
+<pre><code class="language-plaintext">$ echo "Имя человека ${name} _"</code></pre>
 <figure class="image image_resized" style="width:760px;"><img src="https://linuxhint.com/wp-content/uploads/2020/04/10-5.png" alt="" srcset="https://linuxhint.com/wp-content/uploads/2020/04/10-5.png 562w, https://linuxhint.com/wp-content/uploads/2020/04/10-5-300x39.png 300w" sizes="100vw" width="562"></figure>
 <p>Вот все способы подстановки переменных в Shell:</p>
 <figure class="table" style="width:760px;">
-  <table style="background-color:rgb(255, 255, 255);border-bottom:0px initial initial;border-left:1px solid rgba(0, 0, 0, 0.07);border-right:0px initial initial;border-top:1px solid rgb(230, 230, 230);">
+  <table style="background-color:rgb(255, 255, 255);border-bottom:0px initial;border-left:1px solid rgba(0, 0, 0, 0.07);border-right:0px initial;border-top:1px solid rgb(230, 230, 230);">
     <tbody>
       <tr>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;"><strong>${переменная}</strong></td>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;">Эта команда подставляет значение переменной.</td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;"><strong>${переменная}</strong></td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;">Эта команда подставляет значение переменной.</td>
       </tr>
       <tr>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;"><strong>${переменная:-слово}</strong></td>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;">Если переменная имеет значение null или не задана, переменная заменяется словом. Значение переменной не меняется.</td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;"><strong>${переменная:-слово}</strong></td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;">Если переменная имеет значение null или не задана, переменная заменяется словом. Значение переменной не меняется.</td>
       </tr>
       <tr>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;"><strong>${переменная:=слово}</strong></td>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;">Если переменная имеет значение null или не задана, значение переменной устанавливается в слово.</td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;"><strong>${переменная:=слово}</strong></td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;">Если переменная имеет значение null или не задана, значение переменной устанавливается в слово.</td>
       </tr>
       <tr>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;"><strong>${переменная:?сообщение}</strong></td>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;">Если переменная имеет значение null или если она не установлена, сообщение печатается со стандартной ошибкой bash.</td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;"><strong>${переменная:?сообщение}</strong></td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;">Если переменная имеет значение null или если она не установлена, сообщение печатается со стандартной ошибкой bash.</td>
       </tr>
       <tr>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;"><strong>${переменная:+слово}</strong></td>
-        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial initial;padding:10px 15px;">Если установлена <i>​​переменная</i> , <i>слово</i> заменяется на переменную. Однако само значение переменной не меняется.</td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;"><strong>${переменная:+слово}</strong></td>
+        <td style="border-bottom:1px solid rgba(0, 0, 0, 0.07);border-left:0px initial;border-right:1px solid rgba(0, 0, 0, 0.07);border-top:0px initial;padding:10px 15px;">Если установлена <i>​​переменная</i> , <i>слово</i> заменяется на переменную. Однако само значение переменной не меняется.</td>
       </tr>
     </tbody>
   </table>
 </figure>
-<p>В приведенных выше примерах показано несколько способов использования возможностей подстановки переменных в Bash. Вы можете включить эти способы использования расширения в свои сценарии оболочки для оптимального выполнения поставленной задачи.</p>
+<p>&nbsp;</p>
