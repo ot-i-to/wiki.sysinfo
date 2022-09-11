@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T09:03:46.273Z
+date: 2022-09-11T09:07:31.514Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -77,6 +77,8 @@ fi
 
 echo "[stop]"
 exit 0</code></pre>
+<p>Обращаем внимание, что в скрипте есть закоментированные строки в виде #1# или #2# - &nbsp;это разные источники списка ip &nbsp;адресов и соответсвенно их обработки для ipset.&nbsp;</p>
+<p>&nbsp;</p>
 <p>Проверить, что у нас все загрузилось правильно, можно командой</p>
 <pre><code class="language-plaintext"># ipset list</code></pre>
 <p>&nbsp;</p>
