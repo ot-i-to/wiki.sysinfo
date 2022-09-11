@@ -2,12 +2,13 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T09:24:11.467Z
+date: 2022-09-11T09:25:43.261Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
 -->
 
+<h2>Установка и настройка</h2>
 <p><a href="https://sysinfo.pro/ru/IPTABLES/GEOIP_DEBIAN-11"><strong>Тут</strong></a> было описан вариант <strong>GeoIP</strong> фильтрации с использованием <strong>xt_geoip</strong> из пакета разширения <strong>xtables-addons</strong> для <strong>iptables</strong>, но практика показала частые ошибочные срабатывания на ip , которые должны быть разрешены + во многих дистрибутивах пакет xtables-addons идет “кривой” :(</p>
 <p>В &nbsp;связи с выше изложеным, был найден болеее качаственный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
 <p>Все будет выполнено на шелл скриптах. Устанавливаем необходимое:</p>
@@ -81,6 +82,7 @@ exit 0</code></pre>
 <p>если Вам импонируют другие источники кроме RIPE, то предварительно закоментировав строку <code>$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET</code> &nbsp;и потом раскоментируйте все #1# или #2# коментарии.&nbsp;</p>
 <p>Проверить, что у нас все загрузилось правильно, можно командой</p>
 <pre><code class="language-plaintext"># ipset list</code></pre>
+<h2>Использование</h2>
 <p>Теперь применяем наш список из IPSET в IPTABLES … в нашем случае для запрета всех пакетов с ip отсутсвующих в таблице russia_ru для UDP SIP</p>
 <pre><code class="language-plaintext"># iptables -I INPUT -i eth0 -p udp -m multiport --dports 5000:50000 -m set ! --match-set russia_run src -j DROP</code></pre>
 <p>Обращаем внимание, что команда установит в самое начало списка наше правило, но это не всегда требуется, а иногда и вредно … вот пример заголовка моего файла конфигурации для iptables&nbsp;</p>
