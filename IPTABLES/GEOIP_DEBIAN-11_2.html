@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T09:31:26.201Z
+date: 2022-09-11T09:32:18.196Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -42,6 +42,7 @@ cd $BDDIR
 #1#    $GREP ',RU' | $SED 's/\,RU//g' | $SED 's/\,/-/g' | $GREP '\.' &gt; $FILE
 
 #2#$WGET -q "http://www.ipdeny.com/ipblocks/data/countries/ru.zone" -O $FIPSET
+
 $CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET
 
 #1#if [ -f $FILE ]; then
