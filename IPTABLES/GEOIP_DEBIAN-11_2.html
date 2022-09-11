@@ -2,15 +2,15 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T09:33:42.740Z
+date: 2022-09-11T15:18:48.458Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
 -->
 
-<p><a href="https://sysinfo.pro/ru/IPTABLES/GEOIP_DEBIAN-11"><strong>Тут</strong></a> было описан вариант <strong>GeoIP</strong> фильтрации с использованием <strong>xt_geoip</strong> из пакета разширения <strong>xtables-addons</strong> для <strong>iptables</strong>, но практика показала частые ошибочные срабатывания на ip , которые должны быть разрешены + во многих дистрибутивах пакет <strong>xtables-addons</strong> идет “кривой” :(</p>
+<p><a href="https://sysinfo.pro/ru/IPTABLES/GEOIP_DEBIAN-11"><strong>Тут</strong></a> было описан вариант <strong>GeoIP</strong> фильтрации с использованием <strong>xt_geoip</strong> из пакета раcширения <strong>xtables-addons</strong> для <strong>iptables</strong>, но практика показала частые ошибочные срабатывания на ip , которые должны быть разрешены + во многих дистрибутивах пакет <strong>xtables-addons</strong> идет “кривой” :(</p>
 <h2>Установка и настройка</h2>
-<p>В &nbsp;связи с выше изложеным, был найден болеее качаственный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
+<p>В &nbsp;связи с выше изложенным, был найден более качаственный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
 <p>Все будет выполнено на шелл скриптах. Устанавливаем необходимое:</p>
 <pre><code class="language-plaintext"># sudo apt-get install ipset libnet-cidr-perl jq curl wget ipcalc egrep gzip </code></pre>
 <p>Теперь пишем наш скрипт <strong>/etc/RU/block_noRU_geoip.sh&nbsp;</strong> для создания и обновления <strong>IPSET</strong>:</p>
