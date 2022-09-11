@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T08:51:54.584Z
+date: 2022-09-11T08:52:57.234Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -48,6 +48,7 @@ $CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru |
 #1# echo "[2]"
 #1# /usr/bin/perl -MNet::CIDR=range2cidr -lne 'print for range2cidr $_' $FILE &gt; $FIPSET
 
+# --- Переносим список ip сетей в ipset с именем таблиицы "russia_ru", а старый список в таблицу "russia_old"
 if [ -f $FIPSET ]; then
     if [ -s $FIPSET ]; then
  		echo "[3]"
@@ -59,7 +60,6 @@ if [ -f $FIPSET ]; then
  		echo "[6]"
  		$IPSET swap russia_run russia_old
  		echo "[7]"
-		# --- Переносим список ip сетей в ipset с именем таблиицы "russia_ru"
  		for ippermitir in $($CAT $FIPSET)
  		do
      		$IPSET add russia_run $ippermitir
