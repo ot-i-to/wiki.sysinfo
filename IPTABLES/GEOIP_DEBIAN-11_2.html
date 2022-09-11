@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T09:12:14.649Z
+date: 2022-09-11T09:17:22.217Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -81,6 +81,7 @@ exit 0</code></pre>
 <p>если Вам импонируют другие источники кроме RIPE, то предварительно закоментировав строку <code>$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET</code> &nbsp;и потом раскоментируйте все #1# или #2# коментарии.&nbsp;</p>
 <p>Проверить, что у нас все загрузилось правильно, можно командой</p>
 <pre><code class="language-plaintext"># ipset list</code></pre>
-<p>&nbsp;</p>
+<p>Теперь применяем наш список из IPSET в IPTABLES … в нашем случае для запрета всех пакетов с ip отсутсвующих в таблице russia_ru для UDP SIP<br># iptables -I INPUT -i eth0 -p udp -m multiport --dports 5000:50000 -m set ! --match-set russia_run src -j DROP</p>
+<p><br>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
