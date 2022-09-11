@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T08:40:13.727Z
+date: 2022-09-11T08:45:54.896Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -12,4 +12,72 @@ dateCreated: 2022-09-11T08:28:31.689Z
 <p>В &nbsp;связи с выше изложеным, был найден болеее качаственный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
 <p>Все будет выполнено на шелл скриптах. Устанавливаем необходимое:</p>
 <pre><code class="language-plaintext"># sudo apt-get install ipset libnet-cidr-perl jq curl wget ipcalc egrep gzip </code></pre>
+<p>Теперь пишем наш скрипт /etc/RU/block_noRU_geoip.sh :</p>
+<pre><code class="language-plaintext">#!/bin/sh
+echo "[start]"
+# --- Тут не забудьте проверить правильность пути расположения программ
+IPTABLES=/sbin/iptables
+IPSET=/sbin/ipset
+WGET=/usr/bin/wget
+EGREP=/bin/egrep
+GREP=/bin/grep
+CAT=/bin/cat
+SED=/bin/sed
+CURL=/usr/bin/curl
+GZIP=/bin/gzip
+IPCALC=/usr/bin/ipcalc
+JQ=/usr/bin/jq
+
+BDDIR=/etc/RU
+timestamp=$(date "+%Y-%m")
+FILE=$BDDIR/$timestamp-ipcalc.ipv4
+FIPSET=$BDDIR/$timestamp-ipset_ru.ipv4
+
+echo "[1]"
+cd $BDDIR
+#1#$WGET -q "https://download.db-ip.com/free/dbip-country-lite-$timestamp.csv.gz" -O- | \
+#1#    $GZIP -cd &gt;$timestamp-dbip-country-lite.csv &amp;&amp; $CAT $timestamp-dbip-country-lite.csv | \
+#1#    $GREP ',RU' | $SED 's/\,RU//g' | $SED 's/\,/-/g' | $GREP '\.' &gt; $FILE
+
+#2#$WGET -q "http://www.ipdeny.com/ipblocks/data/countries/ru.zone" -O $FIPSET
+$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET
+
+#1#if [ -f $FILE ]; then
+#1#    if [ -s $FILE ]; then
+#1# echo "[2]"
+#1# /usr/bin/perl -MNet::CIDR=range2cidr -lne 'print for range2cidr $_' $FILE &gt; $FIPSET
+
+if [ -f $FIPSET ]; then
+    if [ -s $FIPSET ]; then
+
+ echo "[3]"
+ $IPSET create russia_run hash:net
+ echo "[4]"
+ $IPSET create russia_old hash:net
+ echo "[5]"
+ $IPSET flush russia_old
+ echo "[6]"
+ $IPSET swap russia_run russia_old
+ echo "[7]"
+ for ippermitir in $($CAT $FIPSET)
+ do
+     $IPSET add russia_run $ippermitir
+ done
+ echo "[8]"
+ $IPSET add russia_run 10.0.0.0/8
+ $IPSET add russia_run 172.16.0.0/12
+ $IPSET add russia_run 192.168.0.0/16
+
+#  $IPSET add russia_run 79.104.0.0/16
+
+    fi
+fi
+
+#1#    fi
+#1#fi
+
+echo "[stop]"
+exit 0</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
