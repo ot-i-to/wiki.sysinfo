@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 1
 description: GeoIP filtering option 1 
 published: true
-date: 2022-09-11T08:15:02.071Z
+date: 2022-09-11T09:27:42.111Z
 tags: iptables, geoip, debian
 editor: ckeditor
 dateCreated: 2021-11-04T14:18:45.151Z
@@ -38,4 +38,5 @@ dateCreated: 2021-11-04T14:18:45.151Z
 <p>&nbsp;</p>
 <p><span style="font-family:Arial, Helvetica, sans-serif;"># Блокируем несколько портов, разрешаем только для РФ</span></p>
 <h6>iptables -A INPUT ! -i lo -p udp -m multiport --dports 25,500,10011 -m geoip ! --source-country RU &nbsp;-j DROP</h6>
+<p><br>Т.к. выше описаный вариант на разных системах имеет ложное страбатыванеи, то предлагаем воспользоваться более надежным способом описаным <a href="https://sysinfo.pro/e/ru/IPTABLES/GEOIP_DEBIAN-11_2"><strong>тут</strong></a>.</p>
 <p>&nbsp;</p>
