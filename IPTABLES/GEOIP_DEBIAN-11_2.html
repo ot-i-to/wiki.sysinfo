@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T08:45:54.896Z
+date: 2022-09-11T08:46:08.684Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -67,8 +67,6 @@ if [ -f $FIPSET ]; then
  $IPSET add russia_run 10.0.0.0/8
  $IPSET add russia_run 172.16.0.0/12
  $IPSET add russia_run 192.168.0.0/16
-
-#  $IPSET add russia_run 79.104.0.0/16
 
     fi
 fi
