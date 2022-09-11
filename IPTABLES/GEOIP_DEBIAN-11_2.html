@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T08:50:42.737Z
+date: 2022-09-11T08:51:54.584Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -34,6 +34,7 @@ FILE=$BDDIR/$timestamp-ipcalc.ipv4
 FIPSET=$BDDIR/$timestamp-ipset_ru.ipv4
 
 echo "[1]"
+# --- Получаем список ip для России
 cd $BDDIR
 #1#$WGET -q "https://download.db-ip.com/free/dbip-country-lite-$timestamp.csv.gz" -O- | \
 #1#    $GZIP -cd &gt;$timestamp-dbip-country-lite.csv &amp;&amp; $CAT $timestamp-dbip-country-lite.csv | \
