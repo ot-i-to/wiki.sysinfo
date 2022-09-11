@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T08:46:08.684Z
+date: 2022-09-11T08:50:02.407Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -49,25 +49,25 @@ $CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru |
 
 if [ -f $FIPSET ]; then
     if [ -s $FIPSET ]; then
-
- echo "[3]"
- $IPSET create russia_run hash:net
- echo "[4]"
- $IPSET create russia_old hash:net
- echo "[5]"
- $IPSET flush russia_old
- echo "[6]"
- $IPSET swap russia_run russia_old
- echo "[7]"
- for ippermitir in $($CAT $FIPSET)
- do
-     $IPSET add russia_run $ippermitir
- done
- echo "[8]"
- $IPSET add russia_run 10.0.0.0/8
- $IPSET add russia_run 172.16.0.0/12
- $IPSET add russia_run 192.168.0.0/16
-
+ 		echo "[3]"
+ 		$IPSET create russia_run hash:net
+ 		echo "[4]"
+ 		$IPSET create russia_old hash:net
+ 		echo "[5]"
+ 		$IPSET flush russia_old
+ 		echo "[6]"
+ 		$IPSET swap russia_run russia_old
+ 		echo "[7]"
+		# --- Переносим список ip сетей в ipset с именем таблиицы "russia_ru"
+ 		for ippermitir in $($CAT $FIPSET)
+ 		do
+     		$IPSET add russia_run $ippermitir
+ 		done
+ 		echo "[8]"
+		# --- На всякий случай добавляем серые сети ... можно не делать если Вам это не нужно
+ 		$IPSET add russia_run 10.0.0.0/8
+ 		$IPSET add russia_run 172.16.0.0/12
+ 		$IPSET add russia_run 192.168.0.0/16
     fi
 fi
 
