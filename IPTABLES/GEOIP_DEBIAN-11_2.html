@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T15:18:48.458Z
+date: 2022-09-11T15:22:48.134Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -10,7 +10,7 @@ dateCreated: 2022-09-11T08:28:31.689Z
 
 <p><a href="https://sysinfo.pro/ru/IPTABLES/GEOIP_DEBIAN-11"><strong>Тут</strong></a> было описан вариант <strong>GeoIP</strong> фильтрации с использованием <strong>xt_geoip</strong> из пакета раcширения <strong>xtables-addons</strong> для <strong>iptables</strong>, но практика показала частые ошибочные срабатывания на ip , которые должны быть разрешены + во многих дистрибутивах пакет <strong>xtables-addons</strong> идет “кривой” :(</p>
 <h2>Установка и настройка</h2>
-<p>В &nbsp;связи с выше изложенным, был найден более качаственный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
+<p>В &nbsp;связи с выше изложенным, был найден более качественный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
 <p>Все будет выполнено на шелл скриптах. Устанавливаем необходимое:</p>
 <pre><code class="language-plaintext"># sudo apt-get install ipset libnet-cidr-perl jq curl wget ipcalc egrep gzip </code></pre>
 <p>Теперь пишем наш скрипт <strong>/etc/RU/block_noRU_geoip.sh&nbsp;</strong> для создания и обновления <strong>IPSET</strong>:</p>
@@ -79,12 +79,12 @@ fi
 
 echo "[stop]"
 exit 0</code></pre>
-<p>Обращаем внимание, что в скрипте есть закоментированные строки в виде #1# или #2# - &nbsp;это разные источники списка ip &nbsp;адресов и соответсвенно их обработки для ipset.&nbsp;</p>
-<p>Если Вам импонируют другие источники кроме RIPE, то предварительно закоментировав строку <code>$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET</code> &nbsp;, раскоментируйте все #1# или #2# коментарии в зависимости от выбраного источника.&nbsp;</p>
+<p>Обращаем внимание, что в скрипте есть закомментированные строки в виде #1# или #2# - &nbsp;это разные источники списка ip &nbsp;адресов и соответственно их обработки для ipset.&nbsp;</p>
+<p>Если Вам импонируют другие источники кроме RIPE, то предварительно закомментировав строку <code>$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET</code> &nbsp;, раскомментируйте все #1# или #2# комментарии в зависимости от выбранного источника.&nbsp;</p>
 <p>Проверить, что у нас все загрузилось правильно, можно командой</p>
 <pre><code class="language-plaintext"># ipset list</code></pre>
 <h2>Использование</h2>
-<p>Теперь применяем наш список из IPSET в IPTABLES … в нашем случае для запрета всех пакетов с ip отсутсвующих в таблице russia_ru для UDP SIP</p>
+<p>Теперь применяем наш список из IPSET в IPTABLES … в нашем случае для запрета всех пакетов с ip отсутствующих в таблице russia_ru для UDP SIP</p>
 <pre><code class="language-plaintext"># iptables -I INPUT -i eth0 -p udp -m multiport --dports 5000:50000 -m set ! --match-set russia_run src -j DROP</code></pre>
 <p>Обращаем внимание, что команда установит в самое начало списка наше правило, но это не всегда требуется, а иногда и вредно … вот пример заголовка моего файла конфигурации для iptables&nbsp;</p>
 <pre><code class="language-plaintext">-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -98,6 +98,6 @@ exit 0</code></pre>
 -A INPUT -i eth0 -p udp -m multiport --dports 5000:50000 -m set ! --match-set russia_run src -j LOG --log-prefix "BAD_SIP_No_Russia-IPSET: " --log-level 6
 -A INPUT -i eth0 -p udp -m multiport --dports 5000:50000 -m set ! --match-set russia_run src -j DROP
 …</code></pre>
-<p><br>&nbsp;Если у Вас бубут вопросы, то <a href="https://sysinfo.pro/ru/%D0%9A%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82">связывайтесть со мной</a> и постораюсь Вам помочь :)&nbsp;</p>
+<p><br>&nbsp;Если у Вас будут вопросы, то <a href="https://sysinfo.pro/ru/%D0%9A%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82">связывайтесь со мной</a> и постараюсь Вам помочь :)&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
