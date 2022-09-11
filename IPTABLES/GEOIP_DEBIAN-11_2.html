@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-11T08:32:04.831Z
+date: 2022-09-11T08:40:00.956Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -10,4 +10,6 @@ dateCreated: 2022-09-11T08:28:31.689Z
 
 <p><a href="https://sysinfo.pro/ru/IPTABLES/GEOIP_DEBIAN-11"><strong>Тут</strong></a> было описан вариант <strong>GeoIP</strong> фильтрации с использованием <strong>xt_geoip</strong> из пакета разширения <strong>xtables-addons</strong> для <strong>iptables</strong>, но практика показала частые ошибочные срабатывания на ip , которые должны быть разрешены + во многих дистрибутивах пакет xtables-addons идет “кривой” :(</p>
 <p>В &nbsp;связи с выше изложеным, был найден болеее качаственный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
+<p>Все будет выполнено на шелл скриптах. Устанавливаем необходимое:</p>
+<pre><code class="language-plaintext"># sudo apt-get install  ipset libnet-cidr-perl jq curl wget ipcalc egrep gzip </code></pre>
 <p>&nbsp;</p>
