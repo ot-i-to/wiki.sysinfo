@@ -2,7 +2,7 @@
 title: GeoIP фильтрация, вариант 2
 description: Используем IPSET
 published: true
-date: 2022-09-12T06:05:29.308Z
+date: 2022-09-16T08:55:36.763Z
 tags: iptables, geoip, bash, sh, debian, ripe, ipset
 editor: ckeditor
 dateCreated: 2022-09-11T08:28:31.689Z
@@ -12,7 +12,7 @@ dateCreated: 2022-09-11T08:28:31.689Z
 <h2>Установка и настройка</h2>
 <p>В &nbsp;связи с выше изложенным, был найден более качественный вариант с использованием <strong>IPSET</strong> совместно с<strong> IPTABLES</strong>.</p>
 <p>Все будет выполнено на шелл скриптах. Устанавливаем необходимое:</p>
-<pre><code class="language-plaintext"># sudo apt-get install ipset libnet-cidr-perl jq curl wget ipcalc egrep gzip </code></pre>
+<pre><code class="language-plaintext"># sudo apt-get install ipset libnet-cidr-perl jq curl wget ipcalc grep gzip </code></pre>
 <p>Теперь пишем наш скрипт <strong>/etc/RU/block_noRU_geoip.sh&nbsp;</strong> для создания и обновления <strong>IPSET</strong>:</p>
 <pre><code class="language-plaintext">#!/bin/sh
 echo "[start]"
