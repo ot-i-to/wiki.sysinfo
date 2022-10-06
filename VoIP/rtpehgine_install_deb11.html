@@ -2,7 +2,7 @@
 title: RTPENGINE + G729
 description: Install Debian 11
 published: true
-date: 2022-10-06T10:55:09.198Z
+date: 2022-10-06T10:57:26.690Z
 tags: voip, install, debian, rtpengine, rtp
 editor: ckeditor
 dateCreated: 2022-10-06T10:55:09.198Z
@@ -30,9 +30,6 @@ dpkg-buildpackage -b -us -uc
 
 mkdir /etc/rtpengine
 cp etc/*.conf /etc/rtpengine/
-dpkg -i ../*.deb
-
-############################################
-##далее настраиваем через: /etc/rtpengine/rtpengine.conf
-############################################</code></pre>
+dpkg -i ../*.deb</code></pre>
+<p>Далее производим настройку : /etc/rtpengine/rtpengine.conf</p>
 <p>&nbsp;</p>
