@@ -1,0 +1,32 @@
+<!--
+title: OpenSIPS Installation
+description: Инструкция для установки
+published: true
+date: 2022-10-06T17:44:08.599Z
+tags: voip, install, установка, sip, opensips, instruction, инструкция
+editor: ckeditor
+dateCreated: 2022-10-06T17:44:08.599Z
+-->
+
+<p><strong>Шаг 1: </strong>Откройте браузер и перейдите на страницу</p>
+<p><a href="https://apt.opensips.org">https://apt.opensips.org</a></p>
+<p><strong>Шаг 2:&nbsp;</strong>Выберите версию релиза</p>
+<p><code>Например будем ставить на Debian-11 и версию релиза OpenSIPS 3.3 … выбираем.&nbsp;</code></p>
+<p><strong>Step 3: </strong>Скопируйте команды со страницы и запустите в системе.</p>
+<pre><code class="language-plaintext">curl https://apt.opensips.org/opensips-org.gpg -o /usr/share/keyrings/opensips-org.gpg
+echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org bullseye 3.3-releases" &gt;/etc/apt/sources.list.d/opensips.list
+echo "deb [signed-by=/usr/share/keyrings/opensips-org.gpg] https://apt.opensips.org bullseye cli-nightly" &gt;/etc/apt/sources.list.d/opensips-cli.list</code></pre>
+<p><strong>Шаг 4: </strong>Обновите систему, чтобы отразить новые пакеты</p>
+<pre><code class="language-plaintext">apt-get update</code></pre>
+<p><strong>Шаг 5: </strong>Установите OpenSIPS и OpenSIPS CLI (интерфейс командной строки)</p>
+<pre><code class="language-plaintext">apt install opensips
+apt install opensips-cli
+</code></pre>
+<p><strong>Шаг 6: </strong>Установите все остальные модули</p>
+<pre><code class="language-plaintext">apt install opensips-*</code></pre>
+<p><strong>Шаг 7: </strong>Запустите opensips и проверьте статус</p>
+<pre><code class="language-plaintext">systemctl enable opensips
+systemctl start opensips
+systemctl status opensips
+</code></pre>
+<p><strong>Шаг 8: </strong>Если установка работает, вы можете приступить к настройке.</p>
