@@ -1,0 +1,38 @@
+<!--
+title: RTPENGINE + G729
+description: Install Debian 11
+published: true
+date: 2022-10-06T10:55:09.198Z
+tags: voip, install, debian, rtpengine, rtp
+editor: ckeditor
+dateCreated: 2022-10-06T10:55:09.198Z
+-->
+
+<pre><code class="language-plaintext">#/bin/bash
+
+apt update
+apt upgrade -y
+apt install -y linux-headers-$(uname -r) linux-image-$(uname -r)
+#reboot#
+
+apt install -qqy git curl mariadb-server libmosquitto-dev libwebsockets-dev python3-websockets apt-utils devscripts dpkg-dev debhelper iptables libxtables-dev libip6tc-dev libip4tc-dev libcurl4-openssl-dev libiptc-dev libglib2.0-dev libavcodec-extra libhiredis-dev libpcre3-dev libssl-dev libxmlrpc-core-c3-dev markdown zlib1g-dev module-assistant dkms gettext default-libmysqlclient-dev gperf libavcodec-dev libavfilter-dev libavformat-dev libavutil-dev libbencode-perl libcrypt-openssl-rsa-perl libcrypt-rijndael-perl libdigest-crc-perl libdigest-hmac-perl libevent-dev libio-multiplex-perl libio-socket-inet6-perl libjson-glib-dev libnet-interface-perl libpcap0.8-dev libsocket6-perl libswresample-dev libsystemd-dev nfs-common netcat-openbsd netcat unzip libconfig-tiny-perl libspandsp-dev**
+apt-get install libbcg729-dev libbcg729-0
+
+mkdir /usr/src/rtpengine
+cd /usr/src/rtpengine
+git clone https://github.com/sipwise/rtpengine.git .
+export DEBIAN_FRONTEND=noninteractive
+apt-get update -qqy
+mkdir -p ./debian/flavors
+touch ./debian/flavors/no_ngcp
+dpkg-checkbuilddeps
+dpkg-buildpackage -b -us -uc
+
+mkdir /etc/rtpengine
+cp etc/*.conf /etc/rtpengine/
+dpkg -i ../*.deb
+
+############################################
+##далее настраиваем через: /etc/rtpengine/rtpengine.conf
+############################################</code></pre>
+<p>&nbsp;</p>
