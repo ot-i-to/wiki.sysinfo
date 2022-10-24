@@ -2,7 +2,7 @@
 title: EoIP tunnel v1
 description: Ethernet over IP (EoIP) тунель на Linux
 published: true
-date: 2022-10-24T09:10:27.368Z
+date: 2022-10-24T09:19:10.900Z
 tags: linux, network, eoip, tunnel
 editor: ckeditor
 dateCreated: 2022-10-24T08:43:12.880Z
@@ -20,7 +20,11 @@ dateCreated: 2022-10-24T08:43:12.880Z
 <pre><code class="language-plaintext">[eoip123]
 id=123
 dst=10.1.10.1</code></pre>
-<p>&nbsp;</p>
+<p>На Mikrotik создайте туннель EoIP с тем же идентификатором (123) и установите IP-адрес вашего сервера в качестве удаленного IP-адреса.&nbsp;</p>
+<p>Выполняем запуск:</p>
+<pre><code class="language-plaintext"># /usr/local/bin/eoip /etc/eoip.cfg</code></pre>
+<p>Присваиваем локальный IP-адрес &nbsp;интерфейсу eoip123:</p>
+<pre><code class="language-plaintext"># ifconfig eoip123 10.255.255.2 netmask 255.255.255.252 up</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
