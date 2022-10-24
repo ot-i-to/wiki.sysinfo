@@ -2,21 +2,16 @@
 title: EoIP tunnel v1
 description: Ethernet over IP (EoIP) тунель на Linux
 published: true
-date: 2022-10-24T08:43:12.880Z
+date: 2022-10-24T09:09:48.425Z
 tags: linux, network, eoip, tunnel
 editor: ckeditor
 dateCreated: 2022-10-24T08:43:12.880Z
 -->
 
 <p>Туннелирование Ethernet через IP (EoIP) — это протокол MikroTik RouterOS (без сохранения состояния и облегченный туннельный протокол Ethernet «точка-точка» со статическими служебными данными 28 байт), который создает туннель Ethernet между двумя маршрутизаторами поверх IP-соединения. Туннель EoIP может работать через туннель IPIP, туннель PPTP или любое другое соединение, способное передавать IP.</p>
-<p>Чтобы соединить Linux с Mikrotik через туннель EoIP, вам понадобится <a href="https://code.google.com/archive/p/linux-eoip/downloads">ЭТО</a>.</p>
-<p>Процедура установки:</p>
-<pre><code class="language-plaintext">#&nbsp;wget http://www.serveradminblog.com/wp-content/uploads/2016/03/linux-eoip-0.5.tar.gz
-или
-#&nbsp;wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/linux-eoip/linux-eoip-0.5.tgz
-
-#&nbsp;tar -xvzf linux-eoip-0.5.tar.gz
-# cd&nbsp;linux-eoip-0.5
+<p>Чтобы соединить Linux с Mikrotik через туннель EoIP, вам понадобится скачать архив <a href="https://sysinfo.pro/file/linux-eoip-0.5.tar.bz2">tar.bz2</a> (<a href="https://sysinfo.pro/file/linux-eoip-0.5.tar.7z">tar.7z</a>, <a href="https://sysinfo.pro/file/linux-eoip-0.5.tar.gz">tar.gz</a>, <a href="https://sysinfo.pro/file/linux-eoip-0.5.tgz">tgz</a>) или взять от разработчика <a href="https://code.google.com/archive/p/linux-eoip/downloads">тут</a>.&nbsp;<br>Разархивируем и переходим в каталог linux-eoip-0.5.</p>
+<p>Далее выполняем процедура установки:</p>
+<pre><code class="language-plaintext"># cd&nbsp;linux-eoip-0.5
 # ./configure
 # make
 # make install</code></pre>
