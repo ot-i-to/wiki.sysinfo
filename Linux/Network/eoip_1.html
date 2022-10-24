@@ -2,7 +2,7 @@
 title: EoIP tunnel v1
 description: Ethernet over IP (EoIP) тунель на Linux
 published: true
-date: 2022-10-24T09:28:35.670Z
+date: 2022-10-24T09:33:47.968Z
 tags: linux, network, eoip, tunnel
 editor: ckeditor
 dateCreated: 2022-10-24T08:43:12.880Z
@@ -25,6 +25,8 @@ dst=10.1.10.1</code></pre>
 <pre><code class="language-plaintext"># /usr/local/bin/eoip /etc/eoip.cfg &amp;</code></pre>
 <p>Присваиваем локальный IP-адрес &nbsp;интерфейсу eoip123:</p>
 <pre><code class="language-plaintext"># ifconfig eoip123 10.255.255.2 netmask 255.255.255.252 up</code></pre>
-<p>&nbsp;</p>
+<p>Автоматический старт при запуске компьютера для Debian можно сделать &nbsp;через файл /etc/network/interfaces добавив строку к интерфейсу, через который работет EoIP:</p>
+<pre><code class="language-plaintext">post-up /usr/local/bin/eoip &amp;</code></pre>
+<p>… , но есть и другие способы на Ваше усмотрение :)</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
