@@ -1,0 +1,117 @@
+<!--
+title: IF работа с файлами
+description: Условия в Shell
+published: true
+date: 2022-11-06T19:18:16.514Z
+tags: linux, bash, sh, shell, if
+editor: ckeditor
+dateCreated: 2022-11-06T19:18:16.514Z
+-->
+
+<p>Часто при написании сценариев оболочки вы можете оказаться в ситуации, когда вам нужно выполнить действие в зависимости от того, существует файл или нет.</p>
+<p>В Bash вы можете использовать команду test, чтобы проверить, существует ли файл, и определить тип файла.</p>
+<p>Команда test принимает одну из следующих синтаксических форм:</p>
+<pre><code class="language-plaintext">test EXPRESSION
+[ EXPRESSION ]
+[[ EXPRESSION ]]
+</code></pre>
+<p>Если вы хотите, чтобы ваш сценарий был переносимым, вам следует предпочесть старую команду test <code>[</code> , которая доступна во всех оболочках POSIX. Новая обновленная версия тестовой команды <code>[[</code> (двойные скобки) поддерживается в большинстве современных систем, использующих Bash, Zsh и Ksh в качестве оболочки по умолчанию.</p>
+<h2>Проверьте, существует ли файл</h2>
+<p>При проверке существования файла наиболее часто используются операторы FILE <code>-e</code> и <code>-f</code> . Первый проверит, существует ли файл независимо от типа, а второй вернет истину, только если ФАЙЛ является обычным файлом (а не каталогом или устройством).</p>
+<p>Наиболее удобочитаемый вариант при проверке существования файла — использование команды <code>test</code> в сочетании с <a href="https://routerus.com/bash-if-else-statement/">оператором <code>if</code></a> . Любой из приведенных ниже фрагментов проверит, существует ли файл <code>/etc/resolv.conf</code> :</p>
+<pre><code class="language-plaintext">FILE=/etc/resolv.conf
+if test -f "$FILE"; then
+    echo "$FILE exists."
+fi
+</code></pre>
+<pre><code class="language-plaintext">FILE=/etc/resolv.conf
+if [ -f "$FILE" ]; then
+    echo "$FILE exists."
+fi
+</code></pre>
+<pre><code class="language-plaintext">FILE=/etc/resolv.conf
+if [[ -f "$FILE" ]]; then
+    echo "$FILE exists."
+fi
+</code></pre>
+<p>Если вы хотите выполнить другое действие в зависимости от того, существует файл или нет, просто используйте конструкцию if / then:</p>
+<pre><code class="language-plaintext">FILE=/etc/resolv.conf
+if [ -f "$FILE" ]; then
+    echo "$FILE exists."
+else 
+    echo "$FILE does not exist."
+fi
+</code></pre>
+<p>Всегда используйте <a href="https://routerus.com/echo-command-in-linux-with-examples/">двойные кавычки,</a> чтобы избежать проблем при работе с файлами, в именах которых есть пробелы.</p>
+<p>Вы также можете использовать команду test без оператора if. Команда после оператора <code>&amp;&amp;</code> будет выполнена только в том случае, если <a href="https://routerus.com/bash-exit/">статус</a> выхода тестовой команды — истина,</p>
+<pre><code class="language-plaintext">test -f /etc/resolv.conf &amp;&amp; echo "$FILE exists."
+</code></pre>
+<pre><code class="language-plaintext">[ -f /etc/resolv.conf ] &amp;&amp; echo "$FILE exists."
+</code></pre>
+<pre><code class="language-plaintext">[[ -f /etc/resolv.conf ]] &amp;&amp; echo "$FILE exists."
+</code></pre>
+<p>Если вы хотите запустить серию команд после оператора <code>&amp;&amp;</code> просто заключите команды в фигурные скобки, разделенные <code>;</code> или <code>&amp;&amp;</code> :</p>
+<pre><code class="language-plaintext">[ -f /etc/resolv.conf ] &amp;&amp; { echo "$FILE exist."; cp "$FILE" /tmp/; }
+</code></pre>
+<p>Напротив <code>&amp;&amp;</code> , оператор после <code>||</code> Оператор будет выполняться только в том случае, если статус выхода тестовой команды <code>false</code> .</p>
+<pre><code class="language-plaintext">[ -f /etc/resolv.conf ] &amp;&amp; echo "$FILE exist." || echo "$FILE does not exist."
+</code></pre>
+<h2>Проверить, существует ли каталог</h2>
+<p>Операторы <code>-d</code> позволяют вам проверить, является ли файл каталогом или нет.</p>
+<p>Например, чтобы проверить, существует ли каталог <code>/etc/docker</code> вы должны использовать:</p>
+<pre><code class="language-plaintext">FILE=/etc/docker
+if [ -d "$FILE" ]; then
+    echo "$FILE is a directory."
+fi
+</code></pre>
+<pre><code class="language-plaintext">[ -d /etc/docker ] &amp;&amp; echo "$FILE is a directory."
+</code></pre>
+<p>Вы также можете использовать двойные скобки <code>[[</code> вместо одинарной <code>[</code> .</p>
+<h2>Проверьте, не существует ли файла</h2>
+<p>Как и во многих других языках, тестовое выражение может быть отменено с помощью <code>!</code> (восклицательный знак) оператор логического НЕ:</p>
+<pre><code class="language-plaintext">FILE=/etc/docker
+if [ ! -f "$FILE" ]; then
+    echo "$FILE does not exist."
+fi
+</code></pre>
+<p>То же, что и выше:</p>
+<pre><code class="language-plaintext">[ ! -f /etc/docker ] &amp;&amp; echo "$FILE does not exist."
+</code></pre>
+<h2>Проверьте, существует ли несколько файлов</h2>
+<p>Вместо использования сложных вложенных конструкций if / else вы можете использовать <code>-a</code> (или <code>&amp;&amp;</code> с <code>[[</code> ), чтобы проверить, существует ли несколько файлов:</p>
+<pre><code class="language-plaintext">if [ -f /etc/resolv.conf -a -f /etc/hosts ]; then
+    echo "Both files exist."
+fi
+</code></pre>
+<pre><code class="language-plaintext">if [[ -f /etc/resolv.conf &amp;&amp; -f /etc/hosts ]]; then
+    echo "Both files exist."
+fi
+</code></pre>
+<p>Эквивалентные варианты без использования оператора IF:</p>
+<pre><code class="language-plaintext">[ -f /etc/resolv.conf -a -f /etc/hosts ] &amp;&amp; echo "Both files exist."
+</code></pre>
+<pre><code class="language-plaintext">[[ -f /etc/resolv.conf &amp;&amp; -f /etc/hosts ]] &amp;&amp; echo "Both files exist."
+</code></pre>
+<h2>Операторы проверки файлов</h2>
+<p>Команда test включает в себя следующие операторы FILE, которые позволяют проверять файлы определенных типов:</p>
+<ul>
+  <li><code>-b</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является специальным блочным файлом.</li>
+  <li><code>-c</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является файлом специальных символов.</li>
+  <li><code>-d</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является каталогом.</li>
+  <li><code>-e</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является файлом, независимо от типа (узел, каталог, сокет и т. д.).</li>
+  <li><code>-f</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является обычным файлом (не каталогом или устройством).</li>
+  <li><code>-G</code> <code>FILE</code> — Истина, если ФАЙЛ существует и имеет ту же группу, что и пользователь, выполняющий команду.</li>
+  <li><code>-h</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является символической ссылкой.</li>
+  <li><code>-g</code> <code>FILE</code> — Истина, если ФАЙЛ существует и для него установлен флаг set-group-id ( <code>sgid</code> ).</li>
+  <li><code>-k</code> <code>FILE</code> — Истина, если ФАЙЛ существует и для него установлен флаг липкого бита.</li>
+  <li><code>-L</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является символической ссылкой.</li>
+  <li><code>-O</code> <code>FILE</code> — Истина, если ФАЙЛ существует и принадлежит пользователю, выполняющему команду.</li>
+  <li><code>-p</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является каналом.</li>
+  <li><code>-r</code> <code>FILE</code> — Истинно, если ФАЙЛ существует и доступен для чтения.</li>
+  <li><code>-S</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является сокетом.</li>
+  <li><code>-s</code> <code>FILE</code> — Истина, если ФАЙЛ существует и имеет ненулевой размер.</li>
+  <li><code>-u</code> <code>FILE</code> — Истинно, если ФАЙЛ существует и установлен флаг set-user-id ( <code>suid</code> ).</li>
+  <li><code>-w</code> <code>FILE</code> — Истина, если ФАЙЛ существует и доступен для записи.</li>
+  <li><code>-x</code> <code>FILE</code> — Истина, если ФАЙЛ существует и является исполняемым.</li>
+</ul>
+<h2>&nbsp;</h2>
