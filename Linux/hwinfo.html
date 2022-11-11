@@ -2,7 +2,7 @@
 title: Hardware information
 description: Информация об оборудовании
 published: true
-date: 2022-11-11T20:41:46.466Z
+date: 2022-11-11T20:58:54.489Z
 tags: linux, hardware, information, dmidecode
 editor: ckeditor
 dateCreated: 2022-11-11T20:41:46.466Z
@@ -21,5 +21,19 @@ dateCreated: 2022-11-11T20:41:46.466Z
 <p><code>--from-dump FILE</code> &nbsp; Считайте данные DMI из двоичного файла</p>
 <p><code>--no-sysfs</code> &nbsp; &nbsp; &nbsp; &nbsp; Не пытайтесь читать данные DMI из файлов sysfs</p>
 <p><code>--oem-string N</code> &nbsp; &nbsp; Отображать только значение данной строки OEM</p>
+<p>&nbsp;</p>
+<h3>пример 1) Отображение информации об оборудовании с использованием идентификатора типа</h3>
+<p><strong>dmidecode --type TYPE, где TYPE может имет значение:</strong></p>
+<ul>
+  <li><strong>bios</strong> - краткая информация о BIOS;</li>
+  <li><strong>system</strong> - сведения о операционной системе;</li>
+  <li><strong>baseboard</strong> - информация о материнской плате;</li>
+  <li><strong>chassis</strong> - сведения о корпусе;</li>
+  <li><strong>processor</strong> - сведения о процессоре;</li>
+  <li><strong>memory</strong> - сведения о памяти и количестве слотов на материнской платы под нее;</li>
+  <li><strong>cache</strong> - сведения о кеше процессора;</li>
+  <li><strong>connector</strong> - сведения о разъемах материнской платы;</li>
+  <li><strong>slot</strong> - сведения о используемых слотах расширения на материнской платы (ISA,PCI,AGP и т.д.)</li>
+</ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
