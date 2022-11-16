@@ -2,7 +2,7 @@
 title: Подключению к старому устройству
 description: ... или как победить no matching key exchange method found 
 published: true
-date: 2022-11-16T10:57:24.070Z
+date: 2022-11-16T10:58:08.425Z
 tags: linux, ssh, old device, старое устройство
 editor: ckeditor
 dateCreated: 2022-11-16T09:39:14.354Z
@@ -20,7 +20,7 @@ dateCreated: 2022-11-16T09:39:14.354Z
 <pre><code class="language-plaintext">Host x.x.x.x
 &nbsp; &nbsp;  KexAlgorithms +diffie-hellman-group1-sha1
      Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc     </code></pre>
-<p style="text-align:justify;">Можно изменить стороку так <code>Host *</code>, тогда ниже перечисленные протоколы будут использоваться при любом подключении автоматически.</p>
+<p style="text-align:justify;">Можно изменить стороку так <code>Host *</code>, тогда ниже перечисленные протоколы будут использоваться при любом подключении автоматически. Вот пример моего кофига:</p>
 <pre><code class="language-plaintext">Host *
 # prevent connection from hanging
     ServerAliveInterval 15
