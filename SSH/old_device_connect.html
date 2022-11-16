@@ -2,7 +2,7 @@
 title: Подключению к старому устройству
 description: ... или как победить no matching key exchange method found 
 published: true
-date: 2022-11-16T10:43:41.438Z
+date: 2022-11-16T10:45:26.937Z
 tags: linux, ssh, old device, старое устройство
 editor: ckeditor
 dateCreated: 2022-11-16T09:39:14.354Z
@@ -18,7 +18,7 @@ dateCreated: 2022-11-16T09:39:14.354Z
 <p style="text-align:justify;">Для устранения в директории <code><i>/home/[user]/.ssh</i></code> конкретного пользователя создаем/редактируем файл <code>config</code> в который добавляем для ip адреса сервера <code>x.x.x.x</code> (ваш конкретный сервер/устройство) строки:</p>
 <pre><code class="language-plaintext">Host x.x.x.x
 &nbsp; &nbsp;  KexAlgorithms +diffie-hellman-group1-sha1
-     Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc</code></pre>
+     Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc     </code></pre>
 <p style="text-align:justify;">Можно опустить стороку <code>Host x.x.x.x</code>, тогда ниже перечисленные протоколы будут использоваться при любом подключении автоматически.<br>Повторяем попытку подключения - должно появится приглашение ввести пароль.</p>
 <h3 style="text-align:justify;">Вариант 2.</h3>
 <p>Лечение добавлением недостающего алгоритма:</p>
