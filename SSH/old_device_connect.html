@@ -2,7 +2,7 @@
 title: Подключению к старому устройству
 description: ... или как победить no matching key exchange method found 
 published: true
-date: 2022-11-16T09:48:44.668Z
+date: 2022-11-16T10:43:41.438Z
 tags: linux, ssh, old device, старое устройство
 editor: ckeditor
 dateCreated: 2022-11-16T09:39:14.354Z
@@ -10,14 +10,16 @@ dateCreated: 2022-11-16T09:39:14.354Z
 
 <p style="text-align:justify;">Ситуация, имеется устаревшее устройство, чаще это cisco, доступное по протоколу ssh v1 или v2. При попытке залогинится <code>ssh admin x.x.x.x</code> получаем такого вида ошибку:</p>
 <blockquote>
-  <p style="text-align:justify;"><code><i>Unable to negotiate with x.x.x.x port 22: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1</i></code><br><i>или</i><br><code><i>&nbsp;Unable to negotiate with x.x.x.x port 22: no matching cipher found. Their offer: aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc</i></code></p>
+  <p style="text-align:justify;"><code><i>Unable to negotiate with x.x.x.x port 22: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1</i></code><br><i>или</i><br><code><i>&nbsp;Unable to negotiate with x.x.x.x port 22: no matching cipher found. Their offer: aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc&nbsp;</i></code></p>
+  <p style="text-align:justify;"><code>…&nbsp;</code></p>
+  <p style="text-align:justify;"><code>Unable to negotiate with х.х.х.х port 22: no matching key exchange method found. Their offer: diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1</code></p>
 </blockquote>
 <h3 style="text-align:justify;">Это значит, что клиент и сервер не могут договориться об алгоритме обмена. Сервер предлагает лишь&nbsp;<i>diffie-hellman-group1-sha1</i>, а клиент по умолчанию его не использует (openssh &gt; 7.0). &nbsp;<br><br>Вариант 1.</h3>
 <p style="text-align:justify;">Для устранения в директории <code><i>/home/[user]/.ssh</i></code> конкретного пользователя создаем/редактируем файл <code>config</code> в который добавляем для ip адреса сервера <code>x.x.x.x</code> (ваш конкретный сервер/устройство) строки:</p>
 <pre><code class="language-plaintext">Host x.x.x.x
 &nbsp; &nbsp;  KexAlgorithms +diffie-hellman-group1-sha1
      Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc</code></pre>
-<p style="text-align:justify;">Повторяем попытку подключения - должно появится приглашение ввести пароль.</p>
+<p style="text-align:justify;">Можно опустить стороку <code>Host x.x.x.x</code>, тогда ниже перечисленные протоколы будут использоваться при любом подключении автоматически.<br>Повторяем попытку подключения - должно появится приглашение ввести пароль.</p>
 <h3 style="text-align:justify;">Вариант 2.</h3>
 <p>Лечение добавлением недостающего алгоритма:</p>
 <pre><code class="language-plaintext"># ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 user@host</code></pre>
