@@ -2,7 +2,7 @@
 title: Подключению к старому устройству
 description: ... или как победить no matching key exchange method found 
 published: true
-date: 2022-11-16T10:52:21.850Z
+date: 2022-11-16T10:57:24.070Z
 tags: linux, ssh, old device, старое устройство
 editor: ckeditor
 dateCreated: 2022-11-16T09:39:14.354Z
@@ -22,10 +22,16 @@ dateCreated: 2022-11-16T09:39:14.354Z
      Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc     </code></pre>
 <p style="text-align:justify;">Можно изменить стороку так <code>Host *</code>, тогда ниже перечисленные протоколы будут использоваться при любом подключении автоматически.</p>
 <pre><code class="language-plaintext">Host *
-     PubkeyAcceptedKeyTypes +ssh-dss
-     HostKeyAlgorithms=+ssh-dss
-     KexAlgorithms diffie-hellman-group1-sha1,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1
-     Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc,chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com</code></pre>
+# prevent connection from hanging
+    ServerAliveInterval 15
+# set connection sharing
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%r@%h:%p
+
+    PubkeyAcceptedKeyTypes +ssh-dss
+    HostKeyAlgorithms=+ssh-dss
+    KexAlgorithms diffie-hellman-group1-sha1,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1
+    Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc,chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com</code></pre>
 <p>&nbsp;Повторяем попытку подключения - должно появится приглашение ввести пароль.</p>
 <h3>Вариант 2.</h3>
 <p>Лечение добавлением недостающего алгоритма:</p>
