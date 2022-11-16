@@ -2,7 +2,7 @@
 title: Подключению к старому устройству
 description: ... или как победить no matching key exchange method found 
 published: true
-date: 2022-11-16T09:42:01.872Z
+date: 2022-11-16T09:48:44.668Z
 tags: linux, ssh, old device, старое устройство
 editor: ckeditor
 dateCreated: 2022-11-16T09:39:14.354Z
@@ -18,5 +18,23 @@ dateCreated: 2022-11-16T09:39:14.354Z
 &nbsp; &nbsp;  KexAlgorithms +diffie-hellman-group1-sha1
      Ciphers aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc</code></pre>
 <p style="text-align:justify;">Повторяем попытку подключения - должно появится приглашение ввести пароль.</p>
-<p style="text-align:justify;">&nbsp;</p>
-<p style="text-align:justify;">&nbsp;</p>
+<h3 style="text-align:justify;">Вариант 2.</h3>
+<p>Лечение добавлением недостающего алгоритма:</p>
+<pre><code class="language-plaintext"># ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 user@host</code></pre>
+<p>Но добавление одного алгоритма не всегда помогает и может появится следующие сообщение:<br><code>Unable to negotiate with host port 22: no matching cipher found. Their offer: aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc</code></p>
+<p>Проверим, какие типы шифрования поддерживает наш ssh клиент</p>
+<pre><code class="language-plaintext"># ssh -Q cipher
+3des-cbc
+aes128-cbc
+aes192-cbc
+aes256-cbc
+rijndael-cbc@lysator.liu.se
+aes128-ctr
+aes192-ctr
+aes256-ctr
+aes128-gcm@openssh.com
+aes256-gcm@openssh.com</code></pre>
+<p>Видим, что можем использовать <code><strong>aes256-cbc</strong></code><strong>, </strong>добовляем при подключении:</p>
+<pre><code class="language-plaintext"># ssh -c aes256-cbc -oKexAlgorithms=+diffie-hellman-group1-sha1 user@host</code></pre>
+<p>Готово.&nbsp;</p>
+<p>Подробнее можно почитать <a href="https://www.openssh.com/legacy.html"><strong>здесь</strong></a></p>
