@@ -1,0 +1,26 @@
+<!--
+title: Фиксация версии пакета
+description: APT Debian / Ubuntu
+published: true
+date: 2022-11-23T09:49:05.282Z
+tags: debian, apt, ubuntu, apt-mark
+editor: ckeditor
+dateCreated: 2022-11-23T09:49:05.282Z
+-->
+
+<h3>Зафиксировать пакет</h3>
+<p>Зафиксировать версию пакета (установка метки зафиксированный):</p>
+<pre><code class="language-plaintext">apt-mark hold &lt;package name&gt;</code></pre>
+<p>пример:</p>
+<pre><code class="language-plaintext">apt-mark hold nano</code></pre>
+<blockquote>
+  <p>Указанный пакет (приложение) не будет автоматически обновляться, так же не будет удален при обновлении.</p>
+</blockquote>
+<h2>Просмотр зафиксированных пакетов</h2>
+<p>Команда:</p>
+<pre><code class="language-plaintext">apt-mark showhold</code></pre>
+<h2>Разблокировать пакет (снять метку зафиксированный)</h2>
+<p>Команда:</p>
+<pre><code class="language-plaintext">apt-mark unhold &lt;package name&gt;</code></pre>
+<p>Пример:</p>
+<pre><code class="language-plaintext">apt-mark unhold nano</code></pre>
