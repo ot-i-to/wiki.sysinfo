@@ -2,13 +2,16 @@
 title: WARNING:core:handle_timer_job: timer job ...
 description: Opensips 3.3
 published: true
-date: 2022-11-24T19:55:58.343Z
+date: 2022-11-24T20:05:53.086Z
 tags: opensips, 3.3, warning, core, handle_timer_job, timer job, tm-timer
 editor: ckeditor
 dateCreated: 2022-11-24T19:07:24.476Z
 -->
 
-<h2>Предупреждение: <code>opensips[128475]: WARNING:core:handle_timer_job: timer job &lt;tm-timer&gt; has a 70000 us delay in execution</code></h2>
+<h2>Предупреждение:&nbsp;</h2>
+<blockquote>
+  <p><strong>opensips[128475]: WARNING:core:handle_timer_job: timer job &lt;tm-timer&gt; has a 70000 us delay in execution</strong></p>
+</blockquote>
 <p>Нашел информацию <a href="https://users.opensips.narkive.com/vRMjs8Dj/opensips-warning-core-utimer-ticker-utimer-task-tm-utimer">тут</a></p>
 <pre><code class="language-plaintext">. . .
 
@@ -43,4 +46,45 @@ http://opensips.org/training/OpenSIPS_Bootcamp_2018/
 . . .</code></pre>
 <p>Для модуля <strong>db_postgres </strong>добавил параметр <code>modparam("db_postgres", "timeout", 2)</code> описанный <a href="https://opensips.org/html/docs/modules/3.3.x/db_postgres.html#param_timeout">тут</a>.</p>
 <p>… ошибка пропала :)</p>
+<blockquote>
+  <p><strong>opensips[149696]: WARNING:core:handle_timer_job: timer job &lt;&gt; has a 60000 us delay in execution</strong></p>
+</blockquote>
+<p>Нашел информацию <a href="https://users.opensips.narkive.com/Wy9BThu6/opensips-opensips-2-2-crash">тут</a></p>
+<pre><code class="language-plaintext">. . .
+
+Hristo Donev
+7 years ago
+Permalink
+Hi,
+
+Opensipips working without problem.
+
+This problem is fixed.
+
+In my log file I see a lot of warning messages:
+
+WARNING:core:handle_timer_job: timer job &lt;nh-timer&gt; has a 20000 us delay in
+execution
+
+Is this problem?
+
+Regards,
+Hristo
+
+...
+Ionut Ionita
+7 years ago
+Permalink
+Thank you. Those warnings are determined by the locking between the
+moment when pings are sent, the
+moment when pings responses are received and the timer which tries to
+find unresponsive contacts, so there is not much to worry about.
+
+Regards,
+
+Ionut Ionita
+OpenSIPS Developer
+
+. . .</code></pre>
+<p>Если судить по ответу то предупреждение возникает из за &nbsp;блокировки между моментом, когда отправляются пинги, моментом, когда получены ответы на пинги и таймером по которому ищится неотвечающие контакты на пинг.</p>
 <p>&nbsp;</p>
