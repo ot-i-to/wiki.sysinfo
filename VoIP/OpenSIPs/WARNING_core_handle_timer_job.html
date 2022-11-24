@@ -2,7 +2,7 @@
 title: WARNING:core:handle_timer_job: timer job ...
 description: Opensips 3.3
 published: true
-date: 2022-11-24T20:07:56.837Z
+date: 2022-11-24T20:18:05.883Z
 tags: opensips, 3.3, warning, core, handle_timer_job, timer job, tm-timer
 editor: ckeditor
 dateCreated: 2022-11-24T19:07:24.476Z
@@ -87,5 +87,5 @@ OpenSIPS Developer
 
 . . .</code></pre>
 <p>Если судить по ответу то предупреждение возникает из за &nbsp;блокировки между моментом, когда отправляются пинги, моментом, когда получены ответы на пинги и таймером по которому ищится неотвечающие контакты на пинг.</p>
-<p>… так что особо волноваться не о чем :)</p>
+<p>… так что особо волноваться не о чем, но возможно за этот таймер отвечает параметр &nbsp;<a href="https://opensips.org/docs/modules/3.3.x/nathelper.html#param_ping_threshold"><code>ping_threshold</code></a> в модуле <strong>nathelper</strong> :)</p>
 <p>&nbsp;</p>
