@@ -1,0 +1,19 @@
+<!--
+title: WARNING <tm-timer>
+description: Opensips 3.3
+published: true
+date: 2022-11-24T19:07:24.476Z
+tags: opensips, 3.3, warning, core, handle_timer_job, timer job, tm-timer
+editor: ckeditor
+dateCreated: 2022-11-24T19:07:24.476Z
+-->
+
+<p>В логе возникает ошибка <code>opensips[128475]: WARNING:core:handle_timer_job: timer job &lt;tm-timer&gt; has a 70000 us delay in execution</code></p>
+<p>Нашел информацию <a href="https://users.opensips.narkive.com/vRMjs8Dj/opensips-warning-core-utimer-ticker-utimer-task-tm-utimer">тут</a></p>
+<pre><code class="language-plaintext">…
+Try setting this param to 1 or 2:
+http://www.opensips.org/html/docs/modules/2.4.x/db_postgres.html#param_timeout
+…</code></pre>
+<p>Для модуля <strong>db_postgres </strong>добавил параметр <code>modparam("db_postgres", "timeout", 2)</code> описанный <a href="https://opensips.org/html/docs/modules/3.3.x/db_postgres.html#param_timeout">тут</a>.</p>
+<p>… ошибка пропала :)</p>
+<p>&nbsp;</p>
