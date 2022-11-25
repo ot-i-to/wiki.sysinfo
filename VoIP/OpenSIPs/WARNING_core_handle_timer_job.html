@@ -2,7 +2,7 @@
 title: WARNING:core:handle_timer_job: timer job ...
 description: Opensips
 published: true
-date: 2022-11-25T08:33:36.518Z
+date: 2022-11-25T08:52:21.839Z
 tags: opensips, 3.3, warning, core, handle_timer_job, timer job, tm-timer, nh-time
 editor: ckeditor
 dateCreated: 2022-11-24T19:07:24.476Z
@@ -94,5 +94,13 @@ OpenSIPS Developer
   <p><strong>opensips[80671]: WARNING:core:handle_timer_job: timer job &lt;dlg-options-pinger&gt; has a 30000 us delay in execution</strong></p>
 </blockquote>
 <p>Эти предупреждения связаны с модулем <a href="https://opensips.org/docs/modules/3.3.x/dialog.html"><strong>DIALOG</strong></a> - Dialog support module … &lt;<strong>dig-timer</strong>&gt; - сокращение от &lt;<strong>dialog-timer</strong>&gt;</p>
+<blockquote>
+  <p><strong>opensips[80714]: WARNING:core:handle_timer_job: timer job &lt;blcore-expire&gt; has a 60000 us delay in execution</strong></p>
+</blockquote>
+<p>Вродебы должно относится к модулю <a href="https://opensips.org/docs/modules/3.3.x/userblacklist.html"><strong>USERBLACKLIST</strong></a> - User black/white listing, но он у меня не загружен :(</p>
+<blockquote>
+  <p><strong>opensips[80714]: WARNING:core:handle_timer_job: timer job &lt;ul-timer&gt; has a 60000 us delay in execution</strong></p>
+</blockquote>
+<p>… с этим сообщением пока неясно … надо смотреть исходники&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
