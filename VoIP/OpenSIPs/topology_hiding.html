@@ -2,7 +2,7 @@
 title: Скрытие топологии
 description: Модуль  TOPOLOGY_HIDING - пример конфигурации 
 published: true
-date: 2022-11-30T15:40:08.569Z
+date: 2022-11-30T15:41:42.754Z
 tags: opensips, topology_hiding
 editor: ckeditor
 dateCreated: 2022-11-30T15:40:08.569Z
@@ -70,7 +70,7 @@ onreply_route {
         if ( has_body("application/sdp") )
                        rtpengine_manage();
 }</code></pre>
-<p>источник https://infra-voice.hu/opensips-3-2-rtpengine-topology-hiding-bridging-under-debian-bullseye/</p>
+<p><a href="https://infra-voice.hu/opensips-3-2-rtpengine-topology-hiding-bridging-under-debian-bullseye/">источник</a> https://infra-voice.hu/opensips-3-2-rtpengine-topology-hiding-bridging-under-debian-bullseye/</p>
 <h2>2) &nbsp;Topology Hiding with OpenSIPS&nbsp;</h2>
 <h4>Текущие функции</h4>
 <p style="text-align:justify;">По умолчанию при включении модуль скрывает заголовки VIA, Record-Route, Route и Contact. Заголовки VIA, Record-Route и Route будут полностью удалены при маршрутизации сообщения с одной стороны на другую, а заголовок Contact будет искажен, чтобы указывать на исходящий IP-адрес интерфейса.<br>При желании модуль также может скрывать Call-ID на исходящей стороне, так как достаточно часто Call-ID будет содержать IP-адрес инициатора трафика.<br>Кроме того, модуль topology_hiding может упростить интеграцию, распространяя различные части заголовка Contact с одной стороны на другую. Контактное имя пользователя может распространяться (например, полезно, когда вы подключаетесь к серверам LRN, но не хотите раскрывать полную топологию поставщику услуг). Кроме того, можно передавать различные параметры заголовка Contact, чтобы обеспечить сквозные функции, которые зависят от таких параметров.</p>
@@ -119,4 +119,4 @@ route {
     t_relay();
     exit;
 }</code></pre>
-<p>источник https://www.opensips.org/Documentation/Tutorials-Topology-Hiding</p>
+<p><a href="https://www.opensips.org/Documentation/Tutorials-Topology-Hiding">источник</a> https://www.opensips.org/Documentation/Tutorials-Topology-Hiding</p>
