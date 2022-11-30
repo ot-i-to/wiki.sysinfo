@@ -1,0 +1,122 @@
+<!--
+title: Скрытие топологии
+description: Модуль  TOPOLOGY_HIDING - пример конфигурации 
+published: true
+date: 2022-11-30T15:40:08.569Z
+tags: opensips, topology_hiding
+editor: ckeditor
+dateCreated: 2022-11-30T15:40:08.569Z
+-->
+
+<h2>1) Opensips 3.2 + Rtpengine +Topology hiding + Bridging under Debian Bullseye</h2>
+<p>Основной маршрут для примера, замените OPENSIPS_WAN_IP на общедоступный IP-адрес вашего сервера Opensips, замените OPENSIPS_LAN_IP на сетевой IP-адрес Opensips. Мы направляем каждый вызов на сервер Asterisk, прослушивающий REMOTE_ASTERISK_IP:PORT. Все звонки от Asterisk будут направляться вашему исходящему провайдеру на YOUR_PROVIDER_IP:PORT.</p>
+<pre><code class="language-plaintext">####### Main routing Logic ########
+
+route{
+    if(!has_totag() &amp;&amp; is_method("INVITE")) {
+        create_dialog();
+        topology_hiding("UC");
+
+        if ( $socket_in(ip) == "OPENSIPS_WAN_IP" ) {
+            $var(direction) =  "in-iface=wan out-iface=lan";
+            $var(whereto_send) = "REMOTE_ASTERISK_IP:PORT";
+        }
+
+        if ( $socket_in(ip) == "OPENSIPS_LAN_IP" ) {
+            $var(direction) =  "in-iface=lan out-iface=wan";
+            $var(whereto_send) = "YOUR_PROVIDER_IP:PORT";
+        }
+
+        $var(rtpengine_params) = $var(direction) + " replace-origin replace-session-connection";
+
+        if ( has_body("application/sdp") )
+            rtpengine_manage("$var(rtpengine_params)");
+
+        $du = "sip:" + $var(whereto_send);
+        $ru = "sip:" + $rU + "@" + $var(whereto_send);
+
+        route(RELAY);
+    }
+
+    if ( has_totag() ) {
+        if ( is_method("ACK") &amp;&amp; t_check_trans() ) {
+            route(RELAY);
+        }
+        if ( topology_hiding_match() ) {
+            if ( is_method("BYE") ) rtpengine_manage();
+            route(RELAY);
+        } else
+            send_reply(404,"Not found");
+    }
+
+    if (is_method("CANCEL")) {
+        if (t_check_trans()) {
+            rtpengine_manage();
+            route(RELAY);
+        }
+    }
+
+    send_reply(501,"$rm not implemented");
+}
+
+route[RELAY] {
+        if (!t_relay()) {
+                send_reply(500,"Internal Error");
+        }
+        exit;
+}
+
+onreply_route {
+        if ( has_body("application/sdp") )
+                       rtpengine_manage();
+}</code></pre>
+<p>источник https://infra-voice.hu/opensips-3-2-rtpengine-topology-hiding-bridging-under-debian-bullseye/</p>
+<h2>2) &nbsp;Topology Hiding with OpenSIPS&nbsp;</h2>
+<h4>Текущие функции</h4>
+<p style="text-align:justify;">По умолчанию при включении модуль скрывает заголовки VIA, Record-Route, Route и Contact. Заголовки VIA, Record-Route и Route будут полностью удалены при маршрутизации сообщения с одной стороны на другую, а заголовок Contact будет искажен, чтобы указывать на исходящий IP-адрес интерфейса.<br>При желании модуль также может скрывать Call-ID на исходящей стороне, так как достаточно часто Call-ID будет содержать IP-адрес инициатора трафика.<br>Кроме того, модуль topology_hiding может упростить интеграцию, распространяя различные части заголовка Contact с одной стороны на другую. Контактное имя пользователя может распространяться (например, полезно, когда вы подключаетесь к серверам LRN, но не хотите раскрывать полную топологию поставщику услуг). Кроме того, можно передавать различные параметры заголовка Contact, чтобы обеспечить сквозные функции, которые зависят от таких параметров.</p>
+<h4>Как это работает</h4>
+<p style="text-align:justify;">Модуль может работать поверх модуля диалога и TM или только поверх модуля TM.<br>При работе строго поверх модуля TM топология, скрывающая SIP-сообщения, будет больше по сравнению с первоначальными запросами (поскольку OpenSIPS будет кодировать всю необходимую информацию в параметре заголовка Contact), но все типы SIP-запросов и диалогов будут поддерживаться ( диалоги INVITE, диалоги Presence, SIP MESSAGE и т. д.). При работе поверх модуля DIALOG вы будете получать более короткие сообщения (все удаленные заголовки будут храниться внутри модуля диалога), но вы сможете скрыть только диалоги на основе INVITE.</p>
+<pre><code class="language-plaintext">loadmodule "topology_hiding.so"
+
+
+route {
+
+    ....
+    ....
+    ....
+
+    if (has_totag()) {
+        if (topology_hiding_match()) {
+            xlog("Succesfully matched this request to a topology hiding dialog. \n");
+            xlog("Calller side callid is $ci \n");
+            xlog("Callee side callid  is $TH_callee_callid \n");
+            t_relay();
+            exit;
+        } else {
+            if ( is_method("ACK") ) {
+                if ( t_check_trans() ) {
+                    t_relay();
+                    exit;
+                } else
+                    exit;
+            }
+            sl_send_reply("404","Not here");
+            exit;
+        }
+    }
+
+    ....
+    ....
+    ....
+
+    # if it's an INVITE dialog, we can create the dialog now, will lead to cleaner SIP messages
+    if (is_method("INVITE"))
+        create_dialog();
+
+
+    # we do topology hiding, preserving the Contact Username and also hiding the Call-ID
+    topology_hiding("UC");
+    t_relay();
+    exit;
+}</code></pre>
+<p>источник https://www.opensips.org/Documentation/Tutorials-Topology-Hiding</p>
