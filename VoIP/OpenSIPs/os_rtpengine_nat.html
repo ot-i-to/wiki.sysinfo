@@ -1,0 +1,44 @@
+<!--
+title: Early Media RTPENGINE +NAT
+description: opensips early-media пример конфика для rtpengine и клиентом за nat
+published: true
+date: 2022-12-09T07:05:11.714Z
+tags: rtpengine, opensips, early-media, nat
+editor: ckeditor
+dateCreated: 2022-12-09T07:05:11.714Z
+-->
+
+<p>Пример проигрованиия музыки без поднятия трубки в предответный канал.</p>
+<pre><code class="language-plaintext">route[early_media] {
+   $var(new_ci) = $(rb{re.subst,/(IP4.).*/\1$si/g});
+
+   if (has_body("application/sdp")) {
+       rtpengine_offer("SIP-source-address in-iface=$avp(in-iface) out-iface=$avp(in-iface)");
+   }
+
+   $json(reply) := $rtpquery;
+   $var(lportrtp)=$json_pretty(reply/tags/$ft/medias[0]/streams[0]/local port);
+
+   remove_body_part();
+   append_to_reply("Content-Type: application/sdp\r\n");
+
+   # replace the IP in the body
+   $var(body) = $(rb{re.subst,/(IP4.).*/\1$socket_in(ip)/g});
+   $var(body) = $(var(body){re.subst,/(audio.)...../\1$var(lportrtp)/g});
+
+   #xlog(".............. [183] PLAY Media INVITE \n| $$var(body): $var(body) \n| totag: $ft \n| from-tag: $ft | $$si: $si contact: $ct $$rd: $rd ................\n");
+   t_reply_with_body(183, "Session Progress", $var(body));
+
+   rtpengine_start_recording("from-tag=$ft");
+
+   rtpengine_unblock_dtmf("from-tag=$ft");
+
+   $var(play_duration) = 3600;
+   rtpengine_play_media("call-id=$ci from-tag=$ft  file=/etc/opensips/sound/music/SummerBensound.mp3", $var(play_duration));
+
+   #xlog(".............. ROUTE[early_media] PLAY Media INVITE [3] call-id: $ci from-tag: $ft $$si: $si contact: $ct ................\n");
+
+}</code></pre>
+<p>Данный пример проверен на OpenSips v.3.3, RTPEngine v.11.2.0.0</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
