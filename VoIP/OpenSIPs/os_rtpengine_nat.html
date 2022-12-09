@@ -2,7 +2,7 @@
 title: Early Media RTPENGINE +NAT
 description: opensips early-media пример конфика для rtpengine и клиентом за nat
 published: true
-date: 2022-12-09T07:48:06.608Z
+date: 2022-12-09T14:54:38.981Z
 tags: rtpengine, opensips, early-media, nat
 editor: ckeditor
 dateCreated: 2022-12-09T07:05:11.714Z
@@ -21,6 +21,7 @@ dateCreated: 2022-12-09T07:05:11.714Z
 
    remove_body_part();
    append_to_reply("Content-Type: application/sdp\r\n");
+   append_to_reply("Allow: INVITE, ACK, BYE, CANCEL, PRACK, REGISTER, INFO, REFER, NOTIFY, OPTIONS, UPDATE\r\n");
 
    # replace the IP in the body
    $var(body) = $(rb{re.subst,/(IP4.).*/\1$socket_in(ip)/g});
