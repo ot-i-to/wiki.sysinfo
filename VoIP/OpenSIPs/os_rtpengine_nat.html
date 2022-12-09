@@ -2,7 +2,7 @@
 title: Early Media RTPENGINE +NAT
 description: opensips early-media пример конфика для rtpengine и клиентом за nat
 published: true
-date: 2022-12-09T07:19:50.079Z
+date: 2022-12-09T07:23:13.506Z
 tags: rtpengine, opensips, early-media, nat
 editor: ckeditor
 dateCreated: 2022-12-09T07:05:11.714Z
@@ -40,6 +40,6 @@ dateCreated: 2022-12-09T07:05:11.714Z
 
 }</code></pre>
 <p>Данный пример проверен на OpenSips v.3.3, RTPEngine v.11.2.0.0</p>
-<p>Очень важным в этой конфигурации оказались:<br>1) флаг/опция <code>SIP-source-address</code> в команде <code>rtpengine_offer</code> без нее rtp пакеты отправлялись на внутренний ip клиента</p>
+<p>Очень важным в этой конфигурации оказались:<br>1) флаг/опция <code>SIP-source-address</code> в команде <code>rtpengine_offer</code> без нее rtp пакеты отправлялись на внутренний ip клиента и ни какие другие команды (типа fix_nated_contact) связанные с NAT не помогали :(</p>
 <p>2) а также при формирование SDP для 183 команды, обязательно надо было сменить не только IP источника RTP но и порт, с которого rtpengine &nbsp;собирается отправлять пакеты, который открывается после клманды rtpengine-offer, т.к. клиент так же начинает слать со свой стороны RTP. За это отвечает переменная <code>$var(lportrtp</code>.&nbsp;</p>
 <p>&nbsp;</p>
