@@ -2,7 +2,7 @@
 title: Early Media RTPENGINE +NAT
 description: opensips early-media пример конфика для rtpengine и клиентом за nat
 published: true
-date: 2022-12-09T07:32:47.260Z
+date: 2022-12-09T07:33:46.510Z
 tags: rtpengine, opensips, early-media, nat
 editor: ckeditor
 dateCreated: 2022-12-09T07:05:11.714Z
@@ -41,7 +41,7 @@ dateCreated: 2022-12-09T07:05:11.714Z
 }</code></pre>
 <p>Данный пример проверен на OpenSips v.3.3, RTPEngine v.11.2.0.0 (</p>
 <blockquote>
-  <p><i><strong><u>ВНИМАНИЕ!</u></strong></i>&nbsp;<strong> </strong>Для раборы функции<strong> play media</strong> в <strong>RTPENGINE</strong> он должен быть собран с опцией Транскодинга “… Only available if compiled with transcoding support. …” Включить можно в файле <i><strong>Makefile</strong></i> строка <i><strong>“with_transcoding ?= yes” </strong></i>… удалите знак вопроса.&nbsp;</p>
+  <p><i><strong><u>ВНИМАНИЕ!</u></strong></i>&nbsp;<strong> </strong>Для раборы функции<strong> &nbsp;“play media”</strong> в <strong>RTPENGINE</strong> он должен быть собран с опцией Транскодинга “… <i><strong>Only available if compiled with transcoding support. </strong></i>…” Включить можно в файле <i><strong>Makefile</strong></i> строка <i><strong>“with_transcoding ?= yes” </strong></i>… удалите знак вопроса.&nbsp;</p>
 </blockquote>
 <p>Очень важным в этой конфигурации оказались:<br>1) флаг/опция <code>SIP-source-address</code> в команде <code>rtpengine_offer</code> без нее rtp пакеты отправлялись на внутренний ip клиента и ни какие другие команды (типа fix_nated_contact) связанные с NAT не помогали :(</p>
 <p>2) а также при формирование SDP для 183 команды, обязательно надо было сменить не только IP источника RTP но и порт, с которого rtpengine &nbsp;собирается отправлять пакеты, который открывается после клманды rtpengine-offer, т.к. клиент так же начинает слать со свой стороны RTP. За это отвечает переменная <code>$var(lportrtp)</code>.&nbsp;</p>
