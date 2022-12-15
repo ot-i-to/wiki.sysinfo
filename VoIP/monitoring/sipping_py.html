@@ -2,7 +2,7 @@
 title: SIP-Ping v.1
 description: Pythone скрипт 
 published: true
-date: 2022-12-15T11:35:38.325Z
+date: 2022-12-15T11:36:05.991Z
 tags: voip, sip, ping, options, monitoring, pythone
 editor: ckeditor
 dateCreated: 2022-12-15T11:35:38.325Z
@@ -14,7 +14,7 @@ dateCreated: 2022-12-15T11:35:38.325Z
 </blockquote>
 <p>Утилита является модернизаций утилиты&nbsp;<a href="https://github.com/cathoderaydude/sip-ping"> cathoderaydude/sip-ping</a> , но внесены следующие изменения:&nbsp;</p>
 <ul>
-  <li>исправлено неработающая опция “-с”&nbsp;</li>
+  <li>исправлено неработающая опция “-с”</li>
   <li>добавлены опции позволяющие выполнять произвольный скрипт в системе при достижения порога неудачных пингов:</li>
 </ul>
 <p><code>&nbsp;--crun count &nbsp;&nbsp;</code> &nbsp; &nbsp; Count lost the run shell script (default 0 - off)</p>
@@ -22,5 +22,5 @@ dateCreated: 2022-12-15T11:35:38.325Z
 <p><code>&nbsp;--run script &nbsp;&nbsp;</code> &nbsp; &nbsp;Path/Name lost shell script (./script.sh))</p>
 <p><code>&nbsp;--pause timeout&nbsp;</code> Pause after script execution (.default 60 sec.))</p>
 <h5><br>Пример запуска:<br><code>/usr/share/sipping/sipping.py -p 5060 -i 10.15.1.154:5099 10.15.1.154 -I 60000 -t 10000 -w '/var/log/asterisk/sipping.log' --pause 300 --crun 10 --run '/usr/share/sipping/script.run' -q</code></h5>
-<p>Скачать данную версиб утилиту можно тут.</p>
+<p>Скачать данную версию утилиту можно тут.</p>
 <p>&nbsp;</p>
