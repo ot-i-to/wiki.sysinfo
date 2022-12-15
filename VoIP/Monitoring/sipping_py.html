@@ -2,18 +2,18 @@
 title: SIP-Ping v.1
 description: Pythone скрипт 
 published: true
-date: 2022-12-15T12:20:16.361Z
+date: 2022-12-15T12:23:48.799Z
 tags: voip, sip, ping, options, monitoring, pythone
 editor: ckeditor
 dateCreated: 2022-12-15T11:35:38.325Z
 -->
 
-<h4>Утилита диагностики VoIP использующая протокол SIP сообщения OPTIONS в качестве ping для анализа состояния носта.</h4>
+<h4 class="toc-header" id="утилита-диагностики-voip-использующая-протокол-sip-сообщения-options-в-качестве-ping-для-анализа-состояния-носта"> Утилита диагностики VoIP использующая протокол SIP сообщения OPTIONS в качестве ping для анализа состояния носта.</h4>
 <blockquote>
-  <p>Для работы утилиты SIP Ping требуется работающая среда Python 2.x., но возможно заработает и на Python 3.x (не провералось).<br>Хост, который вы пингуете, должен отвечать на пакеты OPTIONS. Неважно, что он отвечает - 200, 403, даже 501 все в порядке, если что-то возвращается с неповрежденным Call-ID. Если вы пингуете устройство, которое фильтрует SIP-трафик по доменному имени (например, принимает только пакеты вида From: user@**<a href="http://company.com">company.com</a>**), вам может потребоваться использовать опцию “-d” для установки правильного доменного имени.</p>
+  <p>Для работы утилиты SIP Ping требуется работающая среда Python 2.x., но возможно заработает и на Python 3.x (не провералось).<br>Хост, который вы пингуете, должен отвечать на пакеты OPTIONS. Неважно, что он отвечает - 200, 403, даже 501 все в порядке, если что-то возвращается с неповрежденным Call-ID. Если вы пингуете устройство, которое фильтрует SIP-трафик по доменному имени (например, принимает только пакеты вида From: user@**<a class="is-external-link" href="http://company.com">company.com</a>**), вам может потребоваться использовать опцию “-d” для установки правильного доменного имени.</p>
   <p>SIP Ping работает только по UDP и не может работать с TCP или TLS.</p>
 </blockquote>
-<p>Утилита является модернизаций утилиты&nbsp; <a href="https://github.com/cathoderaydude/sip-ping">cathoderaydude/sip-ping</a> , но внесены следующие изменения:</p>
+<p>Утилита является модернизаций утилиты&nbsp; <a class="is-external-link" href="https://github.com/cathoderaydude/sip-ping">cathoderaydude/sip-ping</a> , но внесены следующие изменения:</p>
 <ul>
   <li>исправлено неработающая опция “-с”</li>
   <li>добавлены опции позволяющие выполнять произвольный скрипт в системе при достижения порога неудачных пингов:</li>
@@ -22,11 +22,11 @@ dateCreated: 2022-12-15T11:35:38.325Z
 <p><code>&nbsp;--cnew count &nbsp;&nbsp;</code> &nbsp; &nbsp;Number of successful attempts to reset the failure &nbsp;counter(default 10, 0 - off)</p>
 <p><code>&nbsp;--run script &nbsp;&nbsp;</code> &nbsp; &nbsp;Path/Name lost shell script (./script.sh))</p>
 <p><code>&nbsp;--pause timeout&nbsp;</code> Pause after script execution (.default 60 sec.))</p>
-<h5>&nbsp;</h5>
+<h5 class="toc-header" id=""> &nbsp;</h5>
 <p>Пример запуска:<br><code>/usr/share/sipping/sipping.py -p 5060 -i 10.15.1.154:5099 10.15.1.154 -I 60000 -t 10000 -w '/var/log/asterisk/sipping.log' --pause 300 --crun 10 --run '/usr/share/sipping/script.run' -q</code></p>
-<p><a href="/VoIP/Monitoring/sipping.tar.bz2">Скачать данную версию утилиту можно тут</a> или с <a href="https://github.com/ot-i-to/sipping">github</a>.</p>
-<h5>Справка:</h5>
-<pre><code class="language-plaintext">usage: sipping.py [-h] [-I interval] [-u userid] [-i ip] [-d domain] [-p port]
+<p><a class="is-asset-link" href="/VoIP/Monitoring/sipping.tar.bz2">Скачать данную версию утилиту можно тут</a> или с <a class="is-external-link" href="https://github.com/ot-i-to/sipping">github</a>.</p>
+<h5 class="toc-header" id="справка"> Справка:</h5>
+<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">usage: sipping.py [-h] [-I interval] [-u userid] [-i ip] [-d domain] [-p port]
                  [--ttl ttl] [-w file] [-t timeout] [-c count] [-x [X]]
                  [-X [X]] [-q [Q]] [-S [S]] [--crun count] [--cnew count]
                  [--run script] [--pause timeout]
