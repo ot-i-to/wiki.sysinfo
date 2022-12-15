@@ -2,13 +2,13 @@
 title: SIP-Ping v.1
 description: Pythone скрипт 
 published: true
-date: 2022-12-15T11:50:14.701Z
+date: 2022-12-15T11:56:23.293Z
 tags: voip, sip, ping, options, monitoring, pythone
 editor: ckeditor
 dateCreated: 2022-12-15T11:35:38.325Z
 -->
 
-<h4>Утилита диагностики VoIP использующая протокол SIP сообщения OPTIONS в качестве ping для анализа состояния носта.</h4>
+<h4><a href="/sipping.tar.bz2">/sipping.tar.bz2</a>Утилита диагностики VoIP использующая протокол SIP сообщения OPTIONS в качестве ping для анализа состояния носта.</h4>
 <blockquote>
   <p>Для работы утилиты SIP Ping требуется работающая среда Python 2.x., но возможно заработает и на Python 3.x (не провералось).<br>Хост, который вы пингуете, должен отвечать на пакеты OPTIONS. Неважно, что он отвечает - 200, 403, даже 501 все в порядке, если что-то возвращается с неповрежденным Call-ID. Если вы пингуете устройство, которое фильтрует SIP-трафик по доменному имени (например, принимает только пакеты вида From: user@**company.com**), вам может потребоваться использовать опцию “-d” для установки правильного доменного имени.<br><br>SIP Ping работает только по UDP и не может работать с TCP или TLS.<br>&nbsp;</p>
 </blockquote>
@@ -22,5 +22,5 @@ dateCreated: 2022-12-15T11:35:38.325Z
 <p><code>&nbsp;--run script &nbsp;&nbsp;</code> &nbsp; &nbsp;Path/Name lost shell script (./script.sh))</p>
 <p><code>&nbsp;--pause timeout&nbsp;</code> Pause after script execution (.default 60 sec.))</p>
 <h5><br>Пример запуска:<br><code>/usr/share/sipping/sipping.py -p 5060 -i 10.15.1.154:5099 10.15.1.154 -I 60000 -t 10000 -w '/var/log/asterisk/sipping.log' --pause 300 --crun 10 --run '/usr/share/sipping/script.run' -q</code></h5>
-<p>Скачать данную версию утилиту можно тут или с <a href="https://github.com/ot-i-to/sipping">github</a>.&nbsp;</p>
+<p>Скачать данную версию утилиту можно <a href="/sipping.tar.bz2">тут</a> или с <a href="https://github.com/ot-i-to/sipping">github</a>.&nbsp;</p>
 <p>&nbsp;</p>
