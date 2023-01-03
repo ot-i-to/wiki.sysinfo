@@ -2,7 +2,7 @@
 title: Отправить UDP в Linux
 description: Отправить UDP пакет через командную строку Linux
 published: true
-date: 2023-01-03T10:13:11.724Z
+date: 2023-01-03T10:13:24.811Z
 tags: linux, terminal, udp
 editor: ckeditor
 dateCreated: 2023-01-03T09:39:11.189Z
@@ -12,7 +12,7 @@ dateCreated: 2023-01-03T09:39:11.189Z
 <p>Просто послать строку … ip и порт меняете на свои:</p>
 <pre><code class="language-plaintext">echo -ne '\xa5\xa5\xa5...' &gt; /dev/udp/192.168.0.1/5555</code></pre>
 <p>Тут сложнее разобраться в формате строки …</p>
-<p>Вариант 2</p>
+<h4>Вариант 2</h4>
 <p>Использовать утилиту netcat (nc):</p>
 <pre><code class="language-plaintext">nc 192.168.0.1 5555 &lt; file_name
 или
