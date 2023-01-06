@@ -2,7 +2,7 @@
 title: Функция конвертирования
 description: 
 published: true
-date: 2023-01-06T14:31:21.331Z
+date: 2023-01-06T14:48:49.580Z
 tags: convert, function, postgres, tel, plpython3u
 editor: ckeditor
 dateCreated: 2023-01-06T14:31:21.331Z
@@ -84,4 +84,8 @@ COMMENT ON FUNCTION public.tel_convert(text, text)
 ‘+’ - добавление последующих цифр/знаков;
 ‘!’ - окончание разбора, все дальнейшие цифры номера отрезаются;
 ‘0-9’, ‘буквы’, ‘#’ и ‘*’ (без знака +) - замещение цифры на данной позиции.';</code></pre>
+<p>Пример использования:</p>
+<pre><code class="language-plaintext">select tel_convert('AliBaba@sru.ru', '+0?8+32-54??79');
+вывод: 0A83254ba79ru.ru</code></pre>
+<p>где: исходный текст - <code>'AliBaba@sru.ru'</code> и правило / rule: <code>'+0?8+32-54??79'</code></p>
 <p>&nbsp;</p>
