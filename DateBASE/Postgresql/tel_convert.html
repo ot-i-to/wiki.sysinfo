@@ -1,0 +1,87 @@
+<!--
+title: Функция конвертирования
+description: 
+published: true
+date: 2023-01-06T14:31:21.331Z
+tags: convert, function, postgres, tel, plpython3u
+editor: ckeditor
+dateCreated: 2023-01-06T14:31:21.331Z
+-->
+
+<p><strong>Допустимые символы и их описание rule:</strong></p>
+<p>‘-’ - удаление цифры;</p>
+<p>‘?’ - цифра/знак на данной позиции остается неизменной;</p>
+<p>‘+’ - добавление последующих цифр/знаков;</p>
+<p>‘!’ - окончание разбора, все дальнейшие цифры номера отрезаются;</p>
+<p>‘0-9’, ‘буквы’, ‘#’ и ‘*’ (без знака +) - замещение цифры на данной позиции.</p>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">-- FUNCTION: public.tel_convert(text, text)
+
+-- DROP FUNCTION IF EXISTS public.tel_convert(text, text);
+
+CREATE OR REPLACE FUNCTION public.tel_convert(
+str_ text,
+rule_ text)
+   RETURNS text
+   LANGUAGE 'plpython3u'
+   COST 100
+   VOLATILE PARALLEL UNSAFE
+AS $BODY$
+out_ = ""
+is_ = 0
+ir_ = 0
+ic_ = 0
+lr_ = len(rule_)
+ls_ = len(str_)
+while True:
+   ic_ += 1
+   if ic_ &gt;= 100:
+       break
+   if is_ &lt; ls_ and ir_ == lr_:
+       while True:
+           out_ = out_ + str_[is_]
+           is_ += 1
+           if is_ &gt;= ls_:
+               break
+       break
+   if rule_[ir_] == "-":
+       is_ += 1
+       ir_ += 1
+   if rule_[ir_] == "+":
+       out0_ = ""
+       ir_ += 1
+       while True:
+           if ir_ &gt;= lr_:
+               break
+           if rule_[ir_] == "." or rule_[ir_] == "+" or rule_[ir_] == "-" or rule_[ir_] == "!" or rule_[ir_] == "?" or rule_[ir_].isalpha():
+               out_ = out_ + out0_
+               print("+ " + out0_)
+               break
+           out0_ = out0_ + rule_[ir_]
+           ir_ += 1
+   if rule_[ir_] == "!" or is_ == ls_:
+       break
+   if rule_[ir_] == "?":
+       out_ = out_ + str_[is_]
+   if rule_[ir_].isalnum() or rule_[ir_] == "*" or rule_[ir_] == "#"  or rule_[ir_] == "@" or rule_[ir_] == ".":
+       out_ = out_ + rule_[ir_]
+   if ir_ &lt; lr_:
+       ir_ += 1
+       is_ += 1
+   else:
+       is_ += 1
+return out_
+
+$BODY$;
+
+ALTER FUNCTION public.tel_convert(text, text)
+   OWNER TO opensips;
+
+COMMENT ON FUNCTION public.tel_convert(text, text)
+   IS 'Допустимые символы и их описание rule:
+‘-’ - удаление цифры;
+‘?’ - цифра/знак на данной позиции остается неизменной;
+‘+’ - добавление последующих цифр/знаков;
+‘!’ - окончание разбора, все дальнейшие цифры номера отрезаются;
+‘0-9’, ‘буквы’, ‘#’ и ‘*’ (без знака +) - замещение цифры на данной позиции.';</code></pre>
+<p>&nbsp;</p>
