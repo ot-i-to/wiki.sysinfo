@@ -2,7 +2,7 @@
 title: Untitled Page
 description: 
 published: true
-date: 2023-01-06T16:44:47.790Z
+date: 2023-01-06T16:46:41.203Z
 tags: 
 editor: markdown
 dateCreated: 2023-01-06T16:44:47.789Z
@@ -24,3 +24,6 @@ FUNCTION: tel_convert(str_ text, rule_ text)
 
 **Где:** *исходный текст* - `'AliBaba@sru.ru'` *и правило / rule* - `'+0?8+32-54??79'`
 
+> https://sysinfo.pro/ru/DateBASE/Postgresql/tel_convert
+> 
+{.is-info}
