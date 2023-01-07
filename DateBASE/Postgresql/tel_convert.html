@@ -2,7 +2,7 @@
 title: Функция конвертирования
 description: Postgresql
 published: true
-date: 2023-01-06T16:58:32.744Z
+date: 2023-01-07T18:20:39.073Z
 tags: convert, function, postgres, tel, plpython3u
 editor: ckeditor
 dateCreated: 2023-01-06T14:31:21.331Z
@@ -36,42 +36,56 @@ ic_ = 0
 lr_ = len(rule_)
 ls_ = len(str_)
 while True:
-   ic_ += 1
-   if ic_ &gt;= 100:
-       break
-   if is_ &lt; ls_ and ir_ == lr_:
-       while True:
-           out_ = out_ + str_[is_]
-           is_ += 1
-           if is_ &gt;= ls_:
-               break
-       break
-   if rule_[ir_] == "-":
-       is_ += 1
-       ir_ += 1
-   if rule_[ir_] == "+":
-       out0_ = ""
-       ir_ += 1
-       while True:
-           if ir_ &gt;= lr_:
-               break
-           if rule_[ir_] == "." or rule_[ir_] == "+" or rule_[ir_] == "-" or rule_[ir_] == "!" or rule_[ir_] == "?" or rule_[ir_].isalpha():
-               out_ = out_ + out0_
-               print("+ " + out0_)
-               break
-           out0_ = out0_ + rule_[ir_]
-           ir_ += 1
-   if rule_[ir_] == "!" or is_ == ls_:
-       break
-   if rule_[ir_] == "?":
-       out_ = out_ + str_[is_]
-   if rule_[ir_].isalnum() or rule_[ir_] == "*" or rule_[ir_] == "#"  or rule_[ir_] == "@" or rule_[ir_] == ".":
-       out_ = out_ + rule_[ir_]
-   if ir_ &lt; lr_:
-       ir_ += 1
-       is_ += 1
-   else:
-       is_ += 1
+    ic_ += 1
+    if ic_ &gt;= 100:
+        break
+    if is_ &lt; ls_ and ir_== lr_:
+        ic0_ = 0
+        while True:
+            ic0_ += 1
+            if ic0_ &gt;= 100:
+                break
+            out_ = out_ + str_[is_]
+            is_ += 1
+            if is_ &gt;= ls_:
+                break
+        break
+    elif is_ == ls_:
+        break
+    elif rule_[ir_] == "!":
+        break
+    elif rule_[ir_] == "?" and ir_ &lt;= (lr_ -1):
+        out_ = out_ + str_[is_]
+        is_ += 1
+        if ir_ &lt; lr_ :
+            ir_ += 1
+    elif rule_[ir_].isalnum() or rule_[ir_] == "*" or rule_[ir_] == "#"  or rule_[ir_] == "@" or rule_[ir_] == "." and ir_ &lt;= (lr_ -1):
+        out_ = out_ + rule_[ir_]
+        is_ += 1
+        if ir_ &lt; lr_:
+            ir_ += 1
+    elif rule_[ir_] == "-" and ir_ &lt;= (lr_ -1):
+        is_ += 1
+        if ir_ &lt; lr_ :
+            ir_ += 1
+    elif rule_[ir_] == "+" and ir_ &lt;= (lr_ -1):
+        out0_ = ""
+        ir_ += 1
+        ic0_ = 0
+        while True:
+            ic0_ += 1
+            if ic0_ &gt;= 100:
+                break
+            if rule_[ir_] == "?" or rule_[ir_] == "+" or rule_[ir_] == "-" or rule_[ir_] == "!" or rule_[ir_].isalpha() and ir_== lr_:
+                out_ = out_ + out0_
+                break
+            out0_ = out0_ + rule_[ir_]
+            if ir_ &lt; lr_:
+                ir_ += 1
+            else:
+                break
+            if ir_ &gt;= lr_:
+                break
 return out_
 
 $BODY$;
