@@ -2,7 +2,7 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-23T19:08:28.678Z
+date: 2023-01-23T19:19:41.111Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
@@ -10,19 +10,17 @@ dateCreated: 2023-01-23T11:21:59.186Z
 
 <hr>
 <p><strong><u>Файлы</u>:</strong></p>
-<p><strong>/etc/RU/..</strong></p>
-<p><i><strong>load_russian_ip.ru</strong></i> ... загрузка ip масок с RIPE</p>
-<p><i><strong>ipcalc.pl</strong></i> ............ служебная программа ip-калькулятора для load_russian_ip.ru</p>
-<p><i><strong>ipset.cron</strong></i> ........... сохранение настроек ipset &nbsp;и перезапуск скрипта в случае падения</p>
-<p><i><strong>ipset.logrotatie</strong></i> ..... ротация логов</p>
-<p><i><strong>iptabless.sh</strong></i> ......... iptables правило</p>
-<p><i><strong>start.sh</strong></i> ............. запуск авто-обновления Росииских масок в ipset</p>
-<p><i><strong>whois.sh</strong></i> ............. служебная программа для start_tail.sh</p>
-<p><strong>/etc/RU/soft/CentOS-6</strong></p>
-<p>&nbsp; &nbsp; &nbsp;&nbsp;<i><strong> ipset-6.11-4.el6.x86_64.rpm</strong></i></p>
-<p><i>&nbsp; &nbsp; &nbsp; &nbsp;<strong>jq-1.3-2.el6.x86_64.rpm</strong></i></p>
-<p><i>&nbsp; &nbsp; &nbsp; &nbsp;<strong>libmnl-1.0.2-3.el6.x86_64.rpm</strong></i></p>
-<p><i>&nbsp; &nbsp; &nbsp; &nbsp;<strong>whois-5.5.1-1.el6.x86_64.rpm</strong></i></p>
-<p><i>&nbsp; &nbsp; &nbsp; &nbsp;<strong>whois-nls-5.5.1-1.el6.noarch.rpm</strong></i></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p><strong>/etc/RU/…</strong>
+<em><strong>load_russian_ip.ru</strong></em> … загрузка ip масок с RIPE
+<em><strong><a class="is-external-link" href="http://ipcalc.pl">ipcalc.pl</a></strong></em> … служебная программа ip-калькулятора для load_russian_ip.ru
+<em><strong>ipset.cron</strong></em> … сохранение настроек ipset &nbsp;и перезапуск скрипта в случае падения
+<em><strong>ipset.logrotatie</strong></em> … ротация логов
+<em><strong><a class="is-external-link" href="http://iptabless.sh">iptabless.sh</a></strong></em> … iptables правило
+<em><strong><a class="is-external-link" href="http://start.sh">start.sh</a></strong></em> … запуск авто-обновления Росииских масок в ipset
+<em><strong><a class="is-external-link" href="http://whois.sh">whois.sh</a></strong></em> … служебная программа для start_tail.sh
+<strong>/etc/RU/soft/CentOS-6</strong>
+&nbsp; &nbsp; &nbsp;&nbsp; <em><strong>ipset-6.11-4.el6.x86_64.rpm</strong></em>
+&nbsp; &nbsp; &nbsp; &nbsp;<em><strong>jq-1.3-2.el6.x86_64.rpm</strong></em>
+&nbsp; &nbsp; &nbsp; &nbsp;<em><strong>libmnl-1.0.2-3.el6.x86_64.rpm</strong></em>
+&nbsp; &nbsp; &nbsp; &nbsp;<em><strong>whois-5.5.1-1.el6.x86_64.rpm</strong></em>
+&nbsp; &nbsp; &nbsp; &nbsp;<em><strong>whois-nls-5.5.1-1.el6.noarch.rpm</strong></em></p>
