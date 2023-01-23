@@ -2,21 +2,21 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-23T19:01:51.884Z
+date: 2023-01-23T19:05:56.809Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
 -->
 
 <hr>
-<p><strong>Файлы:</strong></p>
-<p>load_russian_ip.ru ... загрузка ip масок с RIPE</p>
-<p>ipcalc.pl ............ служебная программа ip-калькулятора для load_russian_ip.ru</p>
-<p>ipset.cron ........... сохранение настроек ipset</p>
-<p>ipset.logrotatie ..... ротация логов</p>
-<p>iptabless.sh ......... iptables правило</p>
-<p>start.sh ............. запуск авто-обновления Росииских масок в ipset</p>
-<p>whois.sh ............. служебная программа для start_tail.sh</p>
+<p><strong><u>Файлы</u>:</strong></p>
+<p><i><strong>load_russian_ip.ru</strong></i> ... загрузка ip масок с RIPE</p>
+<p><i><strong>ipcalc.pl</strong></i> ............ служебная программа ip-калькулятора для load_russian_ip.ru</p>
+<p><i><strong>ipset.cron</strong></i> ........... сохранение настроек ipset &nbsp;и перезапуск скрипта в случае падения</p>
+<p><i><strong>ipset.logrotatie</strong></i> ..... ротация логов</p>
+<p><i><strong>iptabless.sh</strong></i> ......... iptables правило</p>
+<p><i><strong>start.sh</strong></i> ............. запуск авто-обновления Росииских масок в ipset</p>
+<p><i><strong>whois.sh</strong></i> ............. служебная программа для start_tail.sh</p>
 <p>/etc/RU/soft/CentOS-6</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;ipset-6.11-4.el6.x86_64.rpm</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;jq-1.3-2.el6.x86_64.rpm</p>
