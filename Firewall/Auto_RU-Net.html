@@ -2,7 +2,7 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-23T18:31:49.307Z
+date: 2023-01-23T18:33:09.029Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
@@ -15,117 +15,117 @@ dateCreated: 2023-01-23T11:21:59.186Z
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>root@pbx1:/etc/RU# cat load_russian_ip.ru</p>
-<p>#!/bin/sh</p>
-<p>IPTABLES=/sbin/iptables</p>
-<p>#IPSET=/usr/sbin/ipset &nbsp; &nbsp; &nbsp;### CentOS&nbsp;</p>
-<p>IPSET=/sbin/ipset &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;### Debian</p>
-<p>WGET=/usr/bin/wget</p>
-<p>EGREP=/bin/egrep</p>
-<p>GREP=/bin/grep</p>
-<p>CAT=/bin/cat</p>
-<p>SED=/bin/sed</p>
-<p>CURL=/usr/bin/curl</p>
-<p>GZIP=/bin/gzip</p>
-<p>IPCALC=/etc/RU/ipcalc.pl</p>
-<p>JQ=/usr/bin/jq</p>
-<p>BDDIR=/etc/RU</p>
-<p>timestamp=$(date "+%Y-%m")</p>
-<p>FILE=$BDDIR/$timestamp-ipcalc.ipv4</p>
-<p>#FIPSET=$BDDIR/$timestamp-ipset_ru.ipv4</p>
-<p>FIPSET=/var/log/ipset_ru-$timestamp.ipv4</p>
 <p>&nbsp;</p>
-<p>echo "[1]"</p>
-<p>cd $BDDIR</p>
-<p>#1#$WGET -q "https://download.db-ip.com/free/dbip-country-lite-$timestamp.csv.gz" -O- | \</p>
-<p>#1# &nbsp; &nbsp;$GZIP -cd &gt;$timestamp-dbip-country-lite.csv &amp;&amp; $CAT $timestamp-dbip-country-lite.csv | \</p>
-<p>#1# &nbsp; &nbsp;$GREP ',RU' | $SED 's/\,RU//g' | $SED 's/\,/-/g' | $GREP '\.' &gt; $FILE</p>
-<p>&nbsp;</p>
-<p>#2#$WGET -q "http://www.ipdeny.com/ipblocks/data/countries/ru.zone" -O $FIPSET</p>
-<p>&nbsp;</p>
-<p>if [ -s $FIPSET ]; then</p>
-<p>&nbsp; &nbsp; rm -f $FIPSET</p>
-<p>fi</p>
-<p>&nbsp;</p>
-<p>if [ -s $FIPSET.tmp ]; then</p>
-<p>&nbsp; &nbsp; rm -f $FIPSET.tmp</p>
-<p>fi</p>
-<p>&nbsp;</p>
-<p>$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET.tmp</p>
-<p>if [ -s $FIPSET.tmp ]; then</p>
-<p>&nbsp; &nbsp; for i in $(cat $FIPSET.tmp)</p>
-<p>&nbsp; &nbsp; do</p>
-<p>&nbsp;echo "&gt; $i"</p>
-<p>&nbsp;$IPCALC -b $i | $GREP '/' | $GREP -v 'Class' | awk '{print $2}' &gt;&gt; $FIPSET</p>
-<p>&nbsp; &nbsp; done</p>
-<p>&nbsp; &nbsp; rm -f $FIPSET.tmp</p>
-<p>else</p>
-<p>&nbsp; &nbsp; exit -1</p>
-<p>fi</p>
-<p>&nbsp;</p>
-<p>#1#if [ -f $FILE ]; then</p>
-<p>#1# &nbsp; &nbsp;if [ -s $FILE ]; then</p>
-<p>#1# echo "[2]"</p>
-<p>#1# /usr/bin/perl -MNet::CIDR=range2cidr -lne 'print for range2cidr $_' $FILE &gt; $FIPSET</p>
-<p>&nbsp;</p>
-<p>if [ -f $FIPSET ]; then</p>
-<p>&nbsp; &nbsp; if [ -s $FIPSET ]; then</p>
-<p>&nbsp;</p>
-<p>&nbsp;echo "[3]"</p>
-<p>&nbsp;$IPSET -q create russia_run hash:net</p>
-<p>&nbsp;echo "[4]"</p>
-<p>&nbsp;$IPSET -q create russia_old hash:net</p>
-<p>&nbsp;echo "[5]"</p>
-<p>&nbsp;$IPSET -q flush russia_old</p>
-<p>&nbsp;echo "[6]"</p>
-<p>&nbsp;$IPSET -q swap russia_run russia_old</p>
-<p>&nbsp;echo "[7]"</p>
-<p>&nbsp;for ippermitir in $($CAT $FIPSET)</p>
-<p>&nbsp;do</p>
-<p>&nbsp; &nbsp; &nbsp;$IPSET -q add russia_run $ippermitir</p>
-<p>&nbsp;done</p>
-<p>&nbsp;echo "[8]"</p>
-<p>&nbsp;$IPSET -q add russia_run 10.0.0.0/8</p>
-<p>&nbsp;$IPSET -q add russia_run 172.16.0.0/12</p>
-<p>&nbsp;$IPSET -q add russia_run 192.168.0.0/16</p>
-<p>&nbsp;</p>
-<p>&nbsp;$IPSET add russia_run 31.148.12.0/22</p>
-<p>&nbsp;$IPSET add russia_run 37.230.147.0/24</p>
-<p>&nbsp;$IPSET add russia_run 45.137.104.0/24</p>
-<p>&nbsp;$IPSET add russia_run 46.8.32.0/24</p>
-<p>&nbsp;$IPSET add russia_run 46.8.140.0/24</p>
-<p>&nbsp;$IPSET add russia_run 46.243.179.0/24</p>
-<p>&nbsp;$IPSET add russia_run 77.243.83.0/24</p>
-<p>&nbsp;$IPSET add russia_run 92.38.86.0/23</p>
-<p>&nbsp;$IPSET add russia_run 92.253.219.0/24</p>
-<p>&nbsp;$IPSET add russia_run 93.170.246.0/23</p>
-<p>&nbsp;$IPSET add russia_run 93.171.32.0/23</p>
-<p>&nbsp;$IPSET add russia_run 95.46.120.0/23</p>
-<p>&nbsp;$IPSET add russia_run 95.47.180.0/22</p>
-<p>&nbsp;$IPSET add russia_run 109.248.61.0/24</p>
-<p>&nbsp;$IPSET add russia_run 109.248.225.0/24</p>
-<p>&nbsp;$IPSET add russia_run 109.248.245.0/24</p>
-<p>&nbsp;$IPSET add russia_run 141.101.178.0/24</p>
-<p>&nbsp;$IPSET add russia_run 176.96.229.0/24</p>
-<p>&nbsp;$IPSET add russia_run 176.118.212.0/24</p>
-<p>&nbsp;$IPSET add russia_run 178.170.206.0/24</p>
-<p>&nbsp;$IPSET add russia_run 178.219.36.0/23</p>
-<p>&nbsp;$IPSET add russia_run 185.43.8.0/22</p>
-<p>&nbsp;$IPSET add russia_run 185.130.104.0/24</p>
-<p>&nbsp;$IPSET add russia_run 185.143.223.0/24</p>
-<p>&nbsp;$IPSET add russia_run 185.164.149.0/24</p>
-<p>&nbsp;$IPSET add russia_run 185.180.199.0/24</p>
-<p>&nbsp;$IPSET add russia_run 185.209.160.0/24</p>
-<p>&nbsp;$IPSET add russia_run 194.87.92.0/22</p>
-<p>&nbsp;$IPSET add russia_run 195.211.120.0/24</p>
-<p>&nbsp;</p>
-<p>&nbsp; &nbsp; fi</p>
-<p>fi</p>
-<p>&nbsp;</p>
-<p>#1# &nbsp; &nbsp;fi</p>
-<p>#1#fi</p>
-<p>&nbsp;</p>
-<p>echo "[stop]"</p>
-<p>exit 0</p>
+<pre><code class="language-plaintext">#!/bin/sh
+IPTABLES=/sbin/iptables
+#IPSET=/usr/sbin/ipset      ### CentOS 
+IPSET=/sbin/ipset                ### Debian
+WGET=/usr/bin/wget
+EGREP=/bin/egrep
+GREP=/bin/grep
+CAT=/bin/cat
+SED=/bin/sed
+CURL=/usr/bin/curl
+GZIP=/bin/gzip
+IPCALC=/etc/RU/ipcalc.pl
+JQ=/usr/bin/jq
+BDDIR=/etc/RU
+timestamp=$(date "+%Y-%m")
+FILE=$BDDIR/$timestamp-ipcalc.ipv4
+#FIPSET=$BDDIR/$timestamp-ipset_ru.ipv4
+FIPSET=/var/log/ipset_ru-$timestamp.ipv4
+
+echo "[1]"
+cd $BDDIR
+#1#$WGET -q "https://download.db-ip.com/free/dbip-country-lite-$timestamp.csv.gz" -O- | \
+#1#    $GZIP -cd &gt;$timestamp-dbip-country-lite.csv &amp;&amp; $CAT $timestamp-dbip-country-lite.csv | \
+#1#    $GREP ',RU' | $SED 's/\,RU//g' | $SED 's/\,/-/g' | $GREP '\.' &gt; $FILE
+
+#2#$WGET -q "http://www.ipdeny.com/ipblocks/data/countries/ru.zone" -O $FIPSET
+
+if [ -s $FIPSET ]; then
+    rm -f $FIPSET
+fi
+
+if [ -s $FIPSET.tmp ]; then
+    rm -f $FIPSET.tmp
+fi
+
+$CURL -k http://stat.ripe.net/data/country-resource-list/data.json?resource=ru | $JQ -c '.data.resources.ipv4[]' | $SED 's/\"//g' &gt; $FIPSET.tmp
+if [ -s $FIPSET.tmp ]; then
+    for i in $(cat $FIPSET.tmp)
+    do
+ echo "&gt; $i"
+ $IPCALC -b $i | $GREP '/' | $GREP -v 'Class' | awk '{print $2}' &gt;&gt; $FIPSET
+    done
+    rm -f $FIPSET.tmp
+else
+    exit -1
+fi
+
+#1#if [ -f $FILE ]; then
+#1#    if [ -s $FILE ]; then
+#1# echo "[2]"
+#1# /usr/bin/perl -MNet::CIDR=range2cidr -lne 'print for range2cidr $_' $FILE &gt; $FIPSET
+
+if [ -f $FIPSET ]; then
+    if [ -s $FIPSET ]; then
+
+ echo "[3]"
+ $IPSET -q create russia_run hash:net
+ echo "[4]"
+ $IPSET -q create russia_old hash:net
+ echo "[5]"
+ $IPSET -q flush russia_old
+ echo "[6]"
+ $IPSET -q swap russia_run russia_old
+ echo "[7]"
+ for ippermitir in $($CAT $FIPSET)
+ do
+     $IPSET -q add russia_run $ippermitir
+ done
+ echo "[8]"
+ $IPSET -q add russia_run 10.0.0.0/8
+ $IPSET -q add russia_run 172.16.0.0/12
+ $IPSET -q add russia_run 192.168.0.0/16
+
+ $IPSET add russia_run 31.148.12.0/22
+ $IPSET add russia_run 37.230.147.0/24
+ $IPSET add russia_run 45.137.104.0/24
+ $IPSET add russia_run 46.8.32.0/24
+ $IPSET add russia_run 46.8.140.0/24
+ $IPSET add russia_run 46.243.179.0/24
+ $IPSET add russia_run 77.243.83.0/24
+ $IPSET add russia_run 92.38.86.0/23
+ $IPSET add russia_run 92.253.219.0/24
+ $IPSET add russia_run 93.170.246.0/23
+ $IPSET add russia_run 93.171.32.0/23
+ $IPSET add russia_run 95.46.120.0/23
+ $IPSET add russia_run 95.47.180.0/22
+ $IPSET add russia_run 109.248.61.0/24
+ $IPSET add russia_run 109.248.225.0/24
+ $IPSET add russia_run 109.248.245.0/24
+ $IPSET add russia_run 141.101.178.0/24
+ $IPSET add russia_run 176.96.229.0/24
+ $IPSET add russia_run 176.118.212.0/24
+ $IPSET add russia_run 178.170.206.0/24
+ $IPSET add russia_run 178.219.36.0/23
+ $IPSET add russia_run 185.43.8.0/22
+ $IPSET add russia_run 185.130.104.0/24
+ $IPSET add russia_run 185.143.223.0/24
+ $IPSET add russia_run 185.164.149.0/24
+ $IPSET add russia_run 185.180.199.0/24
+ $IPSET add russia_run 185.209.160.0/24
+ $IPSET add russia_run 194.87.92.0/22
+ $IPSET add russia_run 195.211.120.0/24
+    fi
+fi
+
+#1#    fi
+#1#fi
+
+echo "[stop]"
+exit 0</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
