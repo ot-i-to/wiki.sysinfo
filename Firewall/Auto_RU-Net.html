@@ -2,7 +2,7 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-25T12:08:21.360Z
+date: 2023-01-25T12:14:19.169Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
@@ -29,7 +29,7 @@ dateCreated: 2023-01-23T11:21:59.186Z
 <ul>
   <li><strong>ip.new</strong> … используется для хранения уникальных IP</li>
   <li><strong>ipset.add</strong> … суда пишится информация о добавленных масках пулов IP адресов</li>
-  <li><strong>[год-месяц-день]-count.whois</strong> … используется для контрольного счетчика кол-во обращений в сутки через <i>whois</i>, т.к. дейстует ограничение на 1000 запросов информации с одного IP. Если привысить, то ваш IP будет заблокирован на сутки. А если это повторится 3 раза, то на всегда :(</li>
+  <li><strong>[год-месяц-день]-count.whois</strong> … используется для контрольного счетчика кол-во обращений в сутки через <i>whois</i>, т.к. дейстует ограничение на 1000 запросов информации с одного IP. Если привысить, то ваш IP будет заблокирован на сутки. А если это повторится 3 раза, то на всегда :(<br>Более подробная информация смотри <a href="https://www.ripe.net/manage-ips-and-asns/db/support/documentation/ripe-database-acceptable-use-policy/ripe-database-acceptable-use-policy">тут</a> в разделе <strong>Limits </strong>пункте <strong>Query service.</strong></li>
 </ul>
 <hr>
 <p><strong><u>Требуемые для работы утилиты:</u></strong></p>
