@@ -2,22 +2,22 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-25T07:46:57.137Z
+date: 2023-01-25T07:51:18.374Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
 -->
 
 <hr>
-<p><strong><u>Файлы</u>:</strong></p>
+<p><strong><u>Структура рабочей дириктории</u>:</strong></p>
 <p><strong>/etc/RU/..</strong>&nbsp;</p>
-<p><i><strong>load_russian_ip.ru</strong></i> … загрузка ip масок с RIPE&nbsp;</p>
+<p><a href="/files/load_russian_ip.ru"><i><strong>load_russian_ip.ru</strong></i></a> … загрузка ip масок с RIPE&nbsp;</p>
 <p><a href="/files/ipcalc.pl"><i><strong>ipcalc.pl</strong></i></a> … служебная программа ip-калькулятора для load_russian_ip.ru&nbsp;</p>
-<p><i><strong>ipset.cron</strong></i> … сохранение настроек ipset &nbsp;и перезапуск скрипта в случае падения</p>
-<p><i><strong>ipset.logrotatie</strong></i> … ротация логов&nbsp;</p>
-<p><i><strong>iptabless.sh</strong></i> … iptables правило&nbsp;</p>
-<p><i><strong>start.sh</strong></i> … запуск авто-обновления Росииских масок в ipset&nbsp;</p>
-<p><i><strong>whois.sh</strong></i> … служебная программа для start_tail.sh&nbsp;</p>
+<p><a href="/files/ipset.cron"><i><strong>ipset.cron</strong></i></a> … сохранение настроек ipset &nbsp;и перезапуск скрипта в случае падения</p>
+<p><a href="/files/ipset.logrotatie"><i><strong>ipset.logrotatie</strong></i></a> … ротация логов&nbsp;</p>
+<p><a href="/files/iptabless.sh"><i><strong>iptabless.sh</strong></i></a> … iptables правило&nbsp;</p>
+<p><a href="/files/start.sh"><i><strong>start.sh</strong></i></a> … запуск авто-обновления Росииских масок в ipset&nbsp;</p>
+<p><a href="/files/whois.sh"><i><strong>whois.sh</strong></i></a> … служебная программа для start_tail.sh&nbsp;</p>
 <p><strong>/etc/RU/soft/CentOS-6</strong> … тут лежат некоторые недостающие пакеты для системы CentOS.&nbsp;</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="/files/ipset-6.11-4.el6.x86_64.rpm"> <i><strong>ipset-6.11-4.el6.x86_64.rpm</strong></i></a></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="/files/jq-1.3-2.el6.x86_64.rpm"> <i><strong>jq-1.3-2.el6.x86_64.rpm</strong></i></a></p>
