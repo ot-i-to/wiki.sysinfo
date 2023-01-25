@@ -2,7 +2,7 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-25T12:02:23.080Z
+date: 2023-01-25T12:05:04.979Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
@@ -25,24 +25,24 @@ dateCreated: 2023-01-23T11:21:59.186Z
 <p>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="/files/whois-5.5.1-1.el6.x86_64.rpm"><i><strong>whois-5.5.1-1.el6.x86_64.rpm</strong></i></a></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="/files/whois-5.5.1-1.el6.x86_64.rpm"><i><strong>whois-nls-5.5.1-1.el6.noarch.rpm</strong></i></a></p>
 <hr>
-<p>Скрипт сождает следующие файлы в директории "/etc/RU" :</p>
+<p><strong><u>Скрипт сождает следующие файлы в директории "/etc/RU" :</u></strong></p>
 <ul>
   <li><strong>ip.new</strong> … используется для хранения уникальных IP&nbsp;</li>
   <li><strong>ipset.add</strong> … суда пишится информация о добавленных масках пулов IP адресов</li>
-  <li><strong>[год-месяц-день]-count.whois</strong> … используется для контрольного счетчика кол-во обращений в сутки через whois, т.к. дейстует ограничение на 1000 запросов информации в сутки. Если привысить, то ваш IP будет заблокирован на сутки. А если это повторится 3 раза, то на всегда :(</li>
+  <li><strong>[год-месяц-день]-count.whois</strong> … используется для контрольного счетчика кол-во обращений в сутки через <i>whois</i>, т.к. дейстует ограничение на 1000 запросов информации с одного IP в сутки. Если привысить, то ваш IP будет заблокирован на сутки. А если это повторится 3 раза, то на всегда :(</li>
 </ul>
 <hr>
 <p><strong><u>Требуемые для работы утилиты:</u></strong></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- ipset</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- whois</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- wget</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- egrep</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- iptables</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- jq</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- curl</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- gzip</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- grep</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- tail</span></p>
-<p><span style="font-family:Arial, Helvetica, sans-serif;">- perl</span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>ipset</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>whois</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>wget</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>egrep</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>iptables</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>jq</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>curl</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>gzip</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>grep</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>tail</i></code></span></p>
+<p><span style="font-family:Arial, Helvetica, sans-serif;">- <code><i>perl</i></code></span></p>
 <hr>
 <p><strong>Скачать одним файлом </strong><a href="/ru.tar.bz2"><strong>тут</strong></a><strong>.</strong></p>
