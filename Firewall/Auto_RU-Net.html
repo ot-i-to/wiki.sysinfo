@@ -2,7 +2,7 @@
 title: Скрипт листа IP Российской зоны
 description: Самообучающийся скрипт получения списка IP адресов Российской зоны для IPSET
 published: true
-date: 2023-01-25T11:51:02.465Z
+date: 2023-01-25T12:00:59.061Z
 tags: iptables, bash, shell, ipset, script, firewall, ru, inet, jq, whois, self-learning
 editor: ckeditor
 dateCreated: 2023-01-23T11:21:59.186Z
@@ -24,8 +24,15 @@ dateCreated: 2023-01-23T11:21:59.186Z
 <p>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="/files/libmnl-1.0.2-3.el6.x86_64.rpm"><i><strong>libmnl-1.0.2-3.el6.x86_64.rpm</strong></i></a></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="/files/whois-5.5.1-1.el6.x86_64.rpm"><i><strong>whois-5.5.1-1.el6.x86_64.rpm</strong></i></a></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="/files/whois-5.5.1-1.el6.x86_64.rpm"><i><strong>whois-nls-5.5.1-1.el6.noarch.rpm</strong></i></a></p>
-<p>&nbsp;</p>
-<p><strong><u>Дополнительные используемые программы / утилиты:</u></strong></p>
+<hr>
+<p>Скрипт сождает следующие файлы в директории "/etc/RU" :</p>
+<ul>
+  <li>ip.new … используется для хранения уникальных IP&nbsp;</li>
+  <li>ipset.add … суда пишится информация о добавленных масках пулов IP адресов</li>
+  <li>[дата]-count.whois … используется для контрольного счетчика кол-во обращений в сутки через whois, т.к. дейстует ограничение на 1000 запросов информации в сутки. Если привысить, то ваш IP будет заблокирован на сутки. А если это повторится 3 раза, то на всегда :(</li>
+</ul>
+<hr>
+<p><strong><u>Требуемые для работы утилиты:</u></strong></p>
 <p><span style="font-family:Arial, Helvetica, sans-serif;">- ipset</span></p>
 <p><span style="font-family:Arial, Helvetica, sans-serif;">- whois</span></p>
 <p><span style="font-family:Arial, Helvetica, sans-serif;">- wget</span></p>
