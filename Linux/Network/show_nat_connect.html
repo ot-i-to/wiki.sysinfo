@@ -1,0 +1,21 @@
+<!--
+title: Show NAT Connects
+description: Просмотр nat соединений
+published: true
+date: 2023-02-23T07:15:49.654Z
+tags: linux, nat, show, connect
+editor: ckeditor
+dateCreated: 2023-02-23T07:15:49.654Z
+-->
+
+<p>Для того, чтобы их посмотреть, можно установить&nbsp;conntrack:</p>
+<pre><code class="language-plaintext">sudo apt-get install&nbsp;conntrack</code></pre>
+<p><strong>Примеры использования:</strong></p>
+<p>Просмотр текущих соединений</p>
+<pre><code class="language-plaintext">conntrack -L</code></pre>
+<p>Просмотр всех <a href="https://pc.ru/docs/network/tcp">tcp</a> соединений на порт 80</p>
+<pre><code class="language-plaintext">conntrack -L -p tcp --dport 80</code></pre>
+<p>Просмотр в реальном времени всех соединений и их статуса</p>
+<pre><code class="language-plaintext">conntrack -E</code></pre>
+<p>Просмотр в реальном времени всех соединений для ip 192.168.0.10</p>
+<pre><code class="language-plaintext">conntrack -E | grep 192.168.0.10</code></pre>
