@@ -2,14 +2,18 @@
 title: Show NAT Connects
 description: Просмотр nat соединений
 published: true
-date: 2023-02-23T07:17:36.736Z
+date: 2023-02-23T07:30:25.719Z
 tags: linux, nat, show, connect
 editor: ckeditor
 dateCreated: 2023-02-23T07:15:49.654Z
 -->
 
 <p>Для того, чтобы их посмотреть, можно установить&nbsp;conntrack:</p>
-<pre><code class="language-plaintext">sudo apt-get install&nbsp;conntrack</code></pre>
+<pre><code class="language-plaintext">Debian/Ubuntu:
+sudo apt-get install&nbsp;conntrack
+
+RedHat/CentOS
+sudo dnf install conntrack-tools</code></pre>
 <p><strong>Примеры использования:</strong></p>
 <p>Просмотр текущих соединений</p>
 <pre><code class="language-plaintext">conntrack -L</code></pre>
