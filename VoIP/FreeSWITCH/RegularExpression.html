@@ -2,7 +2,7 @@
 title: Регулярные выражения
 description: Regular Expression в диалплане и т.д.
 published: true
-date: 2023-03-15T10:06:04.960Z
+date: 2023-03-15T10:29:22.814Z
 tags: freeswitch, dialplan, регулярные выражения, regular expression, configure
 editor: ckeditor
 dateCreated: 2023-03-15T10:01:30.826Z
@@ -92,6 +92,7 @@ dateCreated: 2023-03-15T10:01:30.826Z
 <pre><code class="language-plaintext">&lt;condition
  field="destination_number" expression="^+37529[13469]|+375447|0037529[13469]|00375447(\d{6})$"
 &gt;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">&lt;action
  application="bridge" data="sofia/gateway/gw_01/80$1"
 /&gt;</code></pre>
@@ -105,6 +106,7 @@ dateCreated: 2023-03-15T10:01:30.826Z
 <pre><code class="language-plaintext">&lt;condition
  field="destination_number" expression="^+37529[2578]|+375336|0037529[2578]|00375336(\d{6})$"
 &gt;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">&lt;action
  application="bridge" data="sofia/gateway/gw_01/80$1"
 /&gt;</code></pre>
@@ -117,6 +119,7 @@ dateCreated: 2023-03-15T10:01:30.826Z
 <pre><code class="language-plaintext">&lt;condition
  field="destination_number" expression="^+37525|0037525(\d{7})$"
 &gt;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">&lt;action
  application="bridge" data="sofia/gateway/gw_01/80$1"
 /&gt;</code></pre>
@@ -139,6 +142,7 @@ dateCreated: 2023-03-15T10:01:30.826Z
 <pre><code class="language-plaintext">&lt;condition
  field="destination_number" expression="^+375|00375(1[567]|2[1234]\d{7})$"
 &gt;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">&lt;action
  application="bridge" data="sofia/gateway/gw_01/80$1"
 /&gt;</code></pre>
@@ -171,4 +175,4 @@ dateCreated: 2023-03-15T10:01:30.826Z
 <p style="text-align:justify;"><strong>{6}</strong> - определяет число вхождений для предыдущего выражения, т.е. ровно 6 цифрам в диапазоне 0-9. Это также может содержать переменное число вхождений, например, чтобы соответствовать последовательность 6 до 9 цифр: {6,9}; или соответствовать по крайней мере 6 без максимального: {6};</p>
 <p style="text-align:justify;"><strong>) </strong>- закрывает другой блок;</p>
 <p style="text-align:justify;"><strong>$</strong> - указывает на конец регулярного выражения (обязательно);</p>
-<p style="text-align:justify;"><span class="text-tiny">источник </span><a href="http://voiplab.by/wiki/freeswitch/78-regulyarnye-vyrazheniya-regular-expression-freeswitch"><span class="text-tiny">тут</span></a><span class="text-tiny"> :)</span></p>
+<p style="text-align:justify;"><span class="text-tiny">источник </span><a href="http://voiplab.by/wiki/freeswitch/78-regulyarnye-vyrazheniya-regular-expression-freeswitch"><span class="text-tiny">тут</span></a><span class="text-tiny"> :) &nbsp; … &nbsp; &nbsp;дополнения </span><a href="https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Examples/Regular-Expression/"><span class="text-tiny">тут</span></a></p>
