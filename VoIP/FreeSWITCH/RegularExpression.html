@@ -1,0 +1,212 @@
+<!--
+title: Регулярные выражения
+description: Regular Expression в диалплане и т.д.
+published: true
+date: 2023-03-15T10:01:30.826Z
+tags: freeswitch, dialplan, регулярные выражения, regular expression, configure
+editor: ckeditor
+dateCreated: 2023-03-15T10:01:30.826Z
+-->
+
+<p style="text-align:justify;">XML Диалплан <a href="http://voiplab.by/wiki/freeswitch/26-freeswitch-setting-possibilities">FreeSWITCH</a> широко использует Perl-совместимые регулярные&nbsp;выражения (PCRE). Результатом выполнения регулярного выражения является true/false на строку символов, это обычно называется сопоставление с образцом.&nbsp;Perl-совместимые регулярные выражения следуют очень особому синтаксису.&nbsp;Как только вы познакомитесь с основами синтаксиса, вы сможете оценить, насколько они сильны. Ниже приведены некоторые примеры регулярных выражений и их значения:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>Шаблон</th>
+        <th>Значение</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>123</td>
+        <td>Любая строка, содержащая последовательность"123"</td>
+      </tr>
+      <tr>
+        <td>^123</td>
+        <td>Любая строка, начинающаяся с цифр "123"</td>
+      </tr>
+      <tr>
+        <td>123$</td>
+        <td>Любая строка, заканчивающийся с последовательностью "123"</td>
+      </tr>
+      <tr>
+        <td>^123$</td>
+        <td>Любая строка, в точности повторяющая последовательность "123"</td>
+      </tr>
+      <tr>
+        <td>\d</td>
+        <td>Совпадение одной цифры (0-9)</td>
+      </tr>
+      <tr>
+        <td>\d\d</td>
+        <td>Совпадение двух последовательных цифр</td>
+      </tr>
+      <tr>
+        <td>^\d\d\d$</td>
+        <td>Любая строка которая имеет длину ровно 3 цифры</td>
+      </tr>
+      <tr>
+        <td>^\d{7}$</td>
+        <td>Любая строка которая имеет длину ровно 7 цифр</td>
+      </tr>
+      <tr>
+        <td>^(\d{7})$</td>
+        <td>Любая строка которая имеет длину ровно 7 цифр и сохраняет соответствующее значение в специальную переменную $1&nbsp;</td>
+      </tr>
+      <tr>
+        <td>^1?(\d{10})$</td>
+        <td>Соответствие любой строке, которая начинается с цифры "1" и содержит дополнительные десять цифр, сохраняет десять цифр в $1&nbsp;</td>
+      </tr>
+      <tr>
+        <td>1^(3\d\d\d)$</td>
+        <td>Соответствует любой строке из 4 цифр, которая начинается с цифры "3", и сохранить согласованный значение в $1</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p style="text-align:justify;">Соответствующие пункты в скобках отображены в переменную последовательность под названиями $1, $2 и т.д. $0 содержащую весь шаблон.</p>
+<p><strong>Любая строка из ровно семи цифр:</strong></p>
+<p>^(\d{7})$
+  Пример: 5551212 будет соответствовать $1 с "5551212"
+  &nbsp; &nbsp; &nbsp; &nbsp;95551212 не будет соответствовать (последовательность цифр слишком длинная) &nbsp; &nbsp; &nbsp; &nbsp;
+  &nbsp; &nbsp; &nbsp; &nbsp;555121A не будет соответствовать (альфа-символы не допускаются)</p>
+<p><strong>Любая строка из ровно 10 цифр:</strong></p>
+<p>^(\d{10})$
+  Пример: 8005551212 будет соответствовать $1 имеющий "8005551212"
+  &nbsp; &nbsp; &nbsp; &nbsp;18005551212 не будет соответствовать (последовательность цифр слишком длинная)</p>
+<p><strong>Любая строка из ровно 11 цифр:</strong></p>
+<p>^(\d{11})$
+  Пример: 18005551212 будет соответствовать $1 имеющий "18005551212"
+  &nbsp; &nbsp; &nbsp; &nbsp;8005551212 не будет соответствовать (последовательность цифр слишком</p>
+<p><strong>Строка с префиксом 9 и 11 дополнительных цифр:</strong></p>
+<p>^9(\d{11})$
+  Пример: 918005551212 будет соответствовать $1 имеющий "18005551212"
+  &nbsp; &nbsp; &nbsp; &nbsp;8005551212 не будет соответствовать (последовательность цифр слишком короткая)</p>
+<p><strong>Любая строка с точностью 3 или 4 цифры:</strong></p>
+<p>(^\d{4}$|^\d{3}$)
+  Пример: 1001 будет соответствовать $1 имеющий "1001"
+  &nbsp; &nbsp; &nbsp; &nbsp;102 будет соответствовать $1 имеющий "102"
+  &nbsp; &nbsp; &nbsp; &nbsp;*9999 не будет соответствовать
+  &nbsp; &nbsp; &nbsp; &nbsp;*98 не будет соответствовать</p>
+<p><strong>Любая строка от 3 до 5 цифр:</strong></p>
+<p>(^\d{3,5}$)
+  Пример: 10010 будет соответствовать $1 имеющий "10010"
+  &nbsp; &nbsp; &nbsp; &nbsp;102 будет соответствовать $1 имеющий "102"
+  &nbsp; &nbsp; &nbsp; &nbsp;*9999 не будет соответствовать
+  &nbsp; &nbsp; &nbsp; &nbsp;*98 не будет соответствовать</p>
+<p><strong>Переменное количество цифр после префикса '9':</strong></p>
+<p>^9(\d+)$
+  Пример: 977 будет соответствовать ($1 = 77)
+  &nbsp; &nbsp; &nbsp; &nbsp;877 не будет соответствовать
+  &nbsp; &nbsp; &nbsp; &nbsp;966736 будет соответствовать ($1 = 66736)
+  &nbsp; &nbsp; &nbsp; &nbsp;9118299983 будет соответствовать ($1 = 118299983)
+  &nbsp; &nbsp; &nbsp; &nbsp;9 не будет соответствовать (+ означает один или более)</p>
+<p style="text-align:justify;"><i><strong>&nbsp;</strong></i></p>
+<p style="text-align:justify;"><i><strong>Делаем шаблоны номеров операторов Беларуси</strong></i></p>
+<p style="text-align:justify;"><strong>Velcom</strong></p>
+<ul>
+  <li style="text-align:justify;">код<strong> +375 29 </strong>или<strong> 8029</strong>&nbsp;для номеров&nbsp;<strong>6</strong>хх хх хх,<strong> 3</strong>хх хх хх,<strong> 1</strong>хх хх хх,<strong> 9</strong>хх хх хх,<strong>&nbsp;4</strong>хх хх хх;</li>
+  <li style="text-align:justify;">код<strong> +375 44&nbsp;</strong>или<strong> 8044 </strong>для номеров&nbsp;<strong>7</strong>хх хх хх.</li>
+</ul>
+<p>^(8029[13469]|80447|+37529[13469]|+375447|0037529[13469]|00375447\d{6})$</p>
+<p>Или шаблон замены префикса кода +375 на 80</p>
+<p><strong>&lt;condition</strong></p>
+<p>&nbsp;field="destination_number" expression="^+37529[13469]|+375447|0037529[13469]|00375447(\d{6})$"</p>
+<p><strong>&gt;</strong></p>
+<p>
+</p>
+<p><strong>&lt;action</strong></p>
+<p>&nbsp;application="bridge" data="sofia/gateway/gw_01/80$1"</p>
+<p><strong>/&gt;</strong></p>
+<p><strong>МТС</strong></p>
+<ul>
+  <li style="text-align:justify;">код<strong> +375 29 </strong>или<strong> 8029</strong>&nbsp;для номеров&nbsp;<strong>2</strong>xx&nbsp;xx&nbsp;xx<strong>, 5</strong>xx&nbsp;xx&nbsp;xx<strong>, 7</strong>xx&nbsp;xx&nbsp;xx<strong>, 8</strong>xx&nbsp;xx&nbsp;xx;</li>
+  <li style="text-align:justify;">код<strong> +375 33 </strong>или<strong> 8033</strong>&nbsp;для номеров&nbsp;<strong>6</strong>хх хх хх.</li>
+</ul>
+<p>^(8029[2578]|80336|+37529[2578]|+375336|0037529[2578]|00375336\d{6})$</p>
+<p>Или шаблон замены префикса кода +375 на 80</p>
+<p><strong>&lt;condition</strong></p>
+<p>&nbsp;field="destination_number" expression="^+37529[2578]|+375336|0037529[2578]|00375336(\d{6})$"</p>
+<p><strong>&gt;</strong></p>
+<p>
+</p>
+<p><strong>&lt;action</strong></p>
+<p>&nbsp;application="bridge" data="sofia/gateway/gw_01/80$1"</p>
+<p><strong>/&gt;</strong></p>
+<p><strong>Life</strong></p>
+<ul>
+  <li>код<strong> +375 25</strong>&nbsp;или<strong> 8025</strong>&nbsp;для номеров &nbsp;xхх хх хх.</li>
+</ul>
+<p>^(8025|+37525\d{7})$</p>
+<p>Или шаблон замены префикса кода +375 на 80</p>
+<p><strong>&lt;condition</strong></p>
+<p>&nbsp;field="destination_number" expression="^+37525|0037525(\d{7})$"</p>
+<p><strong>&gt;</strong></p>
+<p>
+</p>
+<p><strong>&lt;action</strong></p>
+<p>&nbsp;application="bridge" data="sofia/gateway/gw_01/80$1"</p>
+<p><strong>/&gt;</strong></p>
+<p style="text-align:justify;"><strong>Белтелеком</strong></p>
+<ul>
+  <li style="text-align:justify;">код<strong> +375 24 </strong>или&nbsp;<strong>8024</strong>&nbsp;для номеров &nbsp;xхх хх хх – Максифон</li>
+  <li style="text-align:justify;">код<strong> +375 15 </strong>или&nbsp;<strong>8015</strong>&nbsp;для номеров &nbsp;xхх хх хх – Гродненская область</li>
+  <li style="text-align:justify;">код<strong> +375 16 </strong>или&nbsp;<strong>8016</strong>&nbsp;для номеров &nbsp;xхх хх хх – Брестская область</li>
+  <li style="text-align:justify;">код<strong> +375 17 </strong>или&nbsp;<strong>8017</strong>&nbsp;для номеров &nbsp;xхх хх хх – Минская область</li>
+  <li style="text-align:justify;">код<strong> +375 21 </strong>или&nbsp;<strong>8021</strong>&nbsp;для номеров &nbsp;xхх хх хх – Витебская область</li>
+  <li style="text-align:justify;">код<strong> +375 22</strong> или&nbsp;<strong>8022</strong>&nbsp;для номеров &nbsp;xхх хх хх – Могилёвская область</li>
+  <li style="text-align:justify;">код<strong> +375 23 </strong>или&nbsp;<strong>8023</strong>&nbsp;для номеров &nbsp;xхх хх хх – Гомельская область</li>
+</ul>
+<p style="text-align:justify;">Минск</p>
+<ul>
+  <li style="text-align:justify;">для номеров xхх хх хх</li>
+</ul>
+<p>^(801[567]|802[1234]\d{7})|\d{7})$</p>
+<p>И алгоритм замены префиксов кода +375 на 80</p>
+<p><strong>&lt;condition</strong></p>
+<p>&nbsp;field="destination_number" expression="^+375|00375(1[567]|2[1234]\d{7})$"</p>
+<p><strong>&gt;</strong></p>
+<p>
+</p>
+<p><strong>&lt;action</strong></p>
+<p>&nbsp;application="bridge" data="sofia/gateway/gw_01/80$1"</p>
+<p><strong>/&gt;</strong></p>
+<p style="text-align:justify;">Международные вызовы 810x</p>
+<p>^(810\d+)$</p>
+<p><i><strong>&nbsp;</strong></i></p>
+<p><i><strong>Захват значений</strong></i></p>
+<p style="text-align:justify;">Иногда необходимо, использовать скобки для группировки вариантов набор, для экономии записей шаблона. Поставьте <strong>вопросительный знак с двоеточием</strong> после открывающей скобки для достижения этой цели. Например, приведенный ниже, соответствует набранному "+" или "00", но соответствующие&nbsp; символы не сохраняются.&nbsp;</p>
+<p>^(?:\+|00)(\d+)$
+  Пример: +13171222222 совпадение и захват 13171222222 в $1
+  &nbsp; &nbsp; &nbsp; &nbsp; 0013171222222 совпадение и захват 13171222222 в $1</p>
+<p style="text-align:justify;">Следующий пример совпадает с набранным номером и сохраняет информацию на две части, как главных символы ($1) и номер телефона ($2).</p>
+<p>^(\+|00)(\d+)$
+  Пример: +13171222222 совпадение и захват + в $1 и 13171222222 в $2
+  &nbsp; &nbsp; &nbsp; &nbsp; 0013171222222 совпадение и захват 00 в $1 и 13171222222 в $2</p>
+<p style="text-align:justify;">Скобки могут быть вложенными. При попытке определить, какие переменная содержит соответствующую информацию, подсчет открывающей скобки слева направо. Первый блок в скобках хранить информацию в $1, второй блок в скобках будет сохранять информацию в $2 и так далее.</p>
+<p>^((\+|00)(\d+))$
+  Пример: +13171222222 совпадение и захват +13171222222 в $1, + в $2 и 13171222222 в $3
+  &nbsp; &nbsp; &nbsp; &nbsp; 0013171222222 совпадение и захват 0013171222222 в $1, 00 в $2 и 13171222222 в $3</p>
+<p style="text-align:justify;">В следующем примере, первый блок скобок не сохраняет любую информацию.</p>
+<p>^(?:(\+|00)(\d+))$
+  Пример: +13171222222 совпадение и захват + в $1 и 13171222222 в $2
+  &nbsp; &nbsp; &nbsp; &nbsp; 0013171222222 совпадение и захват 00 в $1 и 13171222222 в $2</p>
+<p style="text-align:justify;"><strong>&nbsp;</strong></p>
+<p style="text-align:justify;"><strong>Пример шаблона:</strong></p>
+<p>^(\+?1)?(8(00|44|55|66|77|88)[2-9]\d{6})$</p>
+<p style="text-align:justify;"><strong>^</strong> - указывает на начало регулярного выражения (обязательно);</p>
+<p style="text-align:justify;"><strong>(</strong> - указывает на начало блока регулярного выражения - &nbsp;в блоке важно определить внутренние выражение, чтобы в них можно было ссылаться на переменные $ 1, $ 2, $ 3, и т.д.;</p>
+<p style="text-align:justify;"><strong>\+1|1?</strong> - указывает "+1" или "1" необязательные цифры (знак ? определяет значение как необязательное);</p>
+<p style="text-align:justify;"><strong>)</strong> - закрывает блок;</p>
+<p style="text-align:justify;"><strong>8</strong> - соответствует символу '8';</p>
+<p style="text-align:justify;"><strong>(</strong> -&nbsp; открывает новый блок;</p>
+<p style="text-align:justify;"><strong>00|55|66|77|88</strong> - соответствует 00 или 55 или 66 или 77 или 88;</p>
+<p style="text-align:justify;"><strong>) </strong>- закрывает внутренний блок;</p>
+<p style="text-align:justify;"><strong>[2-9]</strong> - соответствует одной цифре в интервале от 2 до 9 (2, 3, 4, 5, 6, 7, 8 и 9), и как вы уже догадались пара скобок [ ] скобок охватывает определенный диапазон;</p>
+<p style="text-align:justify;">другие примеры диапазона: [0-9] соответствует 0 до 9; [a-z] соответствует a, b, c, ...z);</p>
+<p style="text-align:justify;"><strong>\d</strong> - соответствует любой допустимой цифре (такой же, как [0-9]);</p>
+<p style="text-align:justify;"><strong>{6}</strong> - определяет число вхождений для предыдущего выражения, т.е. ровно 6 цифрам в диапазоне 0-9. Это также может содержать переменное число вхождений, например, чтобы соответствовать последовательность 6 до 9 цифр: {6,9}; или соответствовать по крайней мере 6 без максимального: {6};</p>
+<p style="text-align:justify;"><strong>) </strong>- закрывает другой блок;</p>
+<p style="text-align:justify;"><strong>$</strong> - указывает на конец регулярного выражения (обязательно);</p>
+<p style="text-align:justify;"><span class="text-tiny">источник </span><a href="http://voiplab.by/wiki/freeswitch/78-regulyarnye-vyrazheniya-regular-expression-freeswitch"><span class="text-tiny">тут</span></a><span class="text-tiny"> :)</span></p>
