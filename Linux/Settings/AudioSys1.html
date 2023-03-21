@@ -2,7 +2,7 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:45:29.276Z
+date: 2023-03-21T18:47:13.260Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
@@ -120,14 +120,14 @@ $ pulseaudio --start
 </code></pre>
 <h3>5. Тормозит звук</h3>
 <p>Эта проблема возникает из-за неправильного размера буфера. Сначала убедитесь, что значение по умолчанию для переменных <code>default-fragments</code> и <code>default-fragment-size-msec</code> не изменено в файле <code>/etc/pulse/daemon.conf</code>. Если это не помогло, попробуйте установить этим переменным следующие значения:</p>
-<p>/etc/pulse/daemon.conf default-fragments = 5
-  default-fragment-size-msec = 2</p>
-<h3>5. Прерывистый/искажённый звук</h3>
+<pre><code class="language-plaintext">/etc/pulse/daemon.conf </code></pre>
+<pre><code class="language-plaintext">default-fragments = 5
+default-fragment-size-msec = 2</code></pre>
+<h3>6. Прерывистый/искажённый звук</h3>
 <p>Искажённый звук может быть вызван неправильно настроенной частотой дискретизации. Попробуйте следующие настройки:</p>
-<p>/etc/pulse/daemon.conf avoid-resampling = yes #(Необходимо для&nbsp;</p>
-<p><a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/11.0/">PA11</a></p>
-<p>&nbsp;или новее)
-  default-sample-rate = 48000</p>
+<pre><code class="language-plaintext">/etc/pulse/daemon.conf </code></pre>
+<pre><code class="language-plaintext">avoid-resampling = yes #(Необходимо для PA11 или новее)
+default-sample-rate = 48000</code></pre>
 <p>и перезапустите сервер PulseAudio.</p>
 <p>Если искажённый звук возникает в приложениях, использующих <a href="https://en.wikipedia.org/wiki/ru:OpenAL">OpenAL</a>, поменяйте частоту дискретизации в <code>/etc/openal/alsoft.conf</code>:</p>
 <p>/etc/openal/alsoft.conf frequency = 48000</p>
