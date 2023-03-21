@@ -2,25 +2,27 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:32:14.446Z
+date: 2023-03-21T18:37:18.381Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
 -->
 
-<h3>Глюки, пропуски или потрескивания</h3>
-<p>Более новая реализация звукового сервера PulseAudio использует звуковой планировщик на основе таймера, вместо традиционного подхода управления прерываниями.</p>
+<h3>1. Глюки, пропуски или потрескивания</h3>
+<p>Более новая реализация звукового сервера <strong>PulseAudio</strong> использует звуковой планировщик на основе таймера, вместо традиционного подхода управления прерываниями.</p>
 <p>Основанное на таймере планирование может представлять проблемы в некоторых драйверах ALSA. С другой стороны, другие драйверы могли бы глючить без него, проверьте и посмотрите что работает на вашей системе.</p>
 <p>Для выключения основанного на таймере планирования добавьте <code>tsched=0</code> в <code>/etc/pulse/default.pa</code>:</p>
-<p>/etc/pulse/default.pa load-module module-udev-detect tsched=0</p>
-<p>Затем перезапустите сервер PulseAudio:</p>
-<p>pulseaudio -k
-  pulseaudio --start
-</p>
+<pre><code class="language-plaintext">/etc/pulse/default.pa </code></pre>
+<pre><code class="language-plaintext">load-module module-udev-detect tsched=0</code></pre>
+<p>Затем перезапустите сервер <strong>PulseAudio</strong>:</p>
+<pre><code class="language-plaintext">pulseaudio -k
+pulseaudio --start
+</code></pre>
 <p>Наоборот, для включения основанного на таймере планирования, если он уже не включен по умолчанию.</p>
-<p>Если Вы используете Intel <a href="https://en.wikipedia.org/wiki/IOMMU">IOMMU</a> и испытываете глюки и/или пропуски, добавьте <code>intel_iommu=igfx_off</code> к Вашей командной строке ядра.</p>
+<p>Если Вы используете Intel <a href="https://ru.wikipedia.org/wiki/IOMMU">IOMMU</a> и испытываете глюки и/или пропуски, добавьте <code>intel_iommu=igfx_off</code> к Вашей командной строке ядра.</p>
 <p>Некоторым звуковым картам Intel использующим модуль <code>snd-hda-intel</code> нужны опции <code>vid=8086 pid=8ca0 snoop=0</code>. Для постоянной их установки создайте/измените следующий файл, включая строку ниже.</p>
-<p>/etc/modprobe.d/sound.conf options snd-hda-intel vid=8086 pid=8ca0 snoop=0</p>
+<pre><code class="language-plaintext">/etc/modprobe.d/sound.conf </code></pre>
+<pre><code class="language-plaintext">options snd-hda-intel vid=8086 pid=8ca0 snoop=0</code></pre>
 <p>Сообщите о любых таких картах <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Backends/ALSA/BrokenDrivers/">PulseAudio Broken Sound Driver page</a></p>
 <h3>Статический шум при использовании наушников</h3>
 <p>Если вы столкнулись со статическим шумом в разъеме наушников, одной из причин этому может быть петлевое смешивание (loopback mixing) ALSA. В дополнение к настройке <code>tsched=0</code> как описано выше, может помочь отключение петлевого смешивания (loopback mixing). Это легко можно сделать с помощью alsamixer, частью пакета <a href="https://archlinux.org/packages/?name=alsa-utils">alsa-utils</a>. Это не должно оказать негативного влияния на воспроизведение или запись звука, кроме случаев, когда петлевое смешивание вам обязательно нужно.</p>
