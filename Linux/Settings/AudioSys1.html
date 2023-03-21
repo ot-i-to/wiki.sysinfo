@@ -2,7 +2,7 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:47:13.260Z
+date: 2023-03-21T18:47:49.509Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
@@ -128,9 +128,10 @@ default-fragment-size-msec = 2</code></pre>
 <pre><code class="language-plaintext">/etc/pulse/daemon.conf </code></pre>
 <pre><code class="language-plaintext">avoid-resampling = yes #(Необходимо для PA11 или новее)
 default-sample-rate = 48000</code></pre>
-<p>и перезапустите сервер PulseAudio.</p>
+<p>и перезапустите сервер <strong>PulseAudio</strong>.</p>
 <p>Если искажённый звук возникает в приложениях, использующих <a href="https://en.wikipedia.org/wiki/ru:OpenAL">OpenAL</a>, поменяйте частоту дискретизации в <code>/etc/openal/alsoft.conf</code>:</p>
-<p>/etc/openal/alsoft.conf frequency = 48000</p>
+<pre><code class="language-plaintext">/etc/openal/alsoft.conf </code></pre>
+<pre><code class="language-plaintext">frequency = 48000</code></pre>
 <p>Установка PCM volume выше 0 dB может вызвать <a href="https://en.wikipedia.org/wiki/ru:%D0%9A%D0%BB%D0%B8%D0%BF%D0%BF%D0%B8%D0%BD%D0%B3_(%D0%B0%D1%83%D0%B4%D0%B8%D0%BE)">клиппинг</a>. Запуск <code>alsamixer</code> позволит вам обнаружить и исправить проблему. Обратите внимание, что ALSA может <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/PulseAudioStoleMyVolumes">некорректно экспортировать</a> информацию о dB в PulseAudio. Попробуйте следующее:</p>
 <p>/etc/pulse/default.pa load-module module-udev-detect ignore_dB=1</p>
 <p>и перезапустите сервер PulseAudio. Смотрите также <a href="https://wiki.archlinux.org/title/PulseAudio_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)/Troubleshooting_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#Нет_звука_ниже_определённого_уровня">#Нет звука ниже определённого уровня</a>.</p>
