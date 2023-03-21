@@ -2,7 +2,7 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:37:18.381Z
+date: 2023-03-21T18:38:50.033Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
@@ -24,10 +24,10 @@ pulseaudio --start
 <pre><code class="language-plaintext">/etc/modprobe.d/sound.conf </code></pre>
 <pre><code class="language-plaintext">options snd-hda-intel vid=8086 pid=8ca0 snoop=0</code></pre>
 <p>Сообщите о любых таких картах <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Backends/ALSA/BrokenDrivers/">PulseAudio Broken Sound Driver page</a></p>
-<h3>Статический шум при использовании наушников</h3>
-<p>Если вы столкнулись со статическим шумом в разъеме наушников, одной из причин этому может быть петлевое смешивание (loopback mixing) ALSA. В дополнение к настройке <code>tsched=0</code> как описано выше, может помочь отключение петлевого смешивания (loopback mixing). Это легко можно сделать с помощью alsamixer, частью пакета <a href="https://archlinux.org/packages/?name=alsa-utils">alsa-utils</a>. Это не должно оказать негативного влияния на воспроизведение или запись звука, кроме случаев, когда петлевое смешивание вам обязательно нужно.</p>
-<h3>Определение номера фрагмента по умолчанию и размера буфера в PulseAudio</h3>
-<h4>Отключение планирования, основанного на таймере (0/4)</h4>
+<h3>2. Статический шум при использовании наушников</h3>
+<p>Если вы столкнулись со статическим шумом в разъеме наушников, одной из причин этому может быть петлевое смешивание (loopback mixing) ALSA. В дополнение к настройке <code>tsched=0</code> как описано выше, может помочь отключение петлевого смешивания (loopback mixing). Это легко можно сделать с помощью alsamixer, частью пакета alsa-utils. Это не должно оказать негативного влияния на воспроизведение или запись звука, кроме случаев, когда петлевое смешивание вам обязательно нужно.</p>
+<h3>3. Определение номера фрагмента по умолчанию и размера буфера в PulseAudio</h3>
+<h4>3.1 Отключение планирования, основанного на таймере (0/4)</h4>
 <p>По умолчанию PulseAudio использует планирование, основанное на таймере. В этом режиме фрагменты совсем не используются, и игнорируются параметры default-fragments и default-fragment-size-msec parameters. Чтобы отключить планирование, основанное на таймере, добавьте <code>tsched=0</code> в <code>/etc/pulse/default.pa</code>:</p>
 <p>/etc/pulse/default.pa load-module module-udev-detect tsched=0</p>
 <h4>Поиск параметров вашего аудиоустройства (1/4)</h4>
