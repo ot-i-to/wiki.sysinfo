@@ -2,7 +2,7 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:19:17.155Z
+date: 2023-03-21T18:23:22.479Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
@@ -10,7 +10,7 @@ dateCreated: 2023-03-21T18:15:54.895Z
 
 <p>&nbsp;</p>
 <h2>Качество звука</h2>
-<h3>Глюки, пропуски или треск</h3>
+<h3>1. Глюки, пропуски или треск</h3>
 <p>Более новая реализация звукового сервера PulseAudio использует планирование звука на основе таймера вместо традиционного подхода, управляемого прерываниями.<br>Планирование на основе таймера может выявить проблемы в некоторых драйверах ALSA. С другой стороны, другие драйверы могут глючить без него, поэтому проверьте, что работает в вашей системе.</p>
 <p>Чтобы отключить планирование на основе таймера, добавьте <code>tsched=0</code> в <code>/etc/pulse/default.pa</code>:</p>
 <pre><code class="language-plaintext">/etc/pulse/default.pa load-module module-udev-detect tsched=0</code></pre>
@@ -19,9 +19,10 @@ dateCreated: 2023-03-21T18:15:54.895Z
 $ pulseaudio --start
 </code></pre>
 <p>Сделайте обратное, чтобы включить планирование на основе таймера, если оно еще не включено по умолчанию.</p>
-<p>Если вы используете Intel <a href="https://en.wikipedia.org/wiki/IOMMU">IOMMU</a> и испытываете сбои и/или пропуски, добавьте<code>intel_iommu=igfx_off</code> в командную строку вашего ядра.</p>
-<p>Some Intel audio cards using the <code>snd-hda-intel</code> module need the options <code>vid=8086 pid=8ca0 snoop=0</code>. In order to set them permanently, create/modify the following file including the line below.</p>
-<p>/etc/modprobe.d/sound.conf options snd-hda-intel vid=8086 pid=8ca0 snoop=0</p>
+<p>Если вы используете Intel <a href="https://ru.wikipedia.org/wiki/IOMMU">IOMMU</a> и испытываете сбои и/или пропуски, добавьте<code>intel_iommu=igfx_off</code> в командную строку вашего ядра.</p>
+<p>Некоторые звуковые карты Intel, использующие <code>snd-hda-intel</code> модулю нужны опции <code>vid=8086 pid=8ca0 snoop=0</code>. Чтобы установить их на постоянной основе, создайте/измените следующий файл, включая строку ниже.</p>
+<pre><code class="language-plaintext">/etc/modprobe.d/sound.conf </code></pre>
+<pre><code class="language-plaintext">options snd-hda-intel vid=8086 pid=8ca0 snoop=0</code></pre>
 <p>Please report any such cards to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Backends/ALSA/BrokenDrivers/">PulseAudio Broken Sound Driver page</a></p>
 <p>If you experience audio stuttering because of kernel page locking or late scheduling, see <a href="https://wiki.archlinux.org/title/Gaming#Tweaking_kernel_parameters_for_response_time_consistency">Gaming#Tweaking kernel parameters for response time consistency</a>.</p>
 <h3>Static noise when using headphones</h3>
