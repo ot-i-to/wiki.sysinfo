@@ -1,0 +1,104 @@
+<!--
+title: Качество звука
+description: 
+published: true
+date: 2023-03-21T18:15:54.895Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-03-21T18:15:54.895Z
+-->
+
+<p>&nbsp;</p>
+<h2>Качество звука</h2>
+<h3>Глюки, пропуски или треск</h3>
+<p>Более новая реализация звукового сервера PulseAudio использует планирование звука на основе таймера вместо традиционного подхода, управляемого прерываниями.<br>Планирование на основе таймера может выявить проблемы в некоторых драйверах ALSA. С другой стороны, другие драйверы могут глючить без него, поэтому проверьте, что работает в вашей системе.</p>
+<p>Чтобы отключить планирование на основе таймера, добавьте <code>tsched=0</code> в <code>/etc/pulse/default.pa</code>:</p>
+<pre><code class="language-plaintext">/etc/pulse/default.pa load-module module-udev-detect tsched=0</code></pre>
+<p>Затем перезапустите сервер PulseAudio:</p>
+<pre><code class="language-plaintext">$ pulseaudio -k
+$ pulseaudio --start
+</code></pre>
+<p>Do the reverse to enable timer-based scheduling, if not already enabled by default.</p>
+<p>If you are using Intel's <a href="https://en.wikipedia.org/wiki/IOMMU">IOMMU</a> and experience glitches and/or skips, add <code>intel_iommu=igfx_off</code> to your kernel command line.</p>
+<p>Some Intel audio cards using the <code>snd-hda-intel</code> module need the options <code>vid=8086 pid=8ca0 snoop=0</code>. In order to set them permanently, create/modify the following file including the line below.</p>
+<p>/etc/modprobe.d/sound.conf options snd-hda-intel vid=8086 pid=8ca0 snoop=0</p>
+<p>Please report any such cards to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Backends/ALSA/BrokenDrivers/">PulseAudio Broken Sound Driver page</a></p>
+<p>If you experience audio stuttering because of kernel page locking or late scheduling, see <a href="https://wiki.archlinux.org/title/Gaming#Tweaking_kernel_parameters_for_response_time_consistency">Gaming#Tweaking kernel parameters for response time consistency</a>.</p>
+<h3>Static noise when using headphones</h3>
+<p>Time-based scheduling may be causing this, disable it as explained in <a href="https://wiki.archlinux.org/title/PulseAudio/Troubleshooting#Glitches,_skips_or_crackling">#Glitches, skips or crackling</a>.</p>
+<p>Another reason you are encountering static noise in your headphone jack could be ALSA's loopback mixing.</p>
+<p>Make sure you have <a href="https://archlinux.org/packages/?name=alsa-utils">alsa-utils</a> installed, launch <code>alsamixer</code>, then select your audio device (pressing <code>F6</code>), navigate all the way left using the <code>left arrow</code>, and stop on <strong>Loopback</strong>, if <strong>Enabled</strong> disable it using the <code>down arrow</code>. This should not impact audio playback or microphone recording negatively, unless you require loopback mixing.</p>
+<p>Some notebook models, like Dell XPS 13 9360, suffer from <a href="https://wiki.archlinux.org/title/Dell_XPS_13_(9360)#Continuous_hissing_sound_with_headphones">continuous hissing sound</a> when a headphone is plugged in.</p>
+<p>Yet another reason for this symptom could be the power-saving mode of your audio device.<a href="https://askubuntu.com/a/534082">[3]</a> If you followed <a href="https://wiki.archlinux.org/title/Power_management#Audio">Power management#Audio</a>, revert the changes and check if it solves the problem.</p>
+<h3>Setting the default fragment number and buffer size in PulseAudio</h3>
+<figure class="image"><img src="https://wiki.archlinux.org/images/8/87/Tango-edit-clear.png" alt="Tango-edit-clear.png"></figure>
+<p><strong>This article or section needs language, wiki syntax or style improvements. See </strong><a href="https://wiki.archlinux.org/title/Help:Style"><strong>Help:Style</strong></a><strong> for reference.</strong></p>
+<figure class="image"><img src="https://wiki.archlinux.org/images/8/87/Tango-edit-clear.png" alt="Tango-edit-clear.png"></figure>
+<p><strong>Reason:</strong> Copied from Linux mint topic with few additions (Discuss in <a href="https://wiki.archlinux.org/title/Talk:PulseAudio/Troubleshooting">Talk:PulseAudio/Troubleshooting</a>)</p>
+<h4>Disabling timer-based scheduling</h4>
+<p>By default, PulseAudio uses timer-based scheduling. In this mode, fixed-size fragments are not used at all, and so the default-fragments and default-fragment-size-msec parameters are ignored. To turn timer-based scheduling off, add <code>tsched=0</code> in <code>/etc/pulse/default.pa</code>:</p>
+<p>/etc/pulse/default.pa load-module module-udev-detect tsched=0</p>
+<h4>Decide on audio device parameters</h4>
+<p>Instructions below will cause PulseAudio to use a fixed size and number for audio fragments. These settings directly affect latency and power consumption. The latency is determined as <code>default-fragments * default-fragment-size-msec</code>, and the interrupt rate (i.e. how often the application is notified that some sound has indeed been played) is <code>1000 / default-fragment-size-msec</code>. The considerations are:</p>
+<ul>
+  <li>The total number of fragments must be within the limits accepted by the hardware. Most sound cards are OK with two or more fragments, but some require three or more.</li>
+  <li>Giving the sound card more fragments than strictly necessary increases the latency, does not change power consumption, and does not remove the load from the scheduler. Therefore, it is advised only in the cases when the interrupts are not reliably delivered to the CPU, and one extra fragment beyond the minimum required should always be enough.</li>
+  <li>Giving the sound card bigger fragments increases latency and decreases power consumption.</li>
+  <li>Some applications (games and VoIP) request low latency and produce glitches when PulseAudio cannot fulfill their request.</li>
+  <li>Setting the latency too low will put a lot of stress on the scheduler, also resulting in glitches.</li>
+</ul>
+<p>If one does not care about excessive power consumption, then 2 or 3 fragments, 5 ms each, are a reasonable choice.</p>
+<h4>Modify PulseAudio's configuration file</h4>
+<p>/etc/pulse/daemon.conf default-fragments =&nbsp;</p>
+<p><strong>3</strong></p>
+<p>
+  default-fragment-size-msec =&nbsp;</p>
+<p><strong>5</strong></p>
+<h4>See if it helps</h4>
+<p><a href="https://wiki.archlinux.org/title/Restart">Restart</a> the <code>pulseaudio.service</code> <a href="https://wiki.archlinux.org/title/User_unit">user unit</a>.</p>
+<p>Run your applications, listen to the sounds they produce, inspect the <a href="https://wiki.archlinux.org/title/Journal">journal</a>.</p>
+<p>If the skips/pops/glitches are occasional and mostly correlated to the system being highly loaded: this is a scheduler problem, the latency needs to be increased.</p>
+<p>If there is metallic sound with the wrong speed from all applications: the most common reason is that you are trying to configure the fragment size which is way too small, like 1 ms. Do not do this.</p>
+<p>If some, but not all, applications produce a constant stream of glitches: this is an application that assumes a low-latency setup. So the fragment size must be decreased so that the application request becomes valid.</p>
+<h3>Choppy sound with analog surround sound setup</h3>
+<p>The low-frequency effects (LFE) or Subwoofer channel is not remixed per default. To enable it, the following needs to be set in <code>/etc/pulse/daemon.conf</code>&nbsp;:</p>
+<p>/etc/pulse/daemon.conf remixing-produce-lfe = yes
+  remixing-consume-lfe = yes</p>
+<p>You should also consider to set a proper crossover frequency for the LFE- channel. The crossover frequency is the frequency up to which the audio signal is rerouted to the LFE sink. The optimal crossover frequency in Hz depends on the size of all your speakers.</p>
+<p>/etc/pulse/daemon.conf lfe-crossover-freq = &lt;40-200&gt;</p>
+<h3>Laggy sound</h3>
+<p>This issue is due to incorrect buffer sizes. First verify that the variables <code>default-fragments</code> and <code>default-fragment-size-msec</code> are not being set to non default values in the file <code>/etc/pulse/daemon.conf</code>. If the issue is still present, try setting them to the following values:</p>
+<p>/etc/pulse/daemon.conf default-fragments = 5
+  default-fragment-size-msec = 2</p>
+<h3>Choppy/distorted sound</h3>
+<p>This can result from an incorrectly set sample rate. Try the following setting:</p>
+<p>/etc/pulse/daemon.conf avoid-resampling = yes #(Needs&nbsp;</p>
+<p><a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/11.0/">PA11</a></p>
+<p>&nbsp;or higher)
+  default-sample-rate = 48000</p>
+<p>and restart the PulseAudio server.</p>
+<p>If one experiences choppy sound in applications using <a href="https://en.wikipedia.org/wiki/OpenAL">OpenAL</a>, change the sample rate in <code>/etc/openal/alsoft.conf</code>:</p>
+<p>/etc/openal/alsoft.conf frequency = 48000</p>
+<p>Setting the PCM volume above 0 dB can cause <a href="https://en.wikipedia.org/wiki/Clipping_(audio)">clipping</a>. Running <code>alsamixer</code> will allow you to see if this is the problem and if so fix it. Note that ALSA may not <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/PulseAudioStoleMyVolumes/">correctly export</a> the dB information to PulseAudio. Try the following:</p>
+<p>/etc/pulse/default.pa load-module module-udev-detect ignore_dB=1</p>
+<p>and restart the PulseAudio server. See also <a href="https://wiki.archlinux.org/title/PulseAudio/Troubleshooting#No_sound_below_a_volume_cutoff_or_Clipping_on_a_particular_output_device">#No sound below a volume cutoff or Clipping on a particular output device</a>.</p>
+<h3>Sound stuttering when streaming over network</h3>
+<p>When streaming over Wi-Fi using module-native-protocol-tcp, you can experience periodic sound stuttering with buffer underruns. As a workaround, you can try to use the rtp protocol. On the sender side, create an rtp sink:</p>
+<p>/etc/pulse/default.pa load-module module-null-sink sink_name=rtp
+  load-module module-rtp-send source=rtp.monitor</p>
+<p>and switch to it:</p>
+<p>/etc/pulse/default.pa set-default-sink rtp</p>
+<p>On the receiver side, load the rtp module:</p>
+<p>/etc/pulse/default.pa load-module module-rtp-recv</p>
+<h3>Pops when starting and stopping playback</h3>
+<p>PulseAudio can suspend sinks after a period of inactivity. This can make an audible noise (like a crack/pop/scratch). Sometimes even when move the slider volume, or open and close windows (KDE4). This behavior is enabled in default configuration files:</p>
+<p>/etc/pulse/default.pa load-module module-suspend-on-idle /etc/pulse/system.pa load-module module-suspend-on-idle</p>
+<p>Commenting that line in relevant file fixes that issue. A better solution is to add the following file:</p>
+<p>~/.config/pulse/default.pa .include /etc/pulse/default.pa
+  .nofail
+  unload-module module-suspend-on-idle
+  .fail</p>
+<p>For some devices (eg. Bose Quietcomfort 35 II), setting high enough volume of the device (usually via physical buttons or a slider) eliminates the audible noise after stopping playback.</p>
+<p>&nbsp;</p>
+<h6><span class="text-tiny">источник информации </span><a href="https://wiki.archlinux.org/title/PulseAudio/Troubleshooting#Audio_quality"><span class="text-tiny">тут</span></a></h6>
+<p>&nbsp;</p>
