@@ -2,7 +2,7 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:50:35.033Z
+date: 2023-03-21T18:54:13.900Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
@@ -129,10 +129,13 @@ default-fragment-size-msec = 2</code></pre>
 <pre><code class="language-plaintext">avoid-resampling = yes #(Необходимо для PulseAudio v.11 или новее)
 default-sample-rate = 48000</code></pre>
 <p>и перезапустите сервер <strong>PulseAudio</strong>.</p>
-<p>Если искажённый звук возникает в приложениях, использующих <a href="https://en.wikipedia.org/wiki/ru:OpenAL">OpenAL</a>, поменяйте частоту дискретизации в <code>/etc/openal/alsoft.conf</code>:</p>
+<p>Если искажённый звук возникает в приложениях, использующих <a href="https://ru.wikipedia.org/wiki/ru:OpenAL">OpenAL</a>, поменяйте частоту дискретизации в <code>/etc/openal/alsoft.conf</code>:</p>
 <pre><code class="language-plaintext">/etc/openal/alsoft.conf </code></pre>
 <pre><code class="language-plaintext">frequency = 48000</code></pre>
 <p>Установка PCM volume выше 0 dB может вызвать <a href="https://ru.wikipedia.org/wiki/ru:%D0%9A%D0%BB%D0%B8%D0%BF%D0%BF%D0%B8%D0%BD%D0%B3_(%D0%B0%D1%83%D0%B4%D0%B8%D0%BE)">клиппинг</a>. Запуск <code>alsamixer</code> позволит вам обнаружить и исправить проблему. Обратите внимание, что ALSA может <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/PulseAudioStoleMyVolumes">некорректно экспортировать</a> информацию о dB в PulseAudio. Попробуйте следующее:</p>
 <pre><code class="language-plaintext">/etc/pulse/default.pa </code></pre>
 <pre><code class="language-plaintext">load-module module-udev-detect ignore_dB=1</code></pre>
-<p>и перезапустите сервер <strong>PulseAudio</strong>. Смотрите также <a href="https://wiki.archlinux.org/title/PulseAudio_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)/Troubleshooting_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#Нет_звука_ниже_определённого_уровня">#Нет звука ниже определённого уровня</a>.</p>
+<p>и перезапустите сервер <strong>PulseAudio</strong>.&nbsp;</p>
+<p>&nbsp;</p>
+<hr>
+<h6><span class="text-tiny">Источник и другая дополнительная информация </span><a href="https://wiki.archlinux.org/title/PulseAudio_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)/Troubleshooting_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)"><span class="text-tiny">тут</span></a><span class="text-tiny">.&nbsp;</span></h6>
