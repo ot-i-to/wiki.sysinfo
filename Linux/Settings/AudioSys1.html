@@ -2,7 +2,7 @@
 title: Качество звука
 description: 
 published: true
-date: 2023-03-21T18:15:54.895Z
+date: 2023-03-21T18:19:17.155Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-03-21T18:15:54.895Z
@@ -18,8 +18,8 @@ dateCreated: 2023-03-21T18:15:54.895Z
 <pre><code class="language-plaintext">$ pulseaudio -k
 $ pulseaudio --start
 </code></pre>
-<p>Do the reverse to enable timer-based scheduling, if not already enabled by default.</p>
-<p>If you are using Intel's <a href="https://en.wikipedia.org/wiki/IOMMU">IOMMU</a> and experience glitches and/or skips, add <code>intel_iommu=igfx_off</code> to your kernel command line.</p>
+<p>Сделайте обратное, чтобы включить планирование на основе таймера, если оно еще не включено по умолчанию.</p>
+<p>Если вы используете Intel <a href="https://en.wikipedia.org/wiki/IOMMU">IOMMU</a> и испытываете сбои и/или пропуски, добавьте<code>intel_iommu=igfx_off</code> в командную строку вашего ядра.</p>
 <p>Some Intel audio cards using the <code>snd-hda-intel</code> module need the options <code>vid=8086 pid=8ca0 snoop=0</code>. In order to set them permanently, create/modify the following file including the line below.</p>
 <p>/etc/modprobe.d/sound.conf options snd-hda-intel vid=8086 pid=8ca0 snoop=0</p>
 <p>Please report any such cards to <a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Backends/ALSA/BrokenDrivers/">PulseAudio Broken Sound Driver page</a></p>
@@ -51,8 +51,7 @@ $ pulseaudio --start
 <h4>Modify PulseAudio's configuration file</h4>
 <p>/etc/pulse/daemon.conf default-fragments =&nbsp;</p>
 <p><strong>3</strong></p>
-<p>
-  default-fragment-size-msec =&nbsp;</p>
+<p>default-fragment-size-msec =&nbsp;</p>
 <p><strong>5</strong></p>
 <h4>See if it helps</h4>
 <p><a href="https://wiki.archlinux.org/title/Restart">Restart</a> the <code>pulseaudio.service</code> <a href="https://wiki.archlinux.org/title/User_unit">user unit</a>.</p>
@@ -62,20 +61,17 @@ $ pulseaudio --start
 <p>If some, but not all, applications produce a constant stream of glitches: this is an application that assumes a low-latency setup. So the fragment size must be decreased so that the application request becomes valid.</p>
 <h3>Choppy sound with analog surround sound setup</h3>
 <p>The low-frequency effects (LFE) or Subwoofer channel is not remixed per default. To enable it, the following needs to be set in <code>/etc/pulse/daemon.conf</code>&nbsp;:</p>
-<p>/etc/pulse/daemon.conf remixing-produce-lfe = yes
-  remixing-consume-lfe = yes</p>
+<p>/etc/pulse/daemon.conf remixing-produce-lfe = yes remixing-consume-lfe = yes</p>
 <p>You should also consider to set a proper crossover frequency for the LFE- channel. The crossover frequency is the frequency up to which the audio signal is rerouted to the LFE sink. The optimal crossover frequency in Hz depends on the size of all your speakers.</p>
 <p>/etc/pulse/daemon.conf lfe-crossover-freq = &lt;40-200&gt;</p>
 <h3>Laggy sound</h3>
 <p>This issue is due to incorrect buffer sizes. First verify that the variables <code>default-fragments</code> and <code>default-fragment-size-msec</code> are not being set to non default values in the file <code>/etc/pulse/daemon.conf</code>. If the issue is still present, try setting them to the following values:</p>
-<p>/etc/pulse/daemon.conf default-fragments = 5
-  default-fragment-size-msec = 2</p>
+<p>/etc/pulse/daemon.conf default-fragments = 5 default-fragment-size-msec = 2</p>
 <h3>Choppy/distorted sound</h3>
 <p>This can result from an incorrectly set sample rate. Try the following setting:</p>
 <p>/etc/pulse/daemon.conf avoid-resampling = yes #(Needs&nbsp;</p>
 <p><a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/11.0/">PA11</a></p>
-<p>&nbsp;or higher)
-  default-sample-rate = 48000</p>
+<p>&nbsp;or higher) default-sample-rate = 48000</p>
 <p>and restart the PulseAudio server.</p>
 <p>If one experiences choppy sound in applications using <a href="https://en.wikipedia.org/wiki/OpenAL">OpenAL</a>, change the sample rate in <code>/etc/openal/alsoft.conf</code>:</p>
 <p>/etc/openal/alsoft.conf frequency = 48000</p>
@@ -84,8 +80,7 @@ $ pulseaudio --start
 <p>and restart the PulseAudio server. See also <a href="https://wiki.archlinux.org/title/PulseAudio/Troubleshooting#No_sound_below_a_volume_cutoff_or_Clipping_on_a_particular_output_device">#No sound below a volume cutoff or Clipping on a particular output device</a>.</p>
 <h3>Sound stuttering when streaming over network</h3>
 <p>When streaming over Wi-Fi using module-native-protocol-tcp, you can experience periodic sound stuttering with buffer underruns. As a workaround, you can try to use the rtp protocol. On the sender side, create an rtp sink:</p>
-<p>/etc/pulse/default.pa load-module module-null-sink sink_name=rtp
-  load-module module-rtp-send source=rtp.monitor</p>
+<p>/etc/pulse/default.pa load-module module-null-sink sink_name=rtp load-module module-rtp-send source=rtp.monitor</p>
 <p>and switch to it:</p>
 <p>/etc/pulse/default.pa set-default-sink rtp</p>
 <p>On the receiver side, load the rtp module:</p>
@@ -94,10 +89,7 @@ $ pulseaudio --start
 <p>PulseAudio can suspend sinks after a period of inactivity. This can make an audible noise (like a crack/pop/scratch). Sometimes even when move the slider volume, or open and close windows (KDE4). This behavior is enabled in default configuration files:</p>
 <p>/etc/pulse/default.pa load-module module-suspend-on-idle /etc/pulse/system.pa load-module module-suspend-on-idle</p>
 <p>Commenting that line in relevant file fixes that issue. A better solution is to add the following file:</p>
-<p>~/.config/pulse/default.pa .include /etc/pulse/default.pa
-  .nofail
-  unload-module module-suspend-on-idle
-  .fail</p>
+<p>~/.config/pulse/default.pa .include /etc/pulse/default.pa .nofail unload-module module-suspend-on-idle .fail</p>
 <p>For some devices (eg. Bose Quietcomfort 35 II), setting high enough volume of the device (usually via physical buttons or a slider) eliminates the audible noise after stopping playback.</p>
 <p>&nbsp;</p>
 <h6><span class="text-tiny">источник информации </span><a href="https://wiki.archlinux.org/title/PulseAudio/Troubleshooting#Audio_quality"><span class="text-tiny">тут</span></a></h6>
