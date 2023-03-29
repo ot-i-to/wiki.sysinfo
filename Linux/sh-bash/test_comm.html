@@ -1,0 +1,70 @@
+<!--
+title: Command "test"
+description: 
+published: true
+date: 2023-03-29T16:19:14.933Z
+tags: bash, sh, shell, if, test
+editor: ckeditor
+dateCreated: 2023-03-29T16:19:14.933Z
+-->
+
+<h3>Выполняет проверку типа файла и сравнения чисел и строк.&nbsp;</h3>
+<p>Возвращает код <code>0</code> (истина) или <code>1</code> (ложь). Выражения могут быть как унарными, так и бинарными.</p>
+<pre><code class="language-plaintext">test выражение</code></pre>
+<p>Для сокращения кода сценария используют парный оператор <code>[</code> как синоним <code>test</code>. Парный оператор требует пробела между скобками потому, что <code>[</code> (скобка) является командой оболочки.</p>
+<h3>Проверка типа файла</h3>
+<ul>
+  <li><code>-d file</code> — истина, если <code>file</code> существует и является каталогом</li>
+  <li><code>-e file</code> — истина, если <code>file</code> существует</li>
+  <li><code>-f file</code> — истина, если <code>file</code> существует и является обычным файлом</li>
+  <li><code>-r file</code> — истина, если <code>file</code> существует и доступен для чтения</li>
+  <li><code>-s file</code> — истина, если <code>file</code> существует и имеет размер больше, чем ноль</li>
+  <li><code>-w file</code> — истина, если <code>file</code> существует и доступен для записи</li>
+  <li><code>-x file</code> — истина, если <code>file</code> существует и доступен для выполнения</li>
+  <li><code>-L file</code> — истина, если <code>file</code> существует и является символьной ссылкой</li>
+  <li><code>file1 -nt file2</code> — истина, если <code>file1</code> новее (дата модификации), чем <code>file2</code></li>
+  <li><code>file1 -ot file2</code> — истина, если <code>file1</code> старее, чем <code>file2</code></li>
+</ul>
+<pre><code class="language-plaintext">#!/bin/bash
+if [ -f "$HOME/.bashrc" ]; then
+    echo "Файл существует!"
+else
+    echo "Файл не существует!"
+fi</code></pre>
+<h3>Сравнение строк</h3>
+<ul>
+  <li><code>-z string</code> — истина, если длина <code>string</code> равна нулю</li>
+  <li><code>-n string</code> — истина, если длина <code>string</code> не ноль</li>
+  <li><code>string1 = string2</code> — истина, если строки равны</li>
+  <li><code>string1 != string2</code> — истина, если строки не равны</li>
+</ul>
+<h3>Сравнение целых чисел</h3>
+<ul>
+  <li><code>число1 -eq число2</code> — истина, если <code>число1</code> равно <code>число2</code></li>
+  <li><code>число1 -gt число2</code> — истина, если <code>число1</code> больше <code>число2</code></li>
+  <li><code>число1 -ge число2</code> — истина, если <code>число1</code> больше или равно <code>число2</code></li>
+  <li><code>число1 -lt число2</code> — истина, если <code>число1</code> меньше <code>число2</code></li>
+  <li><code>число1 -le число2</code> — истина, если <code>число1</code> меньше или равно <code>число2</code></li>
+  <li><code>число1 -ne число2</code> — истина, если <code>число1</code> не равно <code>число2</code></li>
+</ul>
+<pre><code class="language-plaintext">#!/bin/bash
+if [ 3 -lt 6 ]; then
+    echo "Истина"
+else
+    echo "Ложь"
+fi</code></pre>
+<h3>Операции AND и OR</h3>
+<ul>
+  <li><code>expr1 -a expr2</code> — истина, если оба выражения <code>expr1</code> и <code>expr2</code> истина (операция AND)</li>
+  <li><code>expr1 -o expr2</code> — истина, если хотя бы одно из выражений <code>expr1</code> или <code>expr2</code> истина (операция OR)</li>
+  <li><code>! expr</code> — истина, если выражение <code>expr</code> ложно</li>
+</ul>
+<p>В условном выражении команды <code>test</code> можно использовать круглые скобки, чтобы изменить порядок вычисления, но их нужно экранировать:</p>
+<pre><code class="language-plaintext">$ [ \( "$count" -ge 0 \) -a \( "$count" -lt 10 \) ]</code></pre>
+<p>«<code>[[…]]</code>» — расширенный вариант от «<code>[…]</code>», оболочка выполняет его как один элемент с кодом возврата. Внутри «<code>[[…]]</code>» разрешается выполнение операторов <code>&amp;&amp;</code>, <code>||</code> которые приводят к ошибке в обычных скобках «<code>[…]</code>».</p>
+<pre><code class="language-plaintext">#!/bin/bash
+if [[ -f "$HOME/.bashrc" &amp;&amp; -f "/usr/bin/nano" ]]; then
+    echo "Все в порядке, можно редактировать!"
+else
+    echo "Ошибка!"
+fi</code></pre>
