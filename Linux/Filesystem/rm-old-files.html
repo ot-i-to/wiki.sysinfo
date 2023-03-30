@@ -2,14 +2,16 @@
 title: Очистка директорий
 description: Варианты очистки дириктории от старых файлов
 published: true
-date: 2023-03-30T09:30:26.340Z
+date: 2023-03-30T10:07:08.641Z
 tags: file, linux, filesystem, rm, old
 editor: ckeditor
 dateCreated: 2023-03-30T09:27:25.780Z
 -->
 
-<pre><code class="language-plaintext">/bin/ls -t /var/backups/mysqldump/*-all-databases.sql.gz | /usr/bin/tail -n+11 | /usr/bin/xargs /bin/rm -fv &gt;&gt; /var/log/mysqldump_cron.log</code></pre>
-<p>&nbsp;</p>
-<pre><code class="language-plaintext">/bin/ls -tr /var/backups/mysqldump/*-all-databases.sql.gz | /usr/bin/head -n11 | /usr/bin/xargs /bin/rm -fv &gt;&gt; /var/log/mysqldump_cron.log</code></pre>
+<p>Чаще всего для удаления старых файлов в директории используется команда <code>find</code>, но она работает от текущей даты+ времени выполнения. В итоге через какое то время директория останется совсем пустая. Если это файлы резервного копирования, то это не допустимо, т.к. хотя бы один файл резервной копии должен всегда оставаться.<br>&nbsp;</p>
+<p>Ниже примеры команд позволяющие оставлять 10 последних созданных файлов в директории с сохранением лога удаленных файлов:</p>
+<pre><code class="language-plaintext"># /bin/ls -t /var/backups/mysqldump/*-all-databases.sql.gz | /usr/bin/tail -n+11 | /usr/bin/xargs /bin/rm -fv &gt;&gt; /var/log/mysqldump_cron.log</code></pre>
+<p>или&nbsp;</p>
+<pre><code class="language-plaintext"># /bin/ls -tr /var/backups/mysqldump/*-all-databases.sql.gz | /usr/bin/head -n11 | /usr/bin/xargs /bin/rm -fv &gt;&gt; /var/log/mysqldump_cron.log</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
