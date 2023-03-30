@@ -1,0 +1,123 @@
+<!--
+title: Find
+description: 
+published: true
+date: 2023-03-30T10:47:20.353Z
+tags: 
+editor: ckeditor
+dateCreated: 2023-03-30T10:47:20.353Z
+-->
+
+<p>Предназначена для поиска файлов и каталогов на основе условий. Ее можно использовать, например, для поиска файлов по разрешениям, владельцам, группам, типу, размеру и другим критериям.</p>
+<pre><code class="language-plaintext">find [каталог] [опции] [действие] </code></pre>
+<ul>
+  <li><code>каталог</code> — каталог, в котором будем искать файлы</li>
+  <li><code>опции</code> — критерии поиска и дополнительные опции</li>
+  <li><code>действие</code> — действия с найденными файлами с помощью опции <code>-exec</code>.</li>
+</ul>
+<h3>Основные опции</h3>
+<ul>
+  <li><code>-name</code> — искать по имени файла, при использовании подстановочных образцов шаблон заключается в кавычки. Опция различает прописные и строчные буквы; чтобы использовать поиск без этих различий, надо использовать опцию <code>-iname</code>.</li>
+  <li><code>-type</code> — тип искомого: <code>f=файл</code>, <code>d=каталог</code>, <code>l=ссылка</code>, <code>p=канал</code>, <code>s=сокет</code>.</li>
+  <li><code>-user</code> — владелец: имя пользователя или <code>UID</code>.</li>
+  <li><code>-group</code> — владелец: группа пользователя или <code>GID</code>.</li>
+  <li><code>-perm</code> — указываются права доступа.</li>
+  <li><code>-size</code> — размер: указывается в 512-байтных блоках или байтах (признак байтов — символ «c» за числом).</li>
+  <li><code>-atime</code> — время последнего обращения к файлу (в днях).</li>
+  <li><code>-amin</code> — время последнего обращения к файлу (в минутах).</li>
+  <li><code>-ctime</code> — время последнего изменения владельца или прав доступа к файлу (в днях).</li>
+  <li><code>-cmin</code> — время последнего изменения владельца или прав доступа к файлу (в минутах).</li>
+  <li><code>-mtime</code> — время последнего изменения файла (в днях).</li>
+  <li><code>-mmin</code> — время последнего изменения файла (в минутах).</li>
+  <li><code>-newer file</code> — искать файлы созданные позже, чем <code>file</code>.</li>
+  <li><code>-delete</code> — удалять найденные файлы.</li>
+  <li><code>-ls</code> — генерирует вывод, как команда <code>ls -dgils</code>.</li>
+  <li><code>-print</code> — показывает на экране найденные файлы.</li>
+  <li><code>-exec command {} \;</code> — выполняет над найденным файлом указанную команду.</li>
+  <li><code>-ok</code> — перед выполнением команды указанной в <code>-exec</code>, выдаёт запрос.</li>
+  <li><code>-depth</code> или <code>-d</code> — начинать поиск с самых глубоких уровней вложенности, а не с корня каталога.</li>
+  <li><code>-maxdepth</code> — максимальный уровень вложенности для поиска, для поиска в текущем каталоге — 1.</li>
+  <li><code>-prune</code> — используется, когда вы хотите исключить из поиска определённые каталоги.</li>
+  <li><code>-mount</code> или <code>-xdev</code> — не переходить на другие файловые системы.</li>
+  <li><code>-regex</code> — искать по имени файла, используя регулярные выражения.</li>
+  <li><code>-regextype тип</code> — указание типа используемых регулярных выражений.</li>
+  <li><code>-P</code> — не разворачивать символические ссылки (поведение по умолчанию).</li>
+  <li><code>-L</code> — разворачивать символические ссылки.</li>
+  <li><code>-empty</code> — только пустые файлы и каталоги.</li>
+</ul>
+<p>Допускается использование нескольких критериев поиска:</p>
+<ul>
+  <li><code>-newer php.ini -a -size +10M</code> — файл будет найден, если оба критерия верны; <code>-a</code> используется по умолчанию, поэтому его можно опускать;</li>
+  <li><code>-name "*.html" -o -name "*.php"</code> — файл будет найден, если хотя бы один критерий поиска возвращает истину;</li>
+  <li><code>-not -newer php.ini</code> — инвертирует критерий поиска.</li>
+</ul>
+<h2>Примеры</h2>
+<p>Показать все файлы в текущей директории:</p>
+<pre><code class="language-plaintext">$ find</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">$ find .</code></pre>
+<p>Показать все файлы в указанной директории:</p>
+<pre><code class="language-plaintext">$ find ./test</code></pre>
+<p>Искать файлы по имени в текущей папке:</p>
+<pre><code class="language-plaintext">$ find . -name "*.jpg"</code></pre>
+<p>Не учитывать регистр при поиске по имени:</p>
+<pre><code class="language-plaintext">$ find . -iname "test*"</code></pre>
+<p>Поиск файлов по имени только в текущей папке:</p>
+<pre><code class="language-plaintext">$ find . -maxdepth 1 -name "*.php"</code></pre>
+<p>Найти файлы в директории, которые не соответствуют шаблону:</p>
+<pre><code class="language-plaintext">$ find /some/path -not -name "test*"</code></pre>
+<p>Найти файлы, начинающиеся на <code>test</code>, но без расширения <code>.php</code>:</p>
+<pre><code class="language-plaintext">$ find /some/path -name "test" -not -name "*.php"</code></pre>
+<p>Найти все файлы с раширением <code>.html</code> или <code>.php</code>:</p>
+<pre><code class="language-plaintext">$ find /some/path -name "*.html" -o -name "*.php"</code></pre>
+<p>Найти все файлы в двух каталогах с расширением <code>.c</code>:</p>
+<pre><code class="language-plaintext">$ find /some/path/one /some/path/two -type f -name "*.c"</code></pre>
+<p>Найти скрытые файлы (начинающиеся на точку) в домашней директории:</p>
+<pre><code class="language-plaintext">$ find ~ -type f -name ".*"</code></pre>
+<p>Найти файлы в директории с маской прав 0664:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -perm 0664</code></pre>
+<p>Найти все файлы с установленным флагом <code>suid/guid</code>:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -perm 2644</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -perm /u=s</code></pre>
+<p>Поиск файлов только для чтения:</p>
+<pre><code class="language-plaintext">$ find /etc -type f -perm /u=r</code></pre>
+<p>Найти только исполняемые файлы:</p>
+<pre><code class="language-plaintext">$ find /bin -type f -perm /a=x</code></pre>
+<p>Найти все файлы, принадлежащие пользователю <code>evgeniy</code>:</p>
+<pre><code class="language-plaintext">$ find /some/path -user evgeniy</code></pre>
+<p>Поиск файлов, принадлежащих группе <code>developer</code>:</p>
+<pre><code class="language-plaintext">$ find /var/www -group developer</code></pre>
+<p>Найти файлы, модифицированные 30 дней назад:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -mtime 30</code></pre>
+<p>Поиск файлов, открытых 30 дней назад:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -atime 30</code></pre>
+<p>Найти файлы, модифицированные между 30 и 60 дней назад:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -mtime +30 -mtime -60</code></pre>
+<p>Найти файлы, измененные в течении часа:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -cmin 60</code></pre>
+<p>Найти все файлы размером 50 мегабайт:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -size 50M</code></pre>
+<p>Все файлы от пятидесяти до ста мегабайт:</p>
+<pre><code class="language-plaintext">$ find /some/path -type f -size +50M -size -100M</code></pre>
+<p>Поиск пустых файлов и директорий:</p>
+<pre><code class="language-plaintext">$ find /tmp -type f -empty</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">$ find ~ -type d -empty</code></pre>
+<h2>Действия с найденными файлами</h2>
+<p>Для выполнения произвольных команд для найденных файлов используется опция <code>-exec</code>. Например, выполнить команду <code>ls</code> для получения подробной информации о каждом файле:</p>
+<pre><code class="language-plaintext">$ find . -exec ls -ld {} \;</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">$ find . -exec ls -ld {} +</code></pre>
+<p>Удалить все текстовые файлы в директории <code>tmp</code>:</p>
+<pre><code class="language-plaintext">$ find /tmp -type f -name "*.txt" -exec rm -f {} \;</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">$ find /tmp -type f -name "*.txt" -exec rm -f {} +</code></pre>
+<p>Удалить все log-файлы больше 100 мегабайт:</p>
+<pre><code class="language-plaintext">$ find /home/evgeniy/log -type f -name "*.log" -size +100M -exec rm -f {} \;</code></pre>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">$ find /home/evgeniy/log -type f -name "*.log" -size +100M -exec rm -f {} +</code></pre>
+<p>&nbsp;</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
