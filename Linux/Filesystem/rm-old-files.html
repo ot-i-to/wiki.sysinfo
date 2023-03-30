@@ -1,0 +1,13 @@
+<!--
+title: Очистка директорий
+description: Варианты очистки дириктории от старых файлов
+published: true
+date: 2023-03-30T09:27:25.780Z
+tags: file, linux, filesystem, rm, old
+editor: ckeditor
+dateCreated: 2023-03-30T09:27:25.780Z
+-->
+
+<pre><code class="language-plaintext">/bin/ls -t /var/backups/mysqldump/*-all-databases.sql.gz | /usr/bin/tail -n+11 | /usr/bin/xargs /bin/rm -fv &gt;&gt; /var/log/mysqldump_cron.log</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
