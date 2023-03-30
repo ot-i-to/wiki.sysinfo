@@ -2,13 +2,13 @@
 title: Find
 description: 
 published: true
-date: 2023-03-30T10:34:17.224Z
+date: 2023-03-30T10:35:11.045Z
 tags: find, linux, command
 editor: ckeditor
 dateCreated: 2023-03-30T10:34:17.224Z
 -->
 
-<p>Это одна из наиболее часто используемых команд Linux. Предназначена для поиска файлов и каталогов на основе условий. Ее можно использовать, например, для поиска файлов по разрешениям, владельцам, группам, типу, размеру и другим критериям.</p>
+<p>Предназначена для поиска файлов и каталогов на основе условий. Ее можно использовать, например, для поиска файлов по разрешениям, владельцам, группам, типу, размеру и другим критериям.</p>
 <pre><code class="language-plaintext">find [каталог] [опции] [действие] </code></pre>
 <ul>
   <li><code>каталог</code> — каталог, в котором будем искать файлы</li>
@@ -54,6 +54,7 @@ dateCreated: 2023-03-30T10:34:17.224Z
 <h2>Примеры</h2>
 <p>Показать все файлы в текущей директории:</p>
 <pre><code class="language-plaintext">$ find</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ find .</code></pre>
 <p>Показать все файлы в указанной директории:</p>
 <pre><code class="language-plaintext">$ find ./test</code></pre>
@@ -77,6 +78,7 @@ dateCreated: 2023-03-30T10:34:17.224Z
 <pre><code class="language-plaintext">$ find /some/path -type f -perm 0664</code></pre>
 <p>Найти все файлы с установленным флагом <code>suid/guid</code>:</p>
 <pre><code class="language-plaintext">$ find /some/path -type f -perm 2644</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ find /some/path -type f -perm /u=s</code></pre>
 <p>Поиск файлов только для чтения:</p>
 <pre><code class="language-plaintext">$ find /etc -type f -perm /u=r</code></pre>
@@ -100,16 +102,20 @@ dateCreated: 2023-03-30T10:34:17.224Z
 <pre><code class="language-plaintext">$ find /some/path -type f -size +50M -size -100M</code></pre>
 <p>Поиск пустых файлов и директорий:</p>
 <pre><code class="language-plaintext">$ find /tmp -type f -empty</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ find ~ -type d -empty</code></pre>
 <h2>Действия с найденными файлами</h2>
 <p>Для выполнения произвольных команд для найденных файлов используется опция <code>-exec</code>. Например, выполнить команду <code>ls</code> для получения подробной информации о каждом файле:</p>
 <pre><code class="language-plaintext">$ find . -exec ls -ld {} \;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ find . -exec ls -ld {} +</code></pre>
 <p>Удалить все текстовые файлы в директории <code>tmp</code>:</p>
 <pre><code class="language-plaintext">$ find /tmp -type f -name "*.txt" -exec rm -f {} \;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ find /tmp -type f -name "*.txt" -exec rm -f {} +</code></pre>
 <p>Удалить все log-файлы больше 100 мегабайт:</p>
 <pre><code class="language-plaintext">$ find /home/evgeniy/log -type f -name "*.log" -size +100M -exec rm -f {} \;</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ find /home/evgeniy/log -type f -name "*.log" -size +100M -exec rm -f {} +</code></pre>
 <p>&nbsp;</p>
 <ul>
