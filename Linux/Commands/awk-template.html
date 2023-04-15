@@ -2,7 +2,7 @@
 title:  Awk
 description: парсинг файлов по шаблону
 published: true
-date: 2023-04-15T10:59:17.322Z
+date: 2023-04-15T11:01:06.741Z
 tags: sample, linux, command, awk, шаблон, template
 editor: ckeditor
 dateCreated: 2023-04-15T10:47:18.000Z
@@ -32,8 +32,8 @@ dateCreated: 2023-04-15T10:47:18.000Z
 <pre><code class="language-plaintext">awk -F":" '{sum +=$3} END {print sum}' /etc/passwd</code></pre>
 <p>У awk есть встроенные переменные, наиболее часто используемые</p>
 <ul>
-  <li>&nbsp; &nbsp;Number of fields - NF</li>
-  <li>&nbsp; &nbsp;Record number - NR</li>
+  <li>Number of fields - NF</li>
+  <li>Record number - NR</li>
 </ul>
 <p>Вывести строки, начиная с пятой</p>
 <pre><code class="language-plaintext">awk 'NR &gt; 14' /etc/passwd</code></pre>
@@ -64,3 +64,4 @@ ccc</code></pre>
 <p>Список команд, которые вы используете чаще всего:</p>
 <pre><code class="language-plaintext">history | awk '{a[$'`echo "1 2 $HISTTIMEFORMAT" | wc -w`']++}END{for(i in a){print a[i] "\t" i}}' | sort -rn | head</code></pre>
 <p><br><a href="http://rus-linux.net/MyLDP/consol/awk.html">Изучаем команды linux: awk</a></p>
+<p><a href="https://proft.me/2011/05/8/awk-parsing-fajlov-po-shablonu/">-</a></p>
