@@ -2,7 +2,7 @@
 title:  Awk
 description: парсинг файлов по шаблону
 published: true
-date: 2023-04-15T11:11:33.269Z
+date: 2023-04-15T11:12:35.667Z
 tags: sample, linux, command, awk, шаблон, template
 editor: ckeditor
 dateCreated: 2023-04-15T10:47:18.000Z
@@ -64,7 +64,7 @@ ccc</code></pre>
 <p>Список команд, которые вы используете чаще всего:</p>
 <pre><code class="language-plaintext">history | awk '{a[$'`echo "1 2 $HISTTIMEFORMAT" | wc -w`']++}END{for(i in a){print a[i] "\t" i}}' | sort -rn | head</code></pre>
 <p><strong>Поиск поля по шаблону и вывод только его значения в строке</strong></p>
-<p>Представим, что нам надо из строки получить значение определённого поля с названием "SRC=". Разделителем полей в строке является пробел.</p>
+<p>Представим, что нам надо из строки получить значение определённого поля с названием "SRC=", но позицию мы не знаем или переменная. Разделителем полей в строке является пробел.</p>
 <p>Пример</p>
 <pre><code class="language-plaintext">echo "^[[200~Apr 15 12:05:19 tr1-core kernel: [793707.293437] BAD_SIP_No_Russia-IPSET: IN=eno1.1252 OUT= MAC=ac:1f:6b:1d:d3:70:00:19:07:aa:02:00:08:00 SRC=45.93.16.6 DST=91.188.168.139 LEN=435 TOS=0x00 PREC=0x00 TTL=53 ID=24032 DF PROTO=UDP SPT=5088 DPT=5060 LEN=415~" | awk '{ for(k=NF; k&gt;0; --k) {if ($k ~ /SRC=/) print $k}}' | sed ‘s/SRC=//’</code></pre>
 <p>Будет выдано:</p>
