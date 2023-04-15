@@ -2,67 +2,65 @@
 title:  Awk
 description: парсинг файлов по шаблону
 published: true
-date: 2023-04-15T10:53:46.554Z
+date: 2023-04-15T10:59:01.295Z
 tags: sample, linux, command, awk, шаблон, template
 editor: ckeditor
 dateCreated: 2023-04-15T10:47:18.000Z
 -->
 
-<p>awk — интерпретируемый скриптовый язык построчного разбора и обработки входного потока (например, текстового файла) по заданным шаблонам. Позволяет манипулировать структурированными данными и генерировать отчеты. awk относиться к языкам программирования, управляемых данными (data driven), который разработан для обработки текстовых данных, либо в файлах либо в потоках данных.</p>
-<p>Лично для меня awk оказался удобен при разборе больших лог-файлов. Когда надо в огромном наборе строк определить какую-то аномалию, но не просто ее найти (для этого можно воспользоваться и обычным grep), а вычислить на основание других данных в строке.</p>
+<p><a href="http://rus-linux.net/MyLDP/consol/awk.html">awk</a> — интерпретируемый скриптовый язык построчного разбора и обработки входного потока (например, текстового файла) по заданным шаблонам. Позволяет манипулировать структурированными данными и генерировать отчеты. awk относиться к языкам программирования, управляемых данными (data driven), который разработан для обработки текстовых данных, либо в файлах либо в потоках данных.</p>
 <p>Запуск awk выглядит так</p>
-<p>awk '/pattern/{action}' file</p>
+<pre><code class="language-plaintext">awk '/pattern/{action}' file</code></pre>
 <p>Каждая запись поочерёдно сравнивается с pattern, и каждый раз когда она соответствует pattern, выполняется указанное действие. Если шаблон не указан, то действие выполняется для всех записей. Если не указано действие, то запись просто выводится (print).</p>
-<p>awk /proft/ /etc/passwd</p>
+<pre><code class="language-plaintext">awk /proft/ /etc/passwd</code></pre>
 <p>Другой пример, где указывается разделить полей (по-умолчанию в качестве разделителя полей используется пробел) и выводятся только первое и шестое поле. В данном случаи - имя и путь к домашнему каталогу пользователя.</p>
-<p>awk -F":" '{print $1 " " $6}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" '{print $1 " " $6}' /etc/passwd</code></pre>
 <p>Шаблон может содержать условия для фильтрации строк в виде регулярных выражений.</p>
 <p>Вывод строк только с упоминанием об пользователе proft</p>
-<p>awk -F":" '/proft/{print $1 " " $6}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" '/proft/{print $1 " " $6}' /etc/passwd</code></pre>
 <p>Вывод всех строк, в которых нет упоминания об пользователе proft</p>
-<p>awk -F":" '!/proft/{print $1 " " $6}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" '!/proft/{print $1 " " $6}' /etc/passwd</code></pre>
 <p>Вывод всех строк, в которых есть упоминания об пользователе proft или root</p>
-<p>awk '/proft/||/root/' /etc/passwd</p>
+<pre><code class="language-plaintext">awk '/proft/||/root/' /etc/passwd</code></pre>
 <p>Вывод имен пользователей, которые используют zsh</p>
-<p>awk -F":" '{if ($7 ~ /zsh/) print $1;}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" '{if ($7 ~ /zsh/) print $1;}' /etc/passwd</code></pre>
 <p>Перед выводом строк можно произвести замену в них.</p>
-<p>awk '{sub(/proft/,"ivan");print}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk '{sub(/proft/,"ivan");print}' /etc/passwd</code></pre>
 <p>Подсчет количества упоминаний proft в файле /etc/passwd</p>
-<p>awk '/proft/{n++};END{print n+0}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk '/proft/{n++};END{print n+0}' /etc/passwd</code></pre>
 <p>Суммирование значений в третьем столбце для всех строк.</p>
-<p>awk -F":" '{sum +=$3} END {print sum}' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" '{sum +=$3} END {print sum}' /etc/passwd</code></pre>
 <p>У awk есть встроенные переменные, наиболее часто используемые</p>
-<p>&nbsp; &nbsp;Number of fields - NF</p>
-<p>&nbsp; &nbsp;Record number - NR</p>
+<ul>
+  <li>&nbsp; &nbsp;Number of fields - NF</li>
+  <li>&nbsp; &nbsp;Record number - NR</li>
+</ul>
 <p>Вывести строки, начиная с пятой</p>
-<p>awk 'NR &gt; 14' /etc/passwd</p>
+<pre><code class="language-plaintext">awk 'NR &gt; 14' /etc/passwd</code></pre>
 <p>Вывести порядковый номер строки перед обрабатываемым текстом</p>
-<p>awk '$0 = NR" "$0' /etc/passwd</p>
+<pre><code class="language-plaintext">awk '$0 = NR" "$0' /etc/passwd</code></pre>
 <p>Вывести строки между 5 и 10 строкой</p>
-<p>awk -F":" 'NR==5,NR==10' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" 'NR==5,NR==10' /etc/passwd</code></pre>
 <p>Вывести строки с количеством полей больше 5</p>
-<p>awk -F":" 'NF &gt; 5' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" 'NF &gt; 5' /etc/passwd</code></pre>
 <p>Вывести строки, в которых значение последнего поля равно /bin/false</p>
-<p>awk -F":" '$NF="/bin/false"' /etc/passwd</p>
+<pre><code class="language-plaintext">awk -F":" '$NF="/bin/false"' /etc/passwd</code></pre>
 <p>Пример парсинга строки</p>
-<p>free -m | grep "Mem:" | awk '{print $4"/"$2}'</p>
-<p>&nbsp;</p>
-<p>Удаляем в файле дублирующие записи и не используем сортировку</p>
+<pre><code class="language-plaintext">free -m | grep "Mem:" | awk '{print $4"/"$2}'</code></pre>
+<p><strong>Удаляем в файле дублирующие записи и не используем сортировку</strong></p>
 <p>Если использовать awk, можно найти дублирующие записи в неотсортированном файле, причем файл не будет переупорядочен, а найденные и удаленные записи затем можно перенаправить в другой файл.</p>
-<p>#awk '!x[$0]++'</p>
+<pre><code class="language-plaintext">#awk '!x[$0]++'</code></pre>
 <p>Пример</p>
-<p>echo -e "aaa\nbbb\naaa\naa\nccc\naa"|awk \!'x[$0]++'</p>
+<pre><code class="language-plaintext">echo -e "aaa\nbbb\naaa\naa\nccc\naa"|awk \!'x[$0]++'</code></pre>
 <p>Будет выдано:</p>
-<p>aaa</p>
-<p>bbb</p>
-<p>aa</p>
-<p>ccc</p>
-<p>&nbsp;</p>
-<p>Анализируем поля awk</p>
+<p><code>aaa</code></p>
+<p><code>bbb</code></p>
+<p><code>aa</code></p>
+<p><code>ccc</code></p>
+<p><strong>Анализируем поля awk</strong></p>
 <p>Разделим каждую строку на отдельные поля и перенумеруем их. Это действительно полезно, когда вы собираетесь разобрать что-то с помощью AWK, но не уверены точно, с чего начать.</p>
-<p>awk '{print NR”: “$0; for(i=1;i&lt;=NF;++i)print “\t”i”: “$i}'</p>
-<p>&nbsp;</p>
+<pre><code class="language-plaintext">awk '{print NR”: “$0; for(i=1;i&lt;=NF;++i)print “\t”i”: “$i}'</code></pre>
 <p>Показать наиболее часто используемые команды в истории ваших команд history</p>
 <p>Список команд, которые вы используете чаще всего:</p>
-<p>history | awk '{a[$'`echo "1 2 $HISTTIMEFORMAT" | wc -w`']++}END{for(i in a){print a[i] "\t" i}}' | sort -rn | head</p>
+<pre><code class="language-plaintext">history | awk '{a[$'`echo "1 2 $HISTTIMEFORMAT" | wc -w`']++}END{for(i in a){print a[i] "\t" i}}' | sort -rn | head</code></pre>
 <p><br><a href="http://rus-linux.net/MyLDP/consol/awk.html">Изучаем команды linux: awk</a></p>
