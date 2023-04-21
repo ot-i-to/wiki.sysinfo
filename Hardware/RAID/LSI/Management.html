@@ -2,7 +2,7 @@
 title: MegaCLI
 description: полезные команды
 published: true
-date: 2023-04-21T12:51:08.185Z
+date: 2023-04-21T12:54:56.885Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-04-21T11:23:51.199Z
@@ -44,7 +44,7 @@ dateCreated: 2023-04-21T11:23:51.199Z
 # echo 1 &gt; /sys/block/sda/device/rescan</code></pre>
 <p><strong>Расширение существующего RAID-массива новым диском</strong></p>
 <pre><code class="language-plaintext">./MegaCli64 -LDRecon -Start -r5 -Add -PhysDrv[32:3] -L0 -a0</code></pre>
-<p>Создайте новый виртуальный диск RAID 5 из набора новых жестких дисков.</p>
+<p><strong>Создайте новый виртуальный диск RAID 5 из набора новых жестких дисков.</strong></p>
 <p>Сначала нам нужно указать корпус и номер слота жестких дисков, которые мы хотим использовать для нового диска RAID. Узнать их можно по первой команде. Затем я добавляю виртуальный диск с использованием RAID уровня 5, за которым следует список дисков, которые я хочу использовать, указанный в синтаксисе корпус:слот.</p>
 <pre><code class="language-plaintext"># MegaCli64 -PDList -aALL | egrep 'Adapter|Enclosure|Slot|Inquiry'
 # MegaCli64 -CfgLdAdd -r5'[252:5,252:6,252:7]' -a0</code></pre>
