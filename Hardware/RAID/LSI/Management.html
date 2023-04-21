@@ -2,7 +2,7 @@
 title: MegaCLI
 description: полезные команды
 published: true
-date: 2023-04-21T12:43:36.718Z
+date: 2023-04-21T12:48:55.161Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-04-21T11:23:51.199Z
@@ -42,24 +42,25 @@ dateCreated: 2023-04-21T11:23:51.199Z
 <p>В этом примере переносим виртуальный диск 0 с уровня RAID 6 на RAID 5, чтобы освободить место на одном дополнительном диске. Вторая команда используется, чтобы заставить Linux определить новый размер диска RAID.</p>
 <pre><code class="language-plaintext"># /usr/local/sbin/MegaCli64 -LDRecon -Start -r5 -L0 -a0
 # echo 1 &gt; /sys/block/sda/device/rescan</code></pre>
-<p>Расширение существующего RAID-массива новым диском</p>
-<p>./MegaCli64 -LDRecon -Начать -r5 -Добавить -PhysDrv[32:3] -L0 -a0</p>
+<p><strong>Расширение существующего RAID-массива новым диском</strong></p>
+<pre><code class="language-plaintext">./MegaCli64 -LDRecon -Start -r5 -Add -PhysDrv[32:3] -L0 -a0</code></pre>
 <p>Создайте новый виртуальный диск RAID 5 из набора новых жестких дисков.</p>
 <p>Сначала нам нужно указать корпус и номер слота жестких дисков, которые мы хотим использовать для нового диска RAID. Узнать их можно по первой команде. Затем я добавляю виртуальный диск с использованием RAID уровня 5, за которым следует список дисков, которые я хочу использовать, указанный в синтаксисе корпус:слот.</p>
-<p># MegaCli64 -PDList -aALL | egrep 'Adapter|Enclosure|Slot|Inquiry'</p>
-<p># MegaCli64 -CfgLdAdd -r5'[252:5,252:6,252:7]' -a0</p>
-<p>Расширение существующего RAID-массива новым диском</p>
+<pre><code class="language-plaintext"># MegaCli64 -PDList -aALL | egrep 'Adapter|Enclosure|Slot|Inquiry'
+# MegaCli64 -CfgLdAdd -r5'[252:5,252:6,252:7]' -a0</code></pre>
+<p><strong>Расширение существующего RAID-массива новым диском</strong></p>
 <p>Сначала проверьте идентификатор устройства корпуса и номер слота вновь добавленного диска с помощью приведенной выше команды. Затем мы реконструируем логический диск, добавляя новый диск. Для массива RAID 5 используется эта команда:</p>
-<p># MegaCli64 -LDRecon -Start -r5 -Add -PhysDrv[32:3] -L0 -a0</p>
-<p>Посмотреть ход реконструкции</p>
+<pre><code class="language-plaintext"># MegaCli64 -LDRecon -Start -r5 -Add -PhysDrv[32:3] -L0 -a0</code></pre>
+<p><strong>Посмотреть ход реконструкции</strong></p>
 <p>При восстановлении массива RAID вы можете проверить его ход с помощью этой команды.</p>
-<p># MegaCli64 -LDRecon ShowProg L0 -a0</p>
+<pre><code class="language-plaintext"># MegaCli64 -LDRecon ShowProg L0 -a0</code></pre>
 <p>(замените L0 на L1 для второго виртуального диска и т. д.)</p>
-<p>Настройте отключение кэша записи при выходе из строя батареи.</p>
-<p># MegaCli64 -LDSetProp NoCachedBadBBU -LALL -aALL</p>
-<p>Изменить политику кэширования физического диска</p>
+<h5>Настройте отключение кэша записи при выходе из строя батареи.</h5>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext"># MegaCli64 -LDSetProp NoCachedBadBBU -LALL -aALL</code></pre>
+<h5>Изменить политику кэширования физического диска</h5>
 <p>Если ваша система не подключена к ИБП, вам следует отключить кэш физического диска, чтобы предотвратить потерю данных.</p>
-<p># MegaCli -LDGetProp -DskCache -LAll -aALL</p>
+<pre><code class="language-plaintext"># MegaCli -LDGetProp -DskCache -LAll -aALL</code></pre>
 <p>Чтобы включить его (делайте это, только если у вас есть ИБП и резервные источники питания):</p>
-<p># MegaCli -LDGetProp -DskCache -LAll -aALL</p>
+<pre><code class="language-plaintext"># MegaCli -LDGetProp -DskCache -LAll -aALL</code></pre>
 <p>&nbsp;</p>
