@@ -2,32 +2,26 @@
 title: MegaCLI
 description: полезные команды
 published: true
-date: 2023-04-21T11:37:43.034Z
+date: 2023-04-21T12:38:59.228Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-04-21T11:23:51.199Z
 -->
 
 <p>&nbsp;</p>
-<p><strong>RAID контроллерами MegaRAID фирмы LSI, теперь это Broadcom, можно управлять в линуксе из консоли используя утелиту MegaCLI, Загрузить которую можно </strong><a href="https://docs.broadcom.com/docs/12351587"><strong>тут</strong></a><strong>. &nbsp;Вот несколько полезных команд:</strong></p>
-<p>Просмотр информации об адаптере RAID</p>
-<p>&nbsp;</p>
+<p>RAID контроллерами MegaRAID фирмы LSI, теперь это Broadcom, можно управлять в линуксе из консоли используя утелиту MegaCLI, Загрузить которую можно <a href="https://docs.broadcom.com/docs/12351587">тут</a>. &nbsp;Вот несколько полезных команд:</p>
+<h5>Просмотр информации об адаптере RAID</h5>
 <p>Для проверки версии прошивки, наличия блока резервного питания, установленной кэш-памяти и возможностей адаптера:</p>
-<p>&nbsp;</p>
-<p># MegaCli64 -AdpAllInfo -aAll</p>
-<p>Просмотр информации о состоянии резервного аккумулятора</p>
-<p>&nbsp;</p>
-<p># MegaCli64 -AdpBbuCmd -aAll</p>
-<p>Просмотр информации о виртуальных дисках</p>
-<p>&nbsp;</p>
+<pre><code class="language-plaintext"># MegaCli64 -AdpAllInfo -aAll</code></pre>
+<h5>Просмотр информации о состоянии резервного аккумулятора</h5>
+<pre><code class="language-plaintext"># MegaCli64 -AdpBbuCmd -aAll</code></pre>
+<h5>Просмотр информации о виртуальных дисках</h5>
 <p>Полезно для проверки уровня RAID, размера полосы, политики кэширования и состояния RAID:</p>
-<p>&nbsp;</p>
-<p># MegaCli64 -LDInfo -Lall -aALL</p>
-<p>Просмотр информации о физических дисках</p>
-<p>&nbsp;</p>
-<p># MegaCli64 -PDList -aALL</p>
+<pre><code class="language-plaintext"># MegaCli64 -LDInfo -Lall -aALL</code></pre>
+<h5>Просмотр информации о физических дисках</h5>
+<p>Рекомендую обратить внимение на счетчики в строках <code>Media Error Count:</code> и <code>Other Error Count:</code> &nbsp;указывающие на наличие ошибок в работе диска.</p>
+<pre><code class="language-plaintext"># MegaCli64 -PDList -aALL</code></pre>
 <p>Патруль читать</p>
-<p>&nbsp;</p>
 <p>Патрульное чтение — это функция, которая пытается обнаружить ошибку диска до того, как станет слишком поздно и данные будут потеряны. По умолчанию это делается автоматически (с задержкой в ​​168 часов между разными патрульными чтениями) и занимает до 30% ресурсов ввода-вывода.</p>
 <p>&nbsp;</p>
 <p>Чтобы просмотреть информацию о состоянии чтения патруля и задержке между запусками чтения патруля:</p>
