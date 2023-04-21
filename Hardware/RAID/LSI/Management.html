@@ -2,7 +2,7 @@
 title: MegaCLI
 description: полезные команды
 published: true
-date: 2023-04-21T12:41:48.723Z
+date: 2023-04-21T12:42:46.623Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-04-21T11:23:51.199Z
@@ -39,10 +39,9 @@ dateCreated: 2023-04-21T11:23:51.199Z
 <pre><code class="language-plaintext"># MegaCli64 -AdpPR -Stop -aALL</code></pre>
 <p>Рекомендуем использовать приведенные выше команды для запуска патрульного чтения в непиковое время.</p>
 <h5>Миграция с одного уровня RAID на другой</h5>
-<p>В этом примере я переношу виртуальный диск 0 с уровня RAID 6 на RAID 5, чтобы освободить место на одном дополнительном диске. Вторая команда используется, чтобы заставить Linux определить новый размер диска RAID.</p>
-<p>&nbsp;</p>
-<p># /usr/local/sbin/MegaCli64 -LDRecon -Start -r5 -L0 -a0</p>
-<p># echo 1 &gt; /sys/block/sda/device/rescan</p>
+<p>В этом примере переносим виртуальный диск 0 с уровня RAID 6 на RAID 5, чтобы освободить место на одном дополнительном диске. Вторая команда используется, чтобы заставить Linux определить новый размер диска RAID.</p>
+<pre><code class="language-plaintext"># /usr/local/sbin/MegaCli64 -LDRecon -Start -r5 -L0 -a0
+# echo 1 &gt; /sys/block/sda/device/rescan</code></pre>
 <p>Расширение существующего RAID-массива новым диском</p>
 <p>&nbsp;</p>
 <p>./MegaCli64 -LDRecon -Начать -r5 -Добавить -PhysDrv[32:3] -L0 -a0</p>
