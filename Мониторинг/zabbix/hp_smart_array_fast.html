@@ -1,0 +1,14 @@
+<!--
+title: ESXi HP Smart Array Fast
+description: Шаблон Zabbix для HP SmartArray: быстрое сканирование + метрика температуры жесткого диска
+published: true
+date: 2023-04-27T11:22:10.190Z
+tags: шаблон, template, raid, zabbix, hp, smartarray, hdd temperature
+editor: ckeditor
+dateCreated: 2023-04-27T11:22:10.190Z
+-->
+
+<p><strong>Основан шаблона на:&nbsp;</strong><br>1) <a href="https://zabbix.tips/template-esxi-hp-smart-array-monitoring/">https://share.zabbix.com/operating-systems/vmware/esxi-hp-smart-array-monitoring</a> (<a href="https://github.com/lesovsky/zabbix-extensions/tree/master/files/hwraid-smartarray">https://github.com/lesovsky/zabbix-extensions/tree/master/files/hwraid-smartarray</a>), но он для 2 версии zabbix_server<br>2) <a href="https://github.com/snk1313/esxi_hp_smart_array/tree/main">https://github.com/snk1313/esxi_hp_smart<i>array/tree/main</i></a><i> … для zabbix_</i>server 5.2 и работает шаблон через SSH соединение</p>
+<p>Данный шаблон работает через стандартный Zabbix-agenta. Имеет время сканирования 120 секунд. Добавлены триггеры с предупреждением о температуре 35 °C и сигнализацией о температуре 40 °C для жестких дисков. И исправлены ошибки в работе скриптов и шаблона.</p>
+<p>&nbsp;</p>
+<p>Этот шаблон не будет работать с ESXi Unlocker.</p>
