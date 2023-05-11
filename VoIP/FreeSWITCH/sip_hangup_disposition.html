@@ -1,0 +1,45 @@
+<!--
+title: sip_hangup_disposition
+description: Эта поле содержит значение того, кто отправил сообщение SIP BYE.
+published: true
+date: 2023-05-11T18:59:49.151Z
+tags: freeswitch, sip, bye, sip_hangup_disposition, hangup
+editor: code
+dateCreated: 2023-05-11T18:59:49.151Z
+-->
+
+<p><u>Данное поле используется в CDR данных тел. серверов </u><code><u>SBC</u></code><u>, </u><code><u>Router_Garastel</u></code><u>, </u><code><u>TR1-Core</u></code><u>&nbsp;</u></p>
+<p>Значений поля различается для входящих и исходящих вызовов, поскольку FreeSWITCH находится на разных концах сеанса:</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td style="text-align:center;"><strong>Зеачение</strong></td>
+        <td style="text-align:center;"><strong>Входящий</strong></td>
+        <td style="text-align:center;"><strong>Исходящий</strong></td>
+      </tr>
+      <tr>
+        <td><code>send_bye</code></td>
+        <td>FS отправил звонящему BYE (мы повесили трубку)</td>
+        <td>FS отправила BYE на конечную точку (мы повесили трубку)</td>
+      </tr>
+      <tr>
+        <td><code>recv_bye</code></td>
+        <td>FS получил BYE от звонящего (повесили трубку)</td>
+        <td>FS получила BYE от конечной точки (повесили трубку)</td>
+      </tr>
+      <tr>
+        <td><code>send_refuse</code></td>
+        <td>FS отклонил вызов (например, 4xx или 5xx)</td>
+        <td>Конечная точка отклонила вызов (например, 4xx или 5xx)</td>
+      </tr>
+      <tr>
+        <td><code>send_cancel</code></td>
+        <td>н/д</td>
+        <td>FS прервал вызов (мы отправили CANCEL)</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p><a href="https://developer.signalwire.com/freeswitch/Channel-Variables-Catalog/sip_hangup_disposition_16352604/">оригинал</a></p>
+<p>&nbsp;</p>
