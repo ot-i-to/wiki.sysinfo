@@ -2,7 +2,7 @@
 title: Высокая доступность
 description: High Availability
 published: true
-date: 2023-05-16T10:37:19.219Z
+date: 2023-05-16T10:37:45.597Z
 tags: voip, freeswitch, высокая доступность, high availability
 editor: ckeditor
 dateCreated: 2023-05-16T10:07:08.630Z
@@ -22,6 +22,7 @@ dateCreated: 2023-05-16T10:07:08.630Z
 <p>… где <code>&lt;password&gt; </code>заменяем паролем доступа к базе данных, в данном случае от пользователя <code>freeswitch</code></p>
 <p>По мима SIP профилей нам надо в файле switch.conf.xml &nbsp;конфигурации FreeSWITCH, добавbnm строку или раскоментируем её и править:</p>
 <pre><code class="language-plaintext">&lt;param name="core-db-dsn" value="pgsql://hostaddr=127.0.0.1 dbname=freeswitch user=freeswitch port='5432' password='&lt;password&gt;' options='-c client_min_messages=NOTICE'" /&gt;</code></pre>
+<p>… где <code>&lt;password&gt; </code>заменяем паролем доступа к базе данных, в данном случае от пользователя <code>freeswitch</code></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
