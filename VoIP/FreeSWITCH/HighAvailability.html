@@ -2,7 +2,7 @@
 title: Высокая доступность
 description: High Availability
 published: true
-date: 2023-05-16T10:41:52.798Z
+date: 2023-05-16T10:43:28.960Z
 tags: voip, freeswitch, высокая доступность, high availability
 editor: ckeditor
 dateCreated: 2023-05-16T10:07:08.630Z
@@ -18,6 +18,7 @@ dateCreated: 2023-05-16T10:07:08.630Z
 <blockquote>
   <p><mark class="pen-red">Имейте в виду, что при использовании «отслеживания вызовов» наблюдается незначительное снижение производительности, поскольку состояние вызова (все переменные сеанса, аналогичные данным mod_xml_cdr) сохраняются в основной базе данных каждый раз, когда изменяется состояние канала.</mark></p>
 </blockquote>
+<h6>Для общей БД</h6>
 <p>Так же в SIP профилях указываем параметры подключения к серверу БД:</p>
 <pre><code class="language-plaintext">&lt;param name="odbc-dsn" value="pgsql://hostaddr=127.0.0.1 dbname=freeswitch user=freeswitch port='5432' password='&lt;password&gt;.' options='-c client_min_messages=NOTICE' application_name='freeswitch'" /&gt;</code></pre>
 <p>… где <code>&lt;password&gt; </code>заменяем паролем доступа к базе данных, в данном случае от пользователя <code>freeswitch</code></p>
