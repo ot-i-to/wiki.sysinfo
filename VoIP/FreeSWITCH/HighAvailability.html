@@ -2,7 +2,7 @@
 title: Высокая доступность
 description: High Availability
 published: true
-date: 2023-05-16T11:40:35.086Z
+date: 2023-05-16T11:52:19.861Z
 tags: voip, freeswitch, высокая доступность, high availability
 editor: ckeditor
 dateCreated: 2023-05-16T10:07:08.630Z
@@ -27,8 +27,13 @@ dateCreated: 2023-05-16T10:07:08.630Z
 <p>… где <code>&lt;password&gt; </code>заменяем паролем доступа к базе данных, в данном случае от пользователя <code>freeswitch</code></p>
 <p>Имя хоста на обеих машинах должно быть одинаковым, так как запрос sql для восстановления вызовов выбирает по имени хоста. Для этого просто установите для следующего параметра в <code>switch.conf.xml </code>на обоих экземплярах FS одно и то же значение:</p>
 <pre><code class="language-plaintext">&lt;param name="switchname" value="freeswitch"/&gt;</code></pre>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<h1>Управление FreeSWITCH для восстанавливать вызовов</h1>
+<p>Чтобы указать FreeSWITCH восстановиться после сбоя, т.е. стать активным, все, что вам нужно сделать, это выполнить команду:</p>
+<pre><code class="language-plaintext">fs_cli -x 'fsctl recover'</code></pre>
+<p>Для краш-теста функции вы можете выполнить:</p>
+<pre><code class="language-plaintext">fs_cli -x 'fsctl crash'</code></pre>
+<p>Чтобы FreeSWITCH автоматически восстанавливал вызовы при запуске, добавте команду в файл конфигупвции freeswitch.xml:</p>
+<pre><code class="language-plaintext"> &lt;X-PRE-PROCESS cmd="set" data="api_on_startup=fsctl recover"/&gt;</code></pre>
 <p>&nbsp;</p>
 <h6>Сылки:</h6>
 <ul>
