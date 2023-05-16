@@ -2,7 +2,7 @@
 title: Высокая доступность
 description: High Availability
 published: true
-date: 2023-05-16T11:52:19.861Z
+date: 2023-05-16T11:54:53.003Z
 tags: voip, freeswitch, высокая доступность, high availability
 editor: ckeditor
 dateCreated: 2023-05-16T10:07:08.630Z
@@ -34,7 +34,8 @@ dateCreated: 2023-05-16T10:07:08.630Z
 <pre><code class="language-plaintext">fs_cli -x 'fsctl crash'</code></pre>
 <p>Чтобы FreeSWITCH автоматически восстанавливал вызовы при запуске, добавте команду в файл конфигупвции freeswitch.xml:</p>
 <pre><code class="language-plaintext"> &lt;X-PRE-PROCESS cmd="set" data="api_on_startup=fsctl recover"/&gt;</code></pre>
-<p>&nbsp;</p>
+<h1>Конфигурация высокой доступности</h1>
+<p>Ну тут вариантов много и некоторые примеры описаны в ссылках приведенных ниже :)</p>
 <h6>Сылки:</h6>
 <ul>
   <li><a href="https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Configuration/High-Availability/">High Availability</a> [developer.signalwire.com]</li>
