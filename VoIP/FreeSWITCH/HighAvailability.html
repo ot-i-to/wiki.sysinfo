@@ -2,14 +2,16 @@
 title: Высокая доступность
 description: High Availability
 published: true
-date: 2023-05-16T12:59:52.441Z
+date: 2023-05-16T13:07:29.266Z
 tags: voip, freeswitch, высокая доступность, high availability
 editor: ckeditor
 dateCreated: 2023-05-16T10:07:08.630Z
 -->
 
 <p>Конфигурации FreeSWITCH с высокой доступностью, включая отказоустойчивость и центральные базы данных.&nbsp;<br>Эта означает, что вы можете запустить "горячею" копию сервера расположеную на другом физическом с еревере в случае полного отказа основного сервера и сохранить существующие вызовы, потеряв звук всего на несколько секунд (обычно 3-5 секунд). Но этоа конфигурация не является кластером для увеличения пропускной способности FreeSWITCH, т.е. тут нет параллельной обработки SIP вызовов на нескольких физических серверах.&nbsp;</p>
-<figure class="image"><img src="/img/high_availability_freeswitch.drawio_.png"></figure>
+<figure class="image"><img src="/img/high_availability_freeswitch.drawio_.png">
+  <figcaption><a href="/img/high_availability_freeswitch.drawio"><span class="text-tiny"><s><sub><sup>drawio</sup></sub></s></span></a></figcaption>
+</figure>
 <h1>Требования к конфигурации</h1>
 <h6>Track Calls</h6>
 <p>В профилях SIP у вас должно быть включено отслеживание вызовов. Если вызов задействует два и другие SIP профиля во , то отслеживание вызовов должно быть включино во все профилях участвующих в вызове.</p>
