@@ -1,0 +1,20 @@
+<!--
+title: Call to undefined function split()
+description: 
+published: true
+date: 2023-06-01T17:05:21.009Z
+tags: php, pnp-7
+editor: ckeditor
+dateCreated: 2023-06-01T17:05:21.009Z
+-->
+
+<h1>Ошибка Call to undefined function split()</h1>
+<p>Ошибка появляется из-за того что в php 7.0.0 метод split() удален.<br>А решение ошибки очень простое, нужно просто заменить его на метод <code>explode()</code>.</p>
+<p><strong><u>Было</u></strong>:</p>
+<pre><code class="language-plaintext">$domainsName = split( '\r\n', $originList['domain'] );
+$domainsName = split( '\r\n', $originList['domain'] );</code></pre>
+<p><strong><u>Стало</u></strong>:</p>
+<pre><code class="language-plaintext">$domainsName = explode( '\r\n', $originList['domain'] );
+$domainsName = explode( '\r\n', $originList['domain'] );</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
