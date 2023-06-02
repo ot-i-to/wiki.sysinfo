@@ -2,7 +2,7 @@
 title:  show queue
 description: Asterisk cli Command Show Queue
 published: true
-date: 2023-06-02T18:08:07.577Z
+date: 2023-06-02T18:22:04.397Z
 tags: show, command, asterisk, queue, cli
 editor: ckeditor
 dateCreated: 2023-06-02T17:19:54.730Z
@@ -28,4 +28,24 @@ dateCreated: 2023-06-02T17:19:54.730Z
       1. Zap/12-1 (wait: 1:02, prio: 0) &lt;-------------------- Этот канал ждет
 </code></pre>
 <p><strong>0*</strong> Вес очереди, определенный в queues.conf<br><strong>1*</strong> Отвеченые звонки<br><strong>2*</strong> Звонки без ответа (люди, которые звонили, но кладут трубку до того, как им ответят)<br><strong>3*</strong> Уровень обслуживания (% звонков, отвеченных в течение X секунд)<br><strong>4*</strong> Период времени для расчета уровня обслуживания (см. выше), указанный в queues.conf</p>
+<pre><code class="language-plaintext"> |--- номер/имя очереди
+ |    Агенты и расширения, которые будут частью этой очереди            Среднее    Среднее
+ |    |   Звонки в настоящее время обрабатываются                       время      время           0*    1*    2*      3*           4*
+ |    |            | Мах.ограничение в очереди Cтратегия распредиления  удержания  разговора       |     |      |      |            |
+ |    |            |              |                 |    звонков         |            |            |     |      |      |            |
+ V    |            V              V                 V                    V            V            V     V      V      V            V  
+S_T_P |        has 2 calls (max unlimited) in 'rrmemory' strategy (16s holdtime, 510s talktime), W:0, C:306, A:15, SL:84.3% within 15s
+      V
+      Members:
+        Baluev_S (SIP/1411 from SIP/1411) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 18 calls (last was 603 secs ago)
+        Litvinov_D (SIP/1270 from SIP/1270) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 31 calls (last was 1431 secs ago)
+        Turchenko_R (SIP/1260 from SIP/1260) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 9 calls (last was 11776 secs ago)
+        Sedov_V (SIP/1284 from SIP/1284) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 9 calls (last was 3904 secs ago)
+        Orlov_I (SIP/1248 from SIP/1248) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 36 calls (last was 1271 secs ago)
+        Grishin_A (SIP/1295 from SIP/1295) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 34 calls (last was 2051 secs ago)
+        Sejfullaev_R (SIP/L11883 from SIP/L11883) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 41 calls (last was 1015 secs ago)
+        Evtyushin_O (SIP/1246 from SIP/1246) with penalty 1 (ringinuse enabled) (dynamic) (Not in use) has taken 31 calls (last was 429 secs ago)
+     Callers:
+        1. SIP/PBX-0000492b (wait: 1:23, prio: 0)
+        2. SIP/PBX-000049e5 (wait: 0:25, prio: 0)</code></pre>
 <p>&nbsp;</p>
