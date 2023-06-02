@@ -1,0 +1,33 @@
+<!--
+title:  show queue
+description: Asterisk cli Command Show Queue
+published: true
+date: 2023-06-02T17:19:54.730Z
+tags: show, command, asterisk, queue, cli
+editor: ckeditor
+dateCreated: 2023-06-02T17:19:54.730Z
+-->
+
+<p><strong>Синтаксис:</strong><br>show queue &lt;имя/номер очереди&gt;</p>
+<blockquote>
+  <p><strong>Примечание: </strong>имя/номер очереди указывать не обязательно.<br>Если имя.номер очереди равно null, эта команда покажет состояние всех очередей.</p>
+</blockquote>
+<pre><code class="language-plaintext">^
+
+ ---- queue Number
+ | Agents &amp; Extensions that will be part of this queue
+ | |   Calls currently being processed                                          0*    1*    2*      3*           4*
+ | |             |                             Ring Strategy   ?? (average?)    |     |      |      |            |
+ | |             |                                |                 |           |     |      |      |            |
+ V |             V                                V                 V           V     V      V      V            V  
+ 10V         has 1 calls (max unlimited) in 'ringall' strategy (49s holdtime), W:0, C:210, A:201, SL:0.0% within 0s
+   Members:
+      Local/1234@from-internal/n (Unknown) has taken no calls yet  &lt;-------------- This extensions is currently doing nothing (?)
+      Local/1920@from-internal/n (In use) has taken 12 calls (last was 543 secs ago) &lt;----- This extension is processing a call
+)
+   Callers:
+      1. Zap/12-1 (wait: 1:02, prio: 0) &lt;-------------------- This channel is waiting
+^</code></pre>
+<p>0: Queue weight defined in queues.conf<br>1: Calls answered<br>2: Calls unanswered (People who called, but hang up before getting answered)<br>3: Service level (% of calls answered within X seconds)<br>4: Time period to calculate service level (see above), specified in <a href="https://www.voip-info.org/asterisk-config-queuesconf/">queues.conf</a></p>
+<p>in version 1.4.x, the show queue command is deprecated and will be removed in a future release. use <a href="https://www.voip-info.org/asterisk-cli-command-queue-show/"><strong>asterisk cli command queue show</strong></a> instead.</p>
+<p>&nbsp;</p>
