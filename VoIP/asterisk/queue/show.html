@@ -2,7 +2,7 @@
 title:  show queue
 description: Asterisk cli Command Show Queue
 published: true
-date: 2023-06-02T17:32:00.847Z
+date: 2023-06-02T17:32:58.237Z
 tags: show, command, asterisk, queue, cli
 editor: ckeditor
 dateCreated: 2023-06-02T17:19:54.730Z
@@ -14,13 +14,13 @@ dateCreated: 2023-06-02T17:19:54.730Z
 </blockquote>
 <pre><code class="language-plaintext">^
 
- ---- номер/имя очереди
- | Агенты и расширения, которые будут частью этой очереди
- | |   Звонки в настоящее время обрабатываются                                  0*    1*    2*      3*           4*
- | |             |                             Кольцевая стратегия ?? (средний?)|     |      |      |            |
- | |             |                                |                 |           |     |      |      |            |
- V |             V                                V                 V           V     V      V      V            V  
- 10V         has 1 calls (max unlimited) in 'ringall' strategy (49s holdtime), W:0, C:210, A:201, SL:0.0% within 0s
+ |--- номер/имя очереди
+ |  Агенты и расширения, которые будут частью этой очереди
+ |  |   Звонки в настоящее время обрабатываются                                  0*    1*    2*      3*           4*
+ |  |             |                             Кольцевая стратегия ?? (средний?)|     |      |      |            |
+ |  |             |                                |                 |           |     |      |      |            |
+ V  |             V                                V                 V           V     V      V      V            V  
+ 10 V         has 1 calls (max unlimited) in 'ringall' strategy (49s holdtime), W:0, C:210, A:201, SL:0.0% within 0s
    Members:
       Local/1234@from-internal/n (Unknown) has taken no calls yet  &lt;-------------- Это расширение в настоящее время ничего не делает (?)
       Local/1920@from-internal/n (In use) has taken 12 calls (last was 543 secs ago) &lt;----- Это расширение обрабатывает вызов)
