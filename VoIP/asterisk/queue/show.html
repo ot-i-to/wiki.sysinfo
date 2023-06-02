@@ -2,7 +2,7 @@
 title:  show queue
 description: Asterisk cli Command Show Queue
 published: true
-date: 2023-06-02T17:36:44.235Z
+date: 2023-06-02T17:45:14.384Z
 tags: show, command, asterisk, queue, cli
 editor: ckeditor
 dateCreated: 2023-06-02T17:19:54.730Z
@@ -12,8 +12,7 @@ dateCreated: 2023-06-02T17:19:54.730Z
 <blockquote>
   <p><strong>Примечание: </strong>имя/номер очереди указывать не обязательно.<br>Если имя.номер очереди равно null, эта команда покажет состояние всех очередей.</p>
 </blockquote>
-<pre><code class="language-plaintext">^
-
+<pre><code class="language-plaintext">
  |--- номер/имя очереди
  |  Агенты и расширения, которые будут частью этой очереди
  |  |   Звонки в настоящее время обрабатываются                                     0*    1*    2*      3*           4*
@@ -27,6 +26,6 @@ dateCreated: 2023-06-02T17:19:54.730Z
       Local/1920@from-internal/n (In use) has taken 12 calls (last was 543 secs ago) &lt;----- Это расширение обрабатывает вызов)
    Callers:
       1. Zap/12-1 (wait: 1:02, prio: 0) &lt;-------------------- Этот канал ждет
-^</code></pre>
+</code></pre>
 <p>0: Вес очереди, определенный в queues.conf<br>1: Отвеченые звонки<br>2: Звонки без ответа (люди, которые звонили, но кладут трубку до того, как им ответят)<br>3: Уровень обслуживания (% звонков, отвеченных в течение X секунд)<br>4: Период времени для расчета уровня обслуживания (см. выше), указанный в queues.conf</p>
 <p>&nbsp;</p>
