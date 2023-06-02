@@ -2,7 +2,7 @@
 title:  show queue
 description: Asterisk cli Command Show Queue
 published: true
-date: 2023-06-02T17:23:18.543Z
+date: 2023-06-02T17:30:38.353Z
 tags: show, command, asterisk, queue, cli
 editor: ckeditor
 dateCreated: 2023-06-02T17:19:54.730Z
@@ -14,20 +14,20 @@ dateCreated: 2023-06-02T17:19:54.730Z
 </blockquote>
 <pre><code class="language-plaintext">^
 
- ---- queue Number
- | Agents &amp; Extensions that will be part of this queue
- | |   Calls currently being processed                                          0*    1*    2*      3*           4*
- | |             |                             Ring Strategy   ?? (average?)    |     |      |      |            |
+ ---- номер очереди
+ | Агенты и расширения, которые будут частью этой очереди
+ | |   Звонки в настоящее время обрабатываются                                  0*    1*    2*      3*           4*
+ | |             |                             Кольцевая стратегия ?? (средний?)|     |      |      |            |
  | |             |                                |                 |           |     |      |      |            |
  V |             V                                V                 V           V     V      V      V            V  
  10V         has 1 calls (max unlimited) in 'ringall' strategy (49s holdtime), W:0, C:210, A:201, SL:0.0% within 0s
    Members:
-      Local/1234@from-internal/n (Unknown) has taken no calls yet  &lt;-------------- This extensions is currently doing nothing (?)
-      Local/1920@from-internal/n (In use) has taken 12 calls (last was 543 secs ago) &lt;----- This extension is processing a call
+      Local/1234@from-internal/n (Unknown) has taken no calls yet  &lt;-------------- Это расширение в настоящее время ничего не делает (?)
+      Local/1920@from-internal/n (In use) has taken 12 calls (last was 543 secs ago) &lt;----- Это расширение обрабатывает вызов
 )
    Callers:
-      1. Zap/12-1 (wait: 1:02, prio: 0) &lt;-------------------- This channel is waiting
+      1. Zap/12-1 (wait: 1:02, prio: 0) &lt;-------------------- Этот канал ждет
 ^</code></pre>
-<p>0: Вес очереди, определенный в queues.conf<br>1: Отвеченые звонки<br>2: Calls unanswered (People who called, but hang up before getting answered)<br>3: Service level (% of calls answered within X seconds)<br>4: Time period to calculate service level (see above), specified in <a href="https://www.voip-info.org/asterisk-config-queuesconf/">queues.conf</a></p>
+<p>0: Вес очереди, определенный в queues.conf<br>1: Отвеченые звонки<br>2: Звонки без ответа (люди, которые звонили, но кладут трубку до того, как им ответят)<br>3: Уровень обслуживания (% звонков, отвеченных в течение X секунд)<br>4: Период времени для расчета уровня обслуживания (см. выше), указанный в queues.conf</p>
 <p>in version 1.4.x, the show queue command is deprecated and will be removed in a future release. use <a href="https://www.voip-info.org/asterisk-cli-command-queue-show/"><strong>asterisk cli command queue show</strong></a> instead.</p>
 <p>&nbsp;</p>
