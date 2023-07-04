@@ -1,0 +1,27 @@
+<!--
+title: ch341-uart нет ttyUSB ?
+description: для Ubuntu, Linux-Mint, Debian
+published: true
+date: 2023-07-04T11:42:57.257Z
+tags: linux, hardware, ch341-uart, ch341, ttyusb, usb
+editor: ckeditor
+dateCreated: 2023-07-04T11:42:57.257Z
+-->
+
+<h4>Почему при подключении переходника ch341-uart USB-to-RS232-9pin не появляется устройство ttyUSB ?</h4>
+<p>… и в dmesg виден странный результат, что устройство отключено</p>
+<pre><code class="language-plaintext">...
+[14781.423262] usb 1-4: new full-speed USB device number 11 using xhci_hcd
+[14781.571789] usb 1-4: New USB device found, idVendor=1a86, idProduct=7523, bcdDevice= 2.54
+[14781.571800] usb 1-4: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+[14781.571805] usb 1-4: Product: USB2.0-Ser!
+[14781.573338] ch341 1-4:1.0: ch341-uart converter detected
+[14781.573757] ch341-uart ttyUSB0: break control not supported, using simulated break
+[14781.574144] usb 1-4: ch341-uart converter now attached to ttyUSB0
+[14782.189306] input: BRLTTY 6.4 Linux Screen Driver Keyboard as /devices/virtual/input/input28
+[14782.194043] usb 1-4: usbfs: interface 0 claimed by ch341 while 'brltty' sets config #1
+[14782.197555] ch341-uart ttyUSB0: ch341-uart converter now disconnected from ttyUSB0
+[14782.197637] ch341 1-4:1.0: device disconnected</code></pre>
+<p>А решением для меня оказался вариант с удаление пакета <strong>brltty</strong> с помощью <code><strong>sudo apt remove brltty</strong></code> ( описанный <a href="https://stackoverflow.com/questions/70123431/why-would-ch341-uart-is-disconnected-from-ttyusb">тут</a> &nbsp;), поскольку в паке я не нуждался, т.к. у меня нет &nbsp;<strong>электронной книги Брайля</strong>.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
