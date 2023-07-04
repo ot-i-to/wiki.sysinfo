@@ -2,7 +2,7 @@
 title: ch341-uart нет ttyUSB ?
 description: для Ubuntu, Linux-Mint, Debian
 published: true
-date: 2023-07-04T11:42:57.257Z
+date: 2023-07-04T11:43:49.209Z
 tags: linux, hardware, ch341-uart, ch341, ttyusb, usb
 editor: ckeditor
 dateCreated: 2023-07-04T11:42:57.257Z
@@ -22,6 +22,5 @@ dateCreated: 2023-07-04T11:42:57.257Z
 [14782.194043] usb 1-4: usbfs: interface 0 claimed by ch341 while 'brltty' sets config #1
 [14782.197555] ch341-uart ttyUSB0: ch341-uart converter now disconnected from ttyUSB0
 [14782.197637] ch341 1-4:1.0: device disconnected</code></pre>
-<p>А решением для меня оказался вариант с удаление пакета <strong>brltty</strong> с помощью <code><strong>sudo apt remove brltty</strong></code> ( описанный <a href="https://stackoverflow.com/questions/70123431/why-would-ch341-uart-is-disconnected-from-ttyusb">тут</a> &nbsp;), поскольку в паке я не нуждался, т.к. у меня нет &nbsp;<strong>электронной книги Брайля</strong>.</p>
-<p>&nbsp;</p>
+<p>А решением для меня оказался вариант с удаление пакета <strong>brltty</strong> с помощью <code><strong>sudo apt remove brltty</strong></code> ( описанный <a href="https://stackoverflow.com/questions/70123431/why-would-ch341-uart-is-disconnected-from-ttyusb">тут</a> &nbsp;), поскольку в паке я не нуждался.</p>
 <p>&nbsp;</p>
