@@ -2,34 +2,34 @@
 title: Мониторинг пользователя
 description: TTY мониторинг действий 
 published: true
-date: 2023-10-04T10:15:09.198Z
+date: 2023-10-04T10:17:39.711Z
 tags: linux, user, ssh, monitoring, tty
 editor: ckeditor
 dateCreated: 2023-10-04T10:13:26.187Z
 -->
 
-<p>Для обеспечения мониторинга действий пользователей / сотрудников службы поддержки / инсталляторов на сервере Системы, необходимо:</p>
-<p>1. Запретить доступ к пользователю root по протоколу SSH. Для этого заменить в файле /etc/ssh/</p>
+<p><span class="text-big"><strong>Для обеспечения мониторинга действий пользователей / сотрудников службы поддержки / инсталляторов на сервере Системы, необходимо:</strong></span></p>
+<h5>1. Запретить доступ к пользователю root по протоколу SSH. Для этого заменить в файле /etc/ssh/</h5>
 <p>sshd_config строку:</p>
-<p>PermitRootLogin yes</p>
+<pre><code class="language-plaintext">PermitRootLogin yes</code></pre>
 <p>на строку</p>
-<p>PermitRootLogin no</p>
-<p>2. Установить пакет sudo командой:</p>
-<p>aptitude install sudo</p>
-<p>3. Создать пользователя sysinfo и добавить его в группу sudo командами:</p>
-<p>adduser sysinfo</p>
-<p>adduser sysinfo sudo</p>
-<p>4. Завершить все соединения с правами пользователя root и подключиться к серверу в качестве пользователя sysinfo;</p>
-<p>5. Установить пакет ttyrec командой:</p>
-<p>sudo aptitude install ttyrec</p>
-<p>6. Добавить в файл /etc/profile следующие строки для мониторинга действий пользователя в консоли:</p>
-<p>if [ -z "$TTYREC_ENABLED" ]; then</p>
-<p>&nbsp;export TTYREC_ENABLED="yes"</p>
-<p>&nbsp;mkdir -p ~/.ttyrec</p>
-<p>&nbsp;ttyrec ~/.ttyrec/`date +%F_%T_%N`.rec</p>
-<p>&nbsp;exit</p>
-<p>fi</p>
-<p>7. Установить пакет snoopy командой:</p>
-<p>sudo aptitude install snoopy</p>
+<pre><code class="language-plaintext">PermitRootLogin no</code></pre>
+<h5>2. Установить пакет sudo командой:</h5>
+<pre><code class="language-plaintext">aptitude install sudo</code></pre>
+<h5>3. Создать пользователя sysinfo и добавить его в группу sudo командами:</h5>
+<pre><code class="language-plaintext">adduser sysinfo
+adduser sysinfo sudo</code></pre>
+<h5>4. Завершить все соединения с правами пользователя root и подключиться к серверу в качестве пользователя sysinfo;</h5>
+<h5>5. Установить пакет ttyrec командой:</h5>
+<pre><code class="language-plaintext">sudo aptitude install ttyrec</code></pre>
+<h5>6. Добавить в файл /etc/profile следующие строки для мониторинга действий пользователя в консоли:</h5>
+<pre><code class="language-plaintext">if [ -z "$TTYREC_ENABLED" ]; then
+  export TTYREC_ENABLED="yes"
+  mkdir -p ~/.ttyrec
+  ttyrec ~/.ttyrec/`date +%F_%T_%N`.rec
+  exit
+fi</code></pre>
+<h5>7. Установить пакет snoopy командой:</h5>
+<pre><code class="language-plaintext">sudo aptitude install snoopy</code></pre>
 <p>В процессе установки система задаст вопрос, требуется ли добавлять его в ld.so.preload. Необходимо ответить yes. В результате этих действий доступ к пользователю root разрешен только с консоли (необходимо при обнаружении серьезных проблем с аппаратным обеспечением), инженеры службы поддержки и инсталляторы имеют доступ к пользователю sysinfo, клиент имеет доступ к пользователям, созданным самостоятельно. Все действия пользователя в консоли записываются в файлах ~/.ttyrec/*.rec. Для каждого сеанса создается новый файл. Просмотр данных файлов осуществляется с помощью утилиты ttyplay. В журнал /var/log/auth.log записываются все запуски всех программ на данном сервере.</p>
 <p>&nbsp;</p>
