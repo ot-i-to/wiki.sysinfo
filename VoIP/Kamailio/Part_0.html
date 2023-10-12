@@ -2,7 +2,7 @@
 title: 1. Установка и настройка
 description: Kamailio часть 0. Установка и настройка Kamailio. Отказоустойчивая архитектура VoIP
 published: true
-date: 2023-10-12T20:18:49.799Z
+date: 2023-10-12T20:19:43.844Z
 tags: voip, install, user, sip, configuration parameter, configure, kamailio, regitration, subscruber, configuration
 editor: ckeditor
 dateCreated: 2023-10-12T19:01:49.264Z
@@ -21,14 +21,14 @@ dateCreated: 2023-10-12T19:01:49.264Z
   <li>Нет необходимости в установке дополнительных пакетов для сборки из исходников</li>
   <li>Это рекомендуемый способ установки от разработчиков<br>&nbsp;</li>
 </ul>
-<h4>Установка на примере CentOS 7:</h4>
+<h3>Установка на примере CentOS 7:</h3>
 <p>Необходимо выполнить последовательно следующие команды от пользователя с sudo правами:</p>
 <pre><code class="language-plaintext">yum -y install yum-utils 
 yum-config-manager --add-repo https://rpm.kamailio.org/centos/kamailio.repo 
 yum install kamailio</code></pre>
 <p>Для установки на других дистрибутивов, например Debian подобных, необходимо следовать инструкции с официального сайта: <a href="https://www.kamailio.org/wiki/packages/debs#apt_repositories_for_kamailio_v41x">ссылка</a>.</p>
 <p>После установки, в директории <i>/etc/kamailio/ </i>будет автоматически создан конфигурационный файл <i>kamailio.cfg</i>. Рекомендую сохранить его как пример, к нему иногда придется обращаться, чтобы посмотреть как разработчики реализовали тот или иной функционал.&nbsp;<br>После того, как сохранили стандартный конфиг, например переименовав его в <i>kamailio.cfg.example</i>, необходимо создать пустой файл <i>kamailio.cfg </i>в директории <i>/etc/kamailio</i>.</p>
-<h4>Минимальный конфигурационный файл для запуска Kamailio</h4>
+<h3>Минимальный конфигурационный файл для запуска Kamailio</h3>
 <p>Для обеспечения минимальной работоспособности, в конфиг<i> </i>необходимо добавить следующие строки:</p>
 <pre><code class="language-plaintext">request_route {
         exit;
