@@ -2,7 +2,7 @@
 title: Manipulation
 description: Обозначение плана набора номера для маршрутизации и манипуляций
 published: true
-date: 2023-10-23T10:21:33.512Z
+date: 2023-10-23T10:26:05.332Z
 tags: voip, dialplan, manipulation, audiocodes, gateway, routing
 editor: ckeditor
 dateCreated: 2023-10-23T09:33:40.245Z
@@ -60,7 +60,13 @@ dateCreated: 2023-10-23T09:33:40.245Z
 <p>&nbsp; &nbsp; &nbsp; Только <strong>для префикса</strong> также можно использовать обозначения <strong>d[n,m]e</strong> и <strong>d[n-m]e</strong>:</p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить пятизначное число, начинающееся с цифр 11, 22 или 33:<strong> [11,22,33]ххх#</strong></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить шестизначное число, начинающееся с 111 или 222:<strong> [111,222]xxx#</strong>.</p>
-<p>&nbsp;</p>
+<ul>
+  <li><code>[n1-m1,n2-m2,a,b,c,n3-m3] или (n1-m1,n2-m2,a,b,c,n3-m3)</code> - Представляет смешанную запись отдельных чисел и нескольких диапазонов. Например, чтобы изобразить числа от 123 до 130, 455, 766 и от 780 до 790:</li>
+</ul>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Префикс: <strong>[123-130,455,766,780-790]</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Суффикс:<strong> (123-130,455,766,780-790)</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<strong>Примечание.</strong> Диапазоны и отдельные номера, используемые в абонентской группе, должны иметь одинаковое количество цифр.&nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;Например, каждый диапазон номеров и одиночный номер в приведенном выше примере плана набора состоит из трех цифр.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
