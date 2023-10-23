@@ -2,7 +2,7 @@
 title: Manipulation
 description: Обозначение плана набора номера для маршрутизации и манипуляций
 published: true
-date: 2023-10-23T09:58:19.613Z
+date: 2023-10-23T10:15:52.175Z
 tags: voip, dialplan, manipulation, audiocodes, gateway, routing
 editor: ckeditor
 dateCreated: 2023-10-23T09:33:40.245Z
@@ -37,6 +37,33 @@ dateCreated: 2023-10-23T09:33:40.245Z
   <li><code>[n-m] или (n-m)</code> - Представляет диапазон чисел.</li>
 </ul>
 <p><strong>&nbsp; &nbsp; &nbsp; &nbsp;Примеры:</strong></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; - Чтобы отобразить номера префиксов от 5551200 до 5551300: <strong>[5551200-5551300]#</strong></p>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;-&nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; - Чтобы отобразить номера префиксов от 5551200 до 5551300:&nbsp;</p>
+<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[5551200-5551300]#</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы отобразить номера префиксов от 123100 до 123200:&nbsp;</p>
+<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 123[100-200]#</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить номера префикса и суффикса вместе:</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; &nbsp;<strong>03(100)</strong>: для любого числа, которое начинается с 03 и заканчивается на 100.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; &nbsp;<strong>[100-199](100,101,105)</strong>: для чисел, начинающихся со 100 по 199 и заканчивается на 100, 101 или 105.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; &nbsp;03(abc): для любого числа, которое начинается с 03 и заканчивается на abc.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; &nbsp;03(5xx): для любого числа, которое начинается с 03 и заканчивается на 5xx.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &gt; &nbsp;03(400,401,405): для любого номера, который начинается с 03 и заканчивается на 400 или 401 или 405.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<i><strong>Примечания:</strong></i></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Значение n должно быть меньше значения m.</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Поддерживаются только числовые диапазоны (не алфавитные буквы).</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Для диапазонов суффиксов начальное (n) и конечное (m) числа в диапазоне должно содержать одинаковое количество цифр.&nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Например, (23-34) правильно, но (3-12) нет.</p>
+<ul>
+  <li><code>[n,m,...] или (n,m,...)</code> - Представляет несколько чисел. Значение может включать цифры или символы.</li>
+</ul>
+<p>&nbsp; &nbsp; &nbsp;&nbsp;<strong>Примеры:</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить однозначное число, начинающееся с 2, 3, 4, 5 или 6: [2,3,4,5,6]</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить однозначное число, оканчивающееся на 7, 8 или 9: (7,8,9)</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Префикс с суффиксом: [2,3,4,5,6](7,8,9) – префикс обозначается квадратом; суффикс в скобках</p>
+<p>&nbsp; &nbsp; &nbsp; Только для префикса также можно использовать обозначения d[n,m]e и d[n-m]e:</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить пятизначное число, начинающееся с цифр 11, 22 или 33:</p>
+<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[11,22,33]ххх#</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;- Чтобы изобразить шестизначное число, начинающееся с 111 или 222: [111,222]xxx#.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
