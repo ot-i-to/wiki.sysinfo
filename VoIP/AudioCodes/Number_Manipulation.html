@@ -2,7 +2,7 @@
 title: Manipulation
 description: Обозначение плана набора номера для маршрутизации и манипуляций
 published: true
-date: 2023-10-23T09:46:15.651Z
+date: 2023-10-23T09:50:31.755Z
 tags: voip, dialplan, manipulation, audiocodes, gateway, routing
 editor: ckeditor
 dateCreated: 2023-10-23T09:33:40.245Z
@@ -23,7 +23,15 @@ dateCreated: 2023-10-23T09:33:40.245Z
       <li>Префикс имени вызывающего источника и пункта назначения</li>
     </ol>
   </li>
-  <li>&nbsp;</li>
+</ul>
+<h6>Диапазон цифр.&nbsp;</h6>
+<p><strong>Примечания:</strong></p>
+<ul class="todo-list">
+  <li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">Планы нумерации, обозначающие префикс, являющийся диапазоном, должны быть заключены в квадратные скобки, например, [4-8] или 23хх[456].</span></label></li>
+  <li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">Планы нумерации, обозначающие префикс, который не является диапазоном, не заключен в рамки, например, 12345#.</span></label></li>
+  <li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">Планы нумерации, обозначающие суффикс, должны быть заключены в круглые скобки, например, (4) и (4-8).</span></label></li>
+  <li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">Планы нумерации, обозначающие суффикс, включающий несколько диапазонов, диапазон должен быть заключен в квадратные скобки, например (23xx[4,5,6]).</span></label></li>
+  <li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">Пример ввода комбинированной абонентской группы с префиксом и суффиксом. Предположим, вы хотите сопоставить правило чей префикс телефона назначения составляет от 4 до 8, а суффикс&nbsp;– 234, 235 или 236. Введенное значение будет следующими: [4-8](23[4,5,6]).</span></label></li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
