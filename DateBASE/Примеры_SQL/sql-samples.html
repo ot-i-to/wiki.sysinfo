@@ -2,13 +2,13 @@
 title: PostgresSQL
 description: оазные примеры запросов :)
 published: true
-date: 2023-10-27T11:58:10.804Z
+date: 2023-10-27T12:02:01.412Z
 tags: samples, postgresql, sql, pgsql, примеры
 editor: ckeditor
 dateCreated: 2023-10-27T11:58:10.804Z
 -->
 
-<h5>Обновление данных используя данные из бругой таблици по совпадающему значению столбца из обновляемой таблицы:</h5>
+<h5>Обновление данных Т1 используя данные из таблици Т2 по совпадающему значению столбцов в обеих таблицах</h5>
 <pre><code class="language-plaintext">UPDATE "route_e164" T1 SET
 "gw_uuid" = T2."gateway_uuid"
 FROM "v_gateways" T2
