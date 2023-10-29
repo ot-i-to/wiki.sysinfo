@@ -2,7 +2,7 @@
 title: Устаревание apt-key
 description: Warning: apt-key is deprecated. 
 published: true
-date: 2023-10-29T08:40:07.518Z
+date: 2023-10-29T08:41:08.664Z
 tags: debian, apt, ubuntu, deprecation, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T08:06:39.701Z
@@ -46,7 +46,7 @@ uid         [ неизвестно ] TrueConf LLC &lt;packager@trueconf.com&gt;
 sub   rsa2048 2013-12-17 [E]</code></pre>
 <p>Посмотрите на последовательность цифр и букв в поле pub — это хеш. В данном примере нас интересует строка</p>
 <p><code>1DAD 98B6 2621 470B 7EB4 &nbsp;DCA7 C76A 2E88 349F 28FB</code></p>
-<p>Для удаления этого ключа нужно запустить команду (обратите внимание, что из хеша убраны пробелы):</p>
+<p>Для удаления этого ключа нужно запустить команду (обратите внимание, что из хеша удалены асе пробелы):</p>
 <p><code>sudo apt-key del 1DAD98B62621470B7EB4DCA7C76A2E88349F28FB</code></p>
 <p>или достаточно последних 8 символов</p>
 <p><code>sudo apt-key del 349F28FB</code></p>
