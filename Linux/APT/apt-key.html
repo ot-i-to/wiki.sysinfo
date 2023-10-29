@@ -2,7 +2,7 @@
 title: Устаревание apt-key
 description: Warning: apt-key is deprecated. 
 published: true
-date: 2023-10-29T08:08:12.134Z
+date: 2023-10-29T08:18:08.898Z
 tags: debian, apt, ubuntu, deprecation, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T08:06:39.701Z
@@ -13,4 +13,18 @@ dateCreated: 2023-10-29T08:06:39.701Z
 <p style="text-align:justify;">Несмотря на предупреждение, программа <strong>apt-key</strong> работает как обычно и выполняет все свои функции и эту команду не удалят ещё довольно долго, как минимум несколько лет. Поэтому, в принципе, можно не обращать внимание на предупреждение «apt-key is deprecated» и продолжать пользоваться копандой.</p>
 <p style="text-align:justify;">&nbsp;</p>
 <h4 style="text-align:justify;">Но давайте расмотрим варианты как добавлять ключи новым способом.</h4>
-<p style="text-align:justify;">&nbsp;</p>
+<p style="text-align:justify;">Если добавляется удалённый файл ключей:</p>
+<p style="text-align:justify;"><code>curl -s <strong><u>URL</u></strong> | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code></p>
+<p style="text-align:justify;">Если добавляется локальный файл ключей:</p>
+<p style="text-align:justify;"><code>cat <strong><u>ФАЙЛ</u></strong>.pub | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code></p>
+<p>В этих командах нужно следующие параметры заменить своими:</p>
+<ul>
+  <li><strong><u>URL</u></strong> — адрес файла .pub</li>
+  <li><strong><u>ИМЯ</u></strong> — можно выбрать любое имя файла</li>
+  <li><strong><u>ФАЙЛ</u></strong> — имя файла .pub</li>
+</ul>
+<p>Затем <strong>обязательно</strong> выполнить следующую команду для установки правильных прав доступа к файлу:</p>
+<p><code>sudo chmod 644 /etc/apt/trusted.gpg.d/ИМЯ.gpg</code></p>
+<blockquote>
+  <p><strong>Пример</strong>. Если вы уже знаете URL-адрес требуемого открытого ключа, используйте wget или curl для его загрузки и импорта. Не забудьте обновить права доступа к файлам с 600 до 644.&nbsp;</p>
+</blockquote>
