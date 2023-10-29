@@ -2,7 +2,7 @@
 title: Устаревание apt-key
 description: Warning: apt-key is deprecated. 
 published: true
-date: 2023-10-29T08:24:02.424Z
+date: 2023-10-29T08:26:14.820Z
 tags: debian, apt, ubuntu, deprecation, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T08:06:39.701Z
@@ -25,4 +25,13 @@ dateCreated: 2023-10-29T08:06:39.701Z
 <blockquote>
   <p><strong>Внимание</strong>. Обязательно требуется обновить права доступа к файлам с 600 до 644 командой <code>sudo chmod 644 /etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg</code></p>
 </blockquote>
-<p>вввв</p>
+<h4>Чтобы просмотреть информацию об установленном ключе выполните команду:</h4>
+<p><code>gpg --list-keys --keyring /etc/apt/trusted.gpg.d/<strong><u>ФАЙЛ</u></strong>.gpg</code></p>
+<p>Как уже было сказано, старая команда тоже работает:</p>
+<p><code>apt-key list</code></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
