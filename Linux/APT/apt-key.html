@@ -2,7 +2,7 @@
 title: Устаревание apt-key
 description: Warning: apt-key is deprecated. 
 published: true
-date: 2023-10-29T08:45:57.528Z
+date: 2023-10-29T08:52:25.008Z
 tags: debian, apt, ubuntu, deprecation, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T08:06:39.701Z
@@ -13,7 +13,7 @@ dateCreated: 2023-10-29T08:06:39.701Z
 <p style="text-align:justify;">Несмотря на предупреждение, программа <strong>apt-key</strong> работает как обычно и выполняет все свои функции и эту команду не удалят ещё довольно долго, как минимум несколько лет. Поэтому, в принципе, можно не обращать внимание на предупреждение «apt-key is deprecated» и продолжать пользоваться копандой.</p>
 <h4 style="text-align:justify;">Но давайте расмотрим варианты как добавлять ключи новым способом.</h4>
 <p style="text-align:justify;">Если добавляется удалённый файл ключей:</p>
-<p style="text-align:justify;"><code>curl -s <strong><u>URL</u></strong> | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code></p>
+<p style="text-align:justify;"><code>curl -s <strong><u>URL</u></strong> | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code><br>или, если Вам не нравится curl, можно использовать &nbsp;wget<br><code>wget -qO - <strong><u>URL</u></strong> | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code></p>
 <p style="text-align:justify;">Если добавляется локальный файл ключей:</p>
 <p style="text-align:justify;"><code>cat <strong><u>ФАЙЛ</u></strong>.pub | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code></p>
 <p>В этих командах нужно следующие параметры заменить своими:</p>
