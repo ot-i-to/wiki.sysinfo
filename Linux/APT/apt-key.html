@@ -2,7 +2,7 @@
 title: Устаревание apt-key
 description: Warning: apt-key is deprecated. 
 published: true
-date: 2023-10-29T08:23:56.395Z
+date: 2023-10-29T08:24:02.424Z
 tags: debian, apt, ubuntu, deprecation, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T08:06:39.701Z
@@ -11,7 +11,6 @@ dateCreated: 2023-10-29T08:06:39.701Z
 <p style="text-align:justify;">Команда <strong>apt-key</strong> управляет ключами, которые отвечают за проверку подписи репозиториев пакетов приложений.</p>
 <p style="text-align:justify;">Время не стоит на месте и все меняется. Так и 2017 году появились обновления системе управления пакетами и теперь при любом использовании команды apt-key вы будете получать сообщение "<strong>Warning: apt-key is deprecated. Manage keyring files in trusted.gpg.d instead (see apt-key(8)).</strong>" Оно означает, что программа <strong>apt-ke</strong>y теперь устарела и для управления файлами ключей теперь используйте папку <strong>trusted.gpg.d.</strong> Если перевести на человеческий язык, теперь мы должны самостоятельно добавлять файлы в папку <strong>/etc/apt/trusted.gpg.d/</strong>.</p>
 <p style="text-align:justify;">Несмотря на предупреждение, программа <strong>apt-key</strong> работает как обычно и выполняет все свои функции и эту команду не удалят ещё довольно долго, как минимум несколько лет. Поэтому, в принципе, можно не обращать внимание на предупреждение «apt-key is deprecated» и продолжать пользоваться копандой.</p>
-<p style="text-align:justify;">&nbsp;</p>
 <h4 style="text-align:justify;">Но давайте расмотрим варианты как добавлять ключи новым способом.</h4>
 <p style="text-align:justify;">Если добавляется удалённый файл ключей:</p>
 <p style="text-align:justify;"><code>curl -s <strong><u>URL</u></strong> | sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg --import</code></p>
