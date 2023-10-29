@@ -2,7 +2,7 @@
 title: Устаревание apt-key
 description: Warning: apt-key is deprecated. 
 published: true
-date: 2023-10-29T08:26:14.820Z
+date: 2023-10-29T08:40:07.518Z
 tags: debian, apt, ubuntu, deprecation, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T08:06:39.701Z
@@ -29,7 +29,29 @@ dateCreated: 2023-10-29T08:06:39.701Z
 <p><code>gpg --list-keys --keyring /etc/apt/trusted.gpg.d/<strong><u>ФАЙЛ</u></strong>.gpg</code></p>
 <p>Как уже было сказано, старая команда тоже работает:</p>
 <p><code>apt-key list</code></p>
-<p>&nbsp;</p>
+<h4>Как удалить ключ, добавленный новым методом</h4>
+<p>Если вам нужен аналог команды:</p>
+<p>sudo apt-key del 1D2D3ВFС</p>
+<p>То теперь, т.к. ключи храняться в отдельных файлах, &nbsp;для удаления ключа, просто удалите файл командами вида:</p>
+<p><code>sudo rm /etc/apt/trusted.gpg.d/<strong><u>ИМЯ</u></strong>.gpg</code></p>
+<p>Но и <strong>apt-key del</strong> тоже работает.</p>
+<p>Если вы хотите удалить отдельные ключи добавленный с помощью apt-key add, то используйте команду вида:</p>
+<p><code>sudo apt-key del <strong>ИДЕНТИФИКАТОР_КЛЮЧА</strong></code></p>
+<p>Чтобы узнать <strong>ИДЕНТИФИКАТОР_КЛЮЧА</strong> выполните команду <strong>apt-key list </strong>и найдите нужный ключ, например:</p>
+<pre><code class="language-plaintext">/etc/apt/trusted.gpg.d/trueconf.gpg
+-----------------------------------
+pub   rsa2048 2013-12-17 [SC]
+     1DAD 98B6 2621 470B 7EB4  DCA7 C76A 2E88 349F 28FB
+uid         [ неизвестно ] TrueConf LLC &lt;packager@trueconf.com&gt;
+sub   rsa2048 2013-12-17 [E]</code></pre>
+<p>Посмотрите на последовательность цифр и букв в поле pub — это хеш. В данном примере нас интересует строка</p>
+<p><code>1DAD 98B6 2621 470B 7EB4 &nbsp;DCA7 C76A 2E88 349F 28FB</code></p>
+<p>Для удаления этого ключа нужно запустить команду (обратите внимание, что из хеша убраны пробелы):</p>
+<p><code>sudo apt-key del 1DAD98B62621470B7EB4DCA7C76A2E88349F28FB</code></p>
+<p>или достаточно последних 8 символов</p>
+<p><code>sudo apt-key del 349F28FB</code></p>
+<p>Для удаления все ключей, добавленные с помощью apt-key add, надо удалить файл /etc/apt/trusted.gpg:</p>
+<p><code>sudo rm /etc/apt/trusted.gpg</code></p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
