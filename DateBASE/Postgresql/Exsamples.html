@@ -2,7 +2,7 @@
 title: INSERT если не прошел UPDATE
 description: Postgresq - выполняем INSERT если не прошел UPDATE
 published: true
-date: 2022-08-17T16:46:02.891Z
+date: 2023-11-05T15:32:17.251Z
 tags: if, postgresql, insert, update, error
 editor: ckeditor
 dateCreated: 2022-04-20T15:22:49.341Z
@@ -21,6 +21,6 @@ begin
 end
 $$ language plpgsql;</code></pre>
 <p>Пример:</p>
-<p>SELECT UPDATE_OR_INSERT('UPDATE table SET val = '||x||' WHERE id = ‘||y||’::text', 'INSERT INTO table (id, val) VALUES ('||y||', '||x||')'::text)</p>
+<p><strong>SELECT UPDATE_OR_INSERT('UPDATE table SET val = '||x||' WHERE id = ‘||y||’::text', 'INSERT INTO table (id, val) VALUES ('||y||', '||x||')'::text)</strong></p>
 <p>… не проверял, но должно работать на Postgresql ≥ 10 и выше &nbsp;:)</p>
 <p>&nbsp;</p>
