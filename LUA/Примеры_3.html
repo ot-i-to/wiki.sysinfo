@@ -2,7 +2,7 @@
 title: Пример 3 ... Поиск по файлу
 description: Разныее примеры
 published: true
-date: 2023-11-05T15:18:32.747Z
+date: 2023-11-05T15:22:44.486Z
 tags: lua, samples, file, find
 editor: ckeditor
 dateCreated: 2021-11-11T23:46:44.422Z
@@ -50,7 +50,7 @@ end</code></pre>
 end
 startData = 2
 n = 1
-local f = io.open("/tmp/dev/DEF-9xx.csv")
+local f = io.open("/tmp/dev/DEF-9xx.csv", "r")
 for line in f:lines() do
   if ( n &gt;= startData ) then 
     print("--&gt; "..n.." &lt;--")
@@ -60,7 +60,8 @@ for line in f:lines() do
     end
   end
   n = n + 1
-end</code></pre>
+end
+f:close()</code></pre>
 <p>&nbsp;</p>
 <pre><code class="language-plaintext">Результат выглядит так:
 --&gt; 1 &lt;--
