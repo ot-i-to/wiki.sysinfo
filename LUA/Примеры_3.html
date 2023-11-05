@@ -2,7 +2,7 @@
 title: Пример 3 ... Поиск по файлу
 description: Разныее примеры
 published: true
-date: 2023-11-05T15:10:09.511Z
+date: 2023-11-05T15:18:32.747Z
 tags: lua, samples, file, find
 editor: ckeditor
 dateCreated: 2021-11-11T23:46:44.422Z
@@ -48,16 +48,20 @@ end</code></pre>
  table.insert( outResults, string.sub( self, theStart ) )
  return outResults
 end
+startData = 2
 n = 1
 local f = io.open("/tmp/dev/DEF-9xx.csv")
 for line in f:lines() do
- print("--&gt; "..n.." &lt;--")
- TBL = line:split(";");
- for i = 1, #TBL do
-   print(i .. ") " .. TBL[i])
- end
- n = n + 1
+  if ( n &gt;= startData ) then 
+    print("--&gt; "..n.." &lt;--")
+    TBL = line:split(";");
+    for i = 1, #TBL do
+      print(i .. ") " .. TBL[i])
+    end
+  end
+  n = n + 1
 end</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">Результат выглядит так:
 --&gt; 1 &lt;--
 1)  АВС/ DEF
