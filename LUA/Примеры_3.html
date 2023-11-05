@@ -2,7 +2,7 @@
 title: Пример 3 ... Поиск по файлу
 description: Разныее примеры
 published: true
-date: 2023-11-05T15:07:44.643Z
+date: 2023-11-05T15:10:09.511Z
 tags: lua, samples, file, find
 editor: ckeditor
 dateCreated: 2021-11-11T23:46:44.422Z
@@ -58,4 +58,25 @@ for line in f:lines() do
  end
  n = n + 1
 end</code></pre>
-<p>&nbsp;</p>
+<pre><code class="language-plaintext">Результат выглядит так:
+--&gt; 1 &lt;--
+1)  АВС/ DEF
+2) От
+3) До
+4) Емкость
+5) Оператор
+6) Регион
+7) ИНН
+--&gt; 2 &lt;--
+1) 900
+2) 0000000
+3) 0061999
+4) 62000
+5) ООО "Т2 Мобайл"
+6) Краснодарский край
+7) 7743895280
+--&gt; 3 &lt;--
+...
+...
+...
+и т.д.</code></pre>
