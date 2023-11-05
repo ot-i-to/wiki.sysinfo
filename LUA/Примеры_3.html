@@ -2,7 +2,7 @@
 title: Пример 3 ... Поиск по файлу
 description: Разныее примеры
 published: true
-date: 2022-08-17T16:53:28.158Z
+date: 2023-11-05T15:06:20.968Z
 tags: lua, samples, file, find
 editor: ckeditor
 dateCreated: 2021-11-11T23:46:44.422Z
@@ -33,3 +33,29 @@ print(m.MemTotal, m.MemFree)</code></pre>
    elseif --// I don't quite understand this part in your code.
    end
 end</code></pre>
+<p><strong>Пример с CSV файлом:</strong></p>
+<pre><code class="language-plaintext">function string:split( inSplitPattern, outResults )
+ if not outResults then
+    outResults = { }
+ end
+ local theStart = 1
+ local theSplitStart, theSplitEnd = string.find( self, inSplitPattern, theStart )
+ while theSplitStart do
+    table.insert( outResults, string.sub( self, theStart, theSplitStart-1 ) )
+    theStart = theSplitEnd + 1
+    theSplitStart, theSplitEnd = string.find( self, inSplitPattern, theStart )
+ end
+ table.insert( outResults, string.sub( self, theStart ) )
+ return outResults
+end
+n = 1
+local f = io.open("/tmp/dev/DEF-9xx.csv")
+for line in f:lines() do
+ print("--&gt; "..n.." &lt;--")
+ TBL = line:split(";");
+ for i = 1, #TBL do
+   print(i .. ") " .. TBL[i])
+ end
+ n = n + 1
+end</code></pre>
+<p>&nbsp;</p>
