@@ -2,7 +2,7 @@
 title: ... в Таблицу
 description: Примеры
 published: true
-date: 2023-11-06T17:14:53.295Z
+date: 2023-11-06T17:20:28.313Z
 tags: lua, string, table
 editor: ckeditor
 dateCreated: 2023-11-06T16:51:16.094Z
@@ -45,5 +45,25 @@ print("==&gt; "..#textArray)
 --&gt; 192.168.0.10:3022
 ==&gt; 3</code></pre>
 <p>… но можно использовать в качестве разделитя и пробел, т.к. он задан в регулярном выражении <code>"([^(,;)]+)"</code></p>
+<pre><code class="language-plaintext">local text = "1q2w3e4r5t zaqw,sx345 [];kjdhg"
+local textArray = {}
+
+for str in text:gmatch("([^(,;) ]+)") do
+ table.insert(textArray, str)
+end
+
+for _, value in pairs(textArray) do
+ print("--&gt; "..value)
+end
+print("==&gt; "..#textArray)
+
+Результат:
+
+--&gt; 1q2w3e4r5t
+--&gt; zaqw
+--&gt; sx345
+--&gt; []
+--&gt; kjdhg
+==&gt; 5</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
