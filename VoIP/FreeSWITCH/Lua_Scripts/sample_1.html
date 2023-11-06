@@ -1,0 +1,39 @@
+<!--
+title: Пример 1
+description: 
+published: true
+date: 2023-11-06T14:31:34.435Z
+tags: lua, freeswitch, scripts
+editor: ckeditor
+dateCreated: 2023-11-06T14:31:34.435Z
+-->
+
+<p>Пример кода на языке Lua для работы с FreeSWITCH</p>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">-- Загрузка модуля FreeSWITCH
+local api = freeswitch.API()</code></pre>
+<pre><code class="language-plaintext">-- Отправка SIP-запроса
+api:executeString("sofia_contact sip:user@example.com")</code></pre>
+<pre><code class="language-plaintext">-- Установка SIP-переменных
+api:setVariable("user", "John")
+api:setVariable("number", "5551234")</code></pre>
+<pre><code class="language-plaintext">-- Получение SIP-переменных
+local user = api:getVariable("user")
+local number = api:getVariable("number")</code></pre>
+<pre><code class="language-plaintext">-- Отправка команды FreeSWITCH
+api:execute("say", "Hello, world!")</code></pre>
+<pre><code class="language-plaintext">-- Запуск Dialplan
+api:execute("dialplan", "extension example")</code></pre>
+<pre><code class="language-plaintext">-- Запись в лог FreeSWITCH
+freeswitch.consoleLog("info", "Hello, world!")</code></pre>
+<pre><code class="language-plaintext">-- Отправка события FreeSWITCH
+freeswitch.broadcastEvent("CUSTOM", "myEvent")</code></pre>
+<pre><code class="language-plaintext">-- Установка прослушивания событий
+freeswitch.eventListener("all", function(event)
+   if event:getHeader("Event-Name") == "CUSTOM" then
+       print("Received custom event: " .. event:getHeader("Event-Subclass"))
+   end
+end)</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
