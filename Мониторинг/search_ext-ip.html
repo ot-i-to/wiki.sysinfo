@@ -1,0 +1,45 @@
+<!--
+title: Ваш внешний IP ?
+description: Как узнать свой внешний IP из консоли Linux
+published: true
+date: 2023-11-19T08:55:59.303Z
+tags: linux, console, curl, линукс, ip, extermal, косоль, внешний, wget
+editor: ckeditor
+dateCreated: 2023-11-19T08:55:59.303Z
+-->
+
+<p>Свой внешний IP адрес можно узнать с помощью одной из команд:</p>
+<pre><code class="language-plaintext">wget -qO- icanhazip.com
+wget -qO- ip.mysokol.ru
+wget -qO- ifconfig.me/ip
+wget -qO- http://formyip.com/ | awk '/The/{print $5}'
+wget -qO- http://checkip.dyndns.com/ | awk '{print $6}' | sed 's/&lt;.*&gt;//' 
+wget -qO- ident.me 
+wget -qO- eth0.me
+wget -qO- ipecho.net/plain
+wget -qO- ipecho.net
+wget -qO- myip.gelma.net
+
+curl -s checkip.dyndns.org | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}'
+curl ipinfo.io/ip
+curl v4.ident.me
+curl ident.me
+curl v4.ifconfig.co
+curl v6.ifconfig.co
+curl ifconfig.me
+curl 2ip.ru
+curl internet-lab.ru/ip
+curl icanhazip.com
+curl whatsmyip.akamai.com
+curl tnx.nl/ip
+curl ipecho.net/plain
+curl ip.appspot.com
+curl api.ipify.org
+
+lynx --source http://formyip.com/ | awk '/The/{print $5}'</code></pre>
+<p>С помощью nslookup:</p>
+<pre><code class="language-plaintext">nslookup myip.opendns.com. resolver1.opendns.com</code></pre>
+<p>Чтобы не набирать длинную команду каждый раз, можете создать алиас:</p>
+<pre><code class="language-plaintext">alias extip="curl 2ip.ru"</code></pre>
+<p>Чтобы сохранить alias, нужно <strong>прописать выполнение команд alias в файл .</strong> <strong>bashrc пользователя. </strong>Порсмотреть список alias командой <code>alias -p</code>. Удалить по имени, <code>unalias имя_alias</code>. Удаление всех alias, <code>unalias -a</code>.</p>
+<p>&nbsp;</p>
