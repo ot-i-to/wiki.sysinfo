@@ -1,0 +1,13 @@
+<!--
+title: Import CSV to BD
+description: Импорт данных CSV
+published: true
+date: 2023-11-19T21:23:14.543Z
+tags: postgresql, import, csv, pv
+editor: ckeditor
+dateCreated: 2023-11-19T21:23:14.543Z
+-->
+
+<p><br>Индикация прогресса выполнения команды <strong>COPY</strong> :<br><code># pv <i><strong><u>имя.csv файла</u></strong></i> | sudo -u postgres psql -d <i><strong><u>имя базыданных</u></strong></i> -c "copy <i><u>таблица</u></i>(<i><strong><u>колонка-1</u></strong></i>, <i><strong><u>колонка-2</u></strong></i>, <i><strong><u>колонка-3</u></strong></i>, <i><strong><u>колонка-N</u></strong></i>) from stdin delimiter ';' header null ''"</code></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
