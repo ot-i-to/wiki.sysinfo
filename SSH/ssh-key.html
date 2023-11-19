@@ -1,0 +1,19 @@
+<!--
+title: Вход без пароля
+description: Как Настроить SSH-доступ по Ключу
+published: true
+date: 2023-11-19T13:50:58.381Z
+tags: linux, ssh, connect, key
+editor: ckeditor
+dateCreated: 2023-11-19T13:50:58.381Z
+-->
+
+<p>1) Приступим к генерации открытого и закрытого SSH-ключа в Ubuntu / Debian или CentOS, использя команду <code><strong>ssh-keygen -t rsa -b 4096</strong> </code>. Далее на все задаваймые вопросы, ни чего не вводя, просто нажимаете <strong>Enter</strong>. В итоге в павке <strong>ssh/ </strong>будет сохранён Закрытый Ключ с именем файла <strong>id_rsa&nbsp;</strong> и &nbsp;Открытый &nbsp;Ключ &nbsp;с &nbsp;именем <strong>id_rsa.pub.</strong></p>
+<p>2) Копируем Открытый Ключ для включения беспарольного SSH доступа на сервер исползуя команды:&nbsp;<br>– <code><strong>ssh-copy-id </strong><u>имя_удаленного_пользователя@удаленный_IP_aдрес</u></code></p>
+<p>или</p>
+<p>– <code><strong>cat ~/.ssh/id_rsa.pub | ssh </strong><u>имя_удаленного_пользователя@удаленный_ip_aдрес</u> <strong>"mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys"</strong></code></p>
+<p>Если вы решите, что беспарольный SSH вам не подходит, вы можете отключить эту функцию, выполнив следующие действия. Для этого откройте файл конфигурации SSH - <strong>/etc/ssh/ssh_config</strong>. Здесь вы найдёте запись с <strong>PasswordAuthentication</strong>. Измените строки, как показано ниже:</p>
+<pre><code class="language-plaintext">PasswordAuthentication no
+ChallengeResponseAuthentication no
+UsePAM no</code></pre>
+<p>И и для применения изменений, не забудьте перекрузить SSH-сервер:<br>– Ubuntu / Debian командой <code>sudo systemctl restart ssh</code>&nbsp;<br>– CentOS команда <code>sudo systemctl restart sshd</code></p>
