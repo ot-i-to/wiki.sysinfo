@@ -2,7 +2,7 @@
 title: Lua body parse json 
 description: 
 published: true
-date: 2023-11-29T11:43:24.516Z
+date: 2023-11-29T11:47:43.299Z
 tags: lua, web, route, nginx, proxy, body, parsing, parse, json
 editor: ckeditor
 dateCreated: 2023-11-29T11:41:02.577Z
@@ -13,6 +13,52 @@ dateCreated: 2023-11-29T11:41:02.577Z
 <pre><code class="language-plaintext">sudo apt-get install nginx-extras lua-nginx*
 sudo apt-get install lua-zip lua-zlib lua-uri lua-system lua-sql-mysql lua-sql-odbc lua-sql-postgres lua-sql-sqlite3 
 lua-redis lua-json lua-http lua-dkjson lua-curl lua-curses lua-cjson</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">server {
+listen 8080 default_server;
+#listen [::]:8081 default_server;
+
+server_name _;
+
+# Управление заголовками на прокси сервере
+proxy_cache_bypass $http_upgrade;
+proxy_set_header Host $host;
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+#proxy_set_header "Port" $remote_port;
+##proxy_set_header "Port" "8081";
+proxy_set_header "Connection" "";
+
+# настройка буфера для прокси сервера
+proxy_buffering on;
+proxy_buffer_size 8k;
+proxy_buffers 8 8k;
+
+location / {
+
+if ($request_method = POST ) {
+    set $upstream '';
+           access_by_lua '
+               ngx.req.read_body()
+               local data = ngx.req.get_body_data()
+               local cjson = require "cjson"
+               local jsonValue = cjson.decode(data)
+               if jsonValue.request.uvrT == 35 then
+     ngx.var.upstream = "10.255.3.86:8081"
+               elseif jsonValue.request.uvrT == 36 then
+     ngx.var.upstream = "10.255.3.87:8081"
+               elseif jsonValue.request.uvrT == 37 then
+     ngx.var.upstream = "10.255.3.88:8081"
+               end
+           ';
+    proxy_pass http://$upstream;
+}
+#proxy_bind $remote_addr:$remote_port transparent;
+   }
+}</code></pre>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
