@@ -1,0 +1,84 @@
+<!--
+title: Call Back
+description: 
+published: false
+date: 2023-12-04T17:34:14.127Z
+tags: lua, freeswitch, callback
+editor: ckeditor
+dateCreated: 2023-12-04T17:34:14.127Z
+-->
+
+<p>&nbsp;</p>
+<p>В этом примере предполагается, что я путешествую по Германии с немецкой SIM-картой с включенным дешевым тарифным планом для передачи данных в Интернет (например, simyo.de). Мой домашний сервер FreeSWITCH подключен к SIP-провайдеру, который позволяет мне установить идентификатор вызывающего абонента на произвольный номер телефона. Также предполагается, что звонки с FreeSWITCH на немецкие номера будут дешевыми.</p>
+<p>&nbsp;</p>
+<pre><code class="language-plaintext">#### User directory in conf/directory/users/ssinyagin.xml
+
+&nbsp;&lt;user id="7016"&gt;
+&nbsp;&nbsp;&nbsp; &lt;params&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param name="a1-hash" value="b7bfbba6fc6e46cf666ceab54b843e79"/&gt;
+&nbsp;&nbsp;&nbsp; &lt;/params&gt;
+&nbsp;&nbsp;&nbsp; &lt;variables&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;variable name="user_context" value="callback"/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;variable name="originate_aleg_number" value="7017"/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;variable name="outbound_caller_id_number" value="0794070224"/&gt;
+&nbsp;&nbsp;&nbsp; &lt;/variables&gt;
+&nbsp; &lt;/user&gt;
+
+&nbsp; &lt;user id="7017"&gt;
+&nbsp;&nbsp;&nbsp; &lt;params&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param name="dial-string" value="[group_confirm_key=1]loopback/00491637743380/default"/&gt;
+&nbsp;&nbsp;&nbsp; &lt;/params&gt;
+&nbsp; &lt;/user&gt;</code></pre>
+<p>Здесь пользователь 7017 — это псевдоним моего временного номера в Германии. Он также просит нажать 1, чтобы ответить на звонок, чтобы звонок никогда не попадал в голосовую почту или сообщение оператора о том, что пользователь недоступен.<br><br>Пользователь 7016 является пользователем SIP, который используется для инициирования обратного вызова. Итак, на моем телефоне Android с немецкой SIM-картой я могу использовать приложение SIPdroid для набора номеров из стандартной адресной книги и журнала вызовов.<br><br>Звонки от пользователя 7016 переходят в контекст «обратного вызова», и этот контекст имеет только одно расширение, соответствующее всем номерам. Он планирует вызов API через 2 секунды, воспроизводит ужасный сигнал в течение 1 секунды, а затем вешает трубку. Вызов API выполняет скрипт Lua. Он использует мой швейцарский номер мобильного телефона в качестве идентификатора вызывающего абонента при звонке на номер пункта назначения.</p>
+<pre><code class="language-plaintext">#### conf/dialplan/callback.xml
+&lt;include&gt;
+&nbsp; &lt;context name="callback"&gt;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; &lt;extension name="callback_hung_and_originate"&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;condition field="destination_number" expression="^(\+?\d.+)$"&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&lt;action application="info"/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;action application="answer"/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;action application="set" data="api_result=${sched_api(+2 none lua callback.lua ${originate_aleg_number} ${destination_number} ${outbound_caller_id_number})}"/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;action application="gentones" data="%(1000,0,430,450,550)"/&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;action application="hangup" data="NORMAL_CLEARING"/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/condition&gt;
+&nbsp;&nbsp;&nbsp; &lt;/extension&gt;
+&nbsp; &lt;/context&gt;
+&lt;/include&gt;</code></pre>
+<p>Далее следует скрипт Lua. Это довольно просто: он создает сеанс с моим немецким мобильным номером, а затем соединяет его с исходным номером назначения.</p>
+<pre><code class="language-plaintext">#### scripts/callback.lua
+
+aleg_num = argv[1];
+bleg_num = argv[2];
+caller_id = argv[3];
+t_started = os.time();
+
+session1 = freeswitch.Session(string.format("{origination_caller_id_number=%s,call_timeout=30}loopback/%s/default",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; caller_id, aleg_num));
+
+while (session1:ready() and not session1:answered()) do
+&nbsp; if os.time() &gt; t_started + 30 then 
+&nbsp;&nbsp;&nbsp; freeswitch.consoleLog("info", "callback.lua timed out for " .. aleg_num .. "\n");
+&nbsp;&nbsp;&nbsp; session1:hangup();
+&nbsp; else
+&nbsp;&nbsp;&nbsp; freeswitch.consoleLog("debug", "callback.lua: session is not yet answered for " .. aleg_num .. "\n");
+&nbsp;&nbsp;&nbsp; freeswitch.msleep(500);
+&nbsp; end
+end
+
+if session1:ready() and session1:answered() then
+&nbsp;&nbsp; session1:setVariable("outbound_caller_id_number", caller_id);
+&nbsp;&nbsp; session1:transfer(bleg_num, "XML", "default");
+else
+&nbsp;&nbsp; freeswitch.consoleLog("info", "callback.lua: session is not functional for " .. aleg_num .. "\n");
+&nbsp;&nbsp; session1:hangup();
+end</code></pre>
+<p>Почему я не использовал встроенное приложение «originate» во FreeSWITCH? Потому что он копирует все переменные из A-ветви в B-ветвь, но я хочу установить идентификатор вызывающего абонента по-разному для двух ног.<br><br>Переменная «outbound_caller_id_number» не является стандартной переменной FreeSWITCH и используется в моем исходящем добавочном номере PSTN для установки заголовка SIP с желаемым идентификатором вызывающего абонента.<br><br>Кроме того, звонки на мой домашний мобильный номер перенаправляются на ту же АТС FreeSWITCH, а она перенаправляет звонки на мой немецкий мобильный номер.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
