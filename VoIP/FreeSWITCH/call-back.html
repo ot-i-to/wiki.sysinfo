@@ -2,7 +2,7 @@
 title: Call Back
 description: 
 published: false
-date: 2023-12-04T17:35:32.127Z
+date: 2023-12-04T17:45:51.725Z
 tags: lua, freeswitch, callback
 editor: ckeditor
 dateCreated: 2023-12-04T17:34:14.127Z
@@ -75,7 +75,7 @@ end</code></pre>
 <p>Почему я не использовал встроенное приложение «originate» во FreeSWITCH? Потому что он копирует все переменные из A-ветви в B-ветвь, но я хочу установить идентификатор вызывающего абонента по-разному для двух ног.<br><br>Переменная «outbound_caller_id_number» не является стандартной переменной FreeSWITCH и используется в моем исходящем добавочном номере PSTN для установки заголовка SIP с желаемым идентификатором вызывающего абонента.<br><br>Кроме того, звонки на мой домашний мобильный номер перенаправляются на ту же АТС FreeSWITCH, а она перенаправляет звонки на мой немецкий мобильный номер.</p>
 <p>&nbsp;</p>
 <p>https://txlab.wordpress.com/2012/04/14/fight-the-roaming-costs-with-freeswitch/</p>
-<p>&nbsp;</p>
+<p>https://github.com/moises-silva/freeswitch/blob/master/scripts/lua/callback.lua</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
