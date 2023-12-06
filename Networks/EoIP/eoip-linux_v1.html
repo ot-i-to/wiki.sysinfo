@@ -2,7 +2,7 @@
 title: EoIP Linux
 description: Установка и настройка
 published: true
-date: 2023-12-06T11:29:54.651Z
+date: 2023-12-06T11:32:22.051Z
 tags: linux, install, eoip, source, src
 editor: ckeditor
 dateCreated: 2023-12-06T11:13:24.577Z
@@ -24,10 +24,10 @@ dateCreated: 2023-12-06T11:13:24.577Z
 # make install</code></pre>
 <p>4) Скопируйте <strong>eoip.cfg</strong> в каталог <strong>/etc</strong>, измените настройки в соответствии с вашими потребностями и сохраните файл. Если вы используете опцию <code>dynamic=1</code>, обратите внимание, что авторизация отсутствует, и это не безопасно. Не рекомендуется использовать эту функцию с общедоступным IP-адресом или небезопасной (не полностью под вашим контролем каждого хоста) сетью.</p>
 <p><strong>Настройка:</strong></p>
-<p>Предположим, вам нужен только один туннель к удаленному IP-адресу 1.1.1.1</p>
+<p>Предположим, вам нужен только один туннель к удаленному IP-адресу 8.8.8.8</p>
 <pre><code class="language-plaintext">[zeoip0]
 id=1
-dst=1.1.1.1</code></pre>
+dst=8.8.8.8</code></pre>
 <p>На <i>Mikrotik</i> создайте EoIP-туннель с тем же идентификатором (1) и установите IP-адрес вашего сервера в качестве удаленного IP-адреса.&nbsp;</p>
 <p>Запустите <strong>eoio</strong> с помощью:</p>
 <pre><code class="language-plaintext"># /usr/local/bin/eoip /etc/eoip.cfg</code></pre>
