@@ -2,7 +2,7 @@
 title: Регулярные выражения
 description: Regular Expression в диалплане и т.д.
 published: true
-date: 2023-04-12T15:57:42.394Z
+date: 2023-12-06T13:43:02.734Z
 tags: freeswitch, dialplan, регулярные выражения, regular expression, configure
 editor: ckeditor
 dateCreated: 2023-03-15T10:01:30.826Z
@@ -175,7 +175,9 @@ dateCreated: 2023-03-15T10:01:30.826Z
 <p style="text-align:justify;"><strong>{6}</strong> - определяет число вхождений для предыдущего выражения, т.е. ровно 6 цифрам в диапазоне 0-9. Это также может содержать переменное число вхождений, например, чтобы соответствовать последовательность 6 до 9 цифр: {6,9}; или соответствовать по крайней мере 6 без максимального: {6};</p>
 <p style="text-align:justify;"><strong>) </strong>- закрывает другой блок;</p>
 <p style="text-align:justify;"><strong>$</strong> - указывает на конец регулярного выражения (обязательно);<br><br><strong><u>Проверить регулярное выражение в</u> FS_CLI<u>:</u></strong></p>
-<p style="text-align:justify;"><code>regex &lt;data&gt;|&lt;pattern&gt;[|&lt;subst string&gt;][|(n|b)] regex m:/&lt;data&gt;/&lt;pattern&gt;[/&lt;subst string&gt;][/(n|b)] regex m:~&lt;data&gt;~&lt;pattern&gt;[~&lt;subst string&gt;][~(n|b)]</code></p>
+<p style="text-align:justify;"><code>regex &lt;data&gt;|&lt;pattern&gt;[|&lt;subst string&gt;][|(n|b)]&nbsp;</code></p>
+<p style="text-align:justify;"><code>regex m:/&lt;data&gt;/&lt;pattern&gt;[/&lt;subst string&gt;][/(n|b)]&nbsp;</code></p>
+<p style="text-align:justify;"><code>regex m:~&lt;data&gt;~&lt;pattern&gt;[~&lt;subst string&gt;][~(n|b)]</code></p>
 <pre><code class="language-plaintext">freeswitch@&gt; regex 1234|^\d\d$
 false
 freeswitch@&gt; regex 12|^\d\d$
