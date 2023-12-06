@@ -2,7 +2,7 @@
 title: EoIP Linux
 description: Установка и настройка
 published: true
-date: 2023-12-06T11:13:24.577Z
+date: 2023-12-06T11:14:17.294Z
 tags: linux, install, eoip, source, src
 editor: ckeditor
 dateCreated: 2023-12-06T11:13:24.577Z
@@ -10,7 +10,7 @@ dateCreated: 2023-12-06T11:13:24.577Z
 
 <p><strong>Туннелирование Ethernet через IP (EoIP) </strong>— это протокол MikroTik RouterOS (без сохранения состояния и легкий туннельный протокол Ethernet «точка-точка» со статическими накладными расходами в 28 байт), который создает туннель Ethernet между двумя маршрутизаторами поверх IP-соединения. Туннель EoIP может работать через туннель IPIP, туннель PPTP или любое другое соединение, способное передавать IP.</p>
 <p><strong>Процедура установки:</strong></p>
-<p>1) скачиваем архив исходников&nbsp;</p>
+<p>1) скачиваем архив исходников:&nbsp;</p>
 <pre><code class="language-plaintext">#&nbsp;wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/linux-eoip/linux-eoip-0.5.tgz</code></pre>
 <p>… если не получается, то отсюда <a href="/files/linux-eoip-0.5.tgz">linux-eoip-0.5.tgz</a>.&nbsp;</p>
 <p>2) Далее распакуем архив:</p>
@@ -23,7 +23,7 @@ dateCreated: 2023-12-06T11:13:24.577Z
 # make install</code></pre>
 <p>4) Скопируйте eoip.cfg в каталог /etc, измените настройки в соответствии с вашими потребностями и сохраните файл. Если вы используете опцию Dynamic=1, обратите внимание, что авторизация отсутствует, и это не безопасно. Не рекомендуется использовать эту функцию с общедоступным IP-адресом или небезопасной (не полностью под вашим контролем каждого хоста) сетью.</p>
 <p><strong>Настройка:</strong></p>
-<p>Предположим, вам нужен только один туннель к удаленному IP-адресу 1.1.1.1.</p>
+<p>Предположим, вам нужен только один туннель к удаленному IP-адресу 1.1.1.1</p>
 <pre><code class="language-plaintext">[zeoip0]
 id=1
 dst=1.1.1.1</code></pre>
