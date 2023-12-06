@@ -2,7 +2,7 @@
 title: EoIP Linux
 description: Установка и настройка
 published: true
-date: 2023-12-06T11:18:12.572Z
+date: 2023-12-06T11:20:06.180Z
 tags: linux, install, eoip, source, src
 editor: ckeditor
 dateCreated: 2023-12-06T11:13:24.577Z
@@ -13,14 +13,13 @@ dateCreated: 2023-12-06T11:13:24.577Z
 <p>Не забываем предварительно установить компоненты для компиляции для Debian:</p>
 <pre><code class="language-plaintext"># apt-get install build-essential</code></pre>
 <p>1) скачиваем архив исходников:&nbsp;</p>
-<pre><code class="language-plaintext">#&nbsp;wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/linux-eoip/linux-eoip-0.5.tgz</code></pre>
+<pre><code class="language-plaintext">#&nbsp;wget --no-check-certificate https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/linux-eoip/linux-eoip-0.5.tgz</code></pre>
 <p>… если не получается, то отсюда <a href="/files/linux-eoip-0.5.tgz">linux-eoip-0.5.tgz</a>.&nbsp;</p>
 <p>2) Далее распакуем архив:</p>
-<pre><code class="language-plaintext">#&nbsp;tar -xvzf linux-eoip-0.5.tar.gz
-</code></pre>
+<pre><code class="language-plaintext">#&nbsp;tar -xvzf linux-eoip-0.5.tar.gz</code></pre>
 <p>3) Заходим в папку с исходниками и устанавливаем:</p>
 <pre><code class="language-plaintext"># cd&nbsp;linux-eoip-0.5
-# ./configure
+# ./configure --build=x86_64
 # make
 # make install</code></pre>
 <p>4) Скопируйте eoip.cfg в каталог /etc, измените настройки в соответствии с вашими потребностями и сохраните файл. Если вы используете опцию Dynamic=1, обратите внимание, что авторизация отсутствует, и это не безопасно. Не рекомендуется использовать эту функцию с общедоступным IP-адресом или небезопасной (не полностью под вашим контролем каждого хоста) сетью.</p>
