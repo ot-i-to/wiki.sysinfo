@@ -2,7 +2,7 @@
 title: EoIP Linux
 description: Установка и настройка
 published: true
-date: 2023-12-06T11:14:17.294Z
+date: 2023-12-06T11:18:12.572Z
 tags: linux, install, eoip, source, src
 editor: ckeditor
 dateCreated: 2023-12-06T11:13:24.577Z
@@ -10,6 +10,8 @@ dateCreated: 2023-12-06T11:13:24.577Z
 
 <p><strong>Туннелирование Ethernet через IP (EoIP) </strong>— это протокол MikroTik RouterOS (без сохранения состояния и легкий туннельный протокол Ethernet «точка-точка» со статическими накладными расходами в 28 байт), который создает туннель Ethernet между двумя маршрутизаторами поверх IP-соединения. Туннель EoIP может работать через туннель IPIP, туннель PPTP или любое другое соединение, способное передавать IP.</p>
 <p><strong>Процедура установки:</strong></p>
+<p>Не забываем предварительно установить компоненты для компиляции для Debian:</p>
+<pre><code class="language-plaintext"># apt-get install build-essential</code></pre>
 <p>1) скачиваем архив исходников:&nbsp;</p>
 <pre><code class="language-plaintext">#&nbsp;wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/linux-eoip/linux-eoip-0.5.tgz</code></pre>
 <p>… если не получается, то отсюда <a href="/files/linux-eoip-0.5.tgz">linux-eoip-0.5.tgz</a>.&nbsp;</p>
