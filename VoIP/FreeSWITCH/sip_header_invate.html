@@ -2,7 +2,7 @@
 title: SIP парсинг INVATE
 description: Анализировать все заголовки invate
 published: true
-date: 2023-12-11T21:26:39.511Z
+date: 2023-12-11T21:28:36.149Z
 tags: voip, freeswitch, sip, parsing, parse, invate, header
 editor: ckeditor
 dateCreated: 2023-12-11T21:26:39.511Z
@@ -10,5 +10,7 @@ dateCreated: 2023-12-11T21:26:39.511Z
 
 <p>Это возможно, установив <code>&lt;param name="parse-all-invite-headers" value="true"/&gt;</code> в профиле Sofia SIP. Затем все заголовки из <strong>Invite</strong> устанавливаются как переменные канала <strong>sip_i_Header-Name</strong>.</p>
 <p><strong><u>Реакция на конкретные Headears в любых других SIP-сообщениях:</u></strong><br>Если вы хотите реагировать на определенные заголовки в других сообщениях, вы можете сделать это, установив переменную <code>sip_watch_headers</code> (необходимо экспортировать и поставить префикс <strong>nolocal</strong>, если вы хотите, чтобы это было только для <strong>B-ветви</strong>)<br>Если заголовок обнаружен, вы получите ПОЛЬЗОВАТЕЛЬСКОЕ событие подкласса <code>«sofia::notify_watched_header»</code>.<br><br>Пример обнаружения заголовка <strong>Reason</strong> на <strong>B-ветви</strong>):</p>
-<p><code>&lt;action application="export" data="_nolocal_sip_watch_headers=Reason"/&gt;</code></p>
-<p>Вот пример События, которое ищет заголовок <strong>Reason</strong> на <strong>B-ветви </strong>и просматривает заголовок «<strong>Reason</strong>»:<br>&nbsp;</p>
+<ul>
+  <li><code>&lt;action application="export" data="_nolocal_sip_watch_headers=Reason"/&gt;</code></li>
+</ul>
+<p>Вот пример События, которое ищет заголовок <strong>Reason</strong> на <strong>B-ветви </strong>и просматривает заголовок «<strong>Reason</strong>»:<br><code>&nbsp; "Event-Name": "CUSTOM",</code><br><code>...</code><br><code>&nbsp; "Event-Calling-File": "sofia.c",</code><br><code>&nbsp; "Event-Calling-Function": "notify_watched_header",</code><br><code>&nbsp; "Event-Calling-Line-Number": "1443",</code><br><code>&nbsp; "Event-Sequence": "98672",</code><br><code>&nbsp; "Event-Subclass": "sofia::notify_watched_header",</code><br><code>&nbsp; "SIP-Message": "SIP/2.0 183 Session Progress",</code><br><code>&nbsp; "Header-Name": "Reason",</code><br><code>&nbsp; "Header-Value": "Q.850;cause=16",</code><br><code>&nbsp; "Channel-State": "CS_CONSUME_MEDIA",</code><br><code>&nbsp; "Channel-Call-State": "DOWN",</code><br><code>&nbsp; "Channel-State-Number": "7",</code><br><code>...</code><br><code>"Call-Direction": "outbound",&nbsp;</code></p>
