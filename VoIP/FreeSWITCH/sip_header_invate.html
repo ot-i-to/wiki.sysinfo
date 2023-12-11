@@ -2,8 +2,8 @@
 title: SIP парсинг INVATE
 description: Анализировать все заголовки invate
 published: true
-date: 2023-12-11T21:39:31.856Z
-tags: voip, freeswitch, sip, parsing, parse, invate, header
+date: 2023-12-11T21:41:32.643Z
+tags: voip, lua, freeswitch, sip, parsing, parse, invate, header, event
 editor: ckeditor
 dateCreated: 2023-12-11T21:26:39.511Z
 -->
@@ -30,6 +30,7 @@ dateCreated: 2023-12-11T21:26:39.511Z
 "Call-Direction": "outbound",</code></pre>
 <p>На это событие можно отреагировать либо с помощью <strong>Lua</strong>, установив сценарий перехвата в конфигурации <strong>Lua</strong>, либо через <strong>AMQP/EventSocket</strong>.</p>
 <p><strong><u>Как реагировать на эти события с помощью Lua</u></strong></p>
+<p><a href="https://freeswitch.org/confluence/display/FREESWITCH/mod_lua#Event_Hooks">https://freeswitch.org/confluence/display/FREESWITCH/mod_lua#Event_Hooks</a></p>
 <p>Пример: <strong>autload_configs/lua.conf.xml</strong></p>
 <pre><code class="language-plaintext">&lt;configuration name="lua.conf" description="LUA Configuration"&gt;
  &lt;settings&gt;
