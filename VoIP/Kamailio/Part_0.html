@@ -2,7 +2,7 @@
 title: 1. Установка и настройка
 description: Kamailio часть 0. Установка и настройка Kamailio. Отказоустойчивая архитектура VoIP
 published: true
-date: 2023-12-22T21:22:20.347Z
+date: 2023-12-22T21:27:06.905Z
 tags: voip, install, user, sip, configuration parameter, configure, kamailio, regitration, subscruber, configuration
 editor: ckeditor
 dateCreated: 2023-10-12T19:01:49.264Z
@@ -15,12 +15,12 @@ dateCreated: 2023-10-12T19:01:49.264Z
 <figure class="image"><img src="/1.1_kamailio.png"></figure>
 <p>Где Kamailio будет заниматься обработкой SIP сигнализации, а также терминацией WSS трафика для WebRTC (звонки из браузера). Media сервера — занимаются обработкой непосредственно голоса и предоставлением бизнес логики (IVR, очереди, Call Center…), эти сервера могут быть реализованы через Asterisk/FreeSWITCH или любых других SoftSwitch 5 класса. В базе данных хранятся все dialplan’ы, SIP аккаунты и в принципе все данные для которых нужно долговременное хранение.</p>
 <h2>Установка на примере Debian-12:</h2>
-<p>Необходимо выполнить последовательно следующие команды от пользователя с root привелегиями / правами.<br><a href="https://kamailio.sipwise.com/debian/">Ставим Kamailio:</a></p>
+<p>Необходимо выполнить последовательно следующие команды от пользователя с root привелегиями / правами.<br><a href="https://kamailio.sipwise.com/debian/">Ставим Kamailio stable release v5.7:</a></p>
 <pre><code class="language-plaintext">echo deb http://kamailio.sipwise.com/debian/kamailio57 stretch main &gt;&gt; /etc/apt/sources.list.d/kamailio.list
 echo deb-src http://kamailio.sipwise.com/debian/kamailio57 stretch main &gt;&gt; /etc/apt/sources.list.d/kamailio.list
 wget -O- http://deb.kamailio.org/kamailiodebkey.gpg | sudo apt-key add -
 apt update &amp;&amp; apt install kamailio</code></pre>
-<p><a href="https://kamailio.sipwise.com/debian/rtpengine.html">Ставим RTPEngine:</a></p>
+<p><a href="https://kamailio.sipwise.com/debian/rtpengine.html">Ставим RTPEngine</a><a href="https://kamailio.sipwise.com/debian/"> stable release v11.5</a><a href="https://kamailio.sipwise.com/debian/rtpengine.html">:</a></p>
 <pre><code class="language-plaintext">echo deb http://kamailio.sipwise.com/debian/rtpengine-mr11.5 bookworm &gt;&gt; /etc/apt/sources.list.d/rtpengine.list
 echo deb-src http://kamailio.sipwise.com/debian/rtpengine-mr11.5 bookworm &gt;&gt; /etc/apt/sources.list.d/rtpengine.list
 wget -O- http://kamailio.sipwise.com/debian/kamailiodebkey.gpg | sudo apt-key add -
