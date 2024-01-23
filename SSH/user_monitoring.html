@@ -2,7 +2,7 @@
 title: Мониторинг пользователя
 description: TTY мониторинг действий 
 published: true
-date: 2024-01-23T12:09:31.729Z
+date: 2024-01-23T12:09:47.909Z
 tags: linux, user, ssh, monitoring, tty
 editor: ckeditor
 dateCreated: 2023-10-04T10:13:26.187Z
@@ -44,7 +44,7 @@ if [ -z "$TTYREC_ENABLED" ]; then
  exit
 fi</code></pre>
 <p>… и добавляем строку для его выполнение в конец файла <code>/etc/pam.d/common-session</code></p>
-<pre><code class="language-plaintext">session&gt;optional&lt;------&gt;pam_exec.so /bin/bash /etc/ttyrec.sh</code></pre>
+<pre><code class="language-plaintext">session&gt;optional    pam_exec.so /bin/bash /etc/ttyrec.sh</code></pre>
 <p>&nbsp;</p>
 <p><strong><u>Ссылки на аналоги</u></strong>:<br><a href="http://xgu.ru/wiki/LiLaLo">LiLaLo</a> - Живой лабораторный журнал.<br>&nbsp;</p>
 <p>&nbsp;</p>
