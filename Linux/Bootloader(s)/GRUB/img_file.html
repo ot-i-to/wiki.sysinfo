@@ -2,13 +2,13 @@
 title: IMG образ диска
 description: загрузка с образа диска
 published: true
-date: 2024-02-11T19:44:16.936Z
+date: 2024-02-11T19:45:26.616Z
 tags: file, linux, img, bootloader, boot, files, grub, grub2, config
 editor: ckeditor
 dateCreated: 2024-02-11T19:28:25.472Z
 -->
 
 <p>Давайте опишим как настроить GRUB для загрузки любого IMG образа лежащего на локальном диске линукса ( в нашнм случае Debian 12 ). Возмем для примера образ FreeDOS созданный посредсвам DD команды с USB-Flash.&nbsp;</p>
-<p>1) Сперва надо установить приложением grub-imageboot:<br>apt install grub-imageboot</p>
+<p>1) Сперва надо установить приложением grub-imageboot:<br>sudo apt install grub-imageboot</p>
 <p>2) Потом проверим наличие файла /etc/grub.d/60_grub-imageboot используемого для автоматизации настроек GRUB.</p>
-<p>3) Создадим директорию /boot/images в которой по умолчанию ищит IMG образы вышеупомянутый скрипт автоматической настройки:<br>ьлвш</p>
+<p>3) Создадим директорию /boot/images в которой по умолчанию ищит IMG образы вышеупомянутый скрипт автоматической настройки:<br>sudo mkdir -p &nbsp;/boot/images</p>
