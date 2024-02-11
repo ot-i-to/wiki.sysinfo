@@ -2,7 +2,7 @@
 title: IMG образ диска
 description: загрузка с образа диска
 published: true
-date: 2024-02-11T19:51:19.864Z
+date: 2024-02-11T19:53:38.818Z
 tags: file, linux, img, bootloader, boot, files, grub, grub2, config
 editor: ckeditor
 dateCreated: 2024-02-11T19:28:25.472Z
@@ -14,5 +14,6 @@ dateCreated: 2024-02-11T19:28:25.472Z
 <p>3) Создадим директорию /boot/images в которой по умолчанию ищит IMG образы вышеупомянутый скрипт автоматической настройки:<br>sudo mkdir -p &nbsp;/boot/images</p>
 <p>4) Копируем в созданую директорию свой образ диска:<br>sudo cp usb-dos.img /boot/images</p>
 <p>5) И наконец выпогняем команду update-grub автоматической настройки GRUBю</p>
-<p>6) Далее надо перегрузится и во время загрузки в меню GRUB, в нашем случае, &nbsp;мы увидим пунк "Bootable Floppy Image: usb-dos". Выбираем его для проверки работы.</p>
+<p>6) Далее надо проверить как все работает и для этого прегружаемся. Потом находим в меню загрузчика GRUB, внашем случае, &nbsp;пунк "Bootable Floppy Image: usb-dos". &nbsp;Выбираем.&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
