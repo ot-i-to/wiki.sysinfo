@@ -2,20 +2,20 @@
 title: IMG образ диска
 description: загрузка с образа диска
 published: true
-date: 2024-02-11T19:57:37.052Z
+date: 2024-02-11T20:01:21.358Z
 tags: file, linux, img, bootloader, boot, files, grub, grub2, config
 editor: ckeditor
 dateCreated: 2024-02-11T19:28:25.472Z
 -->
 
-<p>Давайте опишим как настроить GRUB для загрузки любого IMG образа лежащего на локальном диске линукса ( в нашнм случае Debian 12 ). Возмем для примера образ FreeDOS созданный посредсвам DD команды с USB-Flash.&nbsp;</p>
-<p>Автоматически режим:</p>
-<p>1) Сперва надо установить приложением grub-imageboot:<br>sudo apt install grub-imageboot</p>
+<p><strong>Давайте опишем как настроить GRUB для загрузки любого IMG образа лежащего на локальном диске линукса ( в нашем случае Debian 12 ). Возьмем для примера образ FreeDOS созданный по средствам DD команды с USB-Flash.</strong></p>
+<h2>Автоматически режим:</h2>
+<p>1) Сперва надо установить приложением grub-imageboot:sudo apt install grub-imageboot</p>
 <p>2) Потом проверим наличие файла /etc/grub.d/60_grub-imageboot используемого для автоматизации настроек GRUB.</p>
-<p>3) Создадим директорию /boot/images в которой по умолчанию ищит IMG образы вышеупомянутый скрипт автоматической настройки:<br>sudo mkdir -p &nbsp;/boot/images</p>
-<p>4) Копируем в созданую директорию свой образ диска:<br>sudo cp usb-dos.img /boot/images</p>
-<p>5) И наконец выпогняем команду update-grub автоматической настройки GRUBю</p>
-<p>6) Далее надо проверить как все работает и для этого прегружаемся. Потом находим в меню загрузчика GRUB, внашем случае, &nbsp;пунк "Bootable Floppy Image: usb-dos". &nbsp;Выбираем.&nbsp;</p>
+<p>3) Создадим директорию /boot/images в которой по умолчанию ищет IMG образы вышеупомянутый скрипт автоматической настройки:sudo mkdir -p &nbsp;/boot/images</p>
+<p>4) Копируем в созданную директорию свой образ диска:sudo cp usb-dos.img /boot/images</p>
+<p>5) И наконец выполняем команду update-grub автоматической настройки GRUBю</p>
+<p>6) Далее надо проверить как все работает и для этого перегружаемся. Потом находим в меню загрузчика GRUB, в нашем случае, &nbsp;пункт "Bootable Floppy Image: usb-dos". &nbsp;Выбираем.&nbsp;</p>
 <figure class="image"><img src="/img/2024-02-11_22-57.png"></figure>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
