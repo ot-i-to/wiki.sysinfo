@@ -2,7 +2,7 @@
 title: IMG образ диска
 description: загрузка с образа диска
 published: true
-date: 2024-02-11T20:06:09.382Z
+date: 2024-02-11T20:06:50.895Z
 tags: file, linux, img, bootloader, boot, files, grub, grub2, config
 editor: ckeditor
 dateCreated: 2024-02-11T19:28:25.472Z
@@ -21,7 +21,7 @@ dateCreated: 2024-02-11T19:28:25.472Z
 <p>6) Далее надо проверить как все работает и для этого перегружаемся.&nbsp;</p>
 <p>Потом находим в меню загрузчика GRUB, в нашем случае, &nbsp;пункт "<code>Bootable Floppy Image: usb-dos</code>". &nbsp;Выбираем.&nbsp;</p>
 <figure class="image"><img src="/img/2024-02-11_22-57.png"></figure>
-<p>Полу-ручной режим:</p>
+<h2>Полу-ручной режим:</h2>
 <p>1) Сперва надо установить приложением grub-imageboot:sudo apt install grub-imageboot</p>
 <p>2) Потом проверим добавляем следующие строки в файл /etc/grub.d/60_grub-imageboot используемого для автоматизации настроек GRUB.</p>
 <p>3) Создадим директорию /boot/images в которой по умолчанию ищет IMG образы вышеупомянутый скрипт автоматической настройки:sudo mkdir -p &nbsp;/boot/images</p>
