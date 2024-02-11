@@ -2,7 +2,7 @@
 title: mount IMG file
 description: 
 published: true
-date: 2024-02-11T20:46:32.959Z
+date: 2024-02-11T20:56:44.474Z
 tags: file, linux, img, mount
 editor: ckeditor
 dateCreated: 2024-02-11T20:46:32.959Z
@@ -22,7 +22,8 @@ Device                    Boot Start     End Sectors   Size Id Type
 /boot/images/usb-dos.img1 *       63 1048319 1048257 511,8M  e W95 FAT16 (LBA)</code></pre>
 <p>Итак, у меня размер блока составляет <strong>512 байт</strong>, а начальный блок - <strong>63</strong>.<code> Смещение = 512 * 63 = 32256</code>.<br>Таким образом, команда монтирования будет такой:</p>
 <pre><code class="language-plaintext">mount -o loop,offset=32256 /boot/images/usb-dos.img /mnt</code></pre>
-<p>&nbsp;</p>
+<p>или если Вы плохо владеете арифметикой и под рукой нет калькулятора, можно так:</p>
+<pre><code class="language-plaintext">mount -o loop,offset=$((512*63)) /boot/images/usb-dos.img /mnt</code></pre>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
