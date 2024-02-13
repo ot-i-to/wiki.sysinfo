@@ -2,7 +2,7 @@
 title: IMG образ диска
 description: загрузка с образа диска
 published: true
-date: 2024-02-13T05:32:28.532Z
+date: 2024-02-13T05:38:19.436Z
 tags: file, linux, img, bootloader, boot, files, grub, grub2, config
 editor: ckeditor
 dateCreated: 2024-02-11T19:28:25.472Z
@@ -19,7 +19,10 @@ dateCreated: 2024-02-11T19:28:25.472Z
 <pre><code class="language-plaintext">sudo cp usb-dos.img /boot/images</code></pre>
 <p>5) И наконец выполняем команду <code>update-grub</code> автоматической настройки <strong>GRUB</strong>.</p>
 <p>6) Далее надо проверить как все работает и для этого перегружаемся.&nbsp;</p>
-<p>Потом находим в меню загрузчика <strong>GRUB</strong>, в нашем случае, &nbsp;пункт "<code>Bootable Floppy Image: usb-dos</code>". &nbsp;Выбираем и ждем как все загрузится - это бывает достаточно долго, т.к. зависит от размера <strong>.img</strong> файла и быстродействия Вашей дисковой подсистемы.&nbsp;</p>
+<p>Потом находим в меню загрузчика <strong>GRUB</strong>, в нашем случае, &nbsp;пункт "<code>Bootable Floppy Image: usb-dos</code>". &nbsp;Выбираем и ждем как все загрузится - это бывает достаточно долго, т.к. зависит от размера <strong>.img</strong> файла и быстродействия Вашей дисковой подсистемы.</p>
+<blockquote>
+  <p>А так же не забывайте, что у Вас должно быть достаточно оперативной памяти в компьюторе для размещения всего <strong>.img</strong> образа и должно оставаться для его работы, в проивном случае, ни чего не заработает.&nbsp;</p>
+</blockquote>
 <figure class="image"><img src="/img/2024-02-11_22-57.png"></figure>
 <h2>Полу-ручной режим:</h2>
 <p>Отличие только в том, что в замен действий описанных в <strong>пункте 2</strong> предыдущей главы, мы создаем свое меню, например с желаемым названием, в файле <code>/etc/grub.d/40_custom </code>добавив в него следующие строки:</p>
