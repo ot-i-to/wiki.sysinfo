@@ -2,12 +2,14 @@
 title: mount IMG file
 description: 
 published: true
-date: 2024-02-11T20:57:47.658Z
+date: 2024-02-13T05:14:37.810Z
 tags: file, linux, img, mount
 editor: ckeditor
 dateCreated: 2024-02-11T20:46:32.959Z
 -->
 
+<p>Для реализации возможности загрузки .img файла в grub потребуется установка дополнительных модулей:</p>
+<pre><code class="language-plaintext">apt install grub-imageboot</code></pre>
 <p>Проблема в том, что файлы <strong>.img</strong> - это образы не раздела, а всего диска. Это означает, что они начинаются с загрузчика и таблицы разделов. Вам необходимо узнать смещение раздела и смонтировать его с помощью опции смещения монтирования. Для этого надо выполнить команду:</p>
 <pre><code class="language-plaintext"># fdisk -lu /boot/images/usb-dos.img</code></pre>
 <p>…она покажет вам размер блока и начальный блок раздела. Вы можете использовать это для расчета смещения.<br>Например, у меня есть образ загрузочной флешки с разделом <strong>FAT16</strong> объемом <strong>538 МБ</strong>. Вывод команды <strong>fdisk</strong>:</p>
