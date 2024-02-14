@@ -2,14 +2,14 @@
 title: 2. Регистрация в Kamailio
 description: Правильная SIP Регистрация в Kamailio, создание внутренних SIP номером
 published: true
-date: 2024-02-14T11:16:27.627Z
+date: 2024-02-14T11:17:43.562Z
 tags: voip, debian, sip, kamailio, registry
 editor: ckeditor
 dateCreated: 2024-02-14T11:16:27.627Z
 -->
 
 <p>В этой статье мы подключим базу данных, вкраце рассмотрим теорию обработки SIP регистрации и авторизации, реализуем ее на практике в Kamailio</p>
-<p>Это продолжение части 0, сегодня мы начнем <a href="https://blog.ipcalls24.com/introduction-in-kamailio/#diagram">реализовывать схему из вводной части в Kamailio</a>.</p>
+<p>Это продолжение части 0, сегодня мы начнем <a href="https://sysinfo.pro/1.1_kamailio.png">реализовывать схему из вводной части в Kamailio</a>.</p>
 <h2>Подключение базы данных PostgreSQL для работы с Kamailio</h2>
 <p>В этой статье мы не будем рассматривать установка и настройку самой базы данных. Замечу только, что у меня на сервере установлена база данных Postgres версии 11 с который мы и будем работать. Для подключения базы данных необходимо установить пакет с драйвером. Для этого необходимо выполнить:</p>
 <pre><code class="language-plaintext">yum install -y kamailio-postgresql</code></pre>
