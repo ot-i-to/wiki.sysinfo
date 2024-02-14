@@ -2,7 +2,7 @@
 title: RTPENGINE + G729
 description: Install Debian 11/12
 published: true
-date: 2024-02-13T18:37:23.754Z
+date: 2024-02-14T09:15:37.115Z
 tags: voip, install, debian, rtpengine, rtp
 editor: ckeditor
 dateCreated: 2022-10-06T10:55:09.198Z
@@ -13,12 +13,13 @@ dateCreated: 2022-10-06T10:55:09.198Z
 <pre><code class="language-plaintext">apt update
 apt upgrade -y
 apt install -y linux-headers-$(uname -r) linux-image-$(uname -r)</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p><strong>Перегружаем систему &nbsp;и продолжаем !</strong></p>
 </blockquote>
 <pre><code class="language-plaintext">apt install -qqy git curl mariadb-server libmosquitto-dev libwebsockets-dev python3-websockets apt-utils devscripts dpkg-dev debhelper iptables libxtables-dev libip6tc-dev libip4tc-dev libcurl4-openssl-dev libiptc-dev libglib2.0-dev libavcodec-extra libhiredis-dev libpcre3-dev libssl-dev libxmlrpc-core-c3-dev markdown zlib1g-dev module-assistant dkms gettext default-libmysqlclient-dev gperf libavcodec-dev libavfilter-dev libavformat-dev libavutil-dev libbencode-perl libcrypt-openssl-rsa-perl libcrypt-rijndael-perl libdigest-crc-perl libdigest-hmac-perl libevent-dev libio-multiplex-perl libio-socket-inet6-perl libjson-glib-dev libnet-interface-perl libpcap0.8-dev libsocket6-perl libswresample-dev libsystemd-dev nfs-common netcat-openbsd netcat-traditional unzip libconfig-tiny-perl libspandsp-dev**
 apt install -qqy libbcg729-dev libbcg729-0
-apt install -qqy dh-sequence-dkms libmnl-dev libncurses-dev libnftnl-dev libopus-dev libtest2-suite-perl pandoc</code></pre>
+apt install -qqy dh-sequence-dkms libmnl-dev libncurses-dev libnftnl-dev libopus-dev libtest2-suite-perl pandoc pkgconf</code></pre>
 <h2>Сборка из исходников:</h2>
 <p>Если надо включить транскодинг, то перед сборкой в файле <code>Makefile</code> надо изменить строку <code>with_transcoding ?= yes</code> к такому виду <code>with_transcoding = yes</code>.</p>
 <pre><code class="language-plaintext">mkdir /usr/src/rtpengine
