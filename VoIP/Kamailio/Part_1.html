@@ -1,0 +1,209 @@
+<!--
+title: 2. Регистрация в Kamailio
+description: Правильная SIP Регистрация в Kamailio, создание внутренних SIP номером
+published: true
+date: 2024-02-14T11:16:27.627Z
+tags: voip, debian, sip, kamailio, registry
+editor: ckeditor
+dateCreated: 2024-02-14T11:16:27.627Z
+-->
+
+<p>В этой статье мы подключим базу данных, вкраце рассмотрим теорию обработки SIP регистрации и авторизации, реализуем ее на практике в Kamailio</p>
+<p>Это продолжение части 0, сегодня мы начнем <a href="https://blog.ipcalls24.com/introduction-in-kamailio/#diagram">реализовывать схему из вводной части в Kamailio</a>.</p>
+<h2>Подключение базы данных PostgreSQL для работы с Kamailio</h2>
+<p>В этой статье мы не будем рассматривать установка и настройку самой базы данных. Замечу только, что у меня на сервере установлена база данных Postgres версии 11 с который мы и будем работать. Для подключения базы данных необходимо установить пакет с драйвером. Для этого необходимо выполнить:</p>
+<pre><code class="language-plaintext">yum install -y kamailio-postgresql</code></pre>
+<p>После установки драйвера, необходимо указать данные для подключения базы данных в файле <i>/etc/kamailio/kamctlrc</i>.</p>
+<pre><code class="language-plaintext">SIP_DOMAIN=ipcalls24.com #Ваш домен
+DBENGINE=PGSQL #Используемый драйвер, может быть PGSQL для Postgres, MYSQL соответственно для драйвера MYSQL
+DBHOST=localhost # IP или DNS адрес базы данных к которой будем подключаться
+DBPORT=5433 # Порт для подключения, по умолчанию 5432 в Postgres, 3306 для MySQL
+DBNAME=kamailio # Название создаваемой базы данных
+DBRWUSER="kamailio" # Имя пользователя с правами на запись и чтение
+DBRWPW="*********" # Пароль для пользователя
+DBROUSER="kamailioro" # Имя пользователя с правами только на чтение
+DBROPW="*********" # Пароль для пользователя
+DBROOTUSER="postgres" # Корневой пользователь с правами на создание баз данных/таблиц. В PostgreSQL по умолчанию пользователь postgres, в MySQL - root
+DBROOTPW="*********" # Пароль для корневого пользователя</code></pre>
+<p>После чего из под пользователя с sudo правами необходимо выполнить инициализацию базы данных с помощью команды <i>kamdbctl</i> и два раза ответить да(<strong>y</strong>):</p>
+<pre><code class="language-plaintext">kamdbctl create
+
+INFO: creating database kamailio ...
+INFO: Core Kamailio tables succesfully created.
+Install presence related tables? (y/n): y
+INFO: creating presence tables into kamailio ...
+INFO: Presence tables succesfully created.
+Install tables for imc cpl siptrace domainpolicy carrierroute
+                drouting userblacklist htable purple uac pipelimit mtree sca moh
+                rtpproxy rtpengine secfilter? (y/n): y
+INFO: creating extra tables into kamailio ...
+INFO: Extra tables succesfully created.</code></pre>
+<p>На этом инициализация базы данных закончена. В конфигурационном файле <i>/etc/kamailio/kamailio.cfg </i>необходимо указать директиву #!define следующего вида:</p>
+<pre><code class="language-plaintext">#!define DBURL "postgres://kamailio:secret_password@localhost:5433/kamailio"</code></pre>
+<p>Где <i><strong>DBURL</strong></i> — название директивы, <i><strong>postgres</strong></i> — используемый драйвер для подключения, <i><strong>kamailio </strong></i>— имя пользователя для подключения, <i><strong>secret_password </strong></i>— пароль пользователя, <i><strong>localhost </strong></i>— IP или DNS имя базы данных для подключения, <i><strong>5433 </strong></i>— порт для подключения, <i><strong>kamailio </strong></i>— название базы данных к которой подключаемся.</p>
+<p>Файл конфигурации будет выглядеть следующем образом:</p>
+<pre><code class="language-plaintext">#!define DBURL "postgres://kamailio:secret_password@localhost:5433/kamailio"
+
+loadmodule "db_postgres.so" # подключаем ранее установленный пакет kamailio-postgresql
+
+request_route {
+        exit;
+}</code></pre>
+<p>На этом подключение к базе данных завершено.</p>
+<h2>Теория обработка запросов SIP регистрации с примерами</h2>
+<p>Теория работы с запросами SIP REGISTER описана в RFC 3261. Сама регистрация выглядит следующим образом:</p>
+<figure class="image"><img src="https://blog.ipcalls24.com/wp-content/uploads/2021/02/trace-2.png" alt="Kamailio REGISTER trace"></figure>
+<p>Т.е из этой трассировки видно следующее:<br>1) Пользователь отправляет запрос REGISTER на SIP сервер (в нашем случае в роли SIP сервера выступает Kamailio) следующего вида:</p>
+<pre><code class="language-plaintext">2021/02/07 13:42:33.936074 185.165.***.5*:7014 -&gt; 78.**.241.199:5060
+REGISTER sip:ipcalls24.com;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 192.168.0.103:5060;branch=z9hG4bK-524287-1---a8c525c096737c3f;rport
+Max-Forwards: 70
+Contact: &lt;sip:1111@192.168.0.103:5060;rinstance=93a63da919047bbf;transport=UDP&gt;
+To: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;
+From: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=9753211e
+Call-ID: 1w7vRiDmp-rpqKe3jhvxaQ..
+CSeq: 1 REGISTER
+Expires: 70
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, timer, outbound, path, X-cisco-serviceuri
+User-Agent: Z 5.4.9 rv2.10.11.7
+Allow-Events: presence, kpml, talk
+Content-Length: 0</code></pre>
+<p>SIP сервер проверяет SIP сообщение на наличие поля «Authorization» и в случае, если не находит его отправляет телефонному агенту пользователя запрос на аутентификацию (401 Unauthorized).</p>
+<pre><code class="language-plaintext">2021/02/07 13:42:33.936448 78.**.241.199:5060 -&gt; 185.165.***.5*:7014
+SIP/2.0 401 Unauthorized
+Via: SIP/2.0/UDP 192.168.0.103:5060;branch=z9hG4bK-524287-1---a8c525c096737c3f;rport=7014;received=185.165.***.5*
+To: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=e0d499bb1b78bcb08c87e527cc2e4090.e11a79c9
+From: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=9753211e
+Call-ID: 1w7vRiDmp-rpqKe3jhvxaQ..
+CSeq: 1 REGISTER
+WWW-Authenticate: Digest realm="ipcalls24.com", nonce="YB/hZWAf4DncAbF2L2CUDyTdoHRvBdno", qop="auth"
+Server: IPCALLS24
+Content-Length: 0</code></pre>
+<p>Пользовательский агент (напр. софтфон Zoiper, MicroSIP или же физическая трубка) получая такое сообщение должен отправить зашифрованные логин/пароль/realm(домен) в новом запросе REGISTER в строку Authorization:</p>
+<pre><code class="language-plaintext">2021/02/07 13:42:33.997725 185.165.***.5*:7014 -&gt; 78.**.241.199:5060
+REGISTER sip:ipcalls24.com;transport=UDP SIP/2.0
+Via: SIP/2.0/UDP 192.168.0.103:5060;branch=z9hG4bK-524287-1---90c1eb9eeb5f82d3;rport
+Max-Forwards: 70
+Contact: &lt;sip:1111@192.168.0.103:5060;rinstance=93a63da919047bbf;transport=UDP&gt;
+To: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;
+From: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=9753211e
+Call-ID: 1w7vRiDmp-rpqKe3jhvxaQ..
+CSeq: 2 REGISTER
+Expires: 70
+Allow: INVITE, ACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
+Supported: replaces, norefersub, extended-refer, timer, outbound, path, X-cisco-serviceuri
+User-Agent: Z 5.4.9 rv2.10.11.7
+Authorization: Digest username="1111",realm="ipcalls24.com",nonce="YB/hZWAf4DncAbF2L2CUDyTdoHRvBdno",uri="sip:ipcalls24.com;transport=UDP",response="b695531add54b51e3e4af8ae2f76ba8d",cnonce="815d6db03cb5323f453ef713d2491122",nc=00000001,qop=auth,algorithm=MD5
+Allow-Events: presence, kpml, talk
+Content-Length: 0</code></pre>
+<p>И в случае, если логин/пароль корректны, SIP сервер отправляет подтверждение 200 OK:</p>
+<pre><code class="language-plaintext">2021/02/07 13:42:34.063125 78.**.241.199:5060 -&gt; 185.165.***.5*:7014
+SIP/2.0 200 OK
+Via: SIP/2.0/UDP 192.168.0.103:5060;branch=z9hG4bK-524287-1---b4a02461fd257b9f;rport=7014;received=185.165.***.5*
+To: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=e0d499bb1b78bcb08c87e527cc2e4090.e11a79c9
+From: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=9753211e
+Call-ID: 1w7vRiDmp-rpqKe3jhvxaQ..
+CSeq: 3 REGISTER
+Server: IPCALLS24
+Content-Length: 0</code></pre>
+<p>С этого момента User Agent(UA) пользователя считается зарегистрированным и хранится в оперативной памяти/базе данных (в зависимости от настроек).</p>
+<p>Исходя из примера выше нам необходимо реализовать следующий алгоритм:</p>
+<figure class="image"><img src="https://blog.ipcalls24.com/wp-content/uploads/2021/02/alg.png" alt="алгоритм обработки SIP регистрации"></figure>
+<h2>Практика обработки запросов SIP REGISTER с примерами</h2>
+<ol>
+  <li>Необходимо добавить следующие модули:</li>
+</ol>
+<ul>
+  <li>pv.so # для доступа к псевдопеременным, список всех псевдомеременных можно посмотреть <a href="https://www.kamailio.org/wiki/cookbooks/5.4.x/pseudovariables">здесь</a></li>
+  <li>textops.so # для работы с SIP заголовками</li>
+  <li>sl.so # зависимость для registrar модуля</li>
+  <li>usrloc.so # зависимость для registrar модуля</li>
+  <li>registrar.so # для обработки запросов регистрации. По умолчанию все сохраненные регистрация хранятся в оперативной памяти, но можно настроить хранения и в базе данных с помощью модуля USRLOC</li>
+  <li>auth.so # модуль используемый для аутентификации</li>
+  <li>db_postgres.so # модуль драйвера базы данных</li>
+  <li>auth_db.so # модуль который позволяет при запросах аутентификации работать с базой данных</li>
+</ul>
+<p>Ниже приведен конфиг <i><strong>/etc/kamailio/kamailio.cfg</strong></i></p>
+<pre><code class="language-plaintext">#!define DBURL "postgres://kamailio:secret_password@localhost:5433/kamailio"
+
+loadmodule "pv.so"
+loadmodule "textops.so"
+loadmodule "sl.so"
+loadmodule "usrloc.so"
+loadmodule "registrar.so"
+loadmodule "auth.so"
+loadmodule "db_postgres.so"
+loadmodule "auth_db.so"
+
+#############[Подключение к БД]###########
+modparam("auth_db", "db_url", DBURL); # указываем URL для подключения, берем его из ранее созданной директивы DBURL
+
+request_route {
+        exit;
+}</code></pre>
+<p>2. Необходимо проверить с какого IP адреса пришел запрос. В случае если IP адрес «белый» т.е публичный, нам ничего не нужно делать. Если же IP адрес «серый» т.е приватный (список приватных подсетей определен в RFC<a href="https://tools.ietf.org/html/rfc1918#section-3"> </a>1918), нам необходимо узнать публичный IP, с которого пришел запрос. В этой статье мы не будем углубляться в проблему прохождения NAT, это материал для следующей статьи. Упомяну только, что для прохождения NAT’a в Kamailio есть модуль <i>nathelper</i> который мы и будем использовать в будущем.<br>Сейчас мы допускаем, что работаем <i>только </i>с приватными адресами и все пользователи находятся в нашей подсети. Поэтому конфигурационный файл будет выглядить следующим образом (прикладываю только request_route, без модулей и параметров модулей):</p>
+<pre><code class="language-plaintext">request_route {
+        if (is_method("REGISTER")) { # проверяем какое SIP сообщение пришло с помощью модуля textops, функции is_method. 
+                route(AUTH); # Если пришел запрос на регистрацию - отправляем в пользовательский маршрут  AUTH.
+        }
+}</code></pre>
+<p>По комментариям должно быть все понятно, что мы делаем. Теперь, нам необходимо создать пользовательский маршрут с именем AUTH (имя задается пользователем. Т.е если мы укажем в request_route вызов маршрута AUTH2 и создадим его, все будет так же работать как и с именем маршрута AUTH)</p>
+<pre><code class="language-plaintext">route[AUTH] {
+                if (!auth_check("$fd", "subscriber", "1")) {
+                        force_rport();
+                        auth_challenge("$fd", "1");
+                        exit;
+                }
+                force_rport();
+                save("location");
+                exit;
+}</code></pre>
+<p>Давайте более подробно рассмотрим что за маршрут мы создали.</p>
+<p>1) Функция <i>auth_check </i>из модуля auth_db принимает 3 значения:<br>authc_check(<strong>realm</strong>, <strong>table</strong>, <strong>flags</strong>).<br><strong>realm</strong> — домен, в нашем случае у нас создан только 1 домен <i>ipcalls24.com</i>. Этот домен мы получаем из псевдопеременной $fd из запроса регистрации, из заголовка From. Это можно <a href="https://blog.ipcalls24.com/sip-register-in-kamailio/#f_reg">наглядно увидеть из ранее приведенного запроса регистрации</a>. Ниже приведена строка из которой берется домен:</p>
+<pre><code class="language-plaintext">From: &lt;sip:1111@ipcalls24.com;transport=UDP&gt;;tag=9753211e</code></pre>
+<p>Псевдопеременная выделена $fd выделенна курсивом.<br><strong>table</strong> — название таблицы в базе данных в которой хранятся созданные SIP аккаунты. По умолчанию таблица называется «subscriber» и находится в ранее созданной базе данных «kamailio»<br><strong>flags </strong>— значение цифры 1 в флаге означает, что будут проверятся соответствие полей From, To в запросе регистрации для запросов REGISTER.</p>
+<p>Функция auth_check из модуля auth_db проверяет наличие поля Authorization (помните теорию?) и корректность realm, логина и пароля. В случае, если функция возвращает одну из ошибок, то начинает выполнятся тело условия (происходит вызов функции auth_challenge). Все коды ошибок приведены в официальной документации модуля и доступны по <a href="https://kamailio.org/docs/modules/5.1.x/modules/auth_db.html#auth_db.f.www_authenticate">ссылке</a>. Так же стоит упомянуть, что функция auth_check работает как для запросов REGISTER, так и для остальных запросов. Приведенное выше описание работы распространяется на запрос REGISTER, остальные варианты будут расмотренны позднее.</p>
+<p>2) Т.к в заголовке Via указан не порт источника, а обычно указан порт 5060 или любой другой в зависимости от настроек телефонного агента пользователя, функцией force_rport мы отправляет ответы на тот же порт, с которого пришел запрос, а не который указан в заголовке Via</p>
+<p>2) Функция auth_challenge из модуля auth принимает 2 значения:<br>auth_challenge(<strong>realm</strong>, <strong>flags</strong>)<br><strong>realm </strong>— домен, принцип работы такой же как и в функии auth_check<br><strong>flags </strong>— все доступные флаги приведены в официальной документации и доступны по <a href="https://kamailio.org/docs/modules/5.1.x/modules/auth.html#auth.f.www_challenge">ссылке</a>. В приведенном примере мы используем qop=auth (флаг 1). Чтобы понимать, что это значит можно прочитать об этом в <a href="https://ru.wikipedia.org/wiki/%D0%94%D0%B0%D0%B9%D0%B4%D0%B6%D0%B5%D1%81%D1%82-%D0%B0%D1%83%D1%82%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F">википедии</a>.</p>
+<p>Функция auth_challenge отправляет ответ 401 Unauthorized (также было описано в теории и алгоритме приведенном выше). После чего обязательно вызвать прерывание, чтобы сообщение не пошло дальше по маршруту. Это делается с помощью exit.</p>
+<p>3) Как только User Agent отправит корретное поле Authorization с верным логином/паролем/realm’ом, происходит вызов функции save(«location») из модуля registrar. Вызов этой функции записывает поле Contact в оперативную память Kamailio. Все сохраненные Contact URI/AoR можно посмотреть с помощью вызовов команд kamcmd и/или kamctl (при подключении модуля ctl.so и jsonrpc.so соответственно).</p>
+<p>Итоговый конфигурационный файл будет выглядеть следующим образом:</p>
+<pre><code class="language-plaintext">#!define DBURL "postgres://kamailio:secret_password@localhost:5433/kamailio"
+
+
+loadmodule "pv.so"
+loadmodule "tm.so"
+loadmodule "textops.so"
+loadmodule "sl.so"
+loadmodule "usrloc.so"
+loadmodule "registrar.so"
+loadmodule "auth.so"
+loadmodule "db_postgres.so"
+loadmodule "auth_db.so"
+
+#############[Подключение к БД]###########
+modparam("auth_db", "db_url", DBURL); # указываем URL для подключения, берем его из ранее созданной директивы DBURL
+
+request_route {
+        if (is_method("REGISTER")) {
+                route(AUTH);
+        }
+}
+
+route[AUTH] {
+                if (!auth_check("$fd", "subscriber", "1")) {
+                        force_rport();
+                        auth_challenge("$fd", "1");
+                        exit;
+                }
+                force_rport();
+                save("location");
+                exit;
+}</code></pre>
+<h2>Заключение</h2>
+<p>В этой статье мы реализовали возможность регистрации SIP аккаунтов. Для добавления нового SIP аккаунта можно сделать запись напрямую в базу данных kamailio, в таблицу subscriber или же вызвать команду:</p>
+<pre><code class="language-plaintext">kamctl add 1111@ipcalls24.com 11111111</code></pre>
+<p>Где 1111 — создаваемый номер, ipcalls24.com — домен к которому относится этот номер, 11111111 — пароль для этого SIP аккаунта.</p>
+<p>Теперь можете попробовать зарегистрироваться, например с помощью Zoiper или MicroSIP.</p>
+<p>В следующей статье мы рассмотрим теорию и практику прохождения NAT в SIP протоколе, добавим хранения зарегестрированных пользователей в базе данных.</p>
