@@ -2,7 +2,7 @@
 title: StorCLI
 description: команды в примерах
 published: true
-date: 2024-02-23T10:16:12.175Z
+date: 2024-02-23T10:19:58.622Z
 tags: megaraid, raid, lsi, broadcom, 9560-16i, manual, commands
 editor: ckeditor
 dateCreated: 2024-02-23T10:03:44.793Z
@@ -468,16 +468,16 @@ Note:
         X=lines per page. E.g. 'storcli help page=10'
      2. Use 'nolog' option to disable debug logging. E.g. 'storcli show nolog'
 </code></pre>
+<p>Посмотреть подсоединенные контроллеры :</p>
+<pre><code class="language-plaintext"># ./storcli64 show ctrlcount
+CLI Version = 007.2807.0000.0000 Dec 22, 2023
+Operating system = Linux 5.15.0-76-generic
+Status Code = 0
+Status = Success
+Description = None
+
+Controller Count = 1</code></pre>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu.png" alt="Получить справочную информацию" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu.png 641w, https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu-300x257.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu-70x60.png 70w" sizes="100vw" width="641"></figure>
-<p>Посмотреть подсоединенные контроллеры</p>
-<p>&nbsp;</p>
-<p>./storcli show ctrlcount</p>
-<p>&nbsp;</p>
-<p>Нашелся один RAID контроллер.</p>
-<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi.png" alt="Посмотреть подсоединенные контроллеры" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi.png 357w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi-300x136.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi-70x32.png 70w" sizes="100vw" width="357"></figure>
 <p>Для более детальной информации вводим следующую команду.</p>
 <p>&nbsp;</p>
 <p>./storcli show all</p>
