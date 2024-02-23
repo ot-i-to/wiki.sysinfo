@@ -1,0 +1,320 @@
+<!--
+title: StorCLI
+description: команды в примерах
+published: true
+date: 2024-02-23T10:03:44.793Z
+tags: megaraid, raid, lsi, broadcom, 9560-16i, manual, commands
+editor: ckeditor
+dateCreated: 2024-02-23T10:03:44.793Z
+-->
+
+<h3>Общие команды&nbsp;storcli&nbsp;show</h3>
+<p>Посмотреть версию storcli</p>
+<pre><code class="language-plaintext">./storcli64 -v</code></pre>
+<p>&nbsp;</p>
+<p>Получить справочную информацию по всем командам утилиты storcli</p>
+<p>&nbsp;</p>
+<p>./storcli -help</p>
+<p>&nbsp;</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu.png" alt="Получить справочную информацию" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu.png 641w, https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu-300x257.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu-70x60.png 70w" sizes="100vw" width="641"></figure>
+<p>Посмотреть подсоединенные контроллеры</p>
+<p>&nbsp;</p>
+<p>./storcli show ctrlcount</p>
+<p>&nbsp;</p>
+<p>Нашелся один RAID контроллер.</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi.png" alt="Посмотреть подсоединенные контроллеры" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi.png 357w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi-300x136.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-podsoedinennyie-kontrolleryi-70x32.png 70w" sizes="100vw" width="357"></figure>
+<p>Для более детальной информации вводим следующую команду.</p>
+<p>&nbsp;</p>
+<p>./storcli show all</p>
+<p>&nbsp;</p>
+<p>Как видите тут выводится модель raid контроллера, у меня это Avago MegaRAID SAS 9361-8i, количество портов.</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-detalnyie-nastroyki-raid-kontrollera.png" alt="Посмотреть детальные настройки raid контроллера" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-detalnyie-nastroyki-raid-kontrollera.png 683w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-detalnyie-nastroyki-raid-kontrollera-150x150.png 150w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-detalnyie-nastroyki-raid-kontrollera-300x298.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Posmotret-detalnyie-nastroyki-raid-kontrollera-70x70.png 70w" sizes="100vw" width="683"></figure>
+<p>Так как я выяснил, что мой контроллер идет под номером 0, то в дальнейшем он будет выступать под видом /c0.</p>
+<p>Посмотрим теперь реально всю информацию о данном RAID контроллере, для этого воспользуемся командой storcli</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show all</p>
+<p>&nbsp;</p>
+<p>В итоге получаем вот такую простыню, как можете заметить информации реально вагон, для примера версии всех прошивок, всех утилит, статусы компонентов и количество ошибок.</p>
+<blockquote>
+  <p>Generating detailed summary of the adapter, it may take a while to complete.</p>
+  <p>Controller = 0<br>Status = Success<br>Description = None<br>Basics :<br>======<br>Controller = 0<br>Model = AVAGO MegaRAID SAS 9361-8i<br>Serial Number = SV53939929<br>Current Controller Date/Time = 12/11/2015, 10:33:16<br>Current System Date/time = 12/11/2015, 09:32:31<br>SAS Address = 500605b00ace58d0<br>PCI Address = 00:0b:00:00<br>Mfg Date = 09/20/15<br>Rework Date = 00/00/00<br>Revision No = 11A<br>Version :<br>=======<br>Firmware Package Build = 24.10.0-0020<br>Firmware Version = 4.600.00-4907<br>CPLD Version = 26747-01A<br>Bios Version = 6.28.04.0_4.17.08.00_0x06110200<br>Ctrl-R Version = 5.13-1101<br>Preboot CLI Version = 01.07-05:#%0000<br>NVDATA Version = 3.1508.00-0009<br>Boot Block Version = 3.07.00.00-0003<br>Driver Name = megaraid_perc9<br>Driver Version = 6.901.55.00.1vmw<br>Bus :<br>===<br>Vendor Id = 0x1000<br>Device Id = 0x5D<br>SubVendor Id = 0x1000<br>SubDevice Id = 0x9361<br>Host Interface = PCI-E<br>Device Interface = SAS-12G<br>Bus Number = 11<br>Device Number = 0<br>Function Number = 0<br>Pending Images in Flash :<br>--------------------------------------------------<br>Adv S/W Opt Time Remaining Mode<br>--------------------------------------------------<br>MegaRAID FastPath Unlimited -<br>MegaRAID CacheCade Pro 2.0 18 days 2 hours -<br>MegaRAID SafeStore 18 days 2 hours -<br>MegaRAID RAID6 Unlimited -<br>MegaRAID RAID5 Unlimited -<br>--------------------------------------------------<br>Virtual Drives = 2</p>
+  <p>VD LIST :<br>=======</p>
+  <p>-----------------------------------------------------------------<br>DG/VD TYPE State Access Consist Cache Cac sCC Size Name<br>-----------------------------------------------------------------<br>0/0 RAID1 Optl RW No RWTD - OFF 558.406 GB system<br>1/1 RAID5 Optl RW No RWTD - OFF 4.545 TB VD_1<br>-----------------------------------------------------------------</p>
+  <p>Cac=CacheCade|Rec=Recovery|OfLn=OffLine|Pdgd=Partially Degraded|dgrd=Degraded<br>Optl=Optimal|RO=Read Only|RW=Read Write|HD=Hidden|B=Blocked|Consist=Consistent|<br>R=Read Ahead Always|NR=No Read Ahead|WB=WriteBack|<br>AWB=Always WriteBack|WT=WriteThrough|C=Cached IO|D=Direct IO|sCC=Scheduled<br>Check Consistency</p>
+  <p>Physical Drives = 8</p>
+  <p>PD LIST :<br>=======</p>
+  <p>--------------------------------------------------------------------------------<br>EID:Slt DID State DG Size Intf Med SED PI SeSz Model Sp<br>--------------------------------------------------------------------------------<br>252:0 16 Onln 1 931.0 GB SATA SSD N N 512B Samsung SSD 850 EVO 1TB U<br>252:1 17 Onln 1 931.0 GB SATA SSD N N 512B Samsung SSD 850 EVO 1TB U<br>252:2 11 Onln 1 931.0 GB SATA SSD N N 512B Samsung SSD 850 EVO 1TB U<br>252:3 12 Onln 1 931.0 GB SATA SSD N N 512B Samsung SSD 840 EVO 1TB U<br>252:4 8 Onln 0 558.406 GB SAS HDD N N 512B EG0600FBDBU U<br>252:5 9 Onln 0 558.406 GB SAS HDD N N 512B EG0600FBDBU U<br>252:6 15 Onln 1 931.0 GB SATA SSD N N 512B Samsung SSD 850 EVO 1TB U<br>252:7 10 Onln 1 931.0 GB SATA SSD N N 512B Samsung SSD 850 EVO 1TB U<br>--------------------------------------------------------------------------------</p>
+  <p>EID-Enclosure Device ID|Slt-Slot No.|DID-Device ID|DG-DriveGroup<br>DHS-Dedicated Hot Spare|UGood-Unconfigured Good|GHS-Global Hotspare<br>UBad-Unconfigured Bad|Onln-Online|Offln-Offline|Intf-Interface<br>Med-Media Type|SED-Self Encryptive Drive|PI-Protection Info<br>SeSz-Sector Size|Sp-Spun|U-Up|D-Down|T-Transition|F-Foreign<br>UGUnsp-Unsupported|UGShld-UnConfigured shielded|HSPShld-Hotspare shielded<br>CFShld-Configured shielded|Cpybck-CopyBack|CBShld-Copyback Shielded</p>
+</blockquote>
+<p>Из полезного еще, можно посмотреть число virtual drive и физических дисков.</p>
+<ul>
+  <li>показывает&nbsp;количество групп дисков;</li>
+  <li>для каждой группы дисков - тип RAID, состояние, наличие фоновых задач, размер, использование кеша дисков, PI, SED, наличие свободного места, не всегда отрабатывает;</li>
+  <li>для каждого диска - номер группы дисков, номер в группе (Row), номер корзины и слота в корзине, идентификатор устройства (DID), состояние, наличие фоновых задач, размер, использование кеша дисков, интерфейс, носитель, размер сектора, модель, раскручен ли;</li>
+  <li>для каждого виртуального диска - номер группы дисков, тип RAID, состояние, тип доступа (RW), консистентность, тип кеширования, размер, имя;</li>
+  <li>для BBU - модель, состояние, температура, режим работы, дата изготовления, дата следующего тестирования</li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi.jpg" alt="StorCLI команды" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi.jpg 656w, https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi-281x300.jpg 281w, https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi-66x70.jpg 66w" sizes="100vw" width="656"></figure>
+<p>Интервал сброса кэша, по умолчанию стоит 4 секунды</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show cacheflushint</p>
+<p>&nbsp;</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Interval-sbrosa-ke`sha.jpg" alt="Интервал сброса кэша"></figure>
+<p>Если происходит проверка консистентности и если находится ошибка, должен ли контроллер прекратить ее или нет.</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show abortcconerror</p>
+<p>&nbsp;</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/proishodit-proverka-konsistentnosti.jpg" alt="происходит проверка консистентности" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/proishodit-proverka-konsistentnosti.jpg 433w, https://pyatilistnik.org/wp-content/uploads/2015/11/proishodit-proverka-konsistentnosti-300x191.jpg 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/proishodit-proverka-konsistentnosti-70x45.jpg 70w" sizes="100vw" width="433"></figure>
+<p>Так и не понял для чего данная команда&nbsp;Use Disk Activity For Locate, типа использовать дисковую активность для локализации диска.</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show activityforlocate</p>
+<p>&nbsp;</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi-upravleniya.jpg" alt="StorCLI команды управления" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi-upravleniya.jpg 454w, https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi-upravleniya-300x189.jpg 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/StorCLI-komandyi-upravleniya-70x44.jpg 70w" sizes="100vw" width="454"></figure>
+<p>Посмотреть включены ли alarm</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show alarm</p>
+<p>&nbsp;</p>
+<p>Узнать количество плохих секторов&nbsp;badblocks</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show badblocks</p>
+<p>&nbsp;</p>
+<p>Узнать статус включены ли предупреждения от BBU батарейки</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show batterywarning</p>
+<p>&nbsp;</p>
+<p>Узнать&nbsp;приоритет фоновой инициализации, по умолчанию это значение 30 %, максимально 100, минимальное 0.</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show bgirate</p>
+<p>&nbsp;</p>
+<p>Задать поведение контроллера при ошибках во время загрузки</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 show bios</p>
+<p>&nbsp;</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Zadat-povedenie-kontrollera.jpg" alt="Задать поведение контроллера" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Zadat-povedenie-kontrollera.jpg 437w, https://pyatilistnik.org/wp-content/uploads/2015/11/Zadat-povedenie-kontrollera-300x224.jpg 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Zadat-povedenie-kontrollera-70x52.jpg 70w" sizes="100vw" width="437"></figure>
+<h3>Работа с Virtual Drive</h3>
+<p>Первым делом приведу команду которая покажет вам существующие virtual drive на вашем Raid контроллере.</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 /vall show</p>
+<p>&nbsp;</p>
+<p>У меня это виртуальный диск на RAID1, размером 558 гб.</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive.png" alt="список virtual drive" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive.png 642w, https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive-300x176.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive-70x41.png 70w" sizes="100vw" width="642"></figure>
+<p>Если добавите параметр all, то получите исчерпывающию информацию, из чего состоит данный Virtual Drive (EID дисков), размер stripe и многое еще.</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive-2.png" alt="список virtual drive-2" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive-2.png 635w, https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive-2-203x300.png 203w, https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-virtual-drive-2-47x70.png 47w" sizes="100vw" width="635"></figure>
+<p>Далее нужно понять какие диски у нас есть, делается это командой</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 /eall /sall show</p>
+<p>&nbsp;</p>
+<p>Вы получите список дисков на вашем сервере, если опять добавите параметр all, то информации будет в разы больше. Тут из полезного EID диска, его статус.</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-diskov-na-servere.png" alt="список дисков на сервере" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-diskov-na-servere.png 639w, https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-diskov-na-servere-300x154.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/spisok-diskov-na-servere-70x36.png 70w" sizes="100vw" width="639"></figure>
+<p>Создаем Virtual Drive, сразу советую вам почитать про <a href="https://pyatilistnik.org/vidyi-raid-i-ih-harakteristiki/">виды RAID</a> и <a href="https://pyatilistnik.org/vidyi-kesha-nastroyka-proizvoditelnosti-na-reyd-kontrollerah-lsi-i-intel/">виды кэша контроллера LSI</a>. Вводим команду</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 add vd type=r0 size=1024000 name=raid0 drives=252:0-1 strip=128 pdcache=off direct wb ra</p>
+<p>&nbsp;</p>
+<p>В результате ее выполнения вы получите виртуальный диск размером 1тб raid0, размером strip 128 с выключенным кэшем записи на диске и режимами кэша&nbsp;Read ahead,&nbsp;Direct I/O,&nbsp;Write back.</p>
+<h4><strong>Возможные параметры virtual drive</strong></h4>
+<ul>
+  <li>add vd &gt; указываем что создается виртуальный диск</li>
+  <li>type &gt; тип raid&nbsp;0|1|5|6|00|10|50|60</li>
+  <li>size &gt; размер указывается в мегабайтах, если поставить all, будет размечено все пространство.</li>
+  <li>name &gt; любое имя на латинице</li>
+  <li>drives &gt; список дисков</li>
+  <li>strip &gt; размер страйпа возможны варианты&nbsp;8|16|32|64|128|256|1024</li>
+  <li>pdcache &gt; включение локального кэширования записи на дисках 0n/off</li>
+  <li>Политика ввода вывода direct &gt;&nbsp;Direct I/O еще возможный вариант <strong>cached</strong> &gt;<strong>&nbsp;</strong>Cached I/O</li>
+  <li>Политика записи&nbsp;wb &gt;&nbsp;&nbsp;Write back,&nbsp;wt &gt;&nbsp;&nbsp;Write through,&nbsp;awb &gt;&nbsp;Always Write Back</li>
+  <li>spares &gt; добавить диск горячей замены, не работает с raid0</li>
+</ul>
+<p>Пример команды с диском горячей замены, где&nbsp;252:3, диск в 3 слоте.</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 add vd type=r0 size=1024000 name=raid0 drives=252:0-1 strip=128 pdcache=off direct wb ra spares=252:3</p>
+<p>&nbsp;</p>
+<p>Проверим теперь список виртуальных дисков. Как видите наш vd успешно добавлен.</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Obnovlennyiy-spisok-virtual-drive.png" alt="Обновленный список virtual drive" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Obnovlennyiy-spisok-virtual-drive.png 527w, https://pyatilistnik.org/wp-content/uploads/2015/11/Obnovlennyiy-spisok-virtual-drive-300x84.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Obnovlennyiy-spisok-virtual-drive-70x20.png 70w" sizes="100vw" width="527"></figure>
+<ul>
+  <li>ssdcaching &gt; on|off <a href="https://pyatilistnik.org/cachecade-chto-eto-takoe-i-kak-ego-nastroit/">режим&nbsp;CacheCade</a></li>
+  <li>emulationType &gt; этот параметр задает как будет происходить эмуляция логического размера физического диска. Если выставить Default (0), то если в виртуальном диске будут диски&nbsp;512E, то он их и будет считать&nbsp;512E, если все диски&nbsp;512N, то и они будут&nbsp;512N, другими словами, все как есть так и будет. Если выставить&nbsp;Disabled (1), то vd всегда все будут считать как&nbsp;512N, если у вас даже будет&nbsp;512E формат дисков. Ну и&nbsp;Forced (2) показывает на virtual drive размер блока как&nbsp;512E, если его даже нет. Более подробно про типы читайте в статье&nbsp;Advanced Format.</li>
+  <li>ds&nbsp;&gt;&nbsp;Default|Auto|None|Max|MaxNoCache &gt;&nbsp;режим энергосбережения</li>
+  <li>autobgi&nbsp;&gt;&nbsp;on|off включение или выключение фоновых процессов.</li>
+</ul>
+<p>Иницилизируем созданный virtual drive</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 /v1 start init&nbsp;</p>
+<p>&nbsp;</p>
+<p>Посмотреть процесс инициализации по всем сразу</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 /vall show init</p>
+<p>&nbsp;</p>
+<p>Удалить virtual drive выполняется командой, где&nbsp;v1 номер vd.</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 /v1 del</p>
+<p>&nbsp;</p>
+<h4>Изменить настройки virtual drive</h4>
+<p>Очень важно уметь выполнять настройки на существующих виртуальных томах. И так у нас есть том 1 тб и режимами кэширования&nbsp;direct wb ra, размер stripe изменить уже не получиться, только удаление тома, а вот имя и режимами кэширования, да и расширение можно осуществить.</p>
+<p>Изменим для начала имя текущего тома, напомню оно raid0, задаем команду и теперь оно будет&nbsp;new_raid0</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 /v1 set name=new_raid0</p>
+<p>&nbsp;</p>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Izmenit-nastroyki-virtual-drive.png" alt="Изменить настройки virtual drive" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Izmenit-nastroyki-virtual-drive.png 546w, https://pyatilistnik.org/wp-content/uploads/2015/11/Izmenit-nastroyki-virtual-drive-300x258.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Izmenit-nastroyki-virtual-drive-70x60.png 70w" sizes="100vw" width="546"></figure>
+<p>Думаю тут понятна конструкция берете&nbsp;./storcli /c0 /v1 set и задаете параметр который нужно поправить.</p>
+<h5>Возможные значения</h5>
+<ul>
+  <li>storcli /cx/vx set accesspolicy=rw (чтение/запись)|ro только чтение|blocked блокировка|rmvblkd &gt; rmvblkd - remove blocked</li>
+  <li>storcli /cx/vx set iopolicy=cached|direct &gt; задать политику ввода/вывода</li>
+  <li>storcli /cx/vx set name=имя &gt; смена имени</li>
+  <li>storcli /cx/vx set pdcache=on|off|default &gt; работа с&nbsp;кешем записи на диске</li>
+  <li>storcli /cx/vx set rdcache=ra|nora &gt; режим предварительного чтения</li>
+  <li>storcli /cx/vx set ssdcaching=on|off &gt; CacheCade, ссылка выше</li>
+  <li>storcli /cx/vx set wrcache=wt|wb|awb &gt; режим кеширования записи (awb - всегда кешировать запись)</li>
+  <li>storcli /cx/vx set emulationType=0|1|2&nbsp;&gt; полезно поиграться с дисками в эмуляции logical size, подробнее о&nbsp;Advanced Format (Default (0): при наличии в томе дисков 512E он видится&nbsp;как 512E. Если все диски — 512N, тогда том видится&nbsp;как 512N.&nbsp;Disabled (1): Том всегда видится&nbsp;как 512N несмотря на наличие дисков 512E.&nbsp;Forced (2): Том всегда видится&nbsp;как 512E даже при отсутствии дисков 512E)</li>
+  <li>storcli /cx/vx set ds=Default|Auto|None|Max|MaxNoCache &gt; включение&nbsp;режима энергосбережения</li>
+  <li>storcli /cx/vx set autobgi=on|off. Включить/выключить фоновую инициализацию</li>
+  <li>storcli /cx/vx set pi=off # (что это?)</li>
+  <li>storcli /cx/vx set bootdrive={on|off}</li>
+  <li>storcli /cx/vx set HostAccess=ExclusiveAccess|SharedAccess</li>
+  <li>storcli /cx/vx set pi=Off</li>
+  <li>storcli /cx/vx set bootdrive=&lt;On|Off&gt; сделать том загрузочным</li>
+  <li>storcli /cx/vx set hidden=On|Off &gt; скрыть том</li>
+  <li>storcli /cx/vx set hoqrebuild=On|Off &gt; включает/выключает главный диск в очереди на ребилд</li>
+  <li>storcli /cx/vx set cbsize=0|1|2 cbmode=0|1|2|3|4|7 &gt; задает размер&nbsp;&nbsp;Cache bypass (cbsize:&nbsp;0 – 64k Cache bypass.&nbsp;1 – 128k Cache bypass.&nbsp;2 – 256k Cache bypass) (cbmode:&nbsp;0 – Включение intelligent mode Cache bypass.&nbsp;1 – Включение standard mode Cache bypass.&nbsp;2 – Включение настраиваемого&nbsp;custom mode Cache bypass 1.&nbsp;3 – Включение настраиваемого custom mode Cache bypass 2.&nbsp;4 – Включение настраиваемого custom mode Cache bypass 3.&nbsp;7 – Выключение&nbsp;Cache bypass.)</li>
+  <li>storcli /cx/vx start erase simple|normal|thorough|standard начать стирание</li>
+  <li>storcli /cx/vx stop eraseостановить стирание</li>
+  <li>storcli /cx/vx start migrate type=RAID{0|1|5|6} [option={add|remove} drives=корзина:слот{,...}] # RAID5 и 6 нельзя преобразовать в RAID1, <a href="https://pyatilistnik.org/kak-izmenit-tip-reyda-s-raid5-na-raid6-v-kontrollerah-lsi/">преобразование raid</a>.</li>
+  <li>storcli /cx/vx start cc [force] запуск проверки консистенции</li>
+  <li>storcli /cx/vx stop cc остановка&nbsp;проверки консистенции</li>
+  <li>storcli /cx/vx pause cc пауза&nbsp;проверки консистенции</li>
+  <li>storcli /cx/vx resume cc возобновление&nbsp;проверки консистенции</li>
+  <li>storcli /cx/vx suspend bgi пауза фоновой инициализации</li>
+  <li>storcli /cx/vx stop bgi остановка&nbsp;фоновой инициализации</li>
+  <li>storcli /cx/vx resume bgi возобновление&nbsp;фоновой инициализации</li>
+  <li>storcli /cx/vx del cachecade &gt; удалить&nbsp;cachecade</li>
+  <li>storcli /cx/vx delete preservedcache [force] удалить данные, закешированные для исчезнувшего диска</li>
+  <li>storcli /cx/vx expand size=ГБ [expandarray] # увеличить виртуальный диск, expandarray - увеличить размер группы дисков после замены дисков на большие диски</li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/uvelichit-virtualnyiy-disk.png" alt="увеличить виртуальный диск" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/uvelichit-virtualnyiy-disk.png 616w, https://pyatilistnik.org/wp-content/uploads/2015/11/uvelichit-virtualnyiy-disk-300x141.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/uvelichit-virtualnyiy-disk-70x33.png 70w" sizes="100vw" width="616"></figure>
+<ul>
+  <li>storcli /cx/vx show BBMT # показать количество плохих блоков на логическом уровне с возможностью коррекции</li>
+</ul>
+<h4>Работа с&nbsp;CacheCade</h4>
+<p>Создаем&nbsp;CacheCade командой</p>
+<p>./storcli /cx add vd cc type=r[0,1,10] drives=[EnclosureID:SlotID|:SlotID-SlotID|:SlotID,SlotID] WT|WB (assignvds=0,1,2)</p>
+<p>пример</p>
+<p>&nbsp;</p>
+<p>./storcli /c0 add vd cc type=r1 drives=252:2-3 WB</p>
+<p>&nbsp;</p>
+<h3>CacheCade&nbsp;активация/деактивация</h3>
+<p>./storcli /cx/[vx|vall] set ssdCaching=[on|off]</p>
+<p>Пример</p>
+<p>&nbsp;</p>
+<p>./storcli /c0/v1 set ssdCaching=on</p>
+<p>&nbsp;</p>
+<h3>удалить&nbsp;CacheCade device</h3>
+<p>&nbsp;</p>
+<p>./storcli /cx/vx del cc</p>
+<p>&nbsp;</p>
+<h4>Популярные Похожие записи:</h4>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2023/01/system-has-critical-issues-150x150.png" alt="Замена сбойного диска на RAID PERC H740P Adapter в ЦОД"></figure>
+<ul>
+  <li><a href="https://pyatilistnik.org/zamena-sboynogo-diska-na-raid-perc-h740p-adapter-v-tsod/">Замена сбойного диска на RAID PERC H740P Adapter в ЦОД</a></li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2021/07/dell-logo-1-150x150.jpg" alt="Как создать RAID на Dell PERC H330 Adapter"></figure>
+<ul>
+  <li><a href="https://pyatilistnik.org/how-to-create-a-raid-on-the-dell-perc-h330-adapter/">Как создать RAID на Dell PERC H330 Adapter</a></li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2021/07/dell-logo-3-150x150.jpg" alt="Как установить операционную систему на Dell PowerEdge R740"></figure>
+<ul>
+  <li><a href="https://pyatilistnik.org/how-to-install-the-operating-system-on-the-dell-r740/">Как установить операционную систему на Dell PowerEdge R740</a></li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2021/07/dell-logo-2-150x150.jpg" alt="Ошибка JCP024 Lifecycle Controller in use"></figure>
+<ul>
+  <li><a href="https://pyatilistnik.org/jcp024-lifecycle-controller-in-use/">Ошибка JCP024 Lifecycle Controller in use</a></li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2022/12/smeta-500-150x150.png" alt="Smata.Ru сервер лицензий недоступен"></figure>
+<ul>
+  <li><a href="https://pyatilistnik.org/smata-ru-license-server-unavailable/">Smata.Ru сервер лицензий недоступен</a></li>
+</ul>
+<figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/08/Kak-ustanovit-Vsphere-Power-CLI-150x150.png" alt="Как установить vSphere PowerCLI последнюю версию"></figure>
+<ul>
+  <li><a href="https://pyatilistnik.org/kak-ustanovit-vsphere-powercli-5-5/">Как установить vSphere PowerCLI последнюю версию</a></li>
+</ul>
+<p>Авг 7, 2016 14:10 Автор - Сёмин Иван</p>
+<h3>22 Responses to <i>StorCLI команды управления RAID контроллером LSI в VMware ESXI 5.5</i></h3>
+<p>Sasha Odarchuk:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-56394">17.08.2016 в 21:02</a></p>
+<p>Как узнать % ребилда ??</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-56400">18.08.2016 в 10:52</a></p>
+<p>./storcli show all</p>
+<p>metall:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-78864">15.03.2017 в 09:10</a></p>
+<p>А как добавить в существующий vd новый диск?</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-78866">15.03.2017 в 09:37</a></p>
+<p>Вы имеете в виду размеченный vd?</p>
+<p>metall:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-78868">15.03.2017 в 09:50</a></p>
+<p>Именно, есть необходимость расширить существующий raid6 без разрушения массива. Возможно ли это?</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-78869">15.03.2017 в 10:16</a></p>
+<p>На контроллерах LSI есть такая возможность, вы можете добавить дополнительные диски в существующий RAID (http://pyatilistnik.org/kak-dobavit-disk-v-sushhestvuyushhiy-raid-na-kontrollere-lsi/), я такое проделывал через MSM, на сайте есть пример статьи, со storcli такого не делал ,но уверен, что там это можно сделать</p>
+<p>metall:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-78870">15.03.2017 в 10:21</a></p>
+<p>Благодарю! Если вдруг будет такой опыт с storcli, то добавьте в статью, пожалуйста! 🙂</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-78875">15.03.2017 в 13:52</a></p>
+<p>Ок, если не забуду. Еще забыл отметить, что во время расширения raid массива, все будет очень тормозить, учтите это.</p>
+<p>OlegusP:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-94405">17.08.2017 в 08:57</a></p>
+<p>добавить диск в рейд6 :<br>./storcli /c0/v0 start migrate type=raid6 option=add drives=4:3<br>где drives — это EID:Slt доп. диска, посмотреть можно командой ./storcli /c0 show<br>на пятнадцать примерно минут рейд задумается, а затем можно смотреть прогресс<br>./storcli /c0/v0 show migrate<br>Лучше чтобы при этом никто не работал, так как система будет жутко тормозить и если кто-то будет работать, то миграция затянется на дни.<br>VD Operation Progress% Status Estimated Time Left<br>——————————————————-<br>0 Migrate 1 In progress 5 Hours 49 Minutes</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-94414">17.08.2017 в 10:14</a></p>
+<p>Да точно растянется на долгое время.</p>
+<p>Василий:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-107011">26.12.2017 в 15:31</a></p>
+<p>Скорее всего неверно указаны единицы измерения команды «expand», не ГБ а МБ</p>
+<p>./storcli /c0 /v0 expand size=1700000<br>Controller = 0<br>Status = Success<br>Description = expansion operation succeeded</p>
+<p>EXPANSION RESULT :<br>================</p>
+<p>————————————————————————<br>VD Size FreSpc ReqSize AbsUsrSz %FreSpc NewSize Status NoArrExp<br>————————————————————————<br>0 1.031 TB 1.695 TB 1.621 TB 1.627 TB 96 2.660 TB — 1.695 TB<br>————————————————————————</p>
+<p>Size — Current VD size|FreSpc — Freespace available before expansion<br>%FreSpc — Requested expansion size in % of available free space<br>AbsUsrSz — User size rounded to nearest %</p>
+<p>jorel:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-137891">06.06.2019 в 19:23</a></p>
+<p>Добрый день.<br>Есть контроллер 9631-4i вместе с ним стоит батарейка, в свойствах она и состояние — оптимальное.<br>При создании рейда virtual drive в политике записи я ожидал увидеть пункт: Write Back BBU,но его нет. Может вы знаете это особенность контроллера или что-то не так? В данный момент я пытаюсь обновить прошивку через storcli (efi), может есть у вас какой-то?</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-137907">06.06.2019 в 22:50</a></p>
+<p>К сожалению, я не работал с данной моделью, могу посоветовать установить MSM или LSA для обновления через веб интерфейс.</p>
+<p>Васо:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-146969">16.10.2019 в 16:16</a></p>
+<p>Подскажите может была похожая проблема с storcli на esxi 6.0, при вводе любой команды storcli зависает. Команда ./storcli -v отвисла через 12 часов.</p>
+<p>Игорь:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-155041">19.03.2020 в 09:32</a></p>
+<p>День добрый!</p>
+<p>Подскажите плиз… У меня регистрируется ошибка:<br>Controller ID: 0 Transient error detected while communicating with PD: Int. Port 0 — 3:1:6</p>
+<p>А я не могу понять с каким физическим диском эта ошибка связана…</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-155060">19.03.2020 в 20:15</a></p>
+<p>Можете выгрузить весь список файлов</p>
+<p>parallax:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-157237">20.04.2020 в 16:10</a></p>
+<p>как с помощью storcli добавить второй массив?<br>спасибо</p>
+<p>Станислав:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-164520">21.09.2020 в 04:36</a></p>
+<p>Включите в статью пример для временного решения проблем с BBU до замены без потери производительности<br>storcli64 /c0/v0 set cachedbadbbu=on</p>
+<p>Евгений:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-178496">09.02.2021 в 20:46</a></p>
+<p>Спасибо за статью! Очень выручила!<br>Подскажите, пожалуйста, на сколько критично количество плохих блоков?<br>Сейчас такая информация:<br>Controller = 0<br>Status = Failure<br>Description = None</p>
+<p>Detailed Status :<br>===============</p>
+<p>————————————————————-<br>Ctrl Status Ctrl_Prop Value ErrMsg ErrCd<br>————————————————————-<br>0 Failed Bad Block Count — BadBlockCount failed 2<br>————————————————————-</p>
+<p>Иван Семин:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-178596">10.02.2021 в 09:38</a></p>
+<p>Исходя из своего опыта, если диск начал крошиться, то его лучше менять сразу, так как он выходит из строя в течении нескольких недель. Например у меня были диски IBM и там критическое количество блоков было 20.</p>
+<p>Алексей:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-213233">06.06.2022 в 04:19</a></p>
+<p>Добрый день. Добавил в массив raid6 еще один диск. Хотел сделать хотспару, но ошибся, добавил именно в массив. В винде, в Управлении дисками, свободное место на массиве появилось, но размечать НЕ стал. Возможно ли, удалить лишний диск без потери данных и остановки массива? Диск перевел в состояние Unconfigured Drive, в MSM.</p>
+<p>Алексей:</p>
+<p><a href="https://pyatilistnik.org/storcli-komandyi-upravleniya-raid-kontrollerom-lsi-v-vmware-esxi-5-5/#comment-213235">06.06.2022 в 04:47</a></p>
+<p>В MSM я не нашел возможности удалить диск из массива. Если переделать пример выше под мой сценарий: ./storcli /c0/v0 start migrate type=raid6 option=del drives=32:7<br>сработает ли? не нагнется ли массив?</p>
+<h3>Добавить комментарий</h3>
+<p>Ваш адрес email не будет опубликован. Обязательные поля помечены *</p>
+<p>Комментарий *</p>
+<p>Имя *</p>
+<p>Email *</p>
+<p>&nbsp;</p>
