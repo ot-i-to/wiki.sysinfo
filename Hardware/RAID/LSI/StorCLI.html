@@ -2,19 +2,474 @@
 title: StorCLI
 description: команды в примерах
 published: true
-date: 2024-02-23T10:03:44.793Z
+date: 2024-02-23T10:16:12.175Z
 tags: megaraid, raid, lsi, broadcom, 9560-16i, manual, commands
 editor: ckeditor
 dateCreated: 2024-02-23T10:03:44.793Z
 -->
 
 <h3>Общие команды&nbsp;storcli&nbsp;show</h3>
-<p>Посмотреть версию storcli</p>
-<pre><code class="language-plaintext">./storcli64 -v</code></pre>
+<p>Cправака командам утилиты storcli64 :</p>
+<pre><code class="language-plaintext"># ./storcli64 -help
+
+      StorCli SAS Customization Utility Ver 007.2807.0000.0000 Dec 22, 2023
+
+    (c)Copyright 2023, Broadcom Inc. All Rights Reserved.
+
+
+storcli -v 
+storcli [verbose] -h| -help| ? 
+storcli show 
+storcli show all
+storcli show ctrlcount
+storcli show file=&lt;filepath&gt;
+storcli get rttdump
+storcli get otc [folder=&lt;name&gt;]
+storcli /cx add vd r[0|1|5|6|00|10|50|60]
+	[Size=&lt;VD1_Sz&gt;,&lt;VD2_Sz&gt;,..|remaining] [name=&lt;VDNAME1&gt;,..] 
+	drives=[e:]s|[e:]s-x|[e:]s-x,y [PDperArray=x][SED]
+	[pdcache=on|off|default][pi][DimmerSwitch(ds)=default|automatic(auto)|
+	none|maximum(max)|MaximumWithoutCaching(maxnocache)][WT|WB|AWB][nora|ra]
+	[direct|cached] [cachevd] [unmap][Strip=&lt;8|16|32|64|128|256|512|1024&gt;]
+	 [AfterVd=X] [EmulationType=0|1|2] [Spares = [e:]s|[e:]s-x|[e:]s-x,y]
+	[force][ExclusiveAccess] [Cbsize=0|1|2 Cbmode=0|1|2|3|4|7] 
+storcli /cx add vd each r0 [name=&lt;VDNAME1&gt;,..] [drives=[e:]s|[e:]s-x|[e:]s-x,y]|all
+	[SED] [pdcache=on|off|default][pi] [DimmerSwitch(ds)=default|
+	automatic(auto)|none|maximum(max)|MaximumWithoutCaching(maxnocache)] 
+	[WT|WB|AWB] [nora|ra] [direct|cached] [EmulationType=0|1|2]
+	[Strip=&lt;8|16|32|64|128|256|512|1024&gt;] [ExclusiveAccess]
+	[Cbsize=0|1|2 Cbmode=0|1|2|3|4|7] [unmap]
+storcli /cx add VD cachecade r[0|1|10] 
+	drives = [e:]s|[e:]s-x|[e:]s-x,y [WT|WB] [assignvds = 0,1,2] 
+storcli /cx/ex show 
+storcli /cx/ex show all 
+storcli /cx/ex show status [extended]
+storcli /cx/ex show phyerrorcounters 
+storcli /cx/ex set time=systemtime 
+storcli /cx/vx del [cachecade] [discardcache] [force]
+storcli /cx delete config [force]
+storcli /cx delete events
+storcli /cx show events [ [type= &lt;sincereboot| sinceshutdown| includedeleted|
+latest=x| ccincon vd=&lt;0,1,...&gt;] [filter=&lt;[info],[warning],[critical],[fatal]&gt;]
+[file=&lt;filepath&gt;] [logfile[=filename]] ]
+storcli /cx show events [logfile[=filename]] ]
+storcli /cx show eventcounters [type=sas|pcie]
+storcli /cx delete eventcounters [type=sas|pcie]
+storcli /cx show eventloginfo
+storcli /cx delete securitykey
+storcli /cx set securitykey useekms
+storcli /cx set securitykey &lt; =xxxxxxxx [passphrase=xxxx] [keyid=xxx] [VolatileKey=on|off] &gt; | file=filename 
+storcli /cx set securitykey &lt; keyid=xxx | file=filename &gt;
+storcli /cx compare securitykey &lt;=xxxxxxxxxx | file=filename&gt;
+storcli /cx set termlog=on|off|offthisboot
+storcli /cx show termlog [type=config|contents] [logfile[=filename]] 
+storcli /cx delete termlog
+storcli /cx set securitykey &lt;=xxxxxxxx oldsecuritykey=xxxxxxxx
+	[passphrase=xxxx] [keyid=xxx] [VolatileKey=on|off] &gt; | file=filename
+storcli /cx set sesmonitoring=on|off
+storcli /cx show sesmonitoring 
+storcli /cx set failpdonsmarterror=on|off
+storcli /cx show failpdonsmarterror 
+storcli /cx/dx show 
+storcli /cx/dall show cachecade 
+storcli /cx/dx show all 
+storcli /cx/dall show mirror 
+storcli /cx/dall split mirror 
+storcli /cx/dall add mirror src=&lt;val&gt; [force] 
+storcli /cx show freespace
+storcli /cx/fall show [all] [securityKey = xxx]
+storcli /cx/fall del|delete [securityKey = xxx]
+storcli /cx/fall import [preview] [securityKey = xxx]
+storcli /cx/vx set ssdcaching=on|off
+storcli /cx/vx set hidden=on|off
+storcli /cx/dx set hidden=on|off
+storcli /cx/dx set security=on
+storcli /cx/vx show expansion
+storcli /cx/vx expand Size=&lt;xx&gt; [expandarray]
+storcli /cx get vpd file=&lt;fileName&gt;
+storcli /cx[/ex]/sx show 
+storcli /cx[/ex]/sx show all
+storcli /cx[/ex]/sx start rebuild 
+storcli /cx start diag [duration=&lt;val&gt;]
+storcli /cx[/ex]/sx stop rebuild 
+storcli /cx[/ex]/sx pause rebuild 
+storcli /cx[/ex]/sx resume rebuild 
+storcli /cx[/ex]/sx show rebuild 
+storcli /cx[/ex]/sx show poh [ignoreselftest]
+storcli /cx[/ex]/sx show smart 
+storcli /cx[/ex]/sx start copyback target=e:s 
+storcli /cx[/ex]/sx stop copyback 
+storcli /cx[/ex]/sx pause copyback 
+storcli /cx[/ex]/sx resume copyback 
+storcli /cx[/ex]/sx reset phyerrorcounters 
+storcli /cx[/ex]/sx reset errorcounters type = 1|2
+storcli /cx[/ex]/sx show copyback 
+storcli /cx[/ex]/sx show patrolread 
+storcli /cx[/ex]/sx show phyerrorcounters 
+storcli /cx[/ex]/sx show errorcounters 
+storcli /cx[/ex]/sx start initialization  
+storcli /cx[/ex]/sx stop initialization  
+storcli /cx[/ex]/sx show initialization  
+storcli /cx[/ex]/sx start locate  
+storcli /cx[/ex]/sx stop locate  
+storcli /cx[/ex]/sx show securitykey keyid 
+storcli /cx[/ex]/sx add hotsparedrive [DGs=&lt;N|0,1,2...&gt;] [enclaffinity]
+storcli /cx[/ex]/sx delete hotsparedrive
+storcli /cx[/ex]/sx spinup
+storcli /cx[/ex]/sx spindown
+storcli /cx[/ex]/sx set online 
+storcli /cx[/ex]/sx set offline 
+storcli /cx[/ex]/sx set missing 
+storcli /cx[/ex]/sx set jbod 
+storcli /cx[/ex]/sx set security=on 
+storcli /cx[/ex]/sx set good [force]  
+storcli /cx[/ex]/sx insert dg=A array=B row=C 
+storcli /cx/vx set emulationType=0|1|2
+storcli /cx/vx set Unmap=&lt;On|Off&gt;
+storcli /cx/vx show Unmap 
+storcli /cx/vx set cbsize=0|1|2 cbmode=0|1|2|3|4|7 
+storcli /cx/vx set wrcache=WT|WB|AWB
+storcli /cx/vx set rdcache=RA|NoRA
+storcli /cx/vx set iopolicy=Cached|Direct
+storcli /cx/vx set accesspolicy=RW|RO|Blocked|RmvBlkd
+storcli /cx/vx set pdcache=On|Off|Default
+storcli /cx/vx set name=&lt;NameString&gt;
+storcli /cx/vx set HostAccess=ExclusiveAccess|SharedAccess
+storcli /cx/vx set ds=Default|Auto|None|Max|MaxNoCache
+storcli /cx/vx set autobgi=On|Off
+storcli /cx/vx set pi=Off
+storcli /cx/vx show
+storcli /cx/vx show all [logfile[=filename]]
+storcli /cx/vx show init
+storcli /cx/vx show cc|consistencycheck
+storcli /cx/vx show erase
+storcli /cx/vx show migrate
+storcli /cx/vx show bgi
+storcli /cx/vx show autobgi
+storcli /cx set consistencycheck|cc[=off|seq|conc] [delay=value]
+	[starttime=yyyy/mm/dd hh] [excludevd=x-y,z|none]
+storcli /cx show cc|consistencycheck
+storcli /cx show ocr 
+storcli /cx set ocr=&lt;on|off&gt;
+storcli /cx show sesmultipathcfg 
+storcli /cx set sesmultipathcfg=&lt;on|off&gt;
+storcli /cx/vx start init [Full] [Force]
+storcli /cx/vx start erase [simple|normal|thorough|standard] [patternA=&lt;val&gt;]
+[patternB=&lt;val&gt;]
+storcli /cx/vx start cc|consistencycheck [Force]
+storcli /cx/vx start migrate type=raidx [option=add|remove 
+	drives=[e:]s|[e:]s-x|[e:]s-x,y] [Force] 
+storcli /cx/vx stop init
+storcli /cx/vx stop erase
+storcli /cx/vx stop cc|consistencycheck
+storcli /cx/vx stop bgi
+storcli /cx/vx pause cc|consistencycheck
+storcli /cx/vx pause bgi
+storcli /cx/vx resume cc|consistencycheck
+storcli /cx/vx resume bgi
+storcli /cx show 
+storcli /cx show all [noASO] [logfile[=filename]]
+storcli /cx show preservedcache 
+storcli /cx/vx delete preservedcache [force] 
+storcli /cx[/ex]/sx download src=&lt;filepath&gt; [satabridge] [mode= 5|7] [parallel [force]] [chunksize=&lt;val&gt;]
+storcli /cx[/ex]/sx download status
+storcli /cx/ex download src=&lt;filepath&gt; [ mode=5 | [forceActivate] mode=7] [bufferid=&lt;val&gt;] [chunksize=&lt;val&gt;]
+storcli /cx/ex download src=&lt;filepath&gt; mode=e [offline] [forceActivate [delay=&lt;val&gt;]] [bufferid=&lt;val&gt;] [chunksize=&lt;val&gt;]
+storcli /cx/ex download mode=f [offline] [delay=&lt;val&gt;] [bufferid=&lt;val&gt;]
+storcli /cx[/ex]/sx download src=&lt;filepath&gt; mode= E [offline] [activatenow [delay=&lt;val&gt;] ] [chunksize=&lt;val&gt;]
+storcli /cx[/ex]/sx download  mode= F [offline] [delay=&lt;val&gt;]
+storcli /cx[/ex]/sx secureerase [force]  
+storcli /cx[/ex]/sx start erase [simple| normal| thorough | standard| threepass | crypto]
+   [patternA=&lt;val&gt;] [patternB=&lt;val&gt;]
+storcli /cx[/ex]/sx start sanitize &lt; cryptoerase| blockErase &gt; [ause] 
+storcli /cx[/ex]/sx start sanitize overwrite [ause] [invert] [overwritecount=&lt;val&gt;]
+            [ patternA=&lt;val&gt; patternB=&lt;val&gt; patternC=&lt;val&gt; patternD=&lt;val&gt; ]
+
+storcli /cx[/ex]/sx stop erase 
+storcli /cx[/ex]/sx show erase 
+storcli /cx[/ex]/sx show sanitize 
+storcli /cx[/ex]/sx show jbod
+storcli /cx[/ex]/sx show jbod all
+storcli /cx[/ex]/sx del jbod [force]
+storcli /cx[/ex]/sx set bootdrive=&lt;on|off&gt; 
+storcli /cx/vx set bootdrive=&lt;on|off&gt;
+storcli /cx show bootdrive
+storcli /cx show bootwithpinnedcache
+storcli /cx set bootwithpinnedcache=&lt;on|off&gt;
+storcli /cx show activityforlocate
+storcli /cx set activityforlocate=&lt;on|off&gt;
+storcli /cx show copyback
+storcli /cx set copyback=&lt;on|off&gt; type=ctrl|smartssd|smarthdd|all 
+storcli /cx show jbod
+storcli /cx set jbod=&lt;on|off&gt; [force]
+storcli /cx set autorebuild=&lt;on|off&gt; 
+storcli /cx set ldlimit=&lt;default|max&gt; 
+storcli /cx show autorebuild
+storcli /cx set autoconfig [= &lt; none | R0 [immediate] | JBOD &gt; [usecurrent] ]  
+                      [[sesmgmt=on|off]  [securesed=on|off] 
+                      [multipath=on|off] [multiinit=on|off] 
+					   [discardpinnedcache=&lt;Val&gt;] [failPDOnReadME=on|off] 
+					   [Lowlatency=low|off]]
+storcli /cx show autoconfig
+storcli /cx show cachebypass
+storcli /cx set cachebypass=&lt;on|off&gt; 
+storcli /cx show usefdeonlyencrypt
+storcli /cx set usefdeonlyencrypt=&lt;on|off&gt;
+storcli /cx show prcorrectunconfiguredareas
+storcli /cx set prcorrectunconfiguredareas=&lt;on|off&gt; 
+storcli /cx show batterywarning
+storcli /cx set batterywarning=&lt;on|off&gt; 
+storcli /cx show abortcconerror
+storcli /cx set abortcconerror=&lt;on|off&gt; 
+storcli /cx show ncq
+storcli /cx show configautobalance 
+storcli /cx set ncq=&lt;on|off&gt; 
+storcli /cx set configautobalance=&lt;on|off&gt; 
+storcli /cx show maintainpdfailhistory
+storcli /cx set maintainpdfailhistory=&lt;on|off&gt; 
+storcli /cx show restorehotspare
+storcli /cx set restorehotspare=&lt;on|off&gt; 
+storcli /cx set bios [state=&lt;on|off&gt;] [Mode=&lt;SOE|PE|IE|SME&gt;] [abs=&lt;on|off&gt;]
+       [DeviceExposure=&lt;value&gt;]
+storcli /cx show bios 
+storcli /cx show alarm
+storcli /cx set alarm=&lt;on|off|silence&gt; 
+storcli /cx show deviceorderbyfirmware
+storcli /cx set deviceorderbyfirmware=&lt;on|off&gt;
+storcli /cx show foreignautoimport
+storcli /cx set foreignautoimport=&lt;on|off&gt; 
+storcli /cx show directpdmapping
+storcli /cx set directpdmapping=&lt;on|off&gt; 
+storcli /cx show rebuildrate
+storcli /cx set rebuildrate=&lt;value&gt; 
+storcli /cx show loadbalancemode
+storcli /cx set loadbalancemode=&lt;on|off&gt; 
+storcli /cx show eghs
+storcli /cx set eghs [state=&lt;on|off&gt;] [eug=&lt;on|off&gt;] [smarter=&lt;on|off&gt;] 
+storcli /cx show cacheflushint
+storcli /cx set cacheflushint=&lt;value&gt; 
+storcli /cx show prrate
+storcli /cx set prrate=&lt;value&gt; 
+storcli /cx show ccrate
+storcli /cx set ccrate=&lt;value&gt; 
+storcli /cx show bgirate
+storcli /cx set bgirate =&lt;value&gt; 
+storcli /cx show dpm 
+storcli /cx start dpm 
+storcli /cx stop dpm 
+storcli /cx[/ex]/sx show dpmstat type =  HIST | LCT | RA | EXT [logfile[=filename]]
+storcli /cx delete dpmstat type =  Hist | LCT | RA | EXT | All 
+storcli /cx show sgpioforce 
+storcli /cx set sgpioforce =&lt;on|off&gt; 
+storcli /cx set supportssdpatrolread =&lt;on|off&gt; 
+storcli /cx show reconrate
+storcli /cx set reconrate=&lt;value&gt; 
+storcli /cx show spinupdrivecount
+storcli /cx show wbsupport
+storcli /cx set spinupdrivecount=&lt;value&gt; 
+storcli /cx show spinupdelay
+storcli /cx set spinupdelay=&lt;value&gt; 
+storcli /cx show coercion
+storcli /cx set coercion=&lt;value&gt; 
+storcli /cx show limitMaxRateSATA
+storcli /cx set limitMaxRateSATA=on|off 
+storcli /cx show HDDThermalPollInterval
+storcli /cx set HDDThermalPollInterval=&lt;value&gt; 
+storcli /cx show SSDThermalPollInterval
+storcli /cx set SSDThermalPollInterval=&lt;value&gt; 
+storcli /cx show smartpollinterval
+storcli /cx set smartpollinterval=&lt;value&gt; 
+storcli /cx show eccbucketsize
+storcli /cx set eccbucketsize=&lt;value&gt; 
+storcli /cx show eccbucketleakrate
+storcli /cx set eccbucketleakrate=&lt;value&gt; 
+storcli /cx show backplane
+storcli /cx set backplane mode=&lt;value&gt; expose=&lt;on|off&gt; 
+storcli /cx show perfmode
+storcli /cx set perfmode=&lt;value&gt; [maxflushlines=&lt;value&gt; numiostoorder=&lt;value&gt;]
+storcli /cx show perfmodevalues
+storcli /cx show pi
+storcli /cx set pi [state=&lt;on|off&gt;] [import=&lt;on|off&gt;]
+storcli /cx show time
+storcli /cx set time=&lt;yyyymmdd hh:mm:ss | systemtime&gt; 
+storcli /cx show ds
+storcli /cx set ds=OFF type=1|2|3|4
+storcli /cx set ds=ON type=1|2 [properties]
+storcli /cx set ds=ON type=3|4 DefaultLdType=&lt;val&gt; [properties]
+storcli /cx set ds [properties] 
+storcli /cx show safeid
+storcli /cx show rehostinfo
+storcli /cx show pci
+storcli /cx show ASO
+storcli /cx set aso key=&lt;key value&gt; preview
+storcli /cx set aso key=&lt;key value&gt;
+storcli /cx set aso transfertovault
+storcli /cx set aso rehostcomplete
+storcli /cx set aso deactivatetrialkey
+storcli /cx set factory defaults
+storcli /cx download file=&lt;filepath&gt; [noverchk] [noreset] [forcehcb] [force]
+storcli /cx download file=&lt;filepath&gt; [fwtype=&lt;val&gt;] [ResetNow] [nosigchk] 
+	[noverchk] [force] [forceclose] 
+storcli /cx flushcache
+storcli /cx set sbr
+storcli /cx/px show 
+storcli /cx/px show phyerrorcounters
+storcli /cx/px show phyevents
+storcli /cx/px show all
+storcli /cx/lnx show 
+storcli /cx show linkconfig 
+storcli /cx set linkconfig [conname=cx,cy] configid=&lt;val&gt;
+storcli /cx/px set linkspeed=0|1.5|3|6|12|22.5 
+storcli /cx/px set state=on|off 
+storcli /cx/px reset [hard | errorlog]
+storcli /cx/lnx set lanespeed=2.5|5|8|16 
+storcli /cx/bbu show 
+storcli /cx/bbu show all 
+storcli /cx/bbu show status 
+storcli /cx/bbu show properties 
+storcli /cx/bbu show learn 
+storcli /cx/bbu show gasgauge Offset=xxxx Numbytes=n 
+storcli /cx/bbu start learn 
+storcli /cx/bbu show modes 
+storcli /cx/bbu set [ learnDelayInterval=&lt;val&gt; | bbuMode=&lt;val&gt;  
+	|learnStartTime=[DDD HH | off] | autolearnmode=&lt;val&gt; | 
+	powermode=sleep | writeaccess=sealed ] 
+storcli /cx/cv show 
+storcli /cx/cv show all 
+storcli /cx/cv show status 
+storcli /cx/cv show learn 
+storcli /cx/cv start learn 
+storcli /cx show securitykey keyid 
+storcli /cx start pr|patrolread
+storcli /cx stop pr|patrolread
+storcli /cx pause pr|patrolread
+storcli /cx resume pr|patrolread
+storcli /cx show pr|patrolRead
+storcli /cx show powermonitoringinfo
+storcli /cx show ldlimit
+storcli /cx set patrolread [=[[on mode=&lt;auto|manual&gt; ]| off]]
+                      | [starttime=&lt; yyyy/mm/dd hh&gt;]
+	                   | [maxconcurrentpd =&lt;value&gt;]
+                      | [includessds=&lt;on|onlymixed|off&gt;]
+                      | [uncfgareas=on|off]
+                      | [excludevd=x-y,z|none]
+                      | [delay = &lt;value&gt;]
+storcli /cx show badblocks
+storcli /cx flasherase 
+storcli /cx transform iMR 
+storcli /cx restart 
+storcli /cx/vx show BBMT
+storcli /cx/vx delete BBMT
+storcli /cx show dequeuelog file=&lt;filepath&gt;
+storcli /cx show maintenance
+storcli /cx set maintenance mode=normal|nodevices 
+storcli /cx show personality
+storcli /cx set personality=RAID|HBA|JBOD 
+storcli /cx show profile 
+storcli /cx set profile profileid=&lt;id&gt; 
+storcli /cx show jbodwritecache
+storcli /cx set jbodwritecache=on|off|default 
+storcli /cx show immediateio
+storcli /cx show driveactivityled
+storcli /cx set immediateio=&lt;on|off&gt;
+storcli /cx show largeiosupport
+storcli /cx set largeiosupport=&lt;on|off&gt;
+storcli /cx show unmap
+storcli /cx set unmap=&lt;on|off&gt;
+storcli /cx set driveactivityled=&lt;on|off&gt;
+storcli /cx show pdfailevents [lastoneday] [lastseqnum=&lt;val&gt;] [file=&lt;filepath&gt;] 
+storcli /cx show pdfaileventoptions
+storcli /cx set pdfaileventoptions [detectionType=&lt;val&gt;] [correctiveaction=&lt;val&gt;] [errorThreshold=&lt;val&gt;] 
+storcli /cx set assemblynumber= xxxx 
+storcli /cx show aliLog [logfile[=filename]]
+storcli /cx get config file=&lt;fileName&gt;
+storcli /cx set config file=&lt;fileName&gt;
+storcli /cx show flushwriteverify
+storcli /cx set flushwriteverify=&lt;on|off&gt;
+storcli /cx/dx set transport=on|off [EDHSP=on|off] [SDHSP=on|off]
+storcli /cx show largeQD
+storcli /cx set largeQD=&lt;on|off&gt;
+storcli /cx set debug type=&lt;value&gt; option=&lt;value&gt; [level=&lt;value in hex&gt;]
+storcli /cx set debug reset all
+storcli /cx show assemblynumber 
+storcli /cx set tracernumber= xxxx 
+storcli /cx show tracernumber 
+storcli /cx show boardname 
+storcli /cx set sasadd = xxxx [devicename] [methodport]
+storcli /cx set sasaddhi = xxxx  sasaddlow = xxxxx [devicename] [methodport]
+storcli /cx show sasadd  
+storcli /cx/px compare linkspeed=&lt;speed&gt;  
+storcli /cx set updatevpd file=&lt;filepath&gt; 
+storcli /cx show vpd  
+storcli /cx erase nvsram 
+storcli /cx erase fwbackup 
+storcli /cx erase bootservices 
+storcli /cx erase all [excludemfg] [file=filename]
+storcli /cx erase perconfpage 
+storcli /cx erase mpb 
+storcli /cx download efibios file=&lt;filepath&gt;  
+storcli /cx download cpld file=&lt;filepath&gt;  
+storcli /cx download psoc file=&lt;filepath&gt;  
+storcli /cx download bios file=&lt;filepath&gt;  
+storcli /cx download fcode file=&lt;filepath&gt;  
+storcli /cx compare bios ver =&lt;bios version&gt;
+storcli /cx compare fwprodid ver =&lt;fw product id version&gt;
+storcli /cx compare ssid ver =&lt;ssid version&gt;
+storcli /cx compare firmware ver =&lt;firmware version&gt;
+storcli /cx get bios file=&lt;filename&gt;
+storcli /cx get firmware  file=&lt;filename&gt; 
+storcli /cx get mpb  file=&lt;filename&gt; 
+storcli /cx get fwbackup  file=&lt;filename&gt; 
+storcli /cx get nvdata file=&lt;filename&gt;  
+storcli /cx get flash  file=&lt;filename&gt;  
+storcli /cx set oob mode=i2c|pcie maxpayloadsize=&lt;payloadsize&gt; maxpacketsize=&lt;packetsize&gt; [spdm=on|off] [pldm=on|off]
+storcli /cx show oob 
+storcli /cx show snapdump
+storcli /cx set snapdump state=on|off 
+storcli /cx set snapdump [ savecount=&lt;value&gt; | delayocr=&lt;value&gt; | preboottrace=&lt;on|off&gt; ]
+storcli /cx get snapdump [ id=[ all | &lt;value&gt; file=&lt;fileName&gt;] ] [norttdump] 
+storcli /cx delete snapdump [force]
+storcli /cx show htbparams
+storcli /cx set htbparams=off
+storcli /cx set htbparams [= on] maxsize=&lt;value&gt; minsize=&lt;value&gt; decrementsize=&lt;value&gt; 
+storcli /cx show failedNvmeDevices
+storcli /cx[/ex]/sx show repair
+storcli /cx[/ex]/sx start repair [force]
+storcli /cx[/ex]/sx stop repair
+storcli /cx show security spdm slotgroup=xx slot=yy
+storcli /cx export security spdm slotgroup=xx slot=yy subject=subjectfile file=filename 
+storcli /cx import security spdm slotgroup=xx slot=yy file=filename [seal]
+storcli /cx set security spdm slotgroup=xx slot=yy invalidate [force]
+storcli /cx get security spdm slotgroup=xx slot=yy file=filename
+storcli /cx show parityreadcachebypass
+storcli /cx set parityreadcachebypass=&lt;on|off&gt; 
+storcli /cx show overrideSlowArrayThresholds
+storcli /cx set overrideSlowArrayThresholds=&lt;on|off&gt; [force]
+storcli /cx show temperature
+storcli /cx show refClk
+storcli /cx set refClk = 0|1|2
+storcli /cx show perst
+storcli /cx set perst = 0|1|2
+storcli /cx db register type=trace|snapshot [size=&lt;val&gt;] [prodmask=&lt;val&gt;] [iopmask=&lt;val&gt;:&lt;val&gt;] [plmask=&lt;val&gt;:&lt;val&gt;] [irmask=&lt;val&gt;:&lt;val&gt;] 
+storcli /cx db query type=trace|snapshot 
+storcli /cx db read type=trace|snapshot file=&lt;filepath&gt; 
+storcli /cx db release type=trace|snapshot 
+storcli /cx db unregister type=trace|snapshot 
+storcli /cx db get type= {[master],[event],[ mpi],[ scsi]} | all 
+storcli /cx db delete type= {[master],[event],[ mpi],[ scsi]} | all
+storcli /cx db set {[master=&lt;val&gt;] [event EventLogQualifier=&lt;val&gt; EventValue=&lt;val&gt; ]
+           [mpi loginfo=&lt;val&gt; iocstatus=&lt;val&gt;] [ scsi sensekey=&lt;val&gt; asc=&lt;val&gt; ascq=&lt;val&gt;]} 
+storcli /cx show captureSodPlLogs
+storcli /cx set captureSodPlLogs=&lt;on|off&gt;
+
+
+Note:
+     1. Use 'page[=x]'as the last option in all the commands to set the page break.
+        X=lines per page. E.g. 'storcli help page=10'
+     2. Use 'nolog' option to disable debug logging. E.g. 'storcli show nolog'
+</code></pre>
 <p>&nbsp;</p>
-<p>Получить справочную информацию по всем командам утилиты storcli</p>
 <p>&nbsp;</p>
-<p>./storcli -help</p>
 <p>&nbsp;</p>
 <figure class="image"><img src="https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu.png" alt="Получить справочную информацию" srcset="https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu.png 641w, https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu-300x257.png 300w, https://pyatilistnik.org/wp-content/uploads/2015/11/Poluchit-spravochnuyu-informatsiyu-70x60.png 70w" sizes="100vw" width="641"></figure>
 <p>Посмотреть подсоединенные контроллеры</p>
