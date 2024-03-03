@@ -2,14 +2,14 @@
 title: Устаревание trusted.gpg
 description: DEPRECATION
 published: true
-date: 2023-10-29T08:47:17.729Z
+date: 2024-03-03T07:47:54.768Z
 tags: apt, deprecation, устаревание, trusted.gpg, apt-key, apt-get
 editor: ckeditor
 dateCreated: 2023-10-29T07:54:33.873Z
 -->
 
 <p style="text-align:justify;">Бывают случае, когда после команды <code>apt-get update </code>мы получаем сообщение такого вида “<strong>W: http://packages.irontec.com/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.</strong>” &nbsp;В данном случае ключ добавлялся по команде “<strong>wget http://packages.irontec.com/public.key -q -O - | apt-key add -</strong>”. Тут мы опишем шаги для устранения данной проблемы:<br>&nbsp;</p>
-<p style="text-align:justify;">1. Мы просматриваем список ключей командой <code>sudo apt-key</code> и находим эту запись для xbmc...</p>
+<p style="text-align:justify;">1. Мы просматриваем список ключей командой <code>sudo apt-key list</code> и находим эту запись для xbmc...</p>
 <pre><code class="language-plaintext">/etc/apt/trusted.gpg
 --------------------
 pub   rsa2048 2015-03-06 [SC]
@@ -19,6 +19,7 @@ uid         [ неизвестно ] Irontec Package Maintainer &lt;packages@iro
 <pre><code class="language-plaintext">sudo apt-key export D8C20040 | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/irontec.gpg</code></pre>
 <p>3. После удачного выполнения предыдущей команды, мы удаляем устаревший ключ из /etc/apt/trusted.gpg, выполнив:</p>
 <pre><code class="language-plaintext">sudo apt-key --keyring /etc/apt/trusted.gpg del D8C20040</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p>Повторите приведенные выше команды для каждого предупреждающего сообщения, созданного <code><strong>sudo apt update</strong></code>.</p>
 </blockquote>
