@@ -2,28 +2,18 @@
 title: Имя интерфейса = MAC
 description: Фиксация имени сетевого интерфейса к MAC адресу
 published: true
-date: 2024-03-29T10:45:16.733Z
+date: 2024-03-29T10:52:26.108Z
 tags: linux, network, nameif, mac, neme, interface
 editor: ckeditor
 dateCreated: 2024-03-29T10:45:16.733Z
 -->
 
-<p>При наличии нескольких одинаковых сетевых карт, чтобы гарантировать, что имя интерфейса в виде eth0, eth1, всегда будут
-  закреплены за определенным Ethernet портом. Это можно огранизовать привязав имя интерфейса к MAC адресу.</p>
-<p>В /etc/mactab добавляем:
-
-  &nbsp; eth0 00:23:B7:89:39:E2
-  &nbsp; eth1 00:08:A3:20:F8:29
-  &nbsp; eth2 00:50:BA:29:B7:32
-
-  Для Debian GNU/Linux создаем скрипт /etc/network/if-pre-up.d/nameif
-
-  &nbsp; #!/bin/sh
-  &nbsp; PATH=/sbin
-  &nbsp; nameif -c /etc/mactab
-
-  Для других Linux дистрибутивов нужно на начальном этапе инициализаци выполнить:
-
-  &nbsp; /sbin/nameif eth0 00:23:B7:89:39:E2
-  &nbsp; /sbin/nameif eth1 00:08:A3:20:F8:29
-  &nbsp; /sbin/nameif eth2 00:50:BA:29:B7:32</p>
+<p>При наличии нескольких одинаковых сетевых карт, чтобы гарантировать, что имя интерфейса в виде eth0, eth1, всегда будут закреплены за определенным Ethernet портом. Это можно сделать привязав имя интерфейса к MAC адресу.</p>
+<p>Для Debian GNU/Linux &nbsp;выполняем команды:</p>
+<pre><code class="language-plaintext">echo "eth0 00:25:90:e7:35:cc" &gt; /etc/network/nameif
+echo "eth1 00:25:90:e7:35:cd" &gt;&gt; /etc/network/nameif
+echo "#!/bin/sh" &gt; /etc/network/if-pre-up.d/nameif
+echo "/sbin/nameif -c /etc/network/nameif" &gt;&gt; /etc/network/if-pre-up.d/nameif
+chmod +x /etc/network/if-pre-up.d/nameif</code></pre>
+<p>И перезагружаемся :)</p>
+<p>&nbsp;</p>
