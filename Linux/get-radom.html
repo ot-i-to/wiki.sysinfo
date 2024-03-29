@@ -1,0 +1,15 @@
+<!--
+title: Generate random
+description: 
+published: true
+date: 2024-03-29T14:48:15.529Z
+tags: linux, shell, generate, random
+editor: ckeditor
+dateCreated: 2024-03-29T14:48:15.529Z
+-->
+
+<h4>Пример генерации пароля длиной 20 знаков:</h4>
+<pre><code class="language-plaintext">dd if=/dev/urandom bs=1 count=20 2&gt;/dev/null | base64 | sed 's/[=\+//]//g'</code></pre>
+<p>… в итоге будет что то в таком вите <code>8ZTbZqJEC5FP9F3vFp6JvYDVArc</code>&nbsp;<br><br>:)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
