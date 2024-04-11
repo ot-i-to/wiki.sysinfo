@@ -1,0 +1,25 @@
+<!--
+title: Как потоки rtsp
+description: Как воспроизводить потоки rtsp
+published: true
+date: 2024-04-11T10:00:37.086Z
+tags: linux, rtsp, vlc, ffplay, xiaomi-dafang-hacks, xiaomi, dafang, camera, ffmpeg
+editor: ckeditor
+dateCreated: 2024-04-11T10:00:37.086Z
+-->
+
+<h2>Как воспроизводить rtsp-потоки с адресов, в которых есть вопросительный знак.</h2>
+<p>Плеер — ffmpeg:</p>
+<pre><code class="language-plaintext">ffplay rtsp://username:password@server:554/path</code></pre>
+<p>Пример ииспользованиия с <a href="https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks"><strong>Xiaomi-Dafang-Hacks</strong></a></p>
+<pre><code class="language-plaintext">ffplay rtsp://but17b:1234567890@10.50.4.59:8554/unicast</code></pre>
+<h2><br>То же самое для VLC</h2>
+<p>Сначала запускаем vlc:</p>
+<pre><code class="language-plaintext">vlc --ttl 12 -vvv --color -I telnet --telnet-password mypasswd --rtsp-host 0.0.0.0:8554</code></pre>
+<p><strong>где</strong>:<br><code>12</code> — это значение TTL (Time To Live) наших IP-пакетов (что означает, что поток сможет проходить через 11 маршрутизаторов).<br><code>telnet</code> запускает telnet-интерфейс vlc.<br><code>mypasswd</code> — пароль для подключения к интерфейсу Telnet.<br><code>0.0.0.0</code> — адрес хоста.<br><code>8554</code> — это порт, через который осуществляется потоковая передача.<br><br><strong>Затем подключитесь к интерфейсу telnet vlc и создайте объект vod:</strong></p>
+<pre><code class="language-plaintext">new Test vod enabled
+setup Test input my_video.mpg</code></pre>
+<p>Вы можете получить доступ к потоку с помощью:</p>
+<pre><code class="language-plaintext">vlc rtsp://server:8554/Test</code></pre>
+<p><strong>где</strong> <code>server</code> — адрес потокового сервера (IP или DNS)</p>
+<p>&nbsp;</p>
