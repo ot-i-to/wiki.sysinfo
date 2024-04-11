@@ -2,7 +2,7 @@
 title: Потоки rtsp
 description: Как воспроизводить потоки rtsp
 published: true
-date: 2024-04-11T10:19:25.450Z
+date: 2024-04-11T10:21:11.706Z
 tags: linux, rtsp, vlc, ffplay, xiaomi-dafang-hacks, xiaomi, dafang, camera, ffmpeg
 editor: ckeditor
 dateCreated: 2024-04-11T10:00:37.086Z
@@ -13,6 +13,7 @@ dateCreated: 2024-04-11T10:00:37.086Z
 <pre><code class="language-plaintext">ffplay rtsp://username:password@server:554/path</code></pre>
 <p>Пример ииспользованиия с <a href="https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks"><strong>Xiaomi-Dafang-Hacks</strong></a></p>
 <pre><code class="language-plaintext">ffplay rtsp://but17b:1234567890@10.50.4.59:8554/unicast</code></pre>
+<p>А также можно использовать mplayer.</p>
 <h2>RTSP-поток от VLC</h2>
 <p>Сначала запускаем vlc:</p>
 <pre><code class="language-plaintext">vlc --ttl 12 -vvv --color -I telnet --telnet-password mypasswd --rtsp-host 0.0.0.0:8554</code></pre>
