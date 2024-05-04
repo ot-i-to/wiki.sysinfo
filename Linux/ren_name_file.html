@@ -1,0 +1,16 @@
+<!--
+title: Имя Win в UTF-8
+description: Как переименовать имена файлов из одной кодировки в другую
+published: true
+date: 2024-05-04T06:11:44.084Z
+tags: linux, windows, win-1251, utf-8, convmv, переименование, файла, кодировка
+editor: ckeditor
+dateCreated: 2024-05-04T06:11:44.084Z
+-->
+
+<h3>Для этих целей существует отличная программа <a href="https://www.j3e.de/linux/convmv/man/">convmv</a>.</h3>
+<p>Ставим из репозитория для Debian:</p>
+<pre><code class="language-plaintext">sudo apt-get install convmv</code></pre>
+<p>После чего вам просто необходимо указать папку, в которой необходимо совершить переименование файлов из одной кодировке в другую.<br>Например, мне нужно переименовать файлы из KOI8-R в UTF-8 рекурсивно вниз:</p>
+<pre><code class="language-plaintext">convmv -r --notest -f koi8-r -t utf-8 Folder/</code></pre>
+<p>Опция <code>--notest</code> отвечает за переименование.<br>Т.е. без этой опции вы просто сделаете тест и посмотрите как файлы будут “выглядеть” в нужной кодировке.</p>
