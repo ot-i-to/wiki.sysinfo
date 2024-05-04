@@ -2,7 +2,7 @@
 title: Имя Win в UTF-8
 description: Как переименовать имена файлов из одной кодировки в другую
 published: true
-date: 2024-05-04T07:59:05.111Z
+date: 2024-05-04T08:00:41.792Z
 tags: linux, windows, win-1251, utf-8, convmv, переименование, файла, кодировка
 editor: ckeditor
 dateCreated: 2024-05-04T06:11:44.084Z
@@ -10,16 +10,16 @@ dateCreated: 2024-05-04T06:11:44.084Z
 
 <h3>Для этих целей существует отличная программа <a href="https://www.j3e.de/linux/convmv/man/">convmv</a>.</h3>
 <p>Ставим из репозитория для Debian:</p>
-<pre><code class="language-plaintext">sudo apt-get install convmv</code></pre>
+<pre><code class="language-plaintext">$ sudo apt-get install convmv</code></pre>
 <p>После чего вам просто необходимо указать папку, в которой необходимо совершить переименование файлов из одной кодировке в другую.<br>Например, мне нужно переименовать файлы из KOI8-R в UTF-8 рекурсивно вниз:</p>
-<pre><code class="language-plaintext">convmv -r -f cp1251  -t utf-8 /home/doc/</code></pre>
+<pre><code class="language-plaintext">$ convmv -r -f cp1251  -t utf-8 /home/doc/</code></pre>
 <p>где <code>-r</code> -рекурсивный поиск, то есть для всех вложенных дирректорий, <code>-f</code> -из какой кодировки, <code>-t </code>в какую кодировку.</p>
 <p>В результате увидим список файлов с исправленными именами. (Исправленными в моем случае были только имена файлов, дирректории - по прежнему знаками вопроса, но после запуска реального изменения а не тестового - имена папок также пришли в норму).</p>
 <p>Если все нормально, запускаем с ключом <code>--notest</code>, для реального изменения:</p>
-<pre><code class="language-plaintext">convmv --notest -r -f cp1251  -t utf-8 /home/doc/</code></pre>
+<pre><code class="language-plaintext">$ convmv --notest -r -f cp1251  -t utf-8 /home/doc/</code></pre>
 <h3>Добавление Windows кодировки cp1251</h3>
 <p>Команда добавление кодировки <strong>cp1251</strong>:</p>
-<pre><code class="language-plaintext">sudo localedef  --no-archive -c -i ru_RU -f CP1251 ru_RU.CP1251</code></pre>
+<pre><code class="language-plaintext">$ sudo localedef  --no-archive -c -i ru_RU -f CP1251 ru_RU.CP1251</code></pre>
 <p>Посмотреть результат:</p>
 <pre><code class="language-plaintext">$ locale -a | grep ru_RU
 ru_RU.cp1251
