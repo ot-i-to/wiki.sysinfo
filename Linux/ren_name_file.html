@@ -2,7 +2,7 @@
 title: Имя Win в UTF-8
 description: Как переименовать имена файлов из одной кодировки в другую
 published: true
-date: 2024-05-04T06:27:48.603Z
+date: 2024-05-04T07:58:30.757Z
 tags: linux, windows, win-1251, utf-8, convmv, переименование, файла, кодировка
 editor: ckeditor
 dateCreated: 2024-05-04T06:11:44.084Z
@@ -17,4 +17,17 @@ dateCreated: 2024-05-04T06:11:44.084Z
 <p>В результате увидим список файлов с исправленными именами. (Исправленными в моем случае были только имена файлов, дирректории - по прежнему знаками вопроса, но после запуска реального изменения а не тестового - имена папок также пришли в норму).</p>
 <p>Если все нормально, запускаем с ключом <code>--notest</code>, для реального изменения:</p>
 <pre><code class="language-plaintext">convmv --notest -r -f cp1251  -t utf-8 /home/doc/</code></pre>
+<h3>Добавление Windows кодировки cp1251</h3>
+<p>Команда добавление кодировки cp1251:</p>
+<pre><code class="language-plaintext">sudo localedef  --no-archive -c -i ru_RU -f CP1251 ru_RU.CP1251</code></pre>
+<p>Посмотреть результат:</p>
+<pre><code class="language-plaintext">$ locale -a | grep ru_RU
+ru_RU.cp1251
+ru_RU.utf8</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <p>&nbsp;</p>
