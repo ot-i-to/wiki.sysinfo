@@ -2,7 +2,7 @@
 title: Sofia
 description: параметры конфиг-файла
 published: true
-date: 2024-05-21T17:15:53.893Z
+date: 2024-05-21T17:16:25.624Z
 tags: voip, file, freeswitch, config, sofia, profile
 editor: ckeditor
 dateCreated: 2024-05-21T16:44:38.843Z
@@ -133,7 +133,13 @@ dateCreated: 2024-05-21T16:44:38.843Z
 <p>Параметр «distinct-to» используется, когда вы хотите, чтобы FS регистрировался с использованием отдельного AOR для заголовка To. Это требует правильной настройки связанных параметров. Например, если вы хотите, чтобы REGISTER сопровождался:</p>
 <p>От: &lt;sip: <a href="mailto:someuser@somedomain.com">someuser@somedomain.com</a> &gt; Кому: &lt;sip: <a href="mailto:anotheruser@anotherdomain.com">otheruser@anotherdomain.com</a> &gt;</p>
 <p>Затем установите параметры следующим образом:</p>
-<p>&nbsp; &nbsp;&lt;param name="distinct-to" value="true"/&gt; &nbsp; &lt;param name="auth-username" value="someuser"/&gt; &nbsp; &lt;param name="from-user" value="someuser"/&gt; &nbsp; &lt;param name="from-domain" value="somedomain.com"/&gt; &nbsp; &lt;param name="password" value="somepassword"/&gt; &nbsp; &lt;param name="username" value="anotheruser"/&gt; &nbsp; &lt;param name="realm" value="anotherdomain.com"/&gt;</p>
+<pre><code class="language-plaintext">  &lt;param name="distinct-to" value="true"/&gt;
+  &lt;param name="auth-username" value="someuser"/&gt;
+  &lt;param name="from-user" value="someuser"/&gt;
+  &lt;param name="from-domain" value="somedomain.com"/&gt;
+  &lt;param name="password" value="somepassword"/&gt;
+  &lt;param name="username" value="anotheruser"/&gt;
+  &lt;param name="realm" value="anotherdomain.com"/&gt;</code></pre>
 <p>Последний параметр «ping» используется для проверки доступности шлюза. Установив эту опцию, FreeSWITCH будет отправлять пакеты SIP OPTIONS на шлюз. Если шлюз отвечает 200 или 404, шлюз произносится вверх, в противном случае — вниз. [NB Похоже, что другие сообщения об ошибках могут быть возвращены и все равно приведут к тому, что шлюз будет помечен как «работающий»?] Если какой-либо вызов направляется на шлюз с выключенным состоянием, FreeSWITCH сгенерирует причину зависания NETWORK_OUT_OF_ORDER. Частота пинга определяется в секундах (атрибут значения) и имеет минимальное значение 5 секунд.</p>
 <p>Параметр «расширение-в-контакте» используется для указания того, какая контактная информация будет указана при регистрации. Если у вас возникли проблемы с регистрацией по умолчанию как gw+gateway_name@ip, вы можете установить для этого параметра значение true, чтобы использовать Extension@ip. Если расширение пустое, будет использоваться имя пользователя@ip.</p>
 <p>если вам нужно вставить цифры FROM в пользовательскую часть URI контакта при отправке вызова на шлюз&nbsp;<br>ДО</p>
