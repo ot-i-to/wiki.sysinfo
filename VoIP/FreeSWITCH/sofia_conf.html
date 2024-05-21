@@ -2,7 +2,7 @@
 title: Sofia
 description: параметры конфиг-файла
 published: true
-date: 2024-05-21T16:54:20.082Z
+date: 2024-05-21T16:55:29.357Z
 tags: voip, file, freeswitch, config, sofia, profile
 editor: ckeditor
 dateCreated: 2024-05-21T16:44:38.843Z
@@ -36,18 +36,18 @@ dateCreated: 2024-05-21T16:44:38.843Z
 <p>&lt;имя домена="все" alias="true" parse="false"/&gt;</p>
 <p>Если вы примените то, что узнали выше, он будет сканировать каждый домен (по умолчанию только один) и добавлять для него псевдоним, а не анализировать его на предмет шлюзов. Каталог по умолчанию использует глобальные переменные конфигурации, чтобы настроить домен в соответствии с локальным IP-адресом на поле. Итак, теперь в вашей конфигурации будет домен, который является вашим IP-адресом, а внутренний профиль прикрепится к нему и добавит псевдоним, чтобы значение расширялось в соответствии с ним.</p>
 <p>Это объясняется в комментарии вверху файлаdirectory/default.xml:</p>
-<pre><code class="language-plaintext">FreeSWITCH works off the concept of users and domains just like email.
-You have users that are in domains for example 1000@domain.com.
+<pre><code class="language-plaintext">FreeSWITCH использует концепцию пользователей и доменов так же, как электронная почта.
+У вас есть пользователи в доменах, например 1000@domain.com.
 
-When freeswitch gets a register packet it looks for the user in the directory
-based on the from or to domain in the packet depending on how your sofia profile
-is configured.  Out of the box the default domain will be the IP address of the
-machine running FreeSWITCH.  This IP can be found by typing "sofia status" at the
-CLI.  You will register your phones to the IP and not the hostname by default.
-If you wish to register using the domain please open vars.xml in the root conf
-directory and set the default domain to the hostname you desire.  Then you would
-use the domain name in the client instead of the IP address to register
-with FreeSWITCH.
+Когда freeswitch получает пакет регистрации, он ищет пользователя в каталоге.
+в зависимости от домена «от» или «куда» в пакете, в зависимости от того, как работает ваш профиль Софии.
+настроен. По умолчанию доменом по умолчанию будет IP-адрес
+машина под управлением FreeSWITCH. Этот IP-адрес можно найти, набрав «sofia status» на странице
+Интерфейс командной строки. По умолчанию вы зарегистрируете свои телефоны по IP, а не по имени хоста.
+Если вы хотите зарегистрироваться, используя домен, откройте vars.xml в корневой конфигурации.
+каталог и установите домен по умолчанию на желаемое имя хоста. Тогда ты бы
+используйте доменное имя в клиенте вместо IP-адреса для регистрации
+с FreeSWITCH.
 </code></pre>
 <p>Таким образом, имея более одного профиля со значением по умолчанию</p>
 <p>&lt;имя домена="все" alias="true" parse="false"/&gt;</p>
