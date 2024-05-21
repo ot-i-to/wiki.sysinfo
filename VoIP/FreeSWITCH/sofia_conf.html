@@ -2,7 +2,7 @@
 title: Sofia
 description: параметры конфиг-файла
 published: true
-date: 2024-05-21T16:55:29.357Z
+date: 2024-05-21T17:02:08.305Z
 tags: voip, file, freeswitch, config, sofia, profile
 editor: ckeditor
 dateCreated: 2024-05-21T16:44:38.843Z
@@ -159,32 +159,32 @@ dateCreated: 2024-05-21T16:44:38.843Z
         <td><code>&lt;param name="ext-rtp-ip" value="$${external\_rtp\_ip}"/&gt;</code></td>
       </tr>
       <tr>
-        <td>wxyz</td>
+        <td>w.x.y.z</td>
         <td>Конкретный цифровой IP-адрес</td>
         <td><code>&lt;param name="ext-rtp-ip" value="1.2.3.4"/&gt;</code></td>
       </tr>
       <tr>
-        <td>автонат: wxyz</td>
+        <td>autonat:w.x.y.z</td>
         <td>Используется для LAN и WAN, чтобы избежать ошибок в SIP CONTACT, отправляемых на устройства LAN.</td>
         <td><code>&lt;param name="ext-rtp-ip" value="autonat:1.2.3.4"/&gt;</code></td>
       </tr>
       <tr>
-        <td>авто</td>
+        <td>auto</td>
         <td>Предполагаемый IP (угадывается путем просмотра таблицы IP-маршрутизации, какой интерфейс является маршрутом по умолчанию)</td>
         <td><code>&lt;param name="ext-rtp-ip" value="auto"/&gt;</code></td>
       </tr>
       <tr>
-        <td>автонатур</td>
+        <td>auto-nat</td>
         <td>FS использует uPNP или NAT-PMP для обнаружения общедоступного IP-адреса, который он должен использовать.</td>
         <td><code>&lt;param name="ext-rtp-ip" value="auto-nat"/&gt;</code></td>
       </tr>
       <tr>
-        <td>stun: DNS-имя или IP-адрес STUN-сервера.</td>
+        <td>stun:DNS имя или IP-адрес STUN сервера.</td>
         <td>FS использует выбранный вами сервер STUN для обнаружения общедоступного IP-адреса.</td>
         <td><code>&lt;param name="ext-rtp-ip" value="stun:stun.freeswitch.org"/&gt;</code></td>
       </tr>
       <tr>
-        <td>хост: DNS-имя</td>
+        <td>host:DNS имя</td>
         <td>FS разрешает DNS-имя как общедоступный IP-адрес, поэтому вы можете использовать динамический DNS-хост.</td>
         <td><code>&lt;param name="ext-rtp-ip" value="host:mypublicIP.dyndns.org"/&gt;</code></td>
       </tr>
