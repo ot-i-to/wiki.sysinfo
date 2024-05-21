@@ -2,7 +2,7 @@
 title: Sofia
 description: параметры конфиг-файла
 published: true
-date: 2024-05-21T17:02:08.305Z
+date: 2024-05-21T17:04:05.658Z
 tags: voip, file, freeswitch, config, sofia, profile
 editor: ckeditor
 dateCreated: 2024-05-21T16:44:38.843Z
@@ -195,7 +195,7 @@ dateCreated: 2024-05-21T16:44:38.843Z
 <h6>ext-sip-ip</h6>
 <p>Это IP-адрес, за которым FreeSWITCH виден из Интернета, поэтому, если FreeSWITCH находится за NAT, это, по сути, общедоступный IP-адрес, который следует использовать для сообщений SIP.</p>
 <p>Возможные значения такие же, как для ext-rtp-ip, и обычно ему присваивается то же значение.</p>
-<p>&lt;param name="ext-sip-ip" value="$${external_sip_ip}"/&gt;</p>
+<pre><code class="language-plaintext">&lt;param name="ext-sip-ip" value="$${external_sip_ip}"/&gt;</code></pre>
 <h6>TCP-Keepalive</h6>
 <p>Установите для этого параметра интервал (в миллисекундах) для отправки пакетов поддержки пользовательским агентам (UA), зарегистрированным через TCP; не устанавливайте для отключения.</p>
 <h6>TCP-пинг-понг</h6>
@@ -203,21 +203,21 @@ dateCreated: 2024-05-21T16:44:38.843Z
 <h6>диалплан</h6>
 <p>Параметр диалплана очень мощный.</p>
 <p>В простейшей конфигурации он будет использовать диалплан XML. Это означает, что он будет считывать данные из XML-диалпланов <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_xml_curl_1049001.mdx">mod_xml_curl</a> (например, обратный вызов на ваш веб-сервер) или, в случае неудачи, из XML-файлов, указанных в разделе диалплана freeswitch.xml. (например, default_context.xml)</p>
-<p>&lt;param name="dialplan" value="XML"/&gt;&nbsp;</p>
+<pre><code class="language-plaintext">&lt;param name="dialplan" value="XML"/&gt; </code></pre>
 <p>Вы также можете добавить в изображение поиск по перечислению (поскольку mod_enum обеспечивает функциональность диалплана), поэтому поиск по перечислению переопределяет диалплан XML.</p>
-<p>&lt;param name="dialplan" value="enum,XML"/&gt;&nbsp;</p>
+<pre><code class="language-plaintext">&lt;param name="dialplan" value="enum,XML"/&gt; </code></pre>
 <p>Или обратный порядок перечисления учитывается только в случае сбоя поиска XML.</p>
-<p>&lt;param name="dialplan" value="XML,enum"/&gt;&nbsp;</p>
+<pre><code class="language-plaintext">&lt;param name="dialplan" value="XML,enum"/&gt; </code></pre>
 <p>Также можно указать конкретный корень перечисления</p>
-<p>&lt;param name="dialplan" value="enum:foo.com,XML"/&gt;&nbsp;</p>
+<pre><code class="language-plaintext">&lt;param name="dialplan" value="enum:foo.com,XML"/&gt; </code></pre>
 <p>Или используйте XML в собственном файле</p>
-<p>&lt;param name="dialplan" value="XML:/tmp/foo.xml,XML,enum"/&gt;&nbsp;</p>
+<pre><code class="language-plaintext">&lt;param name="dialplan" value="XML:/tmp/foo.xml,XML,enum"/&gt; </code></pre>
 <p>Где он сначала проверит конкретный XML-файл, а затем обратится к обычному XML, который также выполняет поиск <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_xml_curl_1049001.mdx">mod_xml_curl</a> , если он настроен и работает.</p>
 <h5>Параметры, связанные со СМИ</h5>
 <p>См. также: <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Configuration/Proxy-Media_13173588.mdx#faqs">Прокси Медиа.</a></p>
 <h6>резюме-медиа-на удержании</h6>
 <p>Если вызовы не находятся на носителе, они вернутся на носитель при нажатии кнопки удержания. Чтобы вернуть вызовы в режим bypass-media после отмены удержания вызова, включите bypass-media-after-hold.</p>
-<p>&lt;param name="media-option" value="resume-media-on-hold"/&gt;</p>
+<pre><code class="language-plaintext">&lt;param name="media-option" value="resume-media-on-hold"/&gt;</code></pre>
 <h6>обойти-медиа-после-att-xfer</h6>
 <p>Это позволит вызову после сопровождаемой передачи вернуться в обход мультимедиа после сопровождаемой передачи.</p>
 <p>&lt;param name="media-option" value="bypass-media-after-att-xfer"/&gt;</p>
