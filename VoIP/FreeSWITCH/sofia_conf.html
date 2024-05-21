@@ -1,0 +1,797 @@
+<!--
+title: Untitled Page
+description: 
+published: true
+date: 2024-05-21T16:44:38.843Z
+tags: 
+editor: ckeditor
+dateCreated: 2024-05-21T16:44:38.843Z
+-->
+
+<h1>Конфигурационные файлы Софии</h1>
+<p>София — это модуль FreeSWITCH™ ( <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_sofia_1048707.mdx#about">mod_sofia</a> ), который обеспечивает SIP-подключение к FreeSWITCH и обратно в форме пользовательского агента.</p>
+<p>«Агент пользователя» («UA») — это приложение, используемое для работы с определенным сетевым протоколом; сетевой протокол в случае Софии — SIP. София — это общее имя любого пользовательского агента в FreeSWITCH, использующего сетевой протокол SIP.</p>
+<p>Например, София принимает вызовы, отправленные в FreeSWITCH от других пользовательских агентов SIP (UA), отправляет вызовы другим UA, действует как клиент для регистрации FreeSWITCH с другими UA, позволяет клиентам регистрироваться в FreeSWITCH и соединяет вызовы (т. е. с локальными расширениями). ).</p>
+<p>Чтобы добавить провайдера SIP (пользовательский агент Софии) в ваш FreeSWITCH, ознакомьтесь с примерами взаимодействия и добавьте информацию о провайдере SIP в файл .xml, хранящийся в папке conf/sip_profiles/.</p>
+<h3>София позволяет использовать несколько пользовательских агентов</h3>
+<p>«Пользовательский агент» («UA») — это приложение, используемое для запуска определенного сетевого протокола, а Софийский UA — это то же самое, но протокол в этом случае — SIP.</p>
+<p>Когда FreeSWITCH запускается, он читает файл conf/autoload_configs/sofia.conf.xml. Этот файл содержит директиву «X-PRE-PROCESS», которая указывает FreeSWITCH на последующую загрузку и объединение любых файлов conf/sip_profiles/*.xml. Каждый загруженный и объединенный таким образом файл *.xml должен содержать полное описание одного или нескольких профилей SIP. Каждый загруженный таким образом профиль SIP является частью «Пользовательского агента» или «UA»; в терминах FreeSWITCH UA = Пользовательский агент = Профиль Sofia = Профиль SIP.</p>
+<p>Обратите внимание, что загруженные таким образом отдельные UA объединяются FreeSWITCH и не должны мешать друг другу: в частности, <strong>каждый UA должен иметь свой собственный уникальный порт, на котором он принимает соединения</strong> (порт по умолчанию для SIP — 5060).</p>
+<h4>Несколько пользовательских агентов (профилей) и диалплан</h4>
+<p>Почему вам может понадобиться создать несколько пользовательских агентов? Вот пример.</p>
+<p>В своем офисе я использую брандмауэр. Это означает, что вызовы, которые я совершаю в места за пределами брандмауэра, должны использовать сервер STUN для прохождения NAT в брандмауэре, в то время как вызовы внутри офиса не требуют использования сервера STUN. Чтобы удовлетворить эти требования, я создал два разных UA. Один из них использует сервер STUN и, в этом отношении, также подключается к PSTN через поставщика услуг. Другой UA предназначен исключительно для местных вызовов SIP.</p>
+<p>Теперь у меня есть два UA, определенные моими профилями, каждый из которых может обрабатывать вызов. Какой UA используется при наборе SIP-адреса или номера телефона? Это определение делается в диалплане. Один из синтаксисов звонка через Софию в диалплане:</p>
+<p>sofia/<strong>profile_name</strong>/destination</p>
+<p>Итак, задача становится довольно простой. Диалпланы используют сопоставление шаблонов и другие приемы, чтобы определить, как обрабатывать вызов. Мой диалплан проверяет, что я набрал, а затем определяет, какой профиль использовать для этого вызова. Если я набираю телефонный номер, диалплан выбирает UA, который подключается к PSTN. Если я набираю SIP-адрес за пределами межсетевого экрана, диалплан выбирает тот же UA, поскольку он использует сервер STUN. Но если я наберу SIP-адрес, находящийся внутри брандмауэра, диалплан выберет «локальный» UA.</p>
+<p>Чтобы понять, как писать диалпланы, использовать сопоставление шаблонов и т. д., см. <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Dialplan/index.mdx#0-about">Диалплан.</a></p>
+<h4>Связь между профилями SIP и доменами</h4>
+<p>Следующий контент был написан в <a href="http://lists.freeswitch.org/pipermail/freeswitch-users/2012-November/089467.html">ветке списка рассылки</a> Энтони Минессейлом в ответ на вопросы о том, как профили SIP связаны с доменными именами в FreeSWITCH.</p>
+<p>Лучше всего взглянуть на эти вещи со стороны.</p>
+<p>Домены внутри реестра XML полностью отличаются от доменов в Интернете и, опять же, полностью отличаются от доменов в sip-пакетах. Профили снова полностью отличаются от любого из вышеперечисленных. Если вы того пожелаете, вы можете их выровнять.</p>
+<p>Конфигурация по умолчанию, распространяемая вместе с FreeSWITCH, устанавливает сценарий, который с наибольшей вероятностью будет загружаться на любой машине и работать «из коробки». Это основная цель этой конфигурации, поэтому она устанавливает домен как в каталоге, глобальную переменную домена по умолчанию, так и имя внутреннего профиля, чтобы они были идентичны IP-адресу на ящике, который может выходить в Интернет. Затем он устанавливает sip, чтобы привести все к этому значению. Если вы хотите отстраниться от такого поведения, вы, вероятно, решаетесь создать какую-то систему с несколькими домами.</p>
+<p><strong>Псевдонимы</strong> в теге &lt;aliases&gt; представляют собой список ключей, которые вы хотите использовать и которые ведут к текущему профилю, который вы настраиваете. Думайте об этом как о файле /etc/hosts в Unix, только для профилей. Когда вы определяете псевдонимы для соответствия всем возможным доменам, размещенным в определенном профиле, а затем, когда вы пытаетесь взять нотацию <a href="mailto:user@host.com">user@host.com</a> и решить, из какого профиля она взята, вы можете использовать псевдонимы для поиска, если вы добавили &lt;alias name=" <a href="http://host.com">host.com</a> "/&gt; в этот профиль.</p>
+<p>Тег &lt;domains&gt; — это индикатор, указывающий профилю открыть XML-реестр в FreeSWITCH и просмотреть все определенные в нем домены. Два ключевых атрибута:</p>
+<p>псевдоним: [true/false] (автоматически создать псевдоним для этого домена, как указано выше) parse: [true/false] (сканировать домен на наличие записей шлюза и включить их в этот профиль) name: [&lt;string&gt;] (либо имя конкретного домена или «все» для обозначения анализа каждого домена в каталоге)</p>
+<p>Как вы показали в своем вопросе, конфигурация по умолчанию имеет</p>
+<p>&lt;имя домена="все" alias="true" parse="false"/&gt;</p>
+<p>Если вы примените то, что узнали выше, он будет сканировать каждый домен (по умолчанию только один) и добавлять для него псевдоним, а не анализировать его на предмет шлюзов. Каталог по умолчанию использует глобальные переменные конфигурации, чтобы настроить домен в соответствии с локальным IP-адресом на поле. Итак, теперь в вашей конфигурации будет домен, который является вашим IP-адресом, а внутренний профиль прикрепится к нему и добавит псевдоним, чтобы значение расширялось в соответствии с ним.</p>
+<p>Это объясняется в комментарии вверху файлаdirectory/default.xml:</p>
+<pre><code class="language-plaintext">FreeSWITCH works off the concept of users and domains just like email.
+You have users that are in domains for example 1000@domain.com.
+
+When freeswitch gets a register packet it looks for the user in the directory
+based on the from or to domain in the packet depending on how your sofia profile
+is configured.  Out of the box the default domain will be the IP address of the
+machine running FreeSWITCH.  This IP can be found by typing "sofia status" at the
+CLI.  You will register your phones to the IP and not the hostname by default.
+If you wish to register using the domain please open vars.xml in the root conf
+directory and set the default domain to the hostname you desire.  Then you would
+use the domain name in the client instead of the IP address to register
+with FreeSWITCH.
+</code></pre>
+<p>Таким образом, имея более одного профиля со значением по умолчанию</p>
+<p>&lt;имя домена="все" alias="true" parse="false"/&gt;</p>
+<p>в конечном итоге приведет к присвоению псевдонимов одним и тем же доменам всем профилям, которые его вызывают, и приведет к перезаписи в таблице поиска и, возможно, к ошибке где-то в ваших журналах. Если бы у вас всех был parse="true", они все попытались бы зарегистрироваться на шлюзах во всех ваших доменах.</p>
+<p>Если вы посмотрите на стандартную конфигурацию, external.xml является хорошим примером вторичного профиля.</p>
+<p>&lt;имя домена="все" alias="false" parse="true"/&gt;</p>
+<p>так что никаких псевдонимов и да синтаксический анализ... полная противоположность внутреннему, чтобы все шлюзы регистрировались с внешнего, а внутренний привязывался к локальному IP-адресу.</p>
+<p>Итак, вы, вероятно, захотите использовать отдельный &lt;domain name=" <a href="http://example.com">example.com</a> "/&gt; для каждого домена и каждого профиля, к которому вы хотите привязать его в более сложных настройках.</p>
+<h3>Структура профиля</h3>
+<p>Каждый профиль может содержать несколько различных подразделов. В настоящее время для sofia.conf.xml не существует XSD или DTD — и любой добровольец, который сможет его создать, будет очень рад.</p>
+<p>&lt;Конфигурация!ELEMENT (global_settings?, профили)&gt; &lt;!ELEMENT global_settings (param+)&gt; &lt;профили!ELEMENT (профиль+)&gt; &lt;профиль!ELEMENT (псевдонимы, шлюзы, домены, настройки)&gt; &lt;!ELEMENT псевдонимы (псевдоним*)&gt; &lt;Шлюзы!ELEMENT (шлюз*)&gt; &lt;Шлюз!ELEMENT (параметр+, переменные?)&gt; &lt;Переменные!ELEMENT (переменная+)&gt; &lt;Домены!ELEMENT (домен*)&gt; &lt;Настройки!ELEMENT (параметр+)&gt; &lt;!ELEMENT псевдоним EMPTY &gt; &lt;параметр!ELEMENT EMPTY&gt; &lt;переменная!ELEMENT EMPTY&gt; &lt;!ELEMENT домен EMPTY&gt; &lt;!имя конфигурации ATTLIST CDATA #REQUIRED описание CDATA #REQUIRED&gt; &lt;!имя профиля ATTLIST CDATA #REQUIRED домен CDATA #IMPLIED&gt; &lt;!имя шлюза ATTLIST CDATA #REQUIRED&gt; &lt;!ATTLIST псевдоним CDATA #REQUIRED&gt; &lt;!ATTLIST имя параметра CDATA #REQUIRED значение CDATA #REQUIRED&gt; &lt;!ATTLIST имя переменной CDATA #REQUIRED данные CDATA #REQUIRED направление CDATA #IMPLIED&gt; &lt;!ATTLIST доменное имя CDATA # ОБЯЗАТЕЛЬНЫЙ псевдоним (true | false) #IMPLIED parse (true | false) #IMPLIED&gt;</p>
+<h4>шлюз</h4>
+<p>Каждый профиль может иметь несколько шлюзов:</p>
+<p>&lt;gateways&gt; &lt;gateway&gt; <i>элементы...</i> &lt;/gateway&gt; &lt;gateway&gt; <i>элементы...</i> &lt;/gateway&gt; &lt;/gateways&gt;</p>
+<p>Шлюз имеет атрибут «имя», по которому на него можно ссылаться. Шлюз описывает, как использовать другой UA для достижения пунктов назначения. Например, шлюз может предоставлять доступ к PSTN или к частной сети SIP. Причина определения шлюза, предположительно, заключается в том, что шлюзу требуется определенная информация, прежде чем он примет вызов от пользовательского агента FreeSWITCH.</p>
+<p>Переменные могут быть определены на шлюзе. Входящие переменные задаются на канале вызова, полученного от шлюза, исходящие переменные задаются на канале вызова, отправленного на шлюз.</p>
+<p>Пример конфигурации шлюза:</p>
+<p>&lt;gateway name="gateway012"&gt; &lt;param name="realm" value="sip.voipcarrier.com" /&gt; &lt;param name="username" value="WBrandes" /&gt; &lt;param name="password" value=" myvoiceismypassword" /&gt; &lt;param name="register" value="true" /&gt; &lt;param name="caller-id-in-from" value="true" /&gt; &lt;param name="ping" value="5" /&gt; &lt;param name="ping-max" value="3" /&gt; &lt;param name="retry-секунды" value="5" /&gt; &lt;param name="expire-секунды" value="60" /&gt; &lt;переменные&gt; &lt;variable name="verbose_sdp" value="true"/&gt; &lt;variable name="absolute_codec_string" value="PCMU,PCMA" Direction="outbound"/&gt; &lt;variable name="customer_id" value="3532" направление="входящее"/&gt; &lt;/переменные&gt; &lt;/шлюз&gt;</p>
+<p>Чтобы достичь определенного шлюза из абонентского плана, используйте</p>
+<p>sofia/gateway/&lt;имя_шлюза&gt;/&lt;строка набора&gt;</p>
+<p>FreeSWITCH также может подписаться на получение уведомлений о событиях от шлюза. Для получения дополнительной информации см. « <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Examples/Presence/index.mdx#freeswitch-as-a-client">Присутствие — использование FreeSWITCH в качестве клиента».</a></p>
+<h5>Параметры</h5>
+<p>Ниже приведен список элементов param, которые являются дочерними элементами элемента шлюза:</p>
+<p>&lt;!-- /// account username *required* /// --&gt;
+  &lt;param name="username" value="foo"/&gt;</p>
+<p>Примечание. Параметр имени пользователя для шлюза не следует путать с параметром имени пользователя в конфигурации настроек профиля!</p>
+<p>&lt;!--/// auth realm: *optional* same as gateway name, if blank ///--&gt;
+  &lt;!-- realm --&gt;
+  &lt;param name="realm" value="sip.example.com[:port]"/&gt;
+
+  &lt;!--/// account password *required* ///--&gt;
+  &lt;param name="password" value="a password"/&gt;
+
+  &lt;!--/// username to use in from: *optional* same as &nbsp;username, if blank ///--&gt;
+  &lt;param name="from-user" value="fooman"/&gt;
+
+  &lt;!--/// domain to use in from: *optional* same as &nbsp;realm, if blank; can also be set to "auto-aleg-full" or "auto-aleg-domain" ///--&gt;
+  &lt;param name="from-domain" value="asterlink.com"/&gt;
+
+  &lt;!--/// replace the INVITE from user with the channel's caller-id ///--&gt;
+  &lt;!--/// this is false by default because outbound calls generally need username in the INVITE ///--&gt;
+  &lt;!--Use the callerid of an inbound call in the from field on outbound calls via this gateway --&gt;
+  &lt;param name="caller-id-in-from" value="false"/&gt;
+
+  &lt;!--/// extension for inbound calls: *optional* Same as username, if blank. To use what's in ${sip_to_user}, set it to the value "auto_to_user" ///--&gt;
+  &lt;param name="extension" value=""/&gt;</p>
+<p>Примечание. Параметр <i>расширения</i> влияет на содержимое переменных канала <i>Caller-Destination-Number</i> и <i>Destination_number</i> . Если оно пустое, <i>номер вызывающего абонента</i> всегда будет соответствовать имени пользователя шлюза. Если у него есть значение, <i>для Caller-Destination-Number</i> всегда будет установлено это значение. Если он имеет значение <i>auto_to_user</i> , <i>Caller-Destination-Number</i> будет заполнен значением <code>${sip\_to\_user}</code>, которое означает реальный набранный номер в случае входящего вызова.</p>
+<p>&lt;!--/// proxy host: *optional* same as realm, if blank ///--&gt;
+  &lt;param name="proxy" value="proxy.example.com"/&gt;
+
+  &lt;!--/// expire in seconds: *optional* 3600, if blank ///--&gt;
+  &lt;param name="expire-seconds" value="3600"/&gt;
+
+  &lt;!-- suppress CNG on this profile or per call with the 'suppress_cng' variable --&gt;
+  &lt;param name="suppress-cng" value="true"/&gt;
+
+  &lt;!--/// false: do not register. true: register (default) ///--&gt;
+  &lt;param name="register" value="false"/&gt;
+
+  &lt;!-- which transport to use for register --&gt;
+  &lt;param name="register-transport" value="udp"/&gt;
+
+  &lt;!--extra sip params to send in the contact--&gt;
+  &lt;param name="contact-params" value="tport=tcp"/&gt;
+
+  &lt;!-- check gateway availability: *optional* --&gt;
+  &lt;param name="ping" value="15"/&gt;
+
+  &lt;!-- *optional* --&gt;
+  &lt;param name="ping-max" value="10"/&gt;
+
+  &lt;!-- &nbsp;*optional* --&gt;
+  &lt;param name="ping-min" value="1"/&gt;</p>
+<p><strong>ping-min</strong> означает «сколько успешных пингов мы должны иметь, прежде чем объявить шлюз открытым».</p>
+<p>Интервал между <strong>ping-min</strong> и <strong>ping-max</strong> — это «безопасная зона», где шлюз помечен как UP. Итак, если у нас есть, например, мин 3 и максимум 6, если шлюз включен и мы перемещаем счетчик между 3,4,5,6, шлюз будет включен.</p>
+<p>Если из 6 мы потеряем 4 (то есть счетчик == 2) пингов подряд, шлюз будет объявлен неработающим.</p>
+<p>Обратите внимание, что при запуске Софии шлюз всегда запускается как UP, поэтому он будет работать, даже если ping-min &gt; 1 . «правильный» путь начинается, когда шлюз выходит из строя.</p>
+<p>&lt;!-- &nbsp;*optional* - default is false--&gt;
+  &lt;param name="extension-in-contact" value="true"/&gt;
+
+  &lt;!-- &nbsp;*optional* --&gt;
+  &lt;param name="cid-type" value="rpid"/&gt;</p>
+<p>Параметр «регистрация» используется, когда этот профиль выступает в качестве клиента для другого UA. Регистрируясь, FreeSWITCH сообщает другому UA о своем местонахождении. Обычно это используется, когда FreeSWITCH хочет, чтобы другой UA отправлял вызовы FreeSWITCH, а другой UA ожидает такого рода регистрации. Если FreeSWITCH использует другой UA только в качестве шлюза (например, к PSTN), то регистрация обычно не требуется.</p>
+<p>Параметр «distinct-to» используется, когда вы хотите, чтобы FS регистрировался с использованием отдельного AOR для заголовка To. Это требует правильной настройки связанных параметров. Например, если вы хотите, чтобы REGISTER сопровождался:</p>
+<p>От: &lt;sip: <a href="mailto:someuser@somedomain.com">someuser@somedomain.com</a> &gt; Кому: &lt;sip: <a href="mailto:anotheruser@anotherdomain.com">otheruser@anotherdomain.com</a> &gt;</p>
+<p>Затем установите параметры следующим образом:</p>
+<p>&nbsp; &nbsp;&lt;param name="distinct-to" value="true"/&gt;
+  &nbsp; &lt;param name="auth-username" value="someuser"/&gt;
+  &nbsp; &lt;param name="from-user" value="someuser"/&gt;
+  &nbsp; &lt;param name="from-domain" value="somedomain.com"/&gt;
+  &nbsp; &lt;param name="password" value="somepassword"/&gt;
+  &nbsp; &lt;param name="username" value="anotheruser"/&gt;
+  &nbsp; &lt;param name="realm" value="anotherdomain.com"/&gt;</p>
+<p>Последний параметр «ping» используется для проверки доступности шлюза. Установив эту опцию, FreeSWITCH будет отправлять пакеты SIP OPTIONS на шлюз. Если шлюз отвечает 200 или 404, шлюз произносится вверх, в противном случае — вниз. [NB Похоже, что другие сообщения об ошибках могут быть возвращены и все равно приведут к тому, что шлюз будет помечен как «работающий»?] Если какой-либо вызов направляется на шлюз с выключенным состоянием, FreeSWITCH сгенерирует причину зависания NETWORK_OUT_OF_ORDER. Частота пинга определяется в секундах (атрибут значения) и имеет минимальное значение 5 секунд.</p>
+<p>Параметр «расширение-в-контакте» используется для указания того, какая контактная информация будет указана при регистрации. Если у вас возникли проблемы с регистрацией по умолчанию как gw+gateway_name@ip, вы можете установить для этого параметра значение true, чтобы использовать Extension@ip. Если расширение пустое, будет использоваться имя пользователя@ip.</p>
+<p>если вам нужно вставить цифры FROM в пользовательскую часть URI контакта при отправке вызова на шлюз&nbsp;<br>ДО</p>
+<p>From: "8885551212" &lt;sip:88855512120@8.8.8.8&gt;
+  Contact: &lt;sip:gw+mygateway@7.7.7.7:7080&gt;</p>
+<p>попробуйте добавить их в параметры шлюза</p>
+<p>&lt;param name="extension" value="8885551212"/&gt;
+  &lt;param name="extension-in-contact" value="true"/&gt;</p>
+<p>ПОСЛЕ</p>
+<p>From: "8885551212" &lt;sip:88855512120@8.8.8.8&gt;
+  Contact: &lt;sip:8885551212@7.7.7.7:7080&gt;</p>
+<h5>Переменные</h5>
+<p>В дополнение к параметрам вы можете дополнительно установить переменные для входящих или исходящих вызовов через этот шлюз. Вы задаете направление, которое устанавливает его как для входящих, так и для исходящих вызовов, если оно опущено.</p>
+<p>&lt;gateway&gt;
+  &nbsp;...params...
+  &nbsp;&lt;variables&gt;
+  &nbsp; &nbsp;&lt;variable name="inbound_var_name" &nbsp;value="this is inbound" &nbsp;direction="inbound"/&gt;
+  &nbsp; &nbsp;&lt;variable name="outbound_var_name" value="this is outbound" direction="outbound"/&gt;
+  &nbsp; &nbsp;&lt;variable name="both_var_name" &nbsp; &nbsp; value="this on any direction"/&gt;
+  &nbsp;&lt;/variables&gt;
+  &lt;/gateway&gt;</p>
+<p>Эти переменные канала будут установлены для всех вызовов, проходящих через этот шлюз в указанном направлении.</p>
+<p>Однако ниже приведен специальный синтаксис для установки переменных профиля, а не переменных канала.</p>
+<p>&lt;variable name="p:caller_id_name" value="Gateway"/&gt;</p>
+<h4>Параметры</h4>
+<p>Параметры конфигурации включают другую, более общую информацию о профиле, в том числе о том, используется ли STUN.</p>
+<p>Обратите внимание, что в параметрах конфигурации между словами используется дефис «-», тогда как в переменных канала между словами используется подчеркивание «_».</p>
+<p>Каждый профиль имеет свой элемент настроек. Это не только удобно — можно настроить один профиль для использования STUN, а другой, с другим шлюзом или работающий за брандмауэром, не использовать STUN — но это также очень важно. Это связано с тем, что каждый профиль определяет пользовательский агент SIP, и каждый UA должен иметь свой собственный уникальный «sip-порт». По соглашению, 5060 является портом по умолчанию, но можно совершать вызовы, например, «foo@sip.example.com <a href="http://sip.example.com">:</a> 5070», и поэтому вы можете определить любой порт для каждого отдельного профиля.</p>
+<p>Конфигурации Vanilla содержат полные образцы файла sofia.conf.xml вместе с комментариями: <a href="https://github.com/signalwire/freeswitch/blob/master/conf/vanilla/sip%5Fprofiles/internal.xml">внутренний</a> , <a href="https://github.com/signalwire/freeswitch/blob/master/conf/vanilla/sip%5Fprofiles/external.xml">внешний.</a></p>
+<h5>Основные параметры</h5>
+<h6>псевдоним</h6>
+<p>&lt;param name="alias" value="sip:10.0.1.251:5555"/&gt;</p>
+<p>Кажется, это приводит к привязке профиля SIP к этому IP и порту, а также к вашим IP-адресам и портам SIP / RTP.</p>
+<p>Энтони сказал следующее о псевдонимах в <a href="http://lists.freeswitch.org/pipermail/freeswitch-users/2012-November/089467.html">теме ML</a> :</p>
+<p>Псевдонимы в теге &lt;aliases&gt; представляют собой список ключей, которые вы хотите использовать и которые ведут к текущему профилю, который вы настраиваете. Думайте об этом как о файле /etc/hosts в Unix, предназначенном только для профилей. Когда вы определяете псевдонимы для соответствия всем возможным доменам, размещенным в определенном профиле, а затем, когда вы пытаетесь взять нотацию <a href="mailto:user@host.com">user@host.com</a> и решить, из какого профиля она взята, вы можете использовать псевдонимы для поиска, если вы добавили &lt;alias name="host.com"/&gt; в этот профиль.</p>
+<h6>отключение при сбое</h6>
+<p>&lt;param name="shutdown-on-fail" value="true"/&gt;</p>
+<p>Если установлено значение true и профиль не загружается, FreeSWITCH отключится. Это полезно, если вы используете что-то вроде Pacemaker и OpenAIS, которые управляют парой узлов FreeSWITCH и автоматически отслеживают, запускают, останавливают, перезапускают и переводят узлы в режим ожидания при сбое. Это гарантирует, что конкретный узел не сможет использоваться в ситуации «частично включенного».</p>
+<h6>строка пользовательского агента</h6>
+<p>Это устанавливает заголовок User-Agent во всех SIP-сообщениях, отправляемых вашим сервером. По умолчанию это может быть что-то вроде «FreeSWITCH-mod_sofia/1.0.trunk-12805». Если вы не хотите рекламировать подробную информацию о версии, вы можете в шутку просто установить для нее значение «FreeSWITCH» или даже «Asterisk PBX».</p>
+<p>Будьте осторожны при установке этого значения, поскольку некоторые символы, такие как «@», могут привести к тому, что другие прокси-серверы SIP могут отклонить ваши сообщения как недействительные.</p>
+<p>&lt;param name="user-agent-string" value="FreeSWITCH Rocks!"/&gt;</p>
+<h6>уровень журнала</h6>
+<p>&lt;param name="log-level" value="0"/&gt;</p>
+<h6>отлаживать</h6>
+<p>&lt;param name="debug" value="0"/&gt;</p>
+<h6>sip-trace</h6>
+<p>&lt;param name="sip-trace" value="no"/&gt;</p>
+<h6>контекст</h6>
+<p>Контекст диалплана, в котором сбрасываются вызовы, поступающие на ip:port этого профиля.</p>
+<p>&lt;param name="context" value="public"/&gt;</p>
+<h6>SIP-порт</h6>
+<p>Порт для привязки SIP-трафика:</p>
+<p>&lt;param name="sip-port" value="$${internal_sip_port}"/&gt;</p>
+<h6>глоток-IP</h6>
+<p>IP-адрес для привязки SIP-трафика. <strong>НЕ ИСПОЛЬЗУЙТЕ ИМЕНА ХОСТОВ, ТОЛЬКО IP-АДРЕСА</strong></p>
+<p>&lt;param name="sip-ip" value="$${local_ip_v4_or_v6}"/&gt;
+
+  Alternatively, since version 1.6 it is possible to specify an interface and an optionnal address family instead of an IP, same for rtp-ip.
+
+  &lt;param name="sip-ip" value="interface:[auto|ipv4|ipv6|]/eth0"/&gt;</p>
+<h6>rtp-ip</h6>
+<p>IP-адрес для привязки для RTP-трафика. <strong>НЕ ИСПОЛЬЗУЙТЕ ИМЕНА ХОСТОВ, ТОЛЬКО IP-АДРЕСА</strong></p>
+<p>&nbsp;&lt;param name="rtp-ip" value="$${local_ip_v4_or_v6}"/&gt;</p>
+<ul>
+  <li>Поддержка нескольких rtp-ip: если добавлено больше параметров rtp-ip, они будут использоваться в циклическом режиме по мере выполнения новых вызовов.</li>
+  <li>На момент написания статьи IPv6-адреса <strong>не поддерживаются</strong> в Windows. См. <a href="http://jira.freeswitch.org/browse/FS-4445">FS-4445.</a></li>
+</ul>
+<h6>ext-rtp-ip</h6>
+<p>Это IP-адрес, за которым FreeSWITCH виден из Интернета, поэтому, если FreeSWITCH находится за NAT, это, по сути, общедоступный IP-адрес, который следует использовать для RTP.</p>
+<p>Допустимые значения:</p>
+<figure class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>значение ext-rtp-ip</th>
+        <th>Описание</th>
+        <th>Пример</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>$${variable}</code></td>
+        <td>Любая переменная из vars.xml</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="$${external\_rtp\_ip}"/&gt;</code></td>
+      </tr>
+      <tr>
+        <td>wxyz</td>
+        <td>Конкретный цифровой IP-адрес</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="1.2.3.4"/&gt;</code></td>
+      </tr>
+      <tr>
+        <td>автонат: wxyz</td>
+        <td>Используется для LAN и WAN, чтобы избежать ошибок в SIP CONTACT, отправляемых на устройства LAN.</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="autonat:1.2.3.4"/&gt;</code></td>
+      </tr>
+      <tr>
+        <td>авто</td>
+        <td>Предполагаемый IP (угадывается путем просмотра таблицы IP-маршрутизации, какой интерфейс является маршрутом по умолчанию)</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="auto"/&gt;</code></td>
+      </tr>
+      <tr>
+        <td>автонатур</td>
+        <td>FS использует uPNP или NAT-PMP для обнаружения общедоступного IP-адреса, который он должен использовать.</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="auto-nat"/&gt;</code></td>
+      </tr>
+      <tr>
+        <td>stun: DNS-имя или IP-адрес STUN-сервера.</td>
+        <td>FS использует выбранный вами сервер STUN для обнаружения общедоступного IP-адреса.</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="stun:stun.freeswitch.org"/&gt;</code></td>
+      </tr>
+      <tr>
+        <td>хост: DNS-имя</td>
+        <td>FS разрешает DNS-имя как общедоступный IP-адрес, поэтому вы можете использовать динамический DNS-хост.</td>
+        <td><code>&lt;param name="ext-rtp-ip" value="host:mypublicIP.dyndns.org"/&gt;</code></td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>параметры с префиксом «ext–», указанным выше, когда они заполнены еще не разрешенными строками DNS (например, <code>name="ext–sip–ip" value="stun:stun.freeswitch.org"</code>или <code>name="ext‑rtp–ip" value="host:mypublicIP.dyndns.org"</code>), преобразуются в IP-адреса <strong>только один раз во время загрузки FreeSWITCH</strong> и после этого остаются постоянными. FS не замечает (не знает) любых последующих изменений IP-адреса вашей среды. Таким образом, эти переменные ext– могут стать функционально несовместимыми с текущими IP-адресами среды с <i>неуказанными результатами</i> в потоке вызовов на сетевом уровне. Перезапуск файловой системы <i><strong>необходим</strong></i> для того, чтобы файловая система захватила текущий рабочий IP-адрес(а).</p>
+<h6>ext-sip-ip</h6>
+<p>Это IP-адрес, за которым FreeSWITCH виден из Интернета, поэтому, если FreeSWITCH находится за NAT, это, по сути, общедоступный IP-адрес, который следует использовать для сообщений SIP.</p>
+<p>Возможные значения такие же, как для ext-rtp-ip, и обычно ему присваивается то же значение.</p>
+<p>&lt;param name="ext-sip-ip" value="$${external_sip_ip}"/&gt;</p>
+<h6>TCP-Keepalive</h6>
+<p>Установите для этого параметра интервал (в миллисекундах) для отправки пакетов поддержки пользовательским агентам (UA), зарегистрированным через TCP; не устанавливайте для отключения.</p>
+<h6>TCP-пинг-понг</h6>
+<h6>TCP-ping2pong</h6>
+<h6>диалплан</h6>
+<p>Параметр диалплана очень мощный.</p>
+<p>В простейшей конфигурации он будет использовать диалплан XML. Это означает, что он будет считывать данные из XML-диалпланов <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_xml_curl_1049001.mdx">mod_xml_curl</a> (например, обратный вызов на ваш веб-сервер) или, в случае неудачи, из XML-файлов, указанных в разделе диалплана freeswitch.xml. (например, default_context.xml)</p>
+<p>&lt;param name="dialplan" value="XML"/&gt;&nbsp;</p>
+<p>Вы также можете добавить в изображение поиск по перечислению (поскольку mod_enum обеспечивает функциональность диалплана), поэтому поиск по перечислению переопределяет диалплан XML.</p>
+<p>&lt;param name="dialplan" value="enum,XML"/&gt;&nbsp;</p>
+<p>Или обратный порядок перечисления учитывается только в случае сбоя поиска XML.</p>
+<p>&lt;param name="dialplan" value="XML,enum"/&gt;&nbsp;</p>
+<p>Также можно указать конкретный корень перечисления</p>
+<p>&lt;param name="dialplan" value="enum:foo.com,XML"/&gt;&nbsp;</p>
+<p>Или используйте XML в собственном файле</p>
+<p>&lt;param name="dialplan" value="XML:/tmp/foo.xml,XML,enum"/&gt;&nbsp;</p>
+<p>Где он сначала проверит конкретный XML-файл, а затем обратится к обычному XML, который также выполняет поиск <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_xml_curl_1049001.mdx">mod_xml_curl</a> , если он настроен и работает.</p>
+<h5>Параметры, связанные со СМИ</h5>
+<p>См. также: <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Configuration/Proxy-Media_13173588.mdx#faqs">Прокси Медиа.</a></p>
+<h6>резюме-медиа-на удержании</h6>
+<p>Если вызовы не находятся на носителе, они вернутся на носитель при нажатии кнопки удержания. Чтобы вернуть вызовы в режим bypass-media после отмены удержания вызова, включите bypass-media-after-hold.</p>
+<p>&lt;param name="media-option" value="resume-media-on-hold"/&gt;</p>
+<h6>обойти-медиа-после-att-xfer</h6>
+<p>Это позволит вызову после сопровождаемой передачи вернуться в обход мультимедиа после сопровождаемой передачи.</p>
+<p>&lt;param name="media-option" value="bypass-media-after-att-xfer"/&gt;</p>
+<h6>обход медиа-после удержания</h6>
+<p>Это позволит вызову вернуться в обход мультимедиа после удержания. Эту опцию можно включить только в том случае, если установлено возобновление медиа-на удержании. Доступно в git rev 8fa385b.</p>
+<p>&lt;param name="media-option" value="bypass-media-after-hold"/&gt;</p>
+<h6>входящий-обход-медиа</h6>
+<p>Раскомментируйте, чтобы перевести все входящие вызовы в режим отсутствия мультимедиа. Это означает, что сервер FreeSWITCH сохраняет только состояние SIP-сообщений, но поток RTP передается напрямую от конечной точки к конечной точке.</p>
+<p>&lt;param name="inbound-bypass-media" value="true"/&gt;</p>
+<h6>входящие-прокси-медиа</h6>
+<p>Раскомментируйте, чтобы перевести все входящие вызовы в режим прокси-медиа. Это означает, что FreeSWITCH сохраняет на сервере трафик SIP и RTP, но не взаимодействует с потоком RTP.</p>
+<p>&lt;param name="inbound-proxy-media" value="true"/&gt;</p>
+<h6>отключить-rtp-автоматическую настройку</h6>
+<p>&lt;param name="disable-rtp-auto-adjust" value="true"/&gt;</p>
+<h6>игнорировать-183nosdp</h6>
+<p>&lt;param name="ignore-183nosdp" value="true"/&gt;</p>
+<h6>включить-соа</h6>
+<p>&lt;param name="enable-soa" value="true"/&gt;</p>
+<p>Установите значение «false», чтобы отключить SIP SOA из Софии, чтобы сообщить Софии не трогать обмен SDP.</p>
+<h6>t38-проходной</h6>
+<p>&lt;param name="t38-passthru" value="true"/&gt;</p>
+<p>Доступны следующие варианты</p>
+<ul>
+  <li>«true» разрешает сквозное соединение t38</li>
+  <li>«false» отключает транзитный режим t38</li>
+  <li>'once' включает транзитное соединение t38, но отправляет повторное приглашение t.38 только один раз (доступно с момента фиксации 08b25a8 от 9 ноября 2011 г.)</li>
+</ul>
+<h5>Параметры, связанные с кодеками</h5>
+<p>Также см:</p>
+<ul>
+  <li><a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Codecs-and-Media/Codec-Negotiation_2883752.mdx#about">Согласование кодека</a></li>
+  <li><a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Codecs-and-Media/Audio-Codecs_1048675.mdx">Поддерживаемые кодеки</a></li>
+</ul>
+<h6>настройки входящего кодека</h6>
+<p>Этот параметр позволяет изменить разрешенные входящие кодеки для каждого профиля.</p>
+<p>&lt;param name="inbound-codec-prefs" value="$${global_codec_prefs}"/&gt;</p>
+<h6>исходящие настройки кодека</h6>
+<p>Этот параметр позволяет изменить исходящие кодеки для каждого профиля.</p>
+<p>&lt;param name="outbound-codec-prefs" value="$${outbound_codec_prefs}"/&gt;</p>
+<h6>настройки кодека</h6>
+<p>Этот параметр позволяет одновременно изменить как inbound-codec-prefs, так и outbound-codec-prefs.</p>
+<p>&lt;param name="codec-prefs" value="$${global_codec_prefs}"/&gt;</p>
+<h6>согласование входящего кодека</h6>
+<p>установите «жадный», если вы хотите, чтобы ваш список кодеков имел приоритет</p>
+<p>&lt;param name="inbound-codec-negotiation" value="generous"/&gt;</p>
+<p>Если «жадный» вам не подходит, попробуйте «Scrooge», который, как известно, исправляет ошибочно сообщаемые проблемы с временем ptime у поставщиков DID, таких как CallCentric.</p>
+<p>Эмпирическое правило таково:</p>
+<ul>
+  <li>«щедрый» позволяет списку удаленных кодеков иметь приоритет и «выиграть» процесс согласования и выбора кодека.</li>
+  <li>«жадность» приводит к победе в локальном списке предпочтений FreeSWITCH</li>
+  <li>«Скрудж» делает «жадный» шаг вперед, так что FreeSWITCH побеждает, даже когда противоположная сторона лжет о возможностях в процессе переговоров.</li>
+</ul>
+<p><a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/Channel-Variables-Catalog/sip_codec_negotiation_16354240.mdx#comments">sip_codec_negotiation</a> — это версия этой настройки для переменной канала.</p>
+<h6>входящие-поздние переговоры</h6>
+<p>Раскомментируйте, чтобы вызовы попадали в диалплан *прежде*, чем вы решите, в порядке ли кодек.</p>
+<p>&lt;param name="inbound-late-negotiation" value="true"/&gt;</p>
+<h6>битовая упаковка</h6>
+<p>Этот параметр предназначен для битовой упаковки AAL2 в G.726.</p>
+<p>&lt;param name="bitpacking" value="aal2"/&gt;</p>
+<h6>отключить транскодирование</h6>
+<p>Раскомментируйте, если вы хотите, чтобы исходящая часть моста предлагала только тот кодек, который использует отправитель.</p>
+<p>&lt;param name="disable-transcoding" value="true"/&gt;</p>
+<h6>повторное согласование кодека при повторном приглашении</h6>
+<p>&lt;param name="renegotiate-codec-on-reinvite" value="true"/&gt;</p>
+<h5>Оглушение</h5>
+<p>Если вам нужно использовать STUN-сервер, вот распространенные рабочие примеры:</p>
+<h6>ext-rtp-ip</h6>
+<p>&lt;param name="ext-rtp-ip" value="stun:stun.fwdnet.net"/&gt;</p>
+<p><a href="http://stun.fwdnet.net">stun.fwdnet.net</a> — это общедоступный STUN-сервер.</p>
+<h6>ext-sip-ip</h6>
+<p>&lt;param name="ext-sip-ip" value="world_reachable.real.numeric.ip"/&gt;</p>
+<h6>оглушающий</h6>
+<p>Простое прохождение UDP через NAT (STUN) используется для решения проблем, связанных с SIP-клиентами за NAT, использующими пространство частных IP-адресов в своих сообщениях. Использовать оглушение, если указано (по умолчанию — true).</p>
+<p>&lt;param name="stun-enabled" value="true"/&gt;</p>
+<h6>автоматическое отключение оглушения</h6>
+<p>Установите значение true, чтобы профиль определял оглушение бесполезно и отключал его глобально.</p>
+<p>&lt;param name="stun-auto-disable" value="true"/&gt;</p>
+<h5>NATing</h5>
+<h6>применить-nat-acl</h6>
+<p>При получении REGISTER или INVITE автоматически включите <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Networking/NAT_6587473.mdx#about">режим NAT</a> , если IP-адрес в заголовке Contact соответствует записи, определенной в <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Networking/3965687.mdx#acl">списке доступа </a><a href="https://tools.ietf.org/html/rfc1918">RFC 1918</a> . «acl» в данном случае является неправильным употреблением, поскольку доступ не будет запрещен, если контактный IP-адрес пользователя не совпадает.</p>
+<p>&lt;param name="apply-nat-acl" value="rfc1918"/&gt;</p>
+<h6>агрессивное обнаружение Nat</h6>
+<p>Это включит режим NAT, если сетевой IP/порт, от которого был получен запрос, отличается от комбинации IP/порт в заголовке SIP Via: или если заголовок Via: содержит полученный параметр (независимо от того, что он содержит) <strong>. 05.04.2009:</strong> Кто-нибудь, уточните, когда это будет полезно. Мне кажется, если кому-то нужна эта функция, скорее всего, все настолько сломано, что придется использовать NDLB-force-rport.</p>
+<p>&lt;param name="aggressive-nat-detection" value="true"/&gt;</p>
+<h5>ВАД и КПГ</h5>
+<p>VAD означает <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Codecs-and-Media/VAD-and-CNG_7144454.mdx#about">«Детектор голосовой активности»</a> . FreeSWITCH способен обнаруживать речь и прекращать передачу пакетов RTP, если голос не обнаружен.</p>
+<h6>вад</h6>
+<p>&lt;param name="vad" value="in"/&gt;
+  &lt;param name="vad" value="out"/&gt;
+  &lt;param name="vad" value="both"/&gt;</p>
+<h6>подавление-cng</h6>
+<p>Подавите генератор комфортного шума (CNG) в этом профиле или для каждого вызова с помощью переменной «suppress_cng».</p>
+<p>&lt;param name="suppress-cng" value="true"/&gt;</p>
+<h5>NDLB (AKA Ни одно устройство не оставлено позади)</h5>
+<h6>NDLB-force-rport</h6>
+<p>Это заставит FreeSWITCH отправлять ответы SIP на сетевой порт, от которого они были получены. <strong>Используйте на свой риск!</strong> Дополнительную информацию см. в <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Networking/NAT-Traversal_3375417.mdx#about">разделе «Обход NAT»</a> .</p>
+<p>&lt;param name="NDLB-force-rport" value="true|safe"/&gt;</p>
+<ul>
+  <li>Safe = параметр, который выполняет принудительное поведение rport только на конечных точках, которые, как мы знаем, безопасны для этого. Это грязный хак, позволяющий попытаться работать с определенными конечными точками за звуковой стеной, которая не использует один и тот же порт при использовании nat, когда устройства не поддерживают rport, и при этом не ломает устройства, которые на самом деле используют разные порты, которые сломает принудительное rport.</li>
+</ul>
+<h6>NDLB-сломанный хэш аутентификации</h6>
+<p>Используется, когда телефоны отвечают на оспоренный ACK с помощью метода INVITE в хеше.</p>
+<p>&lt;param name="NDLB-broken-auth-hash" value="true"/&gt;</p>
+<h6>NDLB-получено в-nat-reg-контакте</h6>
+<p>добавьте ;received="&lt;ip&gt;:&lt;port&gt;" к контакту при ответе, чтобы зарегистрироваться для обработки nat</p>
+<p>&lt;param name="NDLB-received-in-nat-reg-contact" value="true"/&gt;</p>
+<h6>NDLB-sendrecv-в-сеансе</h6>
+<p>По умолчанию «a=sendrecv» включен только в медиа-часть SDP. Хотя это соответствует RFC, это может нарушить функциональность некоторых SIP-устройств. Чтобы также включить «a=sendrecv» в сеансовую часть SDP, установите для этого параметра значение true.</p>
+<p>&lt;param name="NDLB-sendrecv-in-session" value="true"/&gt;</p>
+<h6>NDLB-allow-bad-iananame</h6>
+<ul>
+  <li>Представлено в ред. 15401, это было включено по умолчанию до нового параметра.</li>
+</ul>
+<p>Позволит кодекам соответствовать соответствующему имени, даже если данная строка неверна.</p>
+<p>т. е. телефоны Linksys и Sipura по умолчанию будут передавать G.729a вместо G.729 в ​​качестве строки кодека, поэтому они не совпадают.</p>
+<p>Если вы хотите, чтобы неправильные имена IANA соответствовали соответствующей строке кодека, добавьте следующий параметр в свой профиль SIP.</p>
+<p>&lt;param name="NDLB-allow-bad-iananame" value="true"/&gt;</p>
+<p>См. <a href="https://tools.ietf.org/html/rfc3551">RFC 3551</a> , <a href="https://tools.ietf.org/html/rfc3555">RFC 3555</a> и списки IANA для SDP.</p>
+<h5>Идентификатор вызова</h5>
+<h6>входящий вызов-использования-как-uuid</h6>
+<p>При входящих вызовах сделайте uuid сеанса равным идентификатору SIP-вызова этого вызова.</p>
+<p>&lt;param name="inbound-use-callid-as-uuid" value="true"/&gt;</p>
+<h6>исходящее использование-uuid-as-callid</h6>
+<p>При исходящих вызовах установите callid, соответствующий uuid сеанса.</p>
+<p>&lt;param name="outbound-use-uuid-as-callid" value="true"/&gt;</p>
+<p>Это находится в файле «..sip_profiles/external.xml».</p>
+<h5>ТЛС</h5>
+<p>Обязательно прочтите <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Security/SIP-TLS_9634135.mdx#attachments">SIP TLS,</a> прежде чем включать определенные функции ниже, поскольку они могут работать не так, как ожидалось.</p>
+<h6>спасибо</h6>
+<p>TLS: отключен по умолчанию, для включения установите значение «истина».</p>
+<p>&lt;param name="tls" value="$${internal_ssl_enable}"/&gt;</p>
+<h6>только tls</h6>
+<p>отключено по умолчанию, когда включено, София не может прослушивать незашифрованный порт для этого соединения. Это может остановить многие стандартные сценарии перебора, а если все ваши клиенты подключаются через TLS, это может помочь уменьшить воздействие вашего сервера FreeSWITCH на мир.</p>
+<p>&lt;param name="tls-only" value="false"/&gt;</p>
+<h6>tls-bind-params</h6>
+<p>дополнительные параметры привязки для TLS</p>
+<p>&lt;param name="tls-bind-params" value="transport=tls"/&gt;</p>
+<h6>tls-sip-порт</h6>
+<p>Порт для прослушивания запросов TLS. (5061 будет использоваться, если не указано)</p>
+<p>&lt;param name="tls-sip-port" value="$${internal_tls_port}"/&gt;</p>
+<h6>tls-cert-dir</h6>
+<p>Расположение SSL-сертификатов Agent.pem и cafile.pem (необходимо для TLS-сервера)</p>
+<p>&lt;param name="tls-cert-dir" value="$${internal_ssl_dir}"/&gt;</p>
+<h6>tls-версия</h6>
+<p>Версия TLS («sslv2», «sslv3», «sslv23», «tlsv1», «tlsv1.1», «tlsv1.2»). ПРИМЕЧАНИЕ. Телефоны могут не работать с TLSv1.</p>
+<p>&lt;param name="tls-version" value="$${sip_tls_version}"/&gt;</p>
+<p>Если не установлено, по умолчанию установлено значение: «tlsv1,tlsv1.1,tlsv1.2».</p>
+<h6>tls-парольная фраза</h6>
+<p>Если ваш агент.pem защищен кодовой фразой, введите сюда парольную фразу, чтобы FreeSWITCH мог расшифровать ключ.</p>
+<p>&lt;param name="tls-passphrase" value=""/&gt;</p>
+<h6>tls-verify-date</h6>
+<p>Если на сертификате клиента/сервера должна быть проверена дата, чтобы убедиться, что срок его действия не истек и он в настоящее время активен.</p>
+<p>&lt;param name="tls-verify-date" value="true"/&gt;</p>
+<h6>tls-verify-policy</h6>
+<p>Это контролирует, выполняются ли какие-либо проверки безопасности сертификатов сервера/клиента. Проверка обычно заключается в проверке действительности сертификатов в соответствии с файлом cafile.pem. Установите значение «in», чтобы проверять только входящие соединения, «out», чтобы проверять только исходящие соединения, «all», чтобы проверять все соединения, а также «subjects_in», «subjects_out» и «subjects_all» для проверки субъекта (проверка субъекта для исходящих соединений против имени хоста/IP-адреса, к которому подключается). Несколько политик можно разделить с помощью '|' канал, например «subjects_in|subjects_out». По умолчанию нет.</p>
+<p>&lt;param name="tls-verify-policy" value="none"/&gt;</p>
+<h6>tls-verify-глубина</h6>
+<p>Когда проверка сертификата включена (tls-verify-policy), насколько глубоко мы должны попытаться снова проверить сертификат вверх по цепочке файла cafile.pem. По умолчанию только глубина 2.</p>
+<p>&lt;param name="tls-verify-depth" value="2"/&gt;</p>
+<h6>tls-verify-in-subjects</h6>
+<p>Если проверка субъектов включена для входящих подключений (tls-verify-policy установлена ​​в «subjects_in» или «subjects_all»), это список разрешенных субъектов (разделяется вертикальной чертой «|»). Обратите внимание, что это влияет только на входящие соединения для субъекты исходящих подключений всегда проверяются по именам хостов/IP-адресам.</p>
+<p>&lt;param name="tls-verify-in-subjects" value=""/&gt;</p>
+<h5>DTMF</h5>
+<h6>rfc2833-pt</h6>
+<p>TODO <a href="https://tools.ietf.org/html/rfc2833">RFC 2833</a> устарел благодаря <a href="https://tools.ietf.org/html/rfc4733">RFC 4733</a> .</p>
+<p>&lt;param name="rfc2833-pt" value="101"/&gt;</p>
+<h6>dtmf-длительность</h6>
+<p>&lt;param name="dtmf-duration" value="100"/&gt;</p>
+<h6>тип dtmf</h6>
+<p>TODO <a href="https://tools.ietf.org/html/rfc2833">RFC 2833</a> устарел благодаря <a href="https://tools.ietf.org/html/rfc4733">RFC 4733</a> .</p>
+<p>Установите параметр в SIP-профиле:</p>
+<p>&lt;param name="dtmf-type" value="info"/&gt;</p>
+<p>или</p>
+<p>&lt;param name="dtmf-type" value="rfc2833"/&gt;</p>
+<p>или</p>
+<p>&lt;param name="dtmf-type" value="none"/&gt;</p>
+<p>ИЛИ установите переменную в SIP-шлюзе или профиле пользователя (НЕ в канале, она должна быть до CS_INIT):</p>
+<p>&lt;variables&gt;
+  &nbsp;&lt;variable direction="inbound|outbound|both" name="dtmf_type" value="info"&gt;
+  &lt;/variables&gt;</p>
+<p>Обратите внимание на «_» вместо «-» в параметре профиля (это переменная, установленная в диалплане). (24.10.2010: мне кажется, "оба" не работают в моих тестах, "исходящий" работает)</p>
+<p>Примечание: для внутриполосного DTMF, <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod-dptools/6587132.mdx#0-about">Разное. Инструменты диалплана start_dtmf</a> должны использоваться в диалплане.&nbsp;<br>Кроме того, чтобы изменить исходящую маршрутизацию с info или rfc2833 на внутриполосную, используйте <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod-dptools/6587137.mdx#0-about">Misc._Dialplan_Tools_start_dtmf_generate.</a></p>
+<p><a href="http://tools.ietf.org/html/rfc2833">RFC 2833</a></p>
+<h6><a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/Channel-Variables-Catalog/pass_rfc2833_16352551.mdx#usage">пройти-rfc2833</a></h6>
+<p>TODO <a href="https://tools.ietf.org/html/rfc2833">RFC 2833</a> устарел благодаря <a href="https://tools.ietf.org/html/rfc4733">RFC 4733</a> .</p>
+<p><i>По умолчанию: ложь</i></p>
+<p>Если это правда, то он передает DTMF <a href="https://tools.ietf.org/html/rfc2833">RFC 2833</a> с одной стороны моста на другую без изменений. В противном случае он декодирует и перекодирует их перед передачей дальше.</p>
+<p><code>&lt;param name="pass-rfc2833" value="true"/&gt;</code></p>
+<h6>либерал-dtmf</h6>
+<p>TODO <a href="https://tools.ietf.org/html/rfc2833">RFC 2833</a> устарел благодаря <a href="https://tools.ietf.org/html/rfc4733">RFC 4733</a> .</p>
+<p><i>По умолчанию: false.</i><br>Для согласования DTMF используйте этот параметр, чтобы всегда предлагать 2833 и принимать как 2833, так и INFO. Использование этого параметра не рекомендуется, поскольку его целью является попытка справиться с ошибочными реализациями SIP.</p>
+<p><code>&lt;param name="liberal-dtmf" value="true"/&gt;</code></p>
+<h5>Связанные опции SIP</h5>
+<h6>включить таймер</h6>
+<p>Это включает или отключает поддержку таймеров сеансов SIP <a href="http://tools.ietf.org/html/rfc4028">RFC 4028 .</a></p>
+<p><code>&lt;param name="enable-timer" value="false"/&gt;</code></p>
+<h6>тайм-аут сеанса</h6>
+<p>таймеры сеанса для всех вызовов истекают через указанные секунды. Затем он отправит еще одно приглашение (повторное приглашение). Если не указано иное, по умолчанию — 30 минут. Некоторые шлюзы могут отклонять значения менее 30 минут. Эти значения относятся к Session-Expires в <a href="http://tools.ietf.org/html/rfc4028">RFC 4028</a> (время, в которое элемент будет считать, что время ожидания сеанса истекло, если заранее не произошло успешной транзакции обновления сеанса).</p>
+<p><code>&lt;param name="session-timeout" value="1800"/&gt;</code></p>
+<p>Примечание. Если для вашего коммутатора требуется опция таймера; например, Huawei SoftX3000, ему требуется это необязательное поле, и он отбрасывает вызовы с сообщением «Ошибка сообщения проверки таймера сеанса», тогда вы можете вернуть обратно фиксацию, которая убрала параметр «Требовать: таймер», который является необязательным полем:</p>
+<p>git log -1 -p 58c3c3a049991fedd39f62008f8eb8fca047e7c5 libs/sofia-sip/libsofia-sip-ua | patch -p1 -R
+  touch libs/sofia-sip/.update
+
+  make mod_sofia-clean
+  make mod_sofia-install</p>
+<h6>включить-100rel</h6>
+<p>Это включает поддержку 100rel (100% надежность - сообщение PRACK, как определено в <a href="http://tools.ietf.org/html/rfc3262">RFC3262</a> ). Это устраняет проблему с SIP, когда предварительные сообщения, такие как «180 Ringing», не подтверждаются и, следовательно, могут быть отброшены при плохом соединении без повторной передачи. *2009-07-08:* Включение этого параметра может привести к сбою FreeSWITCH, см. <a href="http://jira.freeswitch.org/browse/FSCORE-392">FSCORE-392</a> .</p>
+<p><code>&lt;param name="enable-100rel" value="true"/&gt;</code></p>
+<h6>срок действия минимальной сессии истекает</h6>
+<p>Это устанавливает значение «Min-SE» (в секундах) из <a href="http://tools.ietf.org/html/rfc4028">RFC 4028</a> . Это значение не должно быть меньше 90 секунд.</p>
+<p><code>&lt;param name="minimum-session-expires" value="120"/&gt;</code></p>
+<h6>sip-опции-ответить-503-при занятости</h6>
+<p>Если для этого параметра установлено значение true, FreeSWITCH будет отвечать на входящие SIP OPTIONS кодом 503 «Максимальное количество выполняемых вызовов», когда FS приостановлена ​​или превышено максимальное количество сеансов.</p>
+<p>Если установлено значение false или вообще не установлено (поведение по умолчанию), SIP OPTIONS всегда отвечает 200 «ОК».</p>
+<p><code>&lt;param name="sip-options-respond-503-on-busy" value="false"/&gt;</code></p>
+<p>Установка этого параметра в значение true особенно полезна, если вы используете прокси-сервер, такой как OpenSIPS или Kamailio, с модулем диспетчера для проверки ваших серверов FreeSWITCH путем отправки SIP OPTIONS.</p>
+<h6>sip-force-истекает</h6>
+<p>Установка этого параметра отменяет значение <i>срока действия</i> в 200 OK в ответ на все входящие SIP-РЕГИСТРЫ в направлении этого sip_profile.</p>
+<p>Этот параметр можно переопределить для каждого отдельного пользователя, установив переменную каталога пользователя <i>sip-force-expires .</i></p>
+<h6>sip-expires-max-deviation</h6>
+<p>Установка этого параметра добавляет случайное отклонение к значению <i>срока действия</i> в 200 OK в ответ на все входящие SIP-РЕГИСТРЫ в направлении этого sip_profile.</p>
+<p>В результате клиенты не будут перерегистрироваться в один и тот же интервал времени, что распределит нагрузку на вашу систему.</p>
+<p>Например, если вы установите:</p>
+<p><code>&lt;param name="sip-force-expires" value="1800"/&gt;</code> <code>&lt;param name="sip-expires-max-deviation" value="600"/&gt;</code></p>
+<p>тогда срок действия ответа будет составлять от 1800-600=1200 до 1800+600=2400 секунд.</p>
+<p>Этот параметр можно переопределить для каждого отдельного пользователя, установив переменную каталога пользователя <i>sip-expires-max-deviation</i> .</p>
+<h6>исходящий прокси</h6>
+<p>Установка этого параметра приведет к отправке всем исходящим транзакциям значения, установленного исходящим прокси.</p>
+<p><code>&lt;param name="outbound-proxy" value="127.0.0.1"/&gt;</code></p>
+<h6>отправить-отображение-обновление</h6>
+<p>Сообщает FreeSWITCH не отправлять UPDATE дисплея на участок вызова.</p>
+<p><code>&lt;param name="send-display-update" value="false"/&gt;</code></p>
+<h5>Связанные параметры RTP</h5>
+<h6>авто-джиттербуфер-мсек</h6>
+<p>Установите для этого параметра размер джиттербуфера, <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Codecs-and-Media/JitterBuffer_6587407.mdx#about">который</a> вы хотели бы иметь для всех вызовов, проходящих через этот профиль.</p>
+<p><code>&lt;param name="auto-jitterbuffer-msec" value="120"/&gt;</code></p>
+<h6>rtp-имя-таймера</h6>
+<p><code>&lt;param name="rtp-timer-name" value="soft"/&gt;</code></p>
+<h6>rtp-rewrite-timestamps</h6>
+<p>Если вы не хотите передавать временные метки из одного потока RTP в другой, rtp-rewrite-timestamps — это параметр, который вы можете установить в профиле SIP (для каждого вызова с помощью chanvar rtp_rewrite_timestamps в диалплане).</p>
+<p>В результате FreeSWITCH будет заново генерировать и перезаписывать временные метки во всех потоках RTP, идущих к конечной точке, используя этот профиль SIP.</p>
+<p>Это может быть необходимо для устранения проблем со звуком при отправке вызовов на некоторые параноидальные и не RFC-совместимые шлюзы (известно, что Cirpack требует этого).</p>
+<p><code>&lt;param name="rtp-rewrite-timestamps" value="true"/&gt;</code></p>
+<h6>media_timeout</h6>
+<p>было: rtp-timeout-sec (устаревший параметр конфигурации)</p>
+<p>Эта переменная канала настраивает количество миллисекунд бездействия RTP (отсутствие полученных медиа-пакетов), прежде чем FreeSWITCH сочтет вызов отключенным и повесит трубку. Вместо этого рекомендуется использовать таймеры сеанса. Если этот параметр опущен, значением по умолчанию является «0», которое отключает тайм-аут.</p>
+<p>Пример: установите тайм-аут мультимедиа на 31 секунду.</p>
+<p><code>&lt;X-PRE-PROCESS cmd="set" data="media_timeout=31000"/&gt;</code></p>
+<h6>media_hold_timeout</h6>
+<p>было: rtp_hold_timeout_sec (устаревший параметр конфигурации)</p>
+<p><code>rtp_hold_timeout_sec deprecated use media_timeout variable.</code></p>
+<p>Эта переменная канала настраивает количество секунд бездействия RTP (молчания мультимедиа) для вызова, поставленного на удержание конечной точкой, прежде чем FreeSWITCH сочтет вызов отключенным и повесит трубку. Вместо этого рекомендуется использовать таймеры сеанса, поскольку некоторые телефоны перестают отправлять мультимедиа при переводе в режим ожидания. Если этот параметр опущен, значением по умолчанию является «0», которое отключает тайм-аут.</p>
+<p>Пример: установите тайм-аут мультимедиа на 10 минут.</p>
+<p><code>&lt;X-PRE-PROCESS cmd="set" data="media_hold_timeout=600000"/&gt;</code></p>
+<h6>rtp-autoflush-во время моста</h6>
+<p>Управляет тем, что произойдет, если FreeSWITCH обнаружит, что он не поддерживает медиа-поток (аудио) RTP при мостовом вызове. (Эта ситуация может произойти, если на сервере FreeSWITCH недостаточно процессорного времени.)</p>
+<p>Если установлено значение «true» (по умолчанию), FreeSWITCH будет замечать, когда во входящей очереди ожидает чтения более одного пакета RTP. Если это состояние сохраняется более пяти секунд, пакеты RTP будут отброшены, чтобы «догнать» аудиопоток. Например, если в очереди всегда есть пять дополнительных пакетов по 20 мс, задержку звука в 100 мс можно устранить, отбросив пакеты. Это приведет к сбою звука, поскольку часть звука будет отброшена, но уменьшит задержку на 100 мс для остальной части вызова.</p>
+<p>Если для rtp-autoflush-during-bridge установлено значение false, FreeSWITCH вместо этого сохранит все пакеты RTP при вызовах по мосту, даже если это увеличивает задержку или «задержку», которую слышат вызывающие абоненты.</p>
+<p><code>&lt;param name="rtp-autoflush-during-bridge" value="true"/&gt;</code></p>
+<h6>rtp-автопромывка</h6>
+<p>Имеет тот же эффект, что и «rtp-autoflush-during-bridge», но влияет на вызовы, не связанные с мостом (такие как факсы, IVR и эхо-тест).</p>
+<p>В отличие от «rtp-autoflush-during-bridge», значение по умолчанию — false, что означает, что пакеты с высокой задержкой при вызовах без моста не будут отбрасываться. Это приводит к более плавному звуку, возможно, за счет увеличения задержки звука (или «задержки»).</p>
+<p>Если для параметра «rtp-autoflush» установлено значение true, пакеты будут отбрасываться, чтобы минимизировать задержку, когда это возможно. Это может привести к ошибкам в распознавании DTMF, факсах и других процессах, требующих получения всех пакетов.</p>
+<p><code>&lt;param name="rtp-autoflush" value="true"/&gt;</code></p>
+<h5>Авторизация</h5>
+<p>Эти настройки касаются аутентификации: требований для идентификации конечных точек SIP для FreeSWITCH.</p>
+<h6>область испытаний</h6>
+<p>Выберите ключ вызова области. По умолчанию используется auto_to, если не установлено.</p>
+<p>auto_from — использует поле from в качестве значения для области SIP. auto_to — использует поле to в качестве значения для области SIP. &lt;любое значение&gt; — вы можете ввести любое значение, которое будет использоваться для области SIP.</p>
+<p>Если вы хотите, чтобы набор URL-адресов работал, вам нужно установить для этого параметра значение auto_from.</p>
+<p>Если вы используете любое другое значение, кроме auto_to или auto_from, вы потеряете возможность использовать несколько доменов.</p>
+<p>Примечание: закомментируйте, чтобы восстановить поведение до 29 сентября 2008 г.</p>
+<p>&lt;param name="challenge-realm" value="auto_from"/&gt;</p>
+<h6>принять-слепую-аутентификацию</h6>
+<p>принимать любую аутентификацию без фактической проверки (не очень хорошая функция для большинства людей)</p>
+<p>&lt;param name="accept-blind-auth" value="true"/&gt;</p>
+<h6>авторизационные вызовы</h6>
+<p>К пользователям в каталоге могут быть применены параметры «auth-acl», чтобы ограничить доступ пользователей к предопределенному ACL или CIDR.</p>
+<p>&lt;param name="auth-calls" value="$${internal_auth_calls}"/&gt;</p>
+<p>Значение может быть «ложным», чтобы отключить аутентификацию в этом профиле. Это означает, что при поступлении звонков в профиль *не* будет отправляться вызов аутентификации вызывающему абоненту.</p>
+<h6>журнал-аутентификации-ошибки</h6>
+<p>Запись записей в журнал (Предупреждение) об ошибках аутентификации (Регистрация и приглашение). полезно для пользователей, желающих использовать Fail2ban. примечание: требуется SVN#15654 или выше.</p>
+<p>&lt;param name="log-auth-failures" value="true"/&gt;</p>
+<h6>аутентификация всех пакетов</h6>
+<p>При вызовах с авторизацией аутентифицируйте *все* пакеты, а не только INVITE и REGISTER (Примечание: OPTIONS, SUBSCRIBE, INFO и MESSAGE не аутентифицируются, даже если для этого параметра установлено значение true, <a href="http://jira.freeswitch.org/browse/FS-2871">см.</a></p>
+<p>&lt;param name="auth-all-packets" value="false"/&gt;</p>
+<h5>Постановка на учет</h5>
+<h6>отключить-регистрацию</h6>
+<p>отключить регистр, что может быть нежелательно в публичном коммутаторе</p>
+<p>&lt;param name="disable-register" value="true"/&gt;</p>
+<h6>множественные регистрации</h6>
+<p>Допустимые значения для этого параметра: «контакт», «истина», «ложь». value="true" — наиболее распространенный вариант использования. Установка этого значения на «contact» приведет к удалению старой регистрации на основе sip_user, sip_host и поля контакта, а не call_id.</p>
+<p>&lt;param name="multiple-registrations" value="contact"/&gt;</p>
+<h6>максимальное количество регистраций на расширение</h6>
+<p>Определяет максимальное количество регистраций на расширение. Допустимое значение этого параметра — целое число больше 0. Обратите внимание, что установка значения 1 будет противодействовать использованию <strong>множественной регистрации</strong> . При попытке зарегистрировать расширение после достижения максимального значения София ответит 403. В следующем примере максимальное количество регистраций будет установлено равным 2.</p>
+<p>&lt;param name="max-registrations-per-extension" value="2"/&gt;</p>
+<h6>принять-слепую-регистрацию</h6>
+<p>это позволяет любому регистру комментировать следующую строку и раскомментировать одну или обе другие две строки для аутентификации вызова.</p>
+<p>&lt;param name="accept-blind-reg" value="true"/&gt;</p>
+<h6>имя пользователя-входящего-reg-force-matching</h6>
+<p>Принудительно совместить пользователя и пользователя авторизации.</p>
+<p>&lt;param name="inbound-reg-force-matching-username" value="true"/&gt;</p>
+<h6>принудительная публикация-истекает</h6>
+<p>Срок действия принудительного пользовательского обновления присутствия истекает (-1 означает бесконечное время)</p>
+<p>&lt;param name="force-publish-expires" value="true"/&gt;</p>
+<h6>принудительный-регистр-домен</h6>
+<p>все входящие регистрации будут искать пользователей в этом домене. Закомментируйте, чтобы использовать несколько доменов</p>
+<p>&lt;param name="force-register-domain" value="$${domain}"/&gt;</p>
+<h6>принудительная регистрация-db-домена</h6>
+<p>все входящие регистрации будут храниться в базе данных с использованием этого домена. Закомментируйте, чтобы использовать несколько доменов</p>
+<p>&lt;param name="force-register-db-domain" value="$${domain}"/&gt;</p>
+<h6>отправить-сообщение-запрос-при-регистрации</h6>
+<p>Может быть установлено значение «истина», «ложь» или «только первый». Если установлено значение «true» (это поведение по умолчанию), mod_sofia отправит событие запроса сообщения при регистрации. <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_voicemail_6587070.mdx">mod_voicemail</a> использует это для подсчета сообщений.</p>
+<p>&lt;param name="send-message-query-on-register" value="true"/&gt;</p>
+<p>Если установлено значение «только первый», только первый REGISTER будет запускать запрос сообщения (для этого требуется, чтобы UA увеличивал NC в последующих REGISTER. Некоторые телефоны, например snom, этого не делают).</p>
+<p>Конечным результатом запроса-сообщения является отправка сообщения NOTIFY MWI регистрирующемуся UA (оно используется для удовлетворения терминалов, которые ожидают MWI без подписки на него).</p>
+<h6>отменить регистрацию при выборе опций</h6>
+<p>Если установлено значение True с помощью <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Networking/NAT-Traversal_3375417.mdx#nat-options-ping">nat-options-ping,</a> конечная точка будет отменена, если не будет ответа на пакет OPTIONS.</p>
+<p>&lt;param name="unregister-on-options-fail" value="true"/&gt;</p>
+<h6>nat-опции-пинг</h6>
+<p>Если эта опция установлена, FreeSWITCH будет периодически отправлять пакет OPTIONS всем зарегистрированным конечным точкам, имеющим NAT, чтобы поддерживать соединение. Если установлено значение True с <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_sofia_1048707.mdx#about">отключением регистрации при сбое параметров,</a> конечная точка будет отменена, если не будет ответа на пакет OPTIONS.</p>
+<p>&lt;param name="nat-options-ping" value="true"/&gt;</p>
+<h6>все-рег-опции-пинг</h6>
+<p>Если эта опция установлена, FreeSWITCH будет периодически отправлять пакет OPTIONS всем зарегистрированным конечным точкам, чтобы поддерживать соединение. Если установлено значение True с <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_sofia_1048707.mdx#about">отключением регистрации при сбое параметров,</a> конечная точка будет отменена, если не будет ответа на пакет OPTIONS.</p>
+<p>&lt;param name="all-reg-options-ping" value="true"/&gt;</p>
+<h6>частота потока регистрации</h6>
+<p>Управляет тем, как часто регистрации в FreeSWITCH проверяются на срок действия.</p>
+<p>&lt;param name="registration-thread-frequency" value="30"/&gt;</p>
+<h6>входящая регистрация в новом потоке</h6>
+<p>Для каждого входящего регистра запускайте новый поток для его обработки, например, при использовании более тяжелых бэкэндов.</p>
+<p>&lt;param name="inbound-reg-in-new-thread" value="true"/&gt;</p>
+<h6>средний интервал пинга</h6>
+<p>Управляет средним интервалом, в течение которого FreeSWITCH™ будет отправлять пакет OPTIONS зарегистрированному пользователю, по умолчанию 30 секунд.</p>
+<p>&lt;param name="ping-mean-interval" value="30"/&gt;</p>
+<h5>&nbsp;</h5>
+<p>частота пинг-потока</p>
+<p>Управляет частотой и средним временем отправки пингов. по умолчанию составляет 1 секунду.</p>
+<p>&lt;param name="ping-thread-frequency" value="1"/&gt;</p>
+<p>Пример: с интервалом, установленным на 30, и частотой, установленной на 1, для 1000 зарегистрированных пользователей FS будет пинговать 33 пользователя в секунду и начинать заново каждые 30 секунд. (1000 разделить на 30 = 33)</p>
+<h5>Подписка</h5>
+<h6>принудительная подписка истекает</h6>
+<p>Принудительная подписка истекает до более низкого значения, чем запрошено</p>
+<p>&lt;param name="force-subscription-expires" value="60"/&gt;</p>
+<h6>принудительная подписка-домен</h6>
+<p>все входящие подписки будут искать пользователей в этом домене. Закомментируйте, чтобы использовать несколько доменов</p>
+<p>&lt;param name="force-subscription-domain" value="$${domain}"/&gt;</p>
+<h5>Присутствие</h5>
+<h6>управлять присутствием</h6>
+<p>Включить присутствие.</p>
+<p>Если вы хотите поделиться своим присутствием (см. имя базы данных и присутствие-хосты), установите для этого параметра значение «true» в первом профиле и включите общую базу данных присутствия. Затем в последующих профилях, в которых используется совместное присутствие, установите для этой переменной значение «пассивный» и включите там также общую базу данных присутствия.</p>
+<p>&lt;param name="manage-presence" value="true"/&gt;</p>
+<h6>имя базы данных</h6>
+<p>Используется для обмена информацией о присутствии в профилях Софии.</p>
+<p>Имя базы данных, которая будет использоваться для этого профиля</p>
+<p>&lt;param name="dbname" value="share_presence"/&gt;</p>
+<h6>состояние присутствия-удержания</h6>
+<p>По умолчанию, когда вызов ставится на удержание, отслеживающие расширения показывают, что этот номер звонит. Вы можете изменить это поведение, указав этот параметр и одно из следующих значений. Доступно с момента фиксации 1145905 13 апреля 2012 г.</p>
+<ul>
+  <li>подтверждено — внутренний номер занят.</li>
+  <li>рано (по умолчанию) — внутренний абонент звонит.</li>
+  <li>прекращено — расширение выглядит бездействующим.</li>
+</ul>
+<p>&lt;param name="presence-hold-state" value="confirmed"/&gt;</p>
+<h6>хосты присутствия</h6>
+<p>Список доменов, которые имеют общее присутствие в базе данных, указанной в dbname. Люди, которые используют несколько доменов для каждого профиля, в любом случае не смогут использовать эту функцию, поэтому в этом случае вам нужно установить для нее что-то вроде «_DISABLED_», чтобы избежать объединения пользователей из похожих доменов. Для нескольких доменов, также известных как мультитенантный вызов 1001, будут вызываться все соответствующие пользователи во всех доменах. Не используйте хосты присутствия с мультитенантом.</p>
+<p>&lt;param name="presence-hosts" value="$${domain}"/&gt;</p>
+<h6>присутствие-конфиденциальность</h6>
+<p>При необходимости можно глобально скрыть идентификатор вызывающего абонента из примечаний о присутствии в распределенных сообщениях NOTIFY. Например, «Разговор 1002» будет примечанием о присутствии для добавочного номера 1001, пока он разговаривает с добавочным номером 1002. Если для тега конфиденциальности присутствия установлено значение «истина», то примечание о присутствии будет распространяться как «На телефоне» (без расширение, к которому оно подключено). Таким образом, любой абонент 1001 не сможет видеть, с кем он разговаривает. <a href="http://jira.freeswitch.org/browse/FS-849">Ссылка.</a> Так же скрывается номер в статусах «Удержание», «Звонок», «Вызов» и возможно других. <a href="http://jira.freeswitch.org/browse/FS-4420">Связь</a></p>
+<p>&lt;param name="presence-privacy" value="true"/&gt;</p>
+<h6>отправить-присутствие-в-регистрации</h6>
+<p>Укажите, следует ли отправлять информацию о присутствии при регистрации пользователей. По умолчанию информация о присутствии не отправляется. Допустимые варианты:</p>
+<ul>
+  <li>ЛОЖЬ</li>
+  <li>истинный</li>
+  <li>только первый</li>
+</ul>
+<p>&lt;param name="send-presence-on-register" value="true"/&gt;</p>
+<h5>CallerID Связанные параметры</h5>
+<h6>тип идентификатора вызывающего абонента</h6>
+<p>выберите один, может быть переопределен типом входящего вызова и/или переменной канала sip_cid_type</p>
+<p>Заголовок Remote-Party-ID:</p>
+<pre><code class="language-plaintext">&lt;param name="caller-id-type" value="rpid"/&gt;
+
+P-\*-Identity family of headers:
+
+   &lt;param name="caller-id-type" value="pid"/&gt;
+
+neither one:
+
+   &lt;param name="caller-id-type" value="none"/&gt;
+</code></pre>
+<h6>пропуск-идентификатор вызываемого абонента</h6>
+<p>(по умолчанию true) Отключите, установив для него значение false, если вы столкнулись с чем-то, что ваш шлюз по какой-то причине ненавидит X-заголовки, которые он должен игнорировать.</p>
+<p>&lt;param name="pass-callee-id" value="false"/&gt;</p>
+<h5>Другое (ДЕЛАТЬ)</h5>
+<h6>удерживайте музыку</h6>
+<p>&lt;param name="hold-music" value="$${hold_music}"/&gt;</p>
+<h6>отключить-удерживать</h6>
+<p>Это позволяет отключить музыку в режиме ожидания (добавлено в коммите GIT e5cc0539ffcbf660637198c698e90c2e30b05c2f, от пятницы, 30 апреля, 19:14:39 2010 -0500).</p>
+<p>Это может быть полезно, когда вызывающее устройство намеревается отправить свой собственный MOH, но, тем не менее, отправляет REINVITE FreeSWITCH, запуская свой MOH.</p>
+<p>Это также можно сделать из диалплана с помощью переменной канала rtp_disable_hold.</p>
+<p>&lt;param name="disable-hold" value="true"/&gt;</p>
+<h6>применить-входящий-ACL</h6>
+<p>установить, какие списки управления доступом, определенные в <a href="https://github.com/signalwire/freeswitch/blob/master/conf/vanilla/autoload%5Fconfigs/acl.conf.xml">acl.conf.xml</a> , применяются к этому профилю</p>
+<p>&lt;param name="apply-inbound-acl" value="domains"/&gt;</p>
+<h6>применить-регистрацию-ACL</h6>
+<p>&lt;param name="apply-register-acl" value="domains"/&gt;</p>
+<h6>применить-прокси-ACL</h6>
+<p>&lt;param name="apply-proxy-acl" value="myproxies"/&gt;</p>
+<p>Это позволяет отправлять трафик во FreeSWITCH через один или несколько прокси-серверов.</p>
+<p>Прокси-сервер должен добавить заголовок X-AUTH-IP, содержащий IP-адрес клиента. FreeSWITCH доверяет прокси-серверу, поскольку его IP-адрес указан в ACL прокси-сервера, и использует значение IP в этом заголовке в качестве IP-адреса клиента для аутентификации ACL (acl определен в apply-inbound-acl).</p>
+<h6>шаблон записи</h6>
+<p>&lt;param name="record-template" value="$${base_dir}/recordings/${caller_id_number}.${target_domain}.${strftime(%Y-%m-%d-%H-%M-%S)}.wav"/&gt;</p>
+<h6>Макс-процесс</h6>
+<p>максимальное количество открытых диалогов в процессе</p>
+<p>&lt;param name="max-proceeding" value="1000"/&gt;</p>
+<h6>параметры привязки</h6>
+<p>если вы хотите отправить какие-либо собственные параметры привязки</p>
+<p>&lt;param name="bind-params" value="transport=udp"/&gt;</p>
+<h6>отключить-передачу</h6>
+<p>отключить передачу, которая может быть нежелательна в публичном коммутаторе</p>
+<p>&lt;param name="disable-transfer" value="true"/&gt;</p>
+<h6>ручное перенаправление</h6>
+<p>&lt;param name="manual-redirect" value="true"/&gt;</p>
+<h6>включить-3pcc</h6>
+<p>Enable-3pcc определяет, разрешено ли стороннее управление вызовами или нет. Управление вызовами третьих лиц полезно в тех случаях, когда приглашение SIP не включает SDP (позднее согласование мультимедиа).</p>
+<p>Для параметра Enable-3pcc может быть установлено значение «true» или «proxy», true принимает вызов сразу, прокси-сервер ждет, пока на вызов не будет дан ответ, а затем отправляет Accept.</p>
+<p>&lt;param name="enable-3pcc" value="true"/&gt;</p>
+<h6>nonce-ttl</h6>
+<p>TTL для nonce в sip-аутентификации</p>
+<p>&lt;param name="nonce-ttl" value="60"/&gt;</p>
+<p>Для этого параметра установлено значение 60 секунд, если оно не установлено здесь. Он используется для определения того, как долго хранить запись регистрации пользователя в таблице sip_authentication. Поле expires в таблице sip_authentication представляет собой это значение плюс срок действия, установленный пользовательским агентом.</p>
+<h6>sql-транзакции</h6>
+<p>Если установлено значение true (по умолчанию), профиль будет указан ждать накопления 500 операторов SQL или истечения 500 мс и выполнения их в транзакции (для повышения производительности).</p>
+<p>&lt;param name="sql-in-transactions" value="true"/&gt;</p>
+<h6>odbc-dsn</h6>
+<p>Если у вас есть поддержка <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Databases/ODBC-DSN/Using-ODBC-in-the-core_6586653.mdx">ODBC</a> и работающий dsn, вы можете использовать его вместо SQLite.</p>
+<p>&lt;param name="odbc-dsn" value="dsn:user:pass"/&gt;</p>
+<h6>mwi-use-reg-callid</h6>
+<p>&lt;param name="mwi-use-reg-callid" value="false"&gt;</p>
+<h6>имя пользователя</h6>
+<p>Если вы хотите скрыть тот факт, что вы используете FreeSWITCH в сообщении SDP (в частности, поля o= и s=), установите параметр имени пользователя в профиле. Это не имеет никакого отношения к параметру имени пользователя, когда мы имеем дело со шлюзами. Если это значение не установлено, система по умолчанию использует FreeSWITCH в качестве параметра имени пользователя с полями o= и s=.</p>
+<p>&lt;param name="username" value="AnyValueHere" /&gt;</p>
+<p>Пример:</p>
+<pre><code class="language-plaintext">.
+v=0.
+o=root 1346068950 1346068951 IN IP4 1.2.3.4.
+s=root.
+c=IN IP4 1.2.3.4.
+t=0 0.
+m=audio 26934 RTP/AVP 18 0 101 13.
+a=fmtp:18 annexb=no.
+a=rtpmap:101 telephone-event/8000.
+a=fmtp:101 0-16.
+a=ptime:20.
+
+when you set &lt;param name="username" value="root" /&gt;
+</code></pre>
+<h3>Каталог пользователей</h3>
+<p>Чтобы разрешить пользователям регистрироваться на сервере, информация о пользователе должна быть указана в файле conf/directory/default/*xml. Чтобы динамически указать, какие пользователи могут регистрироваться, используйте <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Modules/mod_xml_curl_1049001.mdx">mod_xml_curl</a></p>
+<h3>Файл конфигурации по умолчанию</h3>
+<p>Из ванильных конфигураций репозитория FreeSWITCH Github ( <a href="https://github.com/signalwire/freeswitch/blob/master/conf/vanilla/autoload%5Fconfigs/sofia.conf.xml">conf/vanilla/autoload_configs/sofia.conf.xml</a> ):</p>
+<p><strong>conf/autoload_configs/sofia.conf.xml</strong></p>
+<p>&lt;configuration name="sofia.conf" description="sofia Endpoint"&gt;
+
+  &nbsp;&lt;global_settings&gt;
+  &nbsp; &nbsp;&lt;param name="log-level" value="0"/&gt;
+  &nbsp; &nbsp;&lt;!-- &lt;param name="abort-on-empty-external-ip" value="true"/&gt; --&gt;
+  &nbsp; &nbsp;&lt;!-- &lt;param name="auto-restart" value="false"/&gt; --&gt;
+  &nbsp; &nbsp;&lt;param name="debug-presence" value="0"/&gt;
+  &nbsp; &nbsp;&lt;!-- &lt;param name="capture-server" value="udp:homer.domain.com:5060"/&gt; --&gt;
+  &nbsp; &nbsp;
+  &nbsp; &nbsp;&lt;!--
+  &nbsp; &nbsp; the new format for HEPv2/v3 and capture ID &nbsp; &nbsp;
+
+  protocol:host:port;hep=2;capture_id=200;
+
+  &nbsp; &nbsp;--&gt;
+  &nbsp; &nbsp;
+  &nbsp; &nbsp;&lt;!-- &lt;param name="capture-server" value="udp:homer.domain.com:5060;hep=3;capture_id=100"/&gt; --&gt;
+  &nbsp;&lt;/global_settings&gt;
+
+  &nbsp;&lt;!--
+  &nbsp; &nbsp; &nbsp;The rabbit hole goes deep. &nbsp;This includes all the
+  &nbsp; &nbsp; &nbsp;profiles in the sip_profiles directory that is up
+  &nbsp; &nbsp; &nbsp;one level from this directory.
+  &nbsp;--&gt;
+  &nbsp;&lt;profiles&gt;
+  &nbsp; &nbsp;&lt;X-PRE-PROCESS cmd="include" data="../sip_profiles/*.xml"/&gt;
+  &nbsp;&lt;/profiles&gt;
+
+  &lt;/configuration&gt;</p>
+<h3>Перезарядка</h3>
+<p>Если вы внесли изменения в файл sofia.conf.xml, есть два способа заставить FreeSWITCH использовать новые значения.</p>
+<ul>
+  <li>выключение и перезапуск FreeSWITCH (или)</li>
+  <li>выгрузить и загрузить mod_sofia</li>
+</ul>
+<p>Если вы внесли изменения только в определенный профиль, вы можете просто ( <strong>ВНИМАНИЕ</strong> : все вызовы, связанные с этим профилем, будут прекращены):</p>
+<ul>
+  <li>профиль Софии &lt;имя профиля&gt; перезапустить reloadxml</li>
+</ul>
+<h3>Функции безопасности</h3>
+<ul>
+  <li><a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Security/SIP-TLS_9634135.mdx#attachments">SIP TLS</a> для безопасной передачи сигналов.</li>
+  <li><a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/Channel-Variables-Catalog/rtp_secure_media_16353121.mdx">SRTP</a> для безопасной доставки мультимедиа.</li>
+  <li>Раздел Auth выше для настроек аутентификации.</li>
+</ul>
