@@ -2,7 +2,7 @@
 title: Sofia
 description: параметры конфиг-файла
 published: true
-date: 2024-05-21T17:08:47.466Z
+date: 2024-05-21T17:15:53.893Z
 tags: voip, file, freeswitch, config, sofia, profile
 editor: ckeditor
 dateCreated: 2024-05-21T16:44:38.843Z
@@ -71,16 +71,64 @@ dateCreated: 2024-05-21T16:44:38.843Z
 <p>FreeSWITCH также может подписаться на получение уведомлений о событиях от шлюза. Для получения дополнительной информации см. « <a href="https://github.com/signalwire/freeswitch-docs/blob/main/docs/FreeSWITCH-Explained/Examples/Presence/index.mdx#freeswitch-as-a-client">Присутствие — использование FreeSWITCH в качестве клиента».</a></p>
 <h5>Параметры</h5>
 <p>Ниже приведен список элементов param, которые являются дочерними элементами элемента шлюза:</p>
-<p>&lt;!-- /// account username *required* /// --&gt; &lt;param name="username" value="foo"/&gt;</p>
+<pre><code class="language-plaintext">&lt;!-- /// account username *required* /// --&gt;
+&lt;param name="username" value="foo"/&gt;</code></pre>
 <p>Примечание. Параметр имени пользователя для шлюза не следует путать с параметром имени пользователя в конфигурации настроек профиля!</p>
-<p>&lt;!--/// auth realm: *optional* same as gateway name, if blank ///--&gt; &lt;!-- realm --&gt; &lt;param name="realm" value="sip.example.com[:port]"/&gt; &lt;!--/// account password *required* ///--&gt; &lt;param name="password" value="a password"/&gt; &lt;!--/// username to use in from: *optional* same as &nbsp;username, if blank ///--&gt; &lt;param name="from-user" value="fooman"/&gt; &lt;!--/// domain to use in from: *optional* same as &nbsp;realm, if blank; can also be set to "auto-aleg-full" or "auto-aleg-domain" ///--&gt; &lt;param name="from-domain" value="asterlink.com"/&gt; &lt;!--/// replace the INVITE from user with the channel's caller-id ///--&gt; &lt;!--/// this is false by default because outbound calls generally need username in the INVITE ///--&gt; &lt;!--Use the callerid of an inbound call in the from field on outbound calls via this gateway --&gt; &lt;param name="caller-id-in-from" value="false"/&gt; &lt;!--/// extension for inbound calls: *optional* Same as username, if blank. To use what's in ${sip_to_user}, set it to the value "auto_to_user" ///--&gt; &lt;param name="extension" value=""/&gt;</p>
+<pre><code class="language-plaintext">&lt;!--/// auth realm: *optional* same as gateway name, if blank ///--&gt;
+&lt;!-- realm --&gt;
+&lt;param name="realm" value="sip.example.com[:port]"/&gt;
+
+&lt;!--/// account password *required* ///--&gt;
+&lt;param name="password" value="a password"/&gt;
+
+&lt;!--/// username to use in from: *optional* same as  username, if blank ///--&gt;
+&lt;param name="from-user" value="fooman"/&gt;
+
+&lt;!--/// domain to use in from: *optional* same as  realm, if blank; can also be set to "auto-aleg-full" or "auto-aleg-domain" ///--&gt;
+&lt;param name="from-domain" value="asterlink.com"/&gt;
+
+&lt;!--/// replace the INVITE from user with the channel's caller-id ///--&gt;
+&lt;!--/// this is false by default because outbound calls generally need username in the INVITE ///--&gt;
+&lt;!--Use the callerid of an inbound call in the from field on outbound calls via this gateway --&gt;
+&lt;param name="caller-id-in-from" value="false"/&gt;
+
+&lt;!--/// extension for inbound calls: *optional* Same as username, if blank. To use what's in ${sip_to_user}, set it to the value "auto_to_user" ///--&gt;
+&lt;param name="extension" value=""/&gt;</code></pre>
 <p>Примечание. Параметр <i>расширения</i> влияет на содержимое переменных канала <i>Caller-Destination-Number</i> и <i>Destination_number</i> . Если оно пустое, <i>номер вызывающего абонента</i> всегда будет соответствовать имени пользователя шлюза. Если у него есть значение, <i>для Caller-Destination-Number</i> всегда будет установлено это значение. Если он имеет значение <i>auto_to_user</i> , <i>Caller-Destination-Number</i> будет заполнен значением <code>${sip\_to\_user}</code>, которое означает реальный набранный номер в случае входящего вызова.</p>
-<p>&lt;!--/// proxy host: *optional* same as realm, if blank ///--&gt; &lt;param name="proxy" value="proxy.example.com"/&gt; &lt;!--/// expire in seconds: *optional* 3600, if blank ///--&gt; &lt;param name="expire-seconds" value="3600"/&gt; &lt;!-- suppress CNG on this profile or per call with the 'suppress_cng' variable --&gt; &lt;param name="suppress-cng" value="true"/&gt; &lt;!--/// false: do not register. true: register (default) ///--&gt; &lt;param name="register" value="false"/&gt; &lt;!-- which transport to use for register --&gt; &lt;param name="register-transport" value="udp"/&gt; &lt;!--extra sip params to send in the contact--&gt; &lt;param name="contact-params" value="tport=tcp"/&gt; &lt;!-- check gateway availability: *optional* --&gt; &lt;param name="ping" value="15"/&gt; &lt;!-- *optional* --&gt; &lt;param name="ping-max" value="10"/&gt; &lt;!-- &nbsp;*optional* --&gt; &lt;param name="ping-min" value="1"/&gt;</p>
+<pre><code class="language-plaintext">&lt;!--/// proxy host: *optional* same as realm, if blank ///--&gt;
+&lt;param name="proxy" value="proxy.example.com"/&gt;
+
+&lt;!--/// expire in seconds: *optional* 3600, if blank ///--&gt;
+&lt;param name="expire-seconds" value="3600"/&gt;
+
+&lt;!-- suppress CNG on this profile or per call with the 'suppress_cng' variable --&gt;
+&lt;param name="suppress-cng" value="true"/&gt;
+
+&lt;!--/// false: do not register. true: register (default) ///--&gt;
+&lt;param name="register" value="false"/&gt;
+
+&lt;!-- which transport to use for register --&gt;
+&lt;param name="register-transport" value="udp"/&gt;
+
+&lt;!--extra sip params to send in the contact--&gt;
+&lt;param name="contact-params" value="tport=tcp"/&gt;
+
+&lt;!-- check gateway availability: *optional* --&gt;
+&lt;param name="ping" value="15"/&gt;
+
+&lt;!-- *optional* --&gt;
+&lt;param name="ping-max" value="10"/&gt;
+
+&lt;!--  *optional* --&gt;
+&lt;param name="ping-min" value="1"/&gt;</code></pre>
 <p><strong>ping-min</strong> означает «сколько успешных пингов мы должны иметь, прежде чем объявить шлюз открытым».</p>
 <p>Интервал между <strong>ping-min</strong> и <strong>ping-max</strong> — это «безопасная зона», где шлюз помечен как UP. Итак, если у нас есть, например, мин 3 и максимум 6, если шлюз включен и мы перемещаем счетчик между 3,4,5,6, шлюз будет включен.</p>
 <p>Если из 6 мы потеряем 4 (то есть счетчик == 2) пингов подряд, шлюз будет объявлен неработающим.</p>
 <p>Обратите внимание, что при запуске Софии шлюз всегда запускается как UP, поэтому он будет работать, даже если ping-min &gt; 1 . «правильный» путь начинается, когда шлюз выходит из строя.</p>
-<p>&lt;!-- &nbsp;*optional* - default is false--&gt; &lt;param name="extension-in-contact" value="true"/&gt; &lt;!-- &nbsp;*optional* --&gt; &lt;param name="cid-type" value="rpid"/&gt;</p>
+<pre><code class="language-plaintext">&lt;!--  *optional* - default is false--&gt; 
+&lt;param name="extension-in-contact" value="true"/&gt; 
+&lt;!--  *optional* --&gt; 
+&lt;param name="cid-type" value="rpid"/&gt;</code></pre>
 <p>Параметр «регистрация» используется, когда этот профиль выступает в качестве клиента для другого UA. Регистрируясь, FreeSWITCH сообщает другому UA о своем местонахождении. Обычно это используется, когда FreeSWITCH хочет, чтобы другой UA отправлял вызовы FreeSWITCH, а другой UA ожидает такого рода регистрации. Если FreeSWITCH использует другой UA только в качестве шлюза (например, к PSTN), то регистрация обычно не требуется.</p>
 <p>Параметр «distinct-to» используется, когда вы хотите, чтобы FS регистрировался с использованием отдельного AOR для заголовка To. Это требует правильной настройки связанных параметров. Например, если вы хотите, чтобы REGISTER сопровождался:</p>
 <p>От: &lt;sip: <a href="mailto:someuser@somedomain.com">someuser@somedomain.com</a> &gt; Кому: &lt;sip: <a href="mailto:anotheruser@anotherdomain.com">otheruser@anotherdomain.com</a> &gt;</p>
