@@ -2,7 +2,7 @@
 title: SSHFS монтирование каталогов
 description: Клиент для монтирования удалённых каталогов через SSH-соединение. 
 published: true
-date: 2024-05-22T08:11:46.427Z
+date: 2024-05-22T08:16:42.970Z
 tags: ssh, mount, dir, sshfs, remote, server
 editor: ckeditor
 dateCreated: 2024-05-22T08:11:46.427Z
@@ -46,6 +46,99 @@ Match User "someuser"
 <blockquote>
   <p><strong>Примечание:</strong> Владельцем <strong>chroot</strong> директории <strong>должен</strong> быть суперпользователь, иначе вы не сможете подключиться.</p>
 </blockquote>
-<p>&nbsp;</p>
+<h2>Автомонтирование</h2>
+<p>Автоматическое монтирование происходит при загрузке или по запросу (для получения доступа к каталогу). В любом случае настройка будет происходить в <a href="https://wiki.archlinux.org/title/Fstab_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)">fstab</a>.</p>
+<blockquote>
+  <p><strong>Примечание:</strong> Запомните, что автоматическое монтирование выполняется с правами суперпользователя, поэтому вы не можете использовать <code>.ssh/config</code> обычного пользователя.</p>
+</blockquote>
+<p>Чтобы разрешить суперпользователю использовать ключ SSH обычного пользователя, нужно указать полный путь в опции <code>IdentityFile</code>.</p>
+<p><strong>Самое главное</strong> - используйте хотя бы раз каждую примонтированную файловую систему sshfs <strong>в режиме суперпользователя</strong>, таким образом подписи хоста будут добавлены в файл <code>/root/.ssh/known_hosts</code>.</p>
+<h3>По запросу</h3>
+<p>Посредством systemd можно монтировать по запросу, используя <code>/etc/fstab</code>.</p>
+<p>Например:</p>
+<pre><code class="language-plaintext">user@host:/remote/folder /mount/point  fuse.sshfs noauto,x-systemd.automount,_netdev,users,idmap=user,IdentityFile=/home/user/.ssh/id_rsa,allow_other,reconnect 0 0
+</code></pre>
+<p>Главные опции - <code><i>noauto,x-systemd.automount,_netdev</i></code>.</p>
+<ul>
+  <li><code><i>noauto</i></code> - монтирование не будет происходит при загрузке.</li>
+  <li><code><i>x-systemd.automount</i></code> - делает магию, связанную с запросом.</li>
+  <li><code><i>_netdev</i></code> - показывает, что это сетевое устройство, а не блочное (без этой опции может появится ошибка "<strong>No such device</strong>")</li>
+</ul>
+<blockquote>
+  <p><strong>Примечание:</strong> После редактирования <code>/etc/fstab</code>, (пере)запустите соответствующий сервис: <code>systemctl daemon-reload &amp;&amp; systemctl restart &lt;цель&gt;</code>; можно найти <code>&lt;цель&gt;</code>, используя <code>systemctl list-unit-files --type automount</code></p>
+</blockquote>
+<h3>При загрузке</h3>
+<p>Пример того, как использовать sshfs для монтировании удаленной файловой системы при помощи <code>/etc/fstab</code></p>
+<p>USERNAME@HOSTNAME_OR_IP:/REMOTE/DIRECTORY &nbsp;/LOCAL/MOUNTPOINT &nbsp;fuse.sshfs &nbsp;defaults,_netdev &nbsp;0 &nbsp;0
+</p>
+<p>Для примера возьмите линию из <i>fstab</i></p>
+<p>llib@192.168.1.200:/home/llib/FAH &nbsp;/media/FAH2 &nbsp;fuse.sshfs &nbsp;defaults,_netdev &nbsp;0 &nbsp;0
+</p>
+<p>Выше приведенная строка будет работать только в том случае, если вы используете SSH ключ. Смотрите <a href="https://wiki.archlinux.org/title/SSH_keys">SSH keys</a>.</p>
+<p>Если вы не единственный пользователь, использующий sshfs:</p>
+<p>user@domain.org:/home/user &nbsp;/media/user &nbsp; fuse.sshfs &nbsp; &nbsp;defaults,allow_other,_netdev &nbsp; &nbsp;0 &nbsp;0
+</p>
+<p>Очень важно убедится в том, что параметр <i>_netdev</i> установлен, чтобы быть уверенным в доступности сети перед монтированием.</p>
+<h3>Безопасный доступ пользователей</h3>
+<p>Когда используется автомонтирование через <a href="https://wiki.archlinux.org/title/Fstab_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)">fstab</a>, файловая система будет монтироваться от суперпользователя. По умолчанию, это приводит к нежелательным результатам, если вы хотите получать доступ как обычный пользователь и ограничить доступ другим пользователям.</p>
+<p>Пример конфигурации:</p>
+<p>USERNAME@HOSTNAME_OR_IP:/REMOTE/DIRECTORY &nbsp;/LOCAL/MOUNTPOINT &nbsp;fuse.sshfs noauto,x-systemd.automount,_netdev,user,idmap=user,follow_symlinks,identityfile=/home/USERNAME/.ssh/id_rsa,allow_other,default_permissions,uid=USER_ID_N,gid=USER_GID_N 0
+</p>
+<p>Описание опций:</p>
+<ul>
+  <li><i>allow_other</i> - позволяет другим пользователям, отличным от монтирующего (то есть обычным пользователям), получать доступ к тому, что монтируется.</li>
+  <li><i>default_permissions</i> - позволяет ядру проверять права, иначе говоря использовать актуальные права на удаленной файловой системе. А также запрещает доступ всем, кроме объявленных в <i>allow_other</i>.</li>
+  <li><i>uid</i>, <i>gid</i> - устанавливает владельца файлов в соответствии с переданными значениями; <i>uid</i> - это числовой идентификатор пользователя, <i>gid</i> - числовой идентификатор группы пользователя.</li>
+</ul>
+<h2>Решение проблем</h2>
+<h3>Контрольный список</h3>
+<p>Для начала, прочитайте следующую страницу вики <a href="https://wiki.archlinux.org/title/OpenSSH_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#Проверка">OpenSSH#Проверка</a>. Пункты, которые следует проверить:</p>
+<p>1. Получает ли ваш логин SSH дополнительную информацию от сервера, например, файл <code>/etc/issue</code>? Это может запутать SSHFS. Вам следует временно отключить серверный файл <code>/etc/issue</code>:</p>
+<p>$ mv /etc/issue /etc/issue.orig
+</p>
+<p>2. Имейте в виду, что большинство статей по устранению неполадок, связанных с SSH, <strong>не</strong> связаны с Systemd. Часто определения в <code>/etc/fstab</code> ошибочно начинаются с <code><i>sshfs#</i>user@host:/mnt/server/folder ... fuse ...</code> вместо того, чтобы использовать следующий синтаксис <code>user@host:/mnt/server/folder ... fuse.<i>sshfs</i> ... <i>x-systemd</i>, ...</code>.</p>
+<p>3. Убедитесь в том, что владелец исходной папки и ее содержимого на сервере владеет соответствующий пользователь:</p>
+<p>$ chown -R USER_S: /mnt/servers/folder
+</p>
+<p>4. Серверный идентификатор пользователя может отличаться от соответствующего клиентского. Очевидно, что имена пользователей будут одинаковыми. Вам просто нужно позаботиться о клиентском идентификаторе. SSHFS будет преобразовывать идентификатор пользователя посредством следующего параметра:</p>
+<p>uid=</p>
+<p><i>USER_C_ID</i></p>
+<p>,gid=</p>
+<p><i>GROUP_C_ID</i></p>
+<p>
+</p>
+<p>5. Проверьте, чтобы клиент имел права на целевую точку монтирования (каталог). Данная директория должна иметь такой же идентификатор, как в настройках монтирования SSHFS.</p>
+<p>$ chown -R USER_C: /mnt/client/folder
+</p>
+<p>6. Проверьте, что точка монтирования (папка) пуста. По умолчанию, вы не можете монтировать каталоги SSHFS в непустые директории.</p>
+<h3>Сброс соединения пиром</h3>
+<ul>
+  <li>Если вы пытаетесь получить доступ к удаленной машине, используя имя хоста, то попробуйте использовать ее адрес или доменной имя, смотря, что исправит проблему. Убедитесь в том, что вы изменили <code>/etc/hosts</code> в соответствии со свойствами сервера.</li>
+  <li>Если вы используете нестандартные имена ключей и передаете их как <code>-i .ssh/my_key</code>, то это не будет работать. Вам следует использовать <code>-o IdentityFile=/home/user/.ssh/my_key</code> с указанием полного пути к ключу.</li>
+  <li>Если ваш файл <code>/root/.ssh/config</code> является символической ссылкой, то вы получите сообщение об ошибке. Смотрите <a href="https://serverfault.com/questions/507748/bad-owner-or-permissions-on-root-ssh-config">эту тему</a></li>
+  <li>Добавление опции '<code>sshfs_debug</code>' (как в '<code>sshfs -o sshfs_debug user@server ...</code>') может помочь в решении проблемы.</li>
+  <li>Если это не помогло выявить ничего полезного, то вы можете также попробовать добавить опцию '<code>debug</code>'</li>
+  <li>Если вы пытаетесь использовать sshfs в роутере, работающем на DD-WRT или чем-то подобном, то решение проблемы <a href="https://www.dd-wrt.com/wiki/index.php/SFTP_with_DD-WRT">здесь</a>. (обратите внимание, что опция osftp_server=/opt/libexec/sftp-server может быть использована в командах SSH вместо патча dropbear)</li>
+  <li>Если это случается только при загрузке, то возможно, что причиной является systemd, который пытается выполнить монтирование до того, как сеть станет доступна. Это можно исправить, включив 'wait-online'-службу для вашего сетевого соединения (например, systemd-networkd-wait-online.service).</li>
+  <li>Старая тема на форуме: <a href="https://bbs.archlinux.org/viewtopic.php?id=27613">sshfs: Connection reset by peer</a>.</li>
+  <li>Убедитесь, что ваш пользователь можешь зайти на сервер (особенно при использовании AllowUsers).</li>
+  <li>Убедитесь в том, что <code>Subsystem sftp /usr/lib/ssh/sftp-server</code> включен в <code>/etc/ssh/sshd_config</code>.</li>
+</ul>
+<p><strong>Примечание:</strong> Когда вы посылаете больше одного аргумента в sshfs, они должны разделяться запятыми. Например: '<code>sshfs -o sshfs_debug,IdentityFile=&lt;/path/to/key&gt; user@server ...</code>')</p>
+<h3>Удаленный хост отключен</h3>
+<p>Если это сообщение появляется непосредственно после попытки использовать <i>sshfs</i>:</p>
+<ul>
+  <li>Сначала убедитесь, что на удаленном компьютере установлен <i>sftp</i>! Ничего не будет работать, пока пакет не будет установлен.</li>
+  <li>Затем попробуйте проверить корректность пути к <code>Subsystem sftp</code>, указанного в <code>/etc/ssh/sshd_config</code> на удаленной машине.</li>
+</ul>
+<h3>Проблемы с монтированием fstab</h3>
+<p>Для получения подробной отладочной информации, добавьте следующее в параметры монтирования:</p>
+<p>ssh_command=ssh\040-vv,sshfs_debug,debug
+</p>
+<p><strong>Примечание:</strong> <code>\040</code> - пробел, используемый fstab для разделения полей.</p>
+<p>Чтобы видеть отладочную информацию, запустив при этом <code>mount -av</code>, удалите следующее:</p>
+<p>noauto,x-systemd.automount
+</p>
+<h2>&nbsp;</h2>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
