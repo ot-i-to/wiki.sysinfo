@@ -1,0 +1,51 @@
+<!--
+title: SSHFS монтирование каталогов
+description: Клиент для монтирования удалённых каталогов через SSH-соединение. 
+published: true
+date: 2024-05-22T08:11:46.427Z
+tags: ssh, mount, dir, sshfs, remote, server
+editor: ckeditor
+dateCreated: 2024-05-22T08:11:46.427Z
+-->
+
+<p><a href="https://github.com/libfuse/sshfs">SSHFS</a> — клиент файловой системы на основе FUSE для монтирования удалённых каталогов через SSH-соединение.</p>
+<h2>Установка</h2>
+<p>Установите пакет sshfs.</p>
+<pre><code class="language-plaintext">apt-get install sshfs</code></pre>
+<h3>Монтирование</h3>
+<p>Для того, чтобы примонтировать каталог, используя SSH, пользователь должен иметь доступ к нему. Монтирование удаленной директории:</p>
+<pre><code class="language-plaintext">$ sshfs [user@]host:[dir] mountpoint [options]
+</code></pre>
+<p>Например:</p>
+<pre><code class="language-plaintext">$ sshfs user@IP:/remote/dir /local/dir -C -p 2244
+</code></pre>
+<p>Где <code>-p 2244</code> является номером порта, <code>-C</code> - использование сжатия. Для дополнительных опций смотрите раздел <strong>Опции</strong>.</p>
+<p>Если не указан путь, то по умолчанию он указывает на удаленную домашнюю директорию пользователя. Имя пользователя по умолчанию и опции могут быть заданы в <code>~/.ssh/config</code>.</p>
+<p>SSH запросит пароль, если необходимо. Если вы не хотите постоянно вводить пароль, прочитайте <a href="https://wiki.archlinux.org/title/SSH_keys">SSH keys</a>.</p>
+<h3>Размонтирование</h3>
+<p>Чтобы размонтировать удаленную систему:</p>
+<pre><code class="language-plaintext">$ fusermount3 -u /local/dir
+или
+$ гmount /local/dir</code></pre>
+<h2>Опции</h2>
+<p><i>sshfs</i> может автоматически конвертировать ваш и удаленный идентификатор пользователя. Используйте параметр <code>idmap=user</code>, чтобы перевести UID подключаемого пользователя к удаленному пользователю <code>myuser</code> (GID остается нетронутым):</p>
+<pre><code class="language-plaintext">$ sshfs user@IP:/remote/dir /local/dir -o idmap=user
+</code></pre>
+<p>Если вам требуется более точный контроль над переводом идентификаторов между локальным и удаленным пользователем, то обратите внимание на <code>idmap=file</code>, <code>uidfile</code> и <code>gidfile</code>.</p>
+<p>Полный список опций вы можете найти в <a href="https://man.archlinux.org/man/sshfs.1">sshfs(1)</a>.</p>
+<h2>Изменение корневого каталога</h2>
+<p>Вы можете привязать определенного пользователя к конкретной директории на удаленной системе. Это может быть выполнено путем редактирования <code>/etc/ssh/sshd_config</code>:</p>
+<pre><code class="language-plaintext">/etc/ssh/sshd_config ...
+Match User "someuser"
+       ChrootDirectory "/chroot/%u"
+       ForceCommand internal-sftp
+       AllowTcpForwarding no
+       X11Forwarding no
+...
+</code></pre>
+<blockquote>
+  <p><strong>Примечание:</strong> Владельцем <strong>chroot</strong> директории <strong>должен</strong> быть суперпользователь, иначе вы не сможете подключиться.</p>
+</blockquote>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
