@@ -2,7 +2,7 @@
 title: Монтирование каталогов
 description: Клиент для монтирования удалённых каталогов через SSH-соединение. 
 published: true
-date: 2024-05-22T09:06:29.159Z
+date: 2024-05-23T10:36:48.932Z
 tags: ssh, mount, dir, sshfs, remote, server
 editor: ckeditor
 dateCreated: 2024-05-22T08:11:46.427Z
@@ -29,8 +29,9 @@ dateCreated: 2024-05-22T08:11:46.427Z
 $ гmount /local/dir</code></pre>
 <h2>Опции</h2>
 <p><i>sshfs</i> может автоматически конвертировать ваш и удаленный идентификатор пользователя. Используйте параметр <code>idmap=user</code>, чтобы перевести UID подключаемого пользователя к удаленному пользователю <code>myuser</code> (GID остается нетронутым):</p>
-<pre><code class="language-plaintext">$ sshfs user@IP:/remote/dir /local/dir -o idmap=user
-</code></pre>
+<pre><code class="language-plaintext">$ sshfs user@IP:/remote/dir /local/dir -o idmap=user</code></pre>
+<p>или</p>
+<pre><code class="language-plaintext">$ /usr/bin/sshfs -o uid=1001,gid=1001,follow_symlinks,identityfile=/afap/id_rsa,allow_other,default_permissions,reconnect -p 22 node_37@185.220.195.164:/ /afap/sftp_af</code></pre>
 <p>Если вам требуется более точный контроль над переводом идентификаторов между локальным и удаленным пользователем, то обратите внимание на <code>idmap=file</code>, <code>uidfile</code> и <code>gidfile</code>.</p>
 <p>Полный список опций вы можете найти в <a href="https://man.archlinux.org/man/sshfs.1">sshfs(1)</a>.</p>
 <h2>Изменение корневого каталога</h2>
@@ -69,21 +70,17 @@ Match User "someuser"
 </blockquote>
 <h3>При загрузке</h3>
 <p>Пример того, как использовать sshfs для монтировании удаленной файловой системы при помощи <code>/etc/fstab</code></p>
-<p>USERNAME@HOSTNAME_OR_IP:/REMOTE/DIRECTORY &nbsp;/LOCAL/MOUNTPOINT &nbsp;fuse.sshfs &nbsp;defaults,_netdev &nbsp;0 &nbsp;0
-</p>
+<pre><code class="language-plaintext">USERNAME@HOSTNAME_OR_IP:/REMOTE/DIRECTORY  /LOCAL/MOUNTPOINT  fuse.sshfs  defaults,_netdev  0  0</code></pre>
 <p>Для примера возьмите линию из <i>fstab</i></p>
-<p>llib@192.168.1.200:/home/llib/FAH &nbsp;/media/FAH2 &nbsp;fuse.sshfs &nbsp;defaults,_netdev &nbsp;0 &nbsp;0
-</p>
+<pre><code class="language-plaintext">llib@192.168.1.200:/home/llib/FAH  /media/FAH2  fuse.sshfs  defaults,_netdev  0  0</code></pre>
 <p>Выше приведенная строка будет работать только в том случае, если вы используете SSH ключ. Смотрите <a href="https://wiki.archlinux.org/title/SSH_keys">SSH keys</a>.</p>
 <p>Если вы не единственный пользователь, использующий sshfs:</p>
-<p>user@domain.org:/home/user &nbsp;/media/user &nbsp; fuse.sshfs &nbsp; &nbsp;defaults,allow_other,_netdev &nbsp; &nbsp;0 &nbsp;0
-</p>
-<p>Очень важно убедится в том, что параметр <i>_netdev</i> установлен, чтобы быть уверенным в доступности сети перед монтированием.</p>
+<pre><code class="language-plaintext">user@domain.org:/home/user  /media/user   fuse.sshfs    defaults,allow_other,_netdev    0  0</code></pre>
+<p>Очень важно убедится в том, что параметр<strong> </strong><i><strong>_netdev</strong></i> установлен, чтобы быть уверенным в доступности сети перед монтированием.</p>
 <h3>Безопасный доступ пользователей</h3>
 <p>Когда используется автомонтирование через <a href="https://wiki.archlinux.org/title/Fstab_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)">fstab</a>, файловая система будет монтироваться от суперпользователя. По умолчанию, это приводит к нежелательным результатам, если вы хотите получать доступ как обычный пользователь и ограничить доступ другим пользователям.</p>
 <p>Пример конфигурации:</p>
-<p>USERNAME@HOSTNAME_OR_IP:/REMOTE/DIRECTORY &nbsp;/LOCAL/MOUNTPOINT &nbsp;fuse.sshfs noauto,x-systemd.automount,_netdev,user,idmap=user,follow_symlinks,identityfile=/home/USERNAME/.ssh/id_rsa,allow_other,default_permissions,uid=USER_ID_N,gid=USER_GID_N 0
-</p>
+<pre><code class="language-plaintext">USERNAME@HOSTNAME_OR_IP:/REMOTE/DIRECTORY  /LOCAL/MOUNTPOINT  fuse.sshfs noauto,x-systemd.automount,_netdev,user,idmap=user,follow_symlinks,identityfile=/home/USERNAME/.ssh/id_rsa,allow_other,default_permissions,uid=USER_ID_N,gid=USER_GID_N 0</code></pre>
 <p>Описание опций:</p>
 <ul>
   <li><i>allow_other</i> - позволяет другим пользователям, отличным от монтирующего (то есть обычным пользователям), получать доступ к тому, что монтируется.</li>
@@ -94,22 +91,18 @@ Match User "someuser"
 <h3>Контрольный список</h3>
 <p>Для начала, прочитайте следующую страницу вики <a href="https://wiki.archlinux.org/title/OpenSSH_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#Проверка">OpenSSH#Проверка</a>. Пункты, которые следует проверить:</p>
 <p>1. Получает ли ваш логин SSH дополнительную информацию от сервера, например, файл <code>/etc/issue</code>? Это может запутать SSHFS. Вам следует временно отключить серверный файл <code>/etc/issue</code>:</p>
-<p>$ mv /etc/issue /etc/issue.orig
-</p>
+<p>$ mv /etc/issue /etc/issue.orig</p>
 <p>2. Имейте в виду, что большинство статей по устранению неполадок, связанных с SSH, <strong>не</strong> связаны с Systemd. Часто определения в <code>/etc/fstab</code> ошибочно начинаются с <code><i>sshfs#</i>user@host:/mnt/server/folder ... fuse ...</code> вместо того, чтобы использовать следующий синтаксис <code>user@host:/mnt/server/folder ... fuse.<i>sshfs</i> ... <i>x-systemd</i>, ...</code>.</p>
 <p>3. Убедитесь в том, что владелец исходной папки и ее содержимого на сервере владеет соответствующий пользователь:</p>
-<p>$ chown -R USER_S: /mnt/servers/folder
-</p>
+<p>$ chown -R USER_S: /mnt/servers/folder</p>
 <p>4. Серверный идентификатор пользователя может отличаться от соответствующего клиентского. Очевидно, что имена пользователей будут одинаковыми. Вам просто нужно позаботиться о клиентском идентификаторе. SSHFS будет преобразовывать идентификатор пользователя посредством следующего параметра:</p>
 <p>uid=</p>
 <p><i>USER_C_ID</i></p>
 <p>,gid=</p>
 <p><i>GROUP_C_ID</i></p>
-<p>
-</p>
+<p>&nbsp;</p>
 <p>5. Проверьте, чтобы клиент имел права на целевую точку монтирования (каталог). Данная директория должна иметь такой же идентификатор, как в настройках монтирования SSHFS.</p>
-<p>$ chown -R USER_C: /mnt/client/folder
-</p>
+<p>$ chown -R USER_C: /mnt/client/folder</p>
 <p>6. Проверьте, что точка монтирования (папка) пуста. По умолчанию, вы не можете монтировать каталоги SSHFS в непустые директории.</p>
 <h3>Сброс соединения пиром</h3>
 <ul>
@@ -133,12 +126,10 @@ Match User "someuser"
 </ul>
 <h3>Проблемы с монтированием fstab</h3>
 <p>Для получения подробной отладочной информации, добавьте следующее в параметры монтирования:</p>
-<p>ssh_command=ssh\040-vv,sshfs_debug,debug
-</p>
+<p>ssh_command=ssh\040-vv,sshfs_debug,debug</p>
 <p><strong>Примечание:</strong> <code>\040</code> - пробел, используемый fstab для разделения полей.</p>
 <p>Чтобы видеть отладочную информацию, запустив при этом <code>mount -av</code>, удалите следующее:</p>
-<p>noauto,x-systemd.automount
-</p>
+<p>noauto,x-systemd.automount</p>
 <h2>&nbsp;</h2>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
