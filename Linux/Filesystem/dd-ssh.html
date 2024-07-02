@@ -1,0 +1,18 @@
+<!--
+title: DD copy disk SSH
+description: Копирование по сети
+published: true
+date: 2024-07-02T06:25:07.908Z
+tags: dd, copy, disk, ssh
+editor: ckeditor
+dateCreated: 2024-07-02T06:25:07.908Z
+-->
+
+<p>&nbsp;</p>
+<h3>Пример команды для выполнения копирования диска с удаленного сервера на локальный диск со сжатием:&nbsp;</h3>
+<pre><code class="language-plaintext">ssh user@host "sudo dd if=/dev/sda | gzip -1 -" | gunzip | dd of=/dev/sda status=progress</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
