@@ -1,0 +1,16 @@
+<!--
+title: Reload confir(s)
+description: 
+published: true
+date: 2024-08-17T12:38:24.427Z
+tags: postgresql, postgres, pg_hda.conf, postgresql.conf
+editor: ckeditor
+dateCreated: 2024-08-17T12:38:24.427Z
+-->
+
+<h2>Меняем настройки СУБД без перезагрузки</h2>
+<p>Как известно, настройки PostgreSQL располагаются в специальных файлах типа <strong>pg_hba.conf</strong> и <strong>postgresql.conf</strong>. Если вы эти файлы измените, потребуется, чтобы система управления БД вновь получила настройки. Естественно, если выполнить перезагрузку, всё буде ок. Но иногда перезагрузка нежелательна. Как раз для таких случаев в PostgreSQL предусмотрена <strong>функция</strong>, позволяющая применять изменения без перезагрузки:</p>
+<pre><code class="language-plaintext">SELECT pg_reload_conf();
+</code></pre>
+<p>
+  Правда, она применима, увы, не ко всем параметрам, поэтому иногда без перезагрузки всё же не обойтись...</p>
