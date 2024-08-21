@@ -1,0 +1,49 @@
+<!--
+title: Антиблокинг deb.sury.org
+description: Обход блокировки репозитария deb.sury.org
+published: true
+date: 2024-08-21T08:58:36.439Z
+tags: php, deb.sury.org, unblock
+editor: ckeditor
+dateCreated: 2024-08-21T08:58:36.439Z
+-->
+
+<h2>Установка PHP 8.3 на Debian 12 Bookworm после блокировки репозитория deb.sury.org</h2>
+<p>2 июля 2024 года мейнтейнер репозитория <strong>deb.sury.org</strong> включил геоблокировку для всех IP адресов из Российской Федерации. Источник на Github- <a href="https://github.com/oerdnj/deb.sury.org/issues/2155">https://github.com/oerdnj/deb.sury.org/issues/2155</a>.</p>
+<p>Рассмотрим способ обхода блокировок репозиториев с обновлениями PHP предложенный <a href="https://blog.altuninvv.ru/linux/debian/%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-php-83-%D0%BD%D0%B0-debian-12-bookworm-%D0%BF%D0%BE%D1%81%D0%BB%D0%B5-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B8-%D1%80%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D1%8F-debsuryorg">тут</a>.<br><br>При попытке обновиться по команде&nbsp;</p>
+<pre><code class="language-plaintext">sudo apt update</code></pre>
+<p>Получаемошибку:</p>
+<pre><code class="language-plaintext"># apt-get update
+Пол:1 http://security.debian.org/debian-security bookworm-security InRelease [48,0 kB]
+Сущ:2 http://deb.debian.org/debian bookworm InRelease                                                                                                                                                
+Пол:3 http://deb.debian.org/debian bookworm-updates InRelease [55,4 kB]                                                                                                                              
+Сущ:4 http://packages.irontec.com/debian bookworm InRelease                                                                                                       
+Ошб:5 https://packages.sury.org/php bookworm InRelease                                              
+  451   [IP: 146.59.69.202 443]
+Пол:6 http://security.debian.org/debian-security bookworm-security/main Sources [106 kB]
+Пол:7 http://security.debian.org/debian-security bookworm-security/main amd64 Packages [170 kB]                           
+Пол:8 http://security.debian.org/debian-security bookworm-security/main Translation-en [103 kB]                           
+Пол:9 https://apt.postgresql.org/pub/repos/apt bookworm-pgdg InRelease [129 kB]                         
+Пол:10 https://apt.postgresql.org/pub/repos/apt bookworm-pgdg/main amd64 Packages [348 kB]
+Чтение списков пакетов… Готово     
+E: Не удалось получить https://packages.sury.org/php/dists/bookworm/InRelease  451   [IP: 146.59.69.202 443]
+E: Репозиторий «https://packages.sury.org/php bookworm InRelease» больше не подписан.
+N: Обновление из этого репозитория нельзя выполнить безопасным способом, поэтому по умолчанию он отключён.
+N: Информацию о создании репозитория и настройках пользователя смотрите в справочной странице apt-secure(8).
+</code></pre>
+<p>451 – означает Unavailable For Legal Reasons –Недоступно по юридическим причинам.</p>
+<p>Мы воспользуемся альтернативными зеркалами предварительно удалив ссылку на старый официальный репозиторий &nbsp;<code>/etc/apt/sources.list.d/php.list</code><br>B воспользуемся другими ссылками на <a href="https://sysinfo.pro/files/php.list">репозитории</a> положив их в <code>/etc/apt/sources.list.d/</code>.</p>
+<p>Но если мы сейчас запустим&nbsp;</p>
+<pre><code class="language-plaintext">sudo apt update</code></pre>
+<p>То получим ошибку:</p>
+<pre><code class="language-plaintext">Get:5 https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease [7,542 B]
+Err:5 https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease
+  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY B188E2B695BD4743
+Reading package lists... Done
+W: GPG error: https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease: The following 
+signatures couldn't be verified because the public key is not available: NO_PUBKEY B188E2B695BD4743
+E: The repository 'https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease' is not signed.
+N: Updating from such a repository can't be done securely, and is therefore disabled by default.
+N: See apt-secure(8) manpage for repository creation and user configuration details.</code></pre>
+<p>Так как репозиторий подписан PGP, а ключ был изменен автором, то нам нужно обновить <a href="https://sysinfo.pro/files/php.gpg">ключ</a> с официального сайта и положить его в <code>/etc/apt/trusted.gpg.d/</code>!</p>
+<p>Повторно обновляемся командой <code>apt-get update</code> и видим, что все работаеет :)<br><br>&nbsp;</p>
