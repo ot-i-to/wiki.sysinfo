@@ -2,7 +2,7 @@
 title: Антиблокинг deb.sury.org
 description: Обход блокировки репозитария deb.sury.org
 published: true
-date: 2024-08-21T08:58:36.439Z
+date: 2024-08-21T09:00:14.355Z
 tags: php, deb.sury.org, unblock
 editor: ckeditor
 dateCreated: 2024-08-21T08:58:36.439Z
@@ -45,5 +45,5 @@ signatures couldn't be verified because the public key is not available: NO_PUBK
 E: The repository 'https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease' is not signed.
 N: Updating from such a repository can't be done securely, and is therefore disabled by default.
 N: See apt-secure(8) manpage for repository creation and user configuration details.</code></pre>
-<p>Так как репозиторий подписан PGP, а ключ был изменен автором, то нам нужно обновить <a href="https://sysinfo.pro/files/php.gpg">ключ</a> с официального сайта и положить его в <code>/etc/apt/trusted.gpg.d/</code>!</p>
+<p>Так как репозиторий подписан PGP, а ключ был изменен автором, то нам нужно обновить <a href="https://sysinfo.pro/files/php.gpg">ключ</a> &nbsp;и положить его в <code>/etc/apt/trusted.gpg.d/</code>!</p>
 <p>Повторно обновляемся командой <code>apt-get update</code> и видим, что все работаеет :)<br><br>&nbsp;</p>
