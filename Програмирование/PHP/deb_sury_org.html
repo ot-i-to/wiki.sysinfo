@@ -2,7 +2,7 @@
 title: Антиблокинг deb.sury.org
 description: Обход блокировки репозитария deb.sury.org
 published: true
-date: 2024-08-21T09:05:18.764Z
+date: 2024-08-21T09:06:32.963Z
 tags: php, deb.sury.org, unblock
 editor: ckeditor
 dateCreated: 2024-08-21T08:58:36.439Z
@@ -31,7 +31,7 @@ E: Репозиторий «https://packages.sury.org/php bookworm InRelease» �
 N: Обновление из этого репозитория нельзя выполнить безопасным способом, поэтому по умолчанию он отключён.
 N: Информацию о создании репозитория и настройках пользователя смотрите в справочной странице apt-secure(8).
 </code></pre>
-<p>451 – означает Unavailable For Legal Reasons –Недоступно по юридическим причинам.</p>
+<p>451 – <strong>означает Unavailable For Legal Reasons </strong>–<strong> Недоступно по юридическим причинам</strong>.</p>
 <p>Мы воспользуемся альтернативным списком <a href="https://sysinfo.pro/files/php.list">зеркал</a> заменив ссылку на старый официальный репозиторий &nbsp;<code>/etc/apt/sources.list.d/php.list</code><br>Но если мы сейчас запустим <code>apt-get update,</code> то получим ошибку:</p>
 <pre><code class="language-plaintext">Get:5 https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease [7,542 B]
 Err:5 https://ftp.mpi-inf.mpg.de/mirrors/linux/mirror/deb.sury.org/repositories/php bookworm InRelease
