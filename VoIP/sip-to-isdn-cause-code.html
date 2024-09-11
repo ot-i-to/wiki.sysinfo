@@ -1,0 +1,286 @@
+<!--
+title: SIP коды ISDN/DSS1
+description: Сопоставление SIP кодов c DSS1.
+published: true
+date: 2024-09-11T14:29:01.890Z
+tags: sip, isdn, cause code, dss1, error code
+editor: ckeditor
+dateCreated: 2024-09-11T14:29:01.890Z
+-->
+
+<h2>SIP Error Messages&nbsp;</h2>
+<p>Тут показаны наиболее распространенные ошибки, которые можно преобразовать в сообщения об ошибках Q.931 или DSS1, они соответствуют следующим типам:<br>4xx — Сбои метода.<br>5xx — Сбои сервера.<br>6xx — Глобальные неудачи.<br><br>Ошибки SIP и ошибки DSS1 / Q.931 сопоставляются, как показано в таблице.<br>&nbsp;</p>
+<figure class="table">
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <p style="text-align:center;"><mark class="pen-red"><strong>SIP event&nbsp;</strong></mark></p>
+        </td>
+        <td>
+          <p style="text-align:center;"><mark class="pen-red"><strong>Decimal</strong></mark><br><mark class="pen-red"><strong>Cause number (DSS1)&nbsp;</strong></mark></p>
+        </td>
+        <td>
+          <p style="text-align:center;"><mark class="pen-red"><strong>Hex.</strong></mark><br><mark class="pen-red"><strong>Cause number (DSS1)&nbsp;</strong></mark></p>
+        </td>
+        <td>
+          <p style="text-align:center;"><mark class="pen-red"><strong>Value as transmitted in D-channel&nbsp;</strong></mark></p>
+        </td>
+        <td><mark class="pen-red"><strong>Cause (DSS1)&nbsp;</strong></mark></td>
+      </tr>
+      <tr>
+        <td><strong>400 Bad request&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>401 Unauthorized&nbsp;</strong></td>
+        <td>57</td>
+        <td>39</td>
+        <td>b9</td>
+        <td>Bearer capability not authorized&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>402 Payment required&nbsp;</strong></td>
+        <td>21</td>
+        <td>15</td>
+        <td>95</td>
+        <td>Call rejected&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>403 Forbidden</strong></td>
+        <td>57</td>
+        <td>39</td>
+        <td>b9</td>
+        <td>Bearer capability not authorized&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>404 Not found</strong></td>
+        <td>1</td>
+        <td>1</td>
+        <td>81</td>
+        <td>Unallocated (unassigned) number&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>405 Method not allowed&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>406 Not acceptable&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>407 Proxy authentication required&nbsp;</strong></td>
+        <td>21</td>
+        <td>15</td>
+        <td>95</td>
+        <td>Call rejected&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>408 Request timeout&nbsp;</strong></td>
+        <td>102</td>
+        <td>66</td>
+        <td>e6</td>
+        <td>Recover on Expires timeout&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>409 Conflict&nbsp;</strong></td>
+        <td>41</td>
+        <td>29</td>
+        <td>a9</td>
+        <td>Temporary failure&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>410 Gone&nbsp;</strong></td>
+        <td>1</td>
+        <td>1</td>
+        <td>81</td>
+        <td>Unallocated (unassigned) number&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>411 Length required&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>413 Request entity too long&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>414 Request URI (URL) too long&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>415 Unsupported media type&nbsp;</strong></td>
+        <td>79</td>
+        <td>4f</td>
+        <td>cf</td>
+        <td>Service or option not available&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>420 Bad extension&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>480 Temporarily unavailable&nbsp;</strong></td>
+        <td>18</td>
+        <td>12</td>
+        <td>92</td>
+        <td>No user response&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>481 Call leg does not exist&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>482 Loop detected&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>483 Too many hops&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>484 Address incomplete&nbsp;</strong></td>
+        <td>28</td>
+        <td>1c</td>
+        <td>9c</td>
+        <td>Address incomplete (invalid number format)&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>485 Address ambiguous&nbsp;</strong></td>
+        <td>1</td>
+        <td>1</td>
+        <td>81</td>
+        <td>Unallocated (unassigned) number&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>486 Busy here&nbsp;</strong></td>
+        <td>17</td>
+        <td>11</td>
+        <td>91</td>
+        <td>User busy&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>487 Request cancelled&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>488 Not acceptable here&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>500 Internal server error&nbsp;</strong></td>
+        <td>41</td>
+        <td>29</td>
+        <td>a9</td>
+        <td>Temporary failure&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>501 Not implemented&nbsp;</strong></td>
+        <td>79</td>
+        <td>4f</td>
+        <td>cf</td>
+        <td>Service or option not implemented&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>502 Bad gateway&nbsp;</strong></td>
+        <td>38</td>
+        <td>26</td>
+        <td>a6</td>
+        <td>Network out of order&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>503 Service unavailable&nbsp;</strong></td>
+        <td>63</td>
+        <td>3f</td>
+        <td>bf</td>
+        <td>Service or option unavailable&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>504 Gateway timeout&nbsp;</strong></td>
+        <td>102</td>
+        <td>66</td>
+        <td>e6</td>
+        <td>Recover on Expires timeout&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>505 Version not implemented&nbsp;</strong></td>
+        <td>127</td>
+        <td>7f</td>
+        <td>ff</td>
+        <td>Interworking, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>580 Precondition Failed&nbsp;</strong></td>
+        <td>47</td>
+        <td>2f</td>
+        <td>af</td>
+        <td>Resource unavailable, unspecified&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>600 Busy everywhere&nbsp;</strong></td>
+        <td>17</td>
+        <td>11</td>
+        <td>91</td>
+        <td>User busy&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>603 Decline&nbsp;</strong></td>
+        <td>21</td>
+        <td>15</td>
+        <td>95</td>
+        <td>Call rejected&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>604 Does not exist anywhere&nbsp;</strong></td>
+        <td>1</td>
+        <td>1</td>
+        <td>81</td>
+        <td>Unallocated (unassigned) number&nbsp;</td>
+      </tr>
+      <tr>
+        <td><strong>606 Not acceptable&nbsp;</strong></td>
+        <td>58</td>
+        <td>3a</td>
+        <td>ba</td>
+        <td>Bearer capability not presently available&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<p>&nbsp;</p>
