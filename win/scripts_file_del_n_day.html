@@ -1,0 +1,63 @@
+<!--
+title: Удаление старых файлов
+description: Windows VBS cкрипт для удаления файлов старше N дней
+published: true
+date: 2024-09-24T18:40:05.139Z
+tags: windows, win, delete, vbs
+editor: ckeditor
+dateCreated: 2024-09-24T18:40:05.139Z
+-->
+
+<h1>Скрипт для удаления файлов старше N дней</h1>
+<p>Этот скрипт может быть полезен для очистки папки в которой хранятся лог-файлы или резервные копии.<br><br>Для использования создайте файл kill2date.vbs с приведенным ниже содержимом. Где в переменных <strong>path </strong>- путь к папке и <strong>killdate - </strong>количество дней<strong>:</strong></p>
+<pre><code class="language-plaintext">path = "T:\transfer"
+killdate = date() - 94
+
+arFiles = Array()
+set fso = createobject("scripting.filesystemobject")
+
+SelectFiles path, killdate, arFiles, true
+
+nDeleted = 0
+for n = 0 to ubound(arFiles)
+ on error resume next
+ arFiles(n).delete true
+ if err.number &lt;&gt; 0 then
+   wscript.echo "Unable to delete: " &amp; arFiles(n).path
+ else
+   nDeleted = nDeleted + 1
+ end if
+ on error goto 0
+next
+
+' msgbox nDeleted &amp; " of " &amp; ubound(arFiles)+1 _ '
+'  &amp; " eligible files were deleted" '
+WScript.Echo nDeleted &amp; " of " &amp; ubound(arFiles)+1 &amp; " eligible files older than " &amp; killdate &amp; " in the " &amp; path &amp; " were deleted"
+WScript.Quit 0
+
+sub SelectFiles(sPath,vKillDate,arFilesToKill,bIncludeSubFolders)
+ on error resume next
+ set folder = fso.getfolder(sPath)
+ set files = folder.files
+
+ for each file in files
+   dtlastmodified = null
+   on error resume Next
+   dtlastmodified = file.datelastmodified
+   on error goto 0
+   if not isnull(dtlastmodified) Then
+     if dtlastmodified &lt; vKillDate then
+       count = ubound(arFilesToKill) + 1
+       redim preserve arFilesToKill(count)
+       set arFilesToKill(count) = file
+     end if
+   end if
+ next
+
+ if bIncludeSubFolders then
+   for each fldr in folder.subfolders
+     SelectFiles fldr.path,vKillDate,arFilesToKill,true
+   next
+ end if
+end sub</code></pre>
+<p>Скачать скрипт <a href="files/kill2date.zip">kill2date.zip</a><br><br><span class="text-tiny">Источник </span><a href="https://www.pokatashkin.com/it/scripts/40"><span class="text-tiny">тут</span></a><span class="text-tiny">.</span></p>
