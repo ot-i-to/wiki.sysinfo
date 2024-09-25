@@ -2,7 +2,7 @@
 title: Kill USER
 description: Как завершить все сессии пользователя в Linux?
 published: true
-date: 2024-09-25T07:43:14.550Z
+date: 2024-09-25T08:03:35.788Z
 tags: linux, user, kill, session
 editor: ckeditor
 dateCreated: 2024-09-25T07:30:31.604Z
@@ -18,10 +18,10 @@ dateCreated: 2024-09-25T07:30:31.604Z
 <blockquote>
   <p>sudo pkill -9 -е <strong>TTY-name</strong></p>
 </blockquote>
-<p>где <strong>TTY-name</strong> в виде “<strong>pts/</strong>2” можно узнать из команды “<strong>w</strong>” :</p>
+<p>где <strong>TTY-name</strong> в виде “<strong>pts/N</strong>” можно узнать из команды “<strong>w</strong>” :</p>
 <pre><code class="language-plaintext"># w
 10:36:55 up 177 days, 18:26,  2 users,  load average: 0,37, 0,52, 0,58
-USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+USER     TTY      FROM            LOGIN@   IDLE   JCPU   PCPU WHAT
 user1   pts/0    10.50.4.59       Mon09   43:03m  0.14s  0.02s sshd: user1 [priv]
 user2   pts/2    10.50.4.59       23:22    0.00s  0.01s  0.01s sshd: user2 [priv]</code></pre>
 <p>&nbsp;</p>
