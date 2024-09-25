@@ -1,0 +1,52 @@
+<!--
+title: fread BAD reading remote file
+description: Ошибка чтения файла или зависал навсегда при работе с удаленными файлами.
+published: true
+date: 2024-09-25T14:39:21.454Z
+tags: file, php, error, fread, bad, reading
+editor: ckeditor
+dateCreated: 2024-09-25T14:39:21.454Z
+-->
+
+<p>Вот этот скрипт будет периодически зависал навсегда или завершаться с ошибкой чтения файла. А связано это со специфическим поведение команды fread при работе с удаленными бинарными файлами.&nbsp;</p>
+<pre><code class="language-plaintext">&lt;?php
+$fp = fsockopen("example.host.com", 80);
+if (!$fp) {
+	echo "$errstr ($errno)&lt;br /&gt;\n";
+} else {
+	fwrite($fp, "Data sent by socket");
+$content = "";
+	while (!feof($fp)) { //This looped forever
+		$content .= fread($fp, 1024);
+	}
+	fclose($fp);
+	echo $content;
+}
+?&gt;</code></pre>
+<p>Цитата из <a href="https://www.php.net/manual/ru/function.fread.php">документации</a>:</p>
+<blockquote>
+  <p><strong>Внимание</strong></p>
+  <p>При чтении не из обычного локального файла, а, например, из потоков, которые возвращаются при чтении удалённых файлов через HTTP, FTP или функциями <strong>popen()</strong> и <strong>fsockopen()</strong>, чтение остановится после получения функцией доступа к пакету.&nbsp;</p>
+</blockquote>
+<p>Проблема в том, что иногда конец потоковой передачи не помечается ни EOF, ни фиксированной отметкой, поэтому это зацикливается навсегда или завершение всего скрипта по ошибке. Это вызывает сильную головную боль ...<br>Можно использовать функцию <strong>stream_get_meta_data</strong> и оператор прерывания <strong>break</strong>, как показано ниже на измененном выше приведенном скрипте:</p>
+<pre><code class="language-plaintext">&lt;?php
+$fp = fsockopen("example.host.com", 80);
+if (!$fp) {
+	echo "$errstr ($errno)&lt;br /&gt;\n";
+} else {
+	fwrite($fp, "Data sent by socket");
+	$content = "";
+	while (!feof($fp)) { 
+		$content .= fread($fp, 1024);
+		// добавляем следующие команды:
+		$stream_meta_data = stream_get_meta_data($fp); //Добавлена ​​строка
+		if($stream_meta_data['unread_bytes'] &lt;= 0) break; //Добавлена ​​строка
+	}
+	fclose($fp);
+	echo $content;
+}
+?&gt;</code></pre>
+<p>&nbsp;</p>
+<h6>Надеюсь, это избавит кого-то от головной боли :)</h6>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
