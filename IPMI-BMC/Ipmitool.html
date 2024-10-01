@@ -1,0 +1,123 @@
+<!--
+title: Ipmitool
+description: утилита для управления по протоколу IPMI.
+published: true
+date: 2024-10-01T06:14:03.626Z
+tags: linux, console, ipmi, bmc
+editor: ckeditor
+dateCreated: 2024-10-01T06:14:03.626Z
+-->
+
+<h1>ipmitool howto</h1>
+<p><strong>ipmitool</strong> -- утилита для out-of-band управления хостами по протоколу <a href="https://www.altlinux.org/IPMI">IPMI</a>.</p>
+<blockquote>
+  <p><strong>Внимание!</strong> при задействовании думаем, что делаем, и только потом жмём энтер&nbsp;<br>-- можно промахнуться и уложить важный хост вместо нужного!</p>
+</blockquote>
+<p>Здесь только основные случаи. Обязательно прочитать <a href="http://linux.die.net/man/1/ipmitool">ман</a> на основные ключи, случаи использования.</p>
+<h2>указание пароля</h2>
+<p>Пароль может указываться в команде, через окружение или через файл. Прямо в команде -- очень вредно. Рекомендуется или через окружение, или через файл.</p>
+<p>Первый вариант:</p>
+<pre><code class="language-plaintext">export IPMI_PASSWORD=TopSecret
+IPMI='ipmitool -U ADMIN -E'
+</code></pre>
+<p>Второй вариант:</p>
+<pre><code class="language-plaintext">touch ~/.ipmi_password
+chmod 0600 ~/.ipmi_password
+echo TopSecret &gt;~/.ipmi_password
+IPMI="ipmitool -U ADMIN -f $HOME/.ipmi_password"
+</code></pre>
+<p>Прямо в команде (не рекомендуется, т.к. ps покажет):</p>
+<pre><code class="language-plaintext">IPMI="ipmitool -U ADMIN -P TopSecret"
+</code></pre>
+<p>дальше будем считать, что <strong>$IPMI</strong> (без кавычек) -- начало команды.</p>
+<h2>частые команды</h2>
+<ul>
+  <li>посмотреть состояние датчиков локально: <strong>ipmitool sdr</strong></li>
+  <li>посмотреть известные датчики с границами: <strong>ipmitool sensor</strong></li>
+  <li>проверить состояние питания локально: <strong>ipmitool power status</strong></li>
+  <li>выключить питание удалённо: <strong>$IPMI -H $HOST power off</strong></li>
+  <li>включить питание удалённо: <strong>$IPMI -H $HOST power on</strong></li>
+  <li>выключить-включить удалённо: <strong>$IPMI -H $HOST power cycle</strong></li>
+  <li>отресетить: <strong>$IPMI -H $HOST power reset</strong></li>
+</ul>
+<h2>network settings</h2>
+<ul>
+  <li>посмотреть локально: <strong>ipmitool lan print N</strong> (N -- номер канала, 1 и выше)</li>
+  <li>поставить IP: <strong>ipmitool lan set 1 ipaddr 192.168.10.112</strong></li>
+  <li>поставить маску: <strong>ipmitool lan set 1 netmask 255.255.255.0</strong></li>
+  <li>поставить шлюз: <strong>ipmitool lan set 1 defgw ipaddr 192.168.10.254</strong></li>
+  <li>выставить vlan: <strong>ipmitool lan set 1 vlan id 333</strong></li>
+</ul>
+<h2>user management</h2>
+<ul>
+  <li>посмотреть: <strong>ipmitool user list 1</strong></li>
+  <li>задать имя аккаунта: <strong>ipmitool user set name 1 ADMIN</strong></li>
+  <li>задать пароль аккакунта: <strong>ipmitool user set password 1 ADMIN</strong></li>
+</ul>
+<h2>Serial-over-LAN</h2>
+<ul>
+  <li>проверить: <strong>$IPMI -I lanplus -H 10.1.0.201 sol info</strong></li>
+  <li>задействовать: <strong>$IPMI -I lanplus -H 10.1.0.201 sol activate</strong></li>
+  <li>разорвать: <strong>$IPMI -I lanplus -H 10.1.0.201 sol deactivate</strong></li>
+</ul>
+<p>Ко всем этим командам добавить -o intelplus для ряда платформ (например, Intel S5000). Обратите внимание: на многих платформах эта опция <i>не</i> работает с характерным сообщением "Error: Unable to establish IPMI v2 / RMCP+ session".</p>
+<h1>пример настройки для S5000</h1>
+<h2>agetty</h2>
+<p>Для обработки последовательного порта со стороны ОС следует:</p>
+<ol>
+  <li>установить пакет agetty;</li>
+  <li>добавить что-то вроде S1:12345:respawn:/sbin/agetty ttyS1 115200 в <strong>/etc/inittab</strong>;</li>
+  <li>сказать <strong>init q</strong>;</li>
+  <li>добавить ttyS1 в <strong>/etc/securetty</strong> для возможности входа рутом.</li>
+</ol>
+<p>Если SoL окажется заведено на <strong>/dev/ttyS0</strong> или устойчиво заработает на 57600, поправьте соответственно.</p>
+<h2>ipmitool</h2>
+<p>Первая часть изнутри хоста:</p>
+<pre><code class="language-plaintext"># предполагаем ipmi_si и ipmi_devintf уже загруженными
+ipmitool user list 1
+# видим админа с номером 3
+ipmitool user set password 3 ADMIN
+ipmitool user priv 3 4 1 ## админу - админово
+
+# сеть: убираем лишнее и ставим нужное:
+ipmitool lan set 2 access off
+ipmitool lan set 2 ipsrc none
+ipmitool lan set 2 ipaddr 0.0.0.0
+ipmitool lan set 3 access off
+ipmitool lan set 3 ipsrc none
+ipmitool lan set 3 ipaddr 0.0.0.0
+ipmitool lan set 1 access on
+ipmitool lan set 1 ipsrc static
+ipmitool lan set 1 ipaddr 10.0.0.229
+ipmitool lan set 1 netmask 255.255.255.0
+ipmitool lan set 1 arp respond on
+ipmitool lan set 1 arp generate on
+ipmitool lan set 1 arp interval 30
+</code></pre>
+<p>На этом этапе IPMI-карточка должна начать пинговаться.</p>
+<pre><code class="language-plaintext">ipmitool lan set 1 auth admin password
+</code></pre>
+<p>с этого момента должны работать обычные команды снаружи, например, так:</p>
+<pre><code class="language-plaintext">export IPMI_PASSWORD=ADMIN
+ipmitool -U ADMIN -E -H 10.0.0.229 power status
+</code></pre>
+<p>Теперь строим SOL (настройка работает только снаружи):</p>
+<pre><code class="language-plaintext">SOLCTL='ipmitool -U ADMIN -E -H 10.0.0.229 -I lanplus -o intelplus sol'
+$SOLCTL set enabled true
+$SOLCTL set force-authentication true
+$SOLCTL set non-volatile-bit-rate 115.2
+$SOLCTL payload enable 14 3
+$SOLCTL activate
+</code></pre>
+<p>и уже есть шанс получить консоль.</p>
+<p>Для получения вывода ядра следует добавить в его параметры что-то вроде console=ttyS1,57600 console=tty0 (при нескольких значениях /dev/console будет на последнем по порядку).</p>
+<h2>BIOS</h2>
+<p>Server Management &gt; Console Redirection; настройки:</p>
+<ul>
+  <li>(redir) Serial Port B</li>
+  <li>(flow) RTC/CTS</li>
+  <li>(rate) 38.4k</li>
+  <li>(term) VT100</li>
+  <li>(legacy) Enabled</li>
+</ul>
+<p><a href="https://www.altlinux.org/Ipmitool"><span class="text-tiny">Копия статьи</span></a></p>
