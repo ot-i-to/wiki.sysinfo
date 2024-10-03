@@ -1,0 +1,121 @@
+<!--
+title: Сбор метрик из Nginx’a в ClickHouse
+description: 
+published: true
+date: 2024-10-03T08:23:50.759Z
+tags: nginx, clickhouse
+editor: ckeditor
+dateCreated: 2024-10-03T08:23:50.759Z
+-->
+
+<p>Запись данных в <strong>Clickhouse</strong> (и другие векторные базы) может достигать производительности в миллионы строк в секунду. Для этого важно писать данные крупными пакетами (сотни тысяч…миллионы строк в пакете).</p>
+<p>Однако аналитические данные часто генерируются прямо на лету. Например, сбор данных о поведении пользователя на сайте. В [https://iotechnologies.com IO] – это один из ключевых источников данных, метрики приходят от миллиардов устройств. И тут крайне важно иметь минимальный путь от Web сервера до базы данных.</p>
+<p>Идеальная схема будет включать только Web сервер и базу данных:</p>
+<p><code>Событие -&gt; Nginx -&gt; Логи -&gt; Clickhouse</code></p>
+<p><strong>## Событие будет логироваться Nginx’ом</strong></p>
+<p>Упростим нашу задачу до сбора и записи простых наборов метрик во времени:</p>
+<ul>
+  <li>У метрики есть название и значение.</li>
+  <li>Метрика приходит в определенный момент времени.</li>
+  <li>По метрикам можно делать различные выборки – фильтровать по времени и имени.</li>
+</ul>
+<h2>Подготовка таблицы</h2>
+<p>В нашем случае таблица будет такой структуры:</p>
+<pre><code class="language-plaintext">CREATE TABLE metrics
+( time DateTime, name String, value Int64)
+ENGINE = MergeTree
+PARTITION BY name
+ORDER BY time
+SETTINGS index_granularity = 8192</code></pre>
+<p><strong>## Создание таблицы в Clickhouse</strong></p>
+<p>Трех колонок будет достаточно для решения нашей задачи. Обратите внимание, что мы даже не использовали дату для партиционирования.</p>
+<h2>Настройка логирования</h2>
+<p>Самая сложная задача – научить Nginx писать данные в нужном нам формате. Хотя с Nginx’ом она оказывается довольно простой. Собирать метрики будем обычным запросом в формате:</p>
+<p><code>http://tracking.server/?n=metric_name&amp;v=metric_value</code></p>
+<p><strong>## Два аргумента – для названия (n) и значения (v) метрики</strong></p>
+<p>Для того, чтобы вставлять данные в Clickhouse мы постараемся получить лог-файл в CSV-формате:</p>
+<p><code>date_time,metric_name,metric_value
+  </code></p>
+<p><strong>## Такой CSV формат можно сразу зафидить в Clickhouse</strong></p>
+<p>Например, при отправке пары запросов по адресу http://tracking.server/?n=pageviews&amp;v=1, мы увидим:</p>
+<p><code>2019-04-07 14:26:47,pageviews,1
+    2019-04-07 14:26:49,pageviews,1
+  </code></p>
+<p>Получить такой формат лога в Nginx’e оказалось довольно просто, но пришлось использовать [https://www.nginx.com/resources/wiki/modules/lua/ Lua] для получения времени в нужном формате:</p>
+<pre><code class="language-plaintext">map $host **$time** { # Определяем переменную $time
+default ”;
+}
+log_format track ‘**$time,$arg_n,$arg_v**’; # Определяем нужный формат лога
+server {
+…
+location / {
+access_log /var/log/nginx/track.log track;
+default_type text/plain;
+content_by_lua ”
+ngx.say(‘thanks’)
+**ngx.var.time = os.date(‘!%Y-%m-%d %H:%M:%S’)** # Наполняем $time временем
+“;
+}
+}</code></pre>
+<p><strong>## Такая конфигурация позволит записать данные в /var/log/nginx/track.log в нужном формате</strong></p>
+<h2>Запись в Clickhouse</h2>
+<p>Чтобы записать данные из лога в Clickhouse, необходимо сначала сменить активный лог-файл (сделать rotate):</p>
+<pre><code class="language-plaintext">mv /var/log/nginx/track.log /tmp/db.log
+kill -USR1 `cat /var/run/nginx.pid`</code></pre>
+<p><strong>## Ротейтим лог перед записью в БД</strong></p>
+<p>Тепер можно записывать данные в Clickhouse:</p>
+<pre><code class="language-plaintext">cat /tmp/db.log | clickhouse-client --query "INSERT INTO metrics FORMAT CSV" &amp;&amp; rm /tmp/db.log</code></pre>
+<p><strong>## Обычный метод записи, ведь формат и данные уже готовы</strong></p>
+<p>Ну и объединить это в цикл с желаемым окном:</p>
+<pre><code class="language-plaintext">while :
+do
+mv /var/log/nginx/track.log /tmp/db.log
+kill -USR1 `cat /var/run/nginx.pid`
+cat /tmp/db.log | clickhouse-client –query “INSERT INTO metrics FORMAT CSV” &amp;&amp; rm /tmp/db.log
+**sleep 10**
+done</code></pre>
+<p><strong>## Ротейтим и записываем лог в базу каждые 10 секунд</strong></p>
+<h2>Буферизация</h2>
+<p>Дополнительной оптимизацией может стать использование [https://clickhouse.yandex/docs/en/operations/table_engines/buffer/ буфера]. Если нагрузка на запись будет неравномерная (скажем, то 10 записей, то 10 тысяч записей), это имеет смысл. Работает все, как всегда, просто – достаточно создать специальную таблицу:</p>
+<pre><code class="language-plaintext">CREATE TABLE metrics_buffer
+AS metrics
+ENGINE = **Buffer**(default, metrics, 16, 10, 100, 1000, 10000, 10000, 100000)</code></pre>
+<p><strong>## Создаем буфер для таблицы с метриками</strong></p>
+<p>Так Clickhouse создаст специальную таблицу, данные которой будут находиться только в памяти. Она будет повторять структуру нашей главной таблицы, и будет периодически сбрасывать в нее данные на основе указанных ограничений. Это повышает производительность вставки данных в основную таблицу, т.к. небольшие пакеты буферизируются и объединяются в более крупные.</p>
+<blockquote>
+  <p><strong>Внимание</strong>, буферы чистятся при перезагрузке базы или сервера. Убедитесь, что у нее есть fail-over, если используете ее на продакшне.</p>
+</blockquote>
+<p>Чтение данных также нужно делать из буфера вместо основной таблицы. Clickhouse сам замерджит данные из двух таблиц и выдаст правильный результат:</p>
+<pre><code class="language-plaintext">SELECT time, name, value FROM **metrics_buffer**</code></pre>
+<p><strong>## Читать данные необходимо также из буфера</strong></p>
+<h2>Производительность решения</h2>
+<p>Мы тестировали решение на самом мелком [https://www.digitalocean.com/pricing/ дроплете на DigitalOcean]:</p>
+<p>Если не учитывать задержки Интернета, то такое решение способно обслужить около 6…7 тыс. запросов в секунду (что и понятно, это же простой Nginx без оверхеда):</p>
+<pre><code class="language-plaintext">ab -n 100000 -c 16 "http://127.0.0.1/track?n=test&amp;v=1"
+This is ApacheBench, Version 2.3 &lt;$Revision: 1807734 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+...
+
+Concurrency Level:      16
+Time taken for tests:   15.553 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      19000000 bytes
+HTML transferred:       700000 bytes
+**Requests per second:    6429.44 [#/sec] (mean)**
+Time per request:       2.489 [ms] (mean)
+Time per request:       0.156 [ms] (mean, across all concurrent requests)
+Transfer rate:          1192.96 [Kbytes/sec] received
+</code></pre>
+<p><strong>## Тестирование пропускной способности</strong></p>
+<p>Собранный пример на этом же дроплете, который считает просмотры и количество пикселей, которые проехали мышки наших читателей можно [https://rt.onthe.io/?metric=5caa00c8e8260-distance&amp;period=1%20hour найти тут]. Там же можно потестировать трекинг:</p>
+<pre><code class="language-plaintext">curl “rt.onthe.io/track?n=5caa00c8e8261-**[имя_метрики]**&amp;v=1”</code></pre>
+<p><strong>## Для трекинга</strong></p>
+<p>После отправки данных достаточно будет зайти по адресу:</p>
+<pre><code class="language-plaintext">https://rt.onthe.io/?metric=5caa00c8e8261-[имя_метрики]</code></pre>
+<p><strong>## Для просмотра</strong></p>
+<h2>Итог</h2>
+<p>Использование связки <strong>Nginx log</strong> + <strong>LUA</strong> + <strong>Clickhouse</strong> позволяет получить высокопроизводительное решение для сбора, хранения и аналитики данных.</p>
+<p>&nbsp;</p>
