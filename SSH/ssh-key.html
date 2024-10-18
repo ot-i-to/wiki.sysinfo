@@ -2,7 +2,7 @@
 title: Вход без пароля
 description: Как Настроить SSH-доступ по Ключу
 published: true
-date: 2023-11-19T13:50:58.381Z
+date: 2024-10-18T11:27:40.816Z
 tags: linux, ssh, connect, key
 editor: ckeditor
 dateCreated: 2023-11-19T13:50:58.381Z
@@ -17,3 +17,7 @@ dateCreated: 2023-11-19T13:50:58.381Z
 ChallengeResponseAuthentication no
 UsePAM no</code></pre>
 <p>И и для применения изменений, не забудьте перекрузить SSH-сервер:<br>– Ubuntu / Debian командой <code>sudo systemctl restart ssh</code>&nbsp;<br>– CentOS команда <code>sudo systemctl restart sshd</code></p>
+<p>&nbsp;</p>
+<hr>
+<p>Convert <i>"BEGIN OPENSSH PRIVATE KEY"</i> to <i>"BEGIN RSA PRIVATE KEY"</i></p>
+<pre><code class="language-python">ssh-keygen -p -m PEM -f ~/.ssh/id_rsa</code></pre>
