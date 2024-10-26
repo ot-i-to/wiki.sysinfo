@@ -2,13 +2,13 @@
 title: Bluetooth LinuxMint
 description: Connection Failed: br-connection-unknown
 published: true
-date: 2024-10-26T11:34:11.226Z
+date: 2024-10-26T11:40:35.553Z
 tags: linux, bluetooth, linuxmint, br-connection-unknown, failed
 editor: ckeditor
 dateCreated: 2024-10-26T11:25:24.691Z
 -->
 
-<h5>Для устранения проблем с <strong>Bluetooth</strong> в линух Linux “<strong>br-connection-unknown</strong>”.</h5>
+<h5>Для устранения проблем с <strong>Bluetooth</strong> в линух Linux “<strong>br-connection-unknown</strong>” (орегинал, <a href="https://forums.linuxmint.com/viewtopic.php?t=420753">тут</a>).</h5>
 <p>1) проверяем в терминале что-бы безопасная загрузка была отключена :</p>
 <pre><code class="language-plaintext">~ $ mokutil --sb
 SecureBoot disabled
@@ -21,6 +21,6 @@ sudo dkms add ./bluetooth-6.5
 sudo dkms install btusb/4.1</code></pre>
 <p>… учтите, что значение <code>6.5</code> указывает / соответствует номеру версии ветки ядра … я проверял на версиях 6.5 и 6.8&nbsp;</p>
 <p>3) Далее, обязательно перегрузите компьютер … например командой <code>Reboot</code> :)</p>
-<p><br>Орегинал, <a href="https://forums.linuxmint.com/viewtopic.php?t=420753">тут</a>.</p>
+<p><br>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
+<p><code>blueman-applet --loglevel debug</code></p>
