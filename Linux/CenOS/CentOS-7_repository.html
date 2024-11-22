@@ -1,0 +1,100 @@
+<!--
+title: CentOS 7 репозитория 
+description: Обновления после окончания жизни (EOL) 2024-07-01
+published: true
+date: 2024-11-22T11:13:40.633Z
+tags: update, cenos, repository, centos 7, end of life, eol, 2024-07-01
+editor: ckeditor
+dateCreated: 2024-11-22T11:13:40.633Z
+-->
+
+<blockquote>
+  <p>Centos 7 не получит никаких обновлений после июня 2024 года. Кроме того, mirrorlist.centos.org больше недоступен, и все источники были удалены с зеркальных серверов, чтобы отразить статус конца жизни (EOL).Если вы хотите обновить свою систему до последней версии (Centos 7.9.2009) или установите несколько пакетов, необходимые для создания новой конфигурации CentOS.Repo с обновленными URL -адресами.</p>
+</blockquote>
+<h5>Удаление старых репозитории</h5>
+<p>Перечислите все в настоящее время настроенные репозитории, а затем переместите конфигурации CentOS и EPEL:</p>
+<pre><code class="language-plaintext">[root@server ~]# ls /etc/yum.repos.d/
+CentOS-Base.repo  CentOS-CR.repo  CentOS-Debuginfo.repo  CentOS-fasttrack.repo  CentOS-Media.repo
+CentOS-Sources.repo  CentOS-Vault.repo  CentOS-x86_64-kernel.repo  epel.repo  epel-testing.repo
+
+[root@server ~]# mkdir /etc/yum.repos.d/old
+[root@server ~]# mv /etc/yum.repos.d/CentOS*.repo /etc/yum.repos.d/old/
+[root@server ~]# mv /etc/yum.repos.d/epel*.repo /etc/yum.repos.d/old/</code></pre>
+<h5>Создайте конфигурацию репозитория CentOS с обновленными URL -адресами</h5>
+<p>Старые версии Centos архивируются по адресу https://vault.centos.org/ - мы собираемся создать новую конфигурацию репозитория с помощью этого сервера.Кроме того, мы установили Metadata_Expire никогда, потому что источники больше не изменятся (конец жизни).</p>
+<pre><code class="language-plaintext">[root@server ~]# cat /etc/yum.repos.d/CentOS.repo
+
+[base]
+name=CentOS-7.9.2009 - Base
+baseurl=http://vault.centos.org/7.9.2009/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+metadata_expire=never
+
+#released updates
+[updates]
+name=CentOS-7.9.2009 - Updates
+baseurl=http://vault.centos.org/7.9.2009/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+metadata_expire=never
+
+# additional packages that may be useful
+[extras]
+name=CentOS-7.9.2009 - Extras
+baseurl=http://vault.centos.org/7.9.2009/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+metadata_expire=never
+
+# additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-7.9.2009 - CentOSPlus
+baseurl=http://vault.centos.org/7.9.2009/centosplus/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=0
+metadata_expire=never
+
+#fasttrack - packages by Centos Users
+[fasttrack]
+name=CentOS-7.9.2009 - Contrib
+baseurl=http://vault.centos.org/7.9.2009/fasttrack/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=0
+metadata_expire=never</code></pre>
+<h5>Добавить конфигурацию репозитория EPEL</h5>
+<p>Этот шаг не является обязательным и необходим только в том случае, если Epel использовался ранее:</p>
+<pre><code class="language-plaintext">[root@server ~]# cat /etc/yum.repos.d/epel.repo
+
+[epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=https://archives.fedoraproject.org/pub/archive/epel/7/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+metadata_expire=never
+
+[epel-debuginfo]
+name=Extra Packages for Enterprise Linux 7 - $basearch - Debug
+baseurl=https://archives.fedoraproject.org/pub/archive/epel/7/$basearch/debug
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+gpgcheck=1
+metadata_expire=never
+
+[epel-source]
+name=Extra Packages for Enterprise Linux 7 - $basearch - Source
+baseurl=https://archives.fedoraproject.org/pub/archive/epel/7/SRPMS
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+gpgcheck=1
+metadata_expire=never</code></pre>
+<h5>Загрузить новые пакетные источники</h5>
+<p>Удалите все доступные в настоящее время метаданные: <code><i>yum clean all</i></code></p>
+<p>Теперь введите <code><i>yum check-update</i></code>, чтобы загрузить новый список всех доступных пакетов и проверить, есть ли в вашей локальной установке все доступные обновления. После этого вы можете установить пакеты, как обычно, используя инсталляцию <code><i>yum install</i></code> или <code><i>yum update</i></code><i> :)</i></p>
+<p>&nbsp;</p>
