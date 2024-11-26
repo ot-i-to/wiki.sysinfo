@@ -1,0 +1,28 @@
+<!--
+title: Проверка на существование
+description: 
+published: true
+date: 2024-11-26T11:07:23.846Z
+tags: postgresql, существование, existence
+editor: ckeditor
+dateCreated: 2024-11-26T11:07:23.846Z
+-->
+
+<h2>Иногда требуется перед выполнением действий проверить на существование таблицы или значения в таблиуце.</h2>
+<p>В этом случае вам вообще не нужно проверять существование таблицы: начиная с уже давно неподдерживаемой версии postgresql 9.1 для <code>create table</code> можно указать опцию <code>if not exists</code>, именно желаемое вами поведение и обеспечивающую.</p>
+<pre><code class="language-plaintext">create table if not exists users (...</code></pre>
+<p>Если же проверка нужна для каких-то других целей, то запрос к <code>information_schema</code> вполне нормальный способ:</p>
+<pre><code class="language-plaintext">SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='users';</code></pre>
+<p>Или если программе требуется выполнит проверку:</p>
+<pre><code class="language-plaintext">SELECT case when count(*) = 0 then 0 else 1 end FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='af_log';</code></pre>
+<p>С одним правда <a href="https://stackoverflow.com/a/24089729">важным уточнением</a>: здесь так же проверяется, есть ли у вашего пользователя права на доступ к этой табличке. В случае деплоя собственного приложения это обычно не проблема.</p>
+<p>Либо, что на самом деле чаще встречается - запрос к системному каталогу:</p>
+<pre><code class="language-plaintext">SELECT 1 
+FROM   pg_catalog.pg_class c
+JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+WHERE  n.nspname = 'schema_name'
+AND    c.relname = 'table_name'
+AND    c.relkind = 'r'    -- only tables;
+</code></pre>
+<p>Но это всё равно должен быть именно отдельный запрос, оператор ветвления должен быть на приложении или в хранимой процедуре. SQL сам по себе декларативный язык и оператора ветвления не предусматривает.</p>
+<p>&nbsp;</p>
