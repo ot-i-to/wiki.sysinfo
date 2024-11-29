@@ -1,0 +1,26 @@
+<!--
+title: Рекомендации по использованию
+description: 
+published: true
+date: 2024-11-29T17:14:06.171Z
+tags: 
+editor: ckeditor
+dateCreated: 2024-11-29T17:14:06.171Z
+-->
+
+<blockquote>
+  <p><mark class="pen-red"><strong>Примечание</strong></mark><br>Эта страница не применима к ClickHouse Cloud. Описанная здесь процедура автоматизирована в облачных сервисах ClickHouse.</p>
+</blockquote>
+<h5>Регулятор масштабирования ЦП</h5>
+<p>Always use the <code><strong>performance</strong></code> scaling governor. The <code><strong>on-demand</strong></code> scaling governor works much worse with constantly high demand.</p>
+<pre><code class="language-plaintext">$ echo 'performance' | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor</code></pre>
+<h5>Ограничения процессора</h5>
+<p>Процессоры могут перегреваться. Используйте <code><strong>dmesg</strong></code>, чтобы узнать, была ли ограничена тактовая частота процессора из-за перегрева. Ограничение также можно установить снаружи на уровне центра обработки данных. Вы можете использовать <code><strong>turbostat</strong></code>, чтобы контролировать его под нагрузкой.</p>
+<h5>RAM</h5>
+<p>Для небольших объемов данных (сжатых до ~200 ГБ) лучше всего использовать столько памяти, сколько объем данных. Для больших объемов данных и при обработке интерактивных (онлайн) запросов следует использовать разумный объем оперативной памяти (128 ГБ или более), чтобы подмножество горячих данных поместилось в кэш страниц. Даже для объемов данных ~50 ТБ на сервер использование 128 ГБ ОЗУ значительно повышает производительность запросов по сравнению с 64 ГБ.<br><br>Не отключайте чрезмерную фиксацию. Значение <code>cat /proc/sys/vm/overcommit_memory</code> должно быть равно 0 или 1. Запустите</p>
+<pre><code class="language-plaintext">$ эхо 0 | sudo тройник /proc/sys/vm/overcommit_memory</code></pre>
+<p>Используйте <code><strong>perf top</strong></code>, чтобы отслеживать время, затрачиваемое ядром на управление памятью. Постоянные огромные страницы также не нужно выделять.</p>
+<p><strong>Использование менее 16 ГБ ОЗУ</strong><br><br>Рекомендуемый объем оперативной памяти — 32 ГБ или более.<br><br>Если ваша система имеет менее 16 ГБ ОЗУ, у вас могут возникнуть различные исключения из памяти, поскольку настройки по умолчанию не соответствуют этому объему памяти. Вы можете использовать ClickHouse в системе с небольшим объемом оперативной памяти (всего 2 ГБ), но эти настройки требуют дополнительной настройки и могут принимать данные только с низкой скоростью.<br><br>При использовании ClickHouse с объемом оперативной памяти менее 16 ГБ мы рекомендуем следующее:<br><br>Уменьшите размер кэша меток в <code><strong>config.xml</strong></code>. Его можно установить на уровне 500 МБ, но нельзя установить равным нулю.<br>Уменьшите количество потоков обработки запросов до <code><strong>1</strong></code>.<br>Уменьшите <code><strong>max_block_size</strong></code> до <code><strong>8192</strong></code>. Значения до <code><strong>1024</strong></code> все еще могут быть практичными.<br>Уменьшите <code><strong>max_download_threads</strong></code> до <code><strong>1</strong></code>.<br>Установите для <code><strong>input_format_parallel_parsing</strong></code> и <code><strong>output_format_parallel_formatting</strong></code> значение <code><strong>0</strong></code>.<br><br><strong>Дополнительные примечания:</strong><br>Чтобы очистить память, кэшированную распределителем памяти, вы можете запустить команду <code><strong>SYSTEM JEMALLOC PURGE</strong></code>.<br>Мы не рекомендуем использовать интеграцию S3 или Kafka на машинах с низким объемом памяти, поскольку им требуется значительный объем памяти для буферов.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
