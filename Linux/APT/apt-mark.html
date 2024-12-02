@@ -1,0 +1,30 @@
+<!--
+title: Фиксировать версии
+description: 
+published: true
+date: 2024-12-02T09:29:24.845Z
+tags: apt, apt-mark, aptitude
+editor: ckeditor
+dateCreated: 2024-12-02T09:29:24.845Z
+-->
+
+<h2>Зафиксировать версию и запретить обновление определённого пакета в Debian/Ubuntu Linux</h2>
+<p>&nbsp;</p>
+<h3>Блокировка версии с apt-mark</h3>
+<p>В базовом наборе утилит <strong>APT</strong> за запрет обновлений пакетов отвечает утилита <strong>apt-mark</strong>.</p>
+<p>Чтобы зафиксировать текущую версию и заблокировать обновление пакета, например с именем «nano», выполним:</p>
+<pre><code class="language-plaintext"># apt-mark hold nano</code></pre>
+<p>Чтобы снять блокировку пакета, выполним:</p>
+<pre><code class="language-plaintext"># apt-mark unhold nano</code></pre>
+<p>Чтобы показать все зафиксированные пакеты с меткой hold:</p>
+<pre><code class="language-plaintext"># apt-mark showhold</code></pre>
+<p>&nbsp;</p>
+<h3>Блокировка версии с aptitude</h3>
+<p>В оболочке <strong>Aptitude</strong> (оболочка для APT) есть свои команды для работы с меткой «hold».</p>
+<p>Чтобы получить список зафиксированных пакетов, выполним:</p>
+<pre><code class="language-plaintext"># aptitude search "~ahold"</code></pre>
+<p>В результате выполнения команды появится перечень пакетов, в котором убрать метку удержания на том или ином пакете.</p>
+<p>Для снятия с фиксации определённого пакета, можем выполнить команду вида:</p>
+<pre><code class="language-plaintext"># aptitude unhold nano</code></pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
