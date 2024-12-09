@@ -1,0 +1,43 @@
+<!--
+title: Всегда через DNS-сервер
+description: 
+published: true
+date: 2024-12-09T09:05:02.580Z
+tags: dns, firefox, search
+editor: ckeditor
+dateCreated: 2024-12-09T09:05:02.580Z
+-->
+
+<h2>Всегда ли проходить через DNS-сервер перед отправкой строки поиска из одного слова в поисковую систему. <a href="https://mozilla.github.io/policy-templates/#gotointranetsiteforsinglewordentryinaddressbar">⇡</a></h2>
+<p><strong>GoToIntranetSiteForSingleWordEntryInAddressBar</strong><br>Принудительно использовать прямую навигацию по сайту в интрасети вместо поиска при вводе отдельных слов в адресной строке.</p>
+<p>Если сайт существует, произойдет переход на него. Если интрасеть отвечает кодом 404, на странице отобразится ошибка 404. Если интрасеть не отвечает, браузер попытается выполнить поиск.</p>
+<p>Второй результат в строке URL-адреса будет результатом поиска, позволяющим пользователям выполнять поиск в Интернете точно так, как он был введен.</p>
+<p>Если вместо этого вы хотите включить возможность отображать ваш домен как действительный URL-адрес и запретить браузеру когда-либо выполнять поиск по этому термину с использованием первого соответствующего ему результата, добавьте преф <code>browser.fixup.domainwhitelist.ВАШ_ДОМЕН</code> (где <code>ВАШ_ДОМЕН</code> — это имя домена, который вы хотите добавить) и установите для параметра значение true. Затем в строке URL будет предложено <code>ВАШ_ДОМЕН</code>, когда пользователь полностью введет <code>ВАШ_ДОМЕН</code>. Если пользователь попытается загрузить этот домен, но он не загрузится, отобразится страница с ошибкой «Невозможно подключиться».</p>
+<p>Вы также можете внести в белый список суффикс домена, который не входит в <a href="https://publicsuffix.org/">список общедоступных суффиксов</a>, добавив преф <code>browser.fixup.domainsuffixwhitelist.ВАШ_ДОМЕН_СУФФИКС</code> со значением <code><strong>true</strong></code>.</p>
+<p>Кроме того, если вы хотите, чтобы пользователи видели подсказку «Вы хотели перейти к «<code>ВАШ_ДОМЕН</code>»» под строкой URL-адреса, если они попадают на страницу результатов поиска, а не на домен интрасети, который предоставляет ответ, установите преф <code>browser.urlbar.dnsResolveSingleWordsAfterSearch</code> равным <code><strong>1</strong></code>. Включение этого параметра приведет к тому, что браузер будет выполнять проверку DNS после каждого поиска отдельного слова. Если браузер получает ответ из интрасети, пользователю будет предложено перейти на сайт <code>ВАШ_ДОМЕН</code>. Если пользователь нажмет кнопку «<code><strong>yes</strong></code>», для параметра <code>browser.fixup.domainwhitelist.ВАШ_ДОМЕН</code> будет установлено значение <code><strong>true</strong></code>.</p>
+<p><strong>Compatibility:</strong> Firefox 104, Firefox ESR 102.2<br><strong>CCK2 Equivalent:</strong> <code>N/A</code><br><strong>Preferences Affected:</strong> <code>browser.fixup.dns_first_for_single_words</code></p>
+<h4>Windows (GPO)</h4>
+<pre><code class="language-plaintext">Software\Policies\Mozilla\Firefox\GoToIntranetSiteForSingleWordEntryInAddressBar = 0x1 | 0x0
+</code></pre>
+<h4>Windows (Intune)</h4>
+<p>OMA-URI:</p>
+<pre><code class="language-plaintext">./Device/Vendor/MSFT/Policy/Config/Firefox~Policy~firefox/GoToIntranetSiteForSingleWordEntryInAddressBar
+</code></pre>
+<p>Value (string):</p>
+<pre><code class="language-plaintext">&lt;enabled/&gt; or &lt;disabled/&gt;
+</code></pre>
+<h4>macOS</h4>
+<pre><code class="language-plaintext">&lt;dict&gt;
+  &lt;key&gt;GoToIntranetSiteForSingleWordEntryInAddressBar&lt;/key&gt;
+  &lt;true/&gt; | &lt;false/&gt;
+&lt;/dict&gt;
+</code></pre>
+<h4>policies.json</h4>
+<pre><code class="language-plaintext">{
+  "policies": {
+    "GoToIntranetSiteForSingleWordEntryInAddressBar": true | false
+  }
+}
+</code></pre>
+<h3>&nbsp;</h3>
+<p><a href="https://mozilla.github.io/policy-templates/">⇒</a></p>
