@@ -2,7 +2,7 @@
 title: Всегда через DNS-сервер
 description: policy-templates
 published: true
-date: 2024-12-09T09:11:32.651Z
+date: 2024-12-09T09:11:54.268Z
 tags: dns, firefox, search
 editor: ckeditor
 dateCreated: 2024-12-09T09:05:02.580Z
@@ -17,27 +17,22 @@ dateCreated: 2024-12-09T09:05:02.580Z
 <p>Кроме того, если вы хотите, чтобы пользователи видели подсказку «Вы хотели перейти к «<code>ВАШ_ДОМЕН</code>»» под строкой URL-адреса, если они попадают на страницу результатов поиска, а не на домен интрасети, который предоставляет ответ, установите преф <code>browser.urlbar.dnsResolveSingleWordsAfterSearch</code> равным <code><strong>1</strong></code>. Включение этого параметра приведет к тому, что браузер будет выполнять проверку DNS после каждого поиска отдельного слова. Если браузер получает ответ из интрасети, пользователю будет предложено перейти на сайт <code>ВАШ_ДОМЕН</code>. Если пользователь нажмет кнопку «<code><strong>yes</strong></code>», для параметра <code>browser.fixup.domainwhitelist.ВАШ_ДОМЕН</code> будет установлено значение <code><strong>true</strong></code>.</p>
 <p><strong>Compatibility:</strong> Firefox 104, Firefox ESR 102.2<br><strong>CCK2 Equivalent:</strong> <code>N/A</code><br><strong>Preferences Affected:</strong> <code>browser.fixup.dns_first_for_single_words</code></p>
 <h4>Windows (GPO)</h4>
-<pre><code class="language-plaintext">Software\Policies\Mozilla\Firefox\GoToIntranetSiteForSingleWordEntryInAddressBar = 0x1 | 0x0
-</code></pre>
+<pre><code class="language-plaintext">Software\Policies\Mozilla\Firefox\GoToIntranetSiteForSingleWordEntryInAddressBar = 0x1 | 0x0</code></pre>
 <h4>Windows (Intune)</h4>
 <p>OMA-URI:</p>
-<pre><code class="language-plaintext">./Device/Vendor/MSFT/Policy/Config/Firefox~Policy~firefox/GoToIntranetSiteForSingleWordEntryInAddressBar
-</code></pre>
+<pre><code class="language-plaintext">./Device/Vendor/MSFT/Policy/Config/Firefox~Policy~firefox/GoToIntranetSiteForSingleWordEntryInAddressBar</code></pre>
 <p>Value (string):</p>
-<pre><code class="language-plaintext">&lt;enabled/&gt; or &lt;disabled/&gt;
-</code></pre>
+<pre><code class="language-plaintext">&lt;enabled/&gt; or &lt;disabled/&gt;</code></pre>
 <h4>macOS</h4>
 <pre><code class="language-plaintext">&lt;dict&gt;
   &lt;key&gt;GoToIntranetSiteForSingleWordEntryInAddressBar&lt;/key&gt;
   &lt;true/&gt; | &lt;false/&gt;
-&lt;/dict&gt;
-</code></pre>
+&lt;/dict&gt;</code></pre>
 <h4>policies.json</h4>
 <pre><code class="language-plaintext">{
   "policies": {
     "GoToIntranetSiteForSingleWordEntryInAddressBar": true | false
   }
-}
-</code></pre>
+}</code></pre>
 <h3>&nbsp;</h3>
 <p><a href="https://mozilla.github.io/policy-templates/">⇒</a></p>
