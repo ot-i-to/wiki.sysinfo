@@ -2,13 +2,13 @@
 title: Simple stateful firewall
 description: Простой брандмауэр с отслеживанием состояния
 published: true
-date: 2024-12-10T08:45:45.255Z
+date: 2024-12-10T08:46:27.533Z
 tags: iptables, firewall
 editor: ckeditor
 dateCreated: 2024-12-10T08:40:35.942Z
 -->
 
-<p>На этой странице представлен перевод статьи <a href="https://wiki.archlinux.org/title/Simple_stateful_firewall">Simple stateful firewall</a>. Дата последней синхронизации: 11 июля 2021.&nbsp;</p>
+<p>На этой странице представлен перевод статьи <a href="https://wiki.archlinux.org/title/Simple_stateful_firewall">Simple stateful firewall</a>. Дата последней синхронизации: 11 июля 2021. <a href="https://wiki.archlinux.org/title/Simple_stateful_firewall_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)">⇡</a></p>
 <p>В статье рассмотрена настройка межсетевого экрана с контекстной фильтрацией (<a href="https://en.wikipedia.org/wiki/ru:Stateful_Packet_Inspection">stateful firewall</a>) посредством <a href="https://wiki.archlinux.org/title/Iptables_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)">iptables</a>, с описанием основных правил и их назначения. Для удобства статья разбита на две части. В первой объясняется настройка межсетевого экрана <a href="https://wiki.archlinux.org/title/Simple_stateful_firewall_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#Настройка_межсетевого_экрана">на одиночной машине</a>, во второй — <a href="https://wiki.archlinux.org/title/Simple_stateful_firewall_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)#Настройка_NAT-шлюза">настройка NAT-шлюза</a> в дополнение к файрволу.</p>
 <p><strong>Важно:</strong> Правила ниже приводятся в порядке выполнения; такая настройка возможна только при локальном входе в систему. Если вы работаете с удалённой системой, то в процессе добавления правил соединение с ней будет потеряно. Чтобы этого избежать, используйте готовый файл настроек.</p>
 <h2>Требования</h2>
