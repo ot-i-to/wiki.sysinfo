@@ -1,0 +1,53 @@
+<!--
+title: SIP ошибки
+description: их значение
+published: true
+date: 2024-12-21T21:45:13.753Z
+tags: error, sip, code
+editor: ckeditor
+dateCreated: 2024-12-21T21:45:13.753Z
+-->
+
+<h2>SIP ошибки и их значение</h2>
+<p>SIP/2.0 <strong>400</strong> Bad Request - ошибка в сигнализации, скорее всего что-то с настройками оборудования</p>
+<p>SIP/2.0 <strong>401</strong> Unauthorized - нормальный ответ сервера о том, что пользователь еще неавторизировался, обычно после этого на абонентское оборудование отправляет на сервер логин и пароль</p>
+<p>SIP/2.0 <strong>401</strong> Expired Authorization - время регистрации истекло</p>
+<p>SIP/2.0 <strong>403</strong> No Such User - нет такого пользователя, ошибка в номере, логине или пароле</p>
+<p>SIP/2.0 <strong>403</strong> User Disabled - пользователь отключен</p>
+<p>SIP/2.0 <strong>403</strong> Wrong Guess - ошибка в пароле</p>
+<p>SIP/2.0 <strong>403</strong> Forbidden - абонент не зарегистрирован</p>
+<p>SIP/2.0 <strong>403</strong> Empty Route Set - нет ни одного шлюза в роутинге</p>
+<p>SIP/2.0 <strong>403</strong> Caller Not Registered - нет такого пользователя</p>
+<p>SIP/2.0 <strong>403</strong> Out of Look-Ahead Retries - перебор узлов закончен</p>
+<p>SIP/2.0 <strong>403</strong> Invalid Phone Number - нет такого направления</p>
+<p>SIP/2.0 <strong>404</strong> Not found - вызываемый абонент не найден, нет такого SIP-номера</p>
+<p>SIP/2.0 <strong>404</strong> Undefined Reason - неопределенное направление</p>
+<p>SIP/2.0 <strong>404</strong> Unknown user account - логин и пароль не найдены</p>
+<p>SIP/2.0 <strong>405</strong> Method Not Allowed - метод не поддерживается, может возникать если пользователь пытается отправлять голосовую почту и т.п.</p>
+<p>SIP/2.0 <strong>406</strong> No codecs match - неправильная конфигурация кодеков</p>
+<p>SIP/2.0 <strong>406</strong> Not Acceptable</p>
+<p>SIP/2.0 <strong>407</strong> Proxy Authentication Required - что-то с регистрацией</p>
+<p>SIP/2.0 <strong>408</strong> Request Timeout - превышение ожижание ответа на запрос</p>
+<p>SIP/2.0 <strong>408</strong> Login timed out - за отведенное время не получен ответ от сервера на запрос авторизации</p>
+<p>SIP/2.0 <strong>410</strong> No Route - вариант SIP/2.0 403 Empty Route Set</p>
+<p>SIP/2.0 <strong>415</strong> No Media - несоответствие кодеков</p>
+<p>SIP/2.0 <strong>480</strong> Invalid Phone Number - неправильный номер телефона</p>
+<p>SIP/2.0 480 Destination Not Found In Client Plan - направления не существует</p>
+<p>SIP/2.0 480 Codec Mismatch - несоответствие кодеков</p>
+<p>SIP/2.0 480 Empty Route Set - что-то с маршрутизацией</p>
+<p>SIP/2.0 480 No money left - недостаточно денег на счете</p>
+<p>SIP/2.0 480 Temporarily Unavailable - временно недоступное направление - попробуйте позвонить позже</p>
+<p>SIP/2.0 481 Call Leg/Transaction Does Not Exist - действие не выполнено, нормальный ответ при поступлении дублирующего пакета</p>
+<p>SIP/2.0 487 Request Terminated - запрос отменен, обычно приходит при отмене вызова</p>
+<p>SIP/2.0 486 Busy Here - абонент занят</p>
+<p>SIP/2.0 488 Codec Mismatch - нет шлюзов с поддержкой заказанного кодека</p>
+<p>SIP/2.0 <strong>488</strong> <code>Private IP Address</code> - адрес RTP media из сетей RFC1918</p>
+<p>SIP/2.0 <strong>499</strong> <code>Codec Mismatch </code>- отсутствует кодек</p>
+<p>SIP/2.0 <strong>500</strong> <code>Internal Server Error</code> - внутренняя ошибка сервера</p>
+<p>SIP/2.0 <strong>500</strong> <code>DB Timeout </code>- нет ответа от базы данных</p>
+<p>SIP/2.0 <strong>500</strong> <code>Database Error</code> - то же самое, но в другой момент</p>
+<p>SIP/2.0 <strong>500</strong> <code>Wrong DB Response</code> - неправильный ответ базы данных</p>
+<p>SIP/2.0 <strong>500</strong> <code>Undefined Reason</code> - неопределенная причина</p>
+<p>SIP/2.0 <strong>500</strong> <code>account has been moved to a remote system</code> - аккаунт перенесен в удаленную систему (дословно)</p>
+<p>SIP/2.0 <strong>5хх</strong> - проблемы с SoftSwitch-ом</p>
+<p>SIP/2.0 <strong>603</strong> <code>Decline</code> - отказ в обслуживании звонка</p>
