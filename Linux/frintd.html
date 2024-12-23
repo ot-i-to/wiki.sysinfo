@@ -1,0 +1,75 @@
+<!--
+title: Сканер отпечатков пальцев
+description: pam
+published: true
+date: 2024-12-23T12:54:47.832Z
+tags: linux, linuxmint, frprint, fprontd, pam
+editor: ckeditor
+dateCreated: 2024-12-23T12:54:47.832Z
+-->
+
+<h2>Включите сканер отпечатков пальцев с помощью fprintd.</h2>
+<p>Поддерживаемые устройства перечислены <a href="https://fprint.freedesktop.org/supported-devices.html">здесь</a> .<br>Проверьте, есть ли идентификатор вашего устройства по команде:</p>
+<pre><code class="language-plaintext">lsusb</code></pre>
+<p>из полученного результата скопируйте идентификатор (шестой столбец вывода) и найдите его на веб-сайте. В моем случае это было <strong>06cb:00df</strong></p>
+<pre><code class="language-plaintext">Bus 002 Device 002: ID 8087:8002 Intel Corp. 8 channel internal hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:800a Intel Corp. Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 021: ID 174c:1153 ASMedia Technology Inc. ASM1153 SATA 3Gb/s bridge
+Bus 004 Device 002: ID 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 006: ID 046d:0843 Logitech, Inc. Webcam C930e
+Bus 003 Device 005: ID 1a40:0101 Terminus Technology Inc. Hub
+Bus 003 Device 100: ID 06cb:00df Synaptics, Inc.  &lt;-------------------- ЭТО
+Bus 003 Device 098: ID 0403:6001 Future Technology Devices International, Ltd FT232 Serial (UART) IC
+Bus 003 Device 003: ID 046d:c534 Logitech, Inc. Unifying Receiver
+Bus 003 Device 007: ID 051d:0002 American Power Conversion Uninterruptible Power Supply
+Bus 003 Device 002: ID 1b3f:2008 Generalplus Technology Inc. USB Audio Device
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</code></pre>
+<p>Перейдем к установке:<br><strong>1 </strong>- Найдите пакет fprint.</p>
+<pre><code class="language-plaintext">$ apt search fprint
+i   fprintd                                                                                                        - D-Bus daemon for fingerprint reader access                                                                              
+i   fprintd-doc                                                                                                    - development documentation for fprintd                                                                                    
+i A gir1.2-fprint-2.0                                                                                              - async fingerprint library of fprint project, gir bindings                                                                
+i   libfprint-2-2                                                                                                  - async fingerprint library of fprint project, shared libraries                                                            
+i   libfprint-2-dev                                                                                                - async fingerprint library of fprint project, development headers                                                        
+p   libfprint-2-doc                                                                                                - async fingerprint library of fprint project, API documentation                                                          
+p   libfprint-2-tod-dev                                                                                            - async fingerprint library of fprint project, drivers development headers                                                
+i   libfprint-2-tod1                                                                                               - async fingerprint library of fprint project, drivers shared libraries                                                    
+i   libpam-fprintd                                                                                                 - PAM module for fingerprint authentication through fprintd                                                                </code></pre>
+<p><strong>2 </strong>- Установите fprintd</p>
+<pre><code class="language-plaintext">sudo apt install fprintd</code></pre>
+<p><strong>3</strong> - Установите модуль библиотеки/модуля PAM.</p>
+<pre><code class="language-plaintext">sudo apt install libpam-fprintd</code></pre>
+<p><strong>4</strong> - Сообщите системе, чтобы она использовала сканер отпечатков пальцев.</p>
+<pre><code class="language-plaintext">sudo pam-auth-update</code></pre>
+<p>… убедитесь, что выбрана «<strong>Аутентификация по отпечатку пальца</strong>»/"<strong>Fingerprint authentication</strong>", затем выберите «<strong>ОК</strong>», чтобы сохранить.</p>
+<figure class="image"><img src="/img/2024-12-23_15-38.png"></figure>
+<p><strong>5</strong> - Добавьте или зарегистрируйте отпечаток пальца</p>
+<pre><code class="language-plaintext">fprintd-enroll -f right-index-finger</code></pre>
+<p>Поприкладывайте палец для получения всех возможных вариантов. После каждего варианта будет новая строка со значением enroll-stage-passed если удачною Продругие значения, читайте на <a href="https://fprint.freedesktop.org/">сайте</a> программы.</p>
+<pre><code class="language-plaintext">$ fprintd-enroll -f right-index-finger
+Using device /net/reactivated/Fprint/Device/0
+Enrolling right-index-finger finger.
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-stage-passed
+Enroll result: enroll-completed</code></pre>
+<p><strong>6 </strong>- Проверяем:</p>
+<pre><code class="language-plaintext">$ fprintd-verify
+Using device /net/reactivated/Fprint/Device/0
+Listing enrolled fingers:
+ - #0: right-index-finger
+Verify started!
+Verifying: right-index-finger
+Verify result: verify-match (done)</code></pre>
+<p>Все.</p>
+<p><br><a href="https://forums.linuxmint.com/viewtopic.php?t=408129"><span class="text-tiny">Оригинал на английском.</span></a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
