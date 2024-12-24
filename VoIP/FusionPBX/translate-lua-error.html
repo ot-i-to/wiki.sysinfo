@@ -1,0 +1,25 @@
+<!--
+title: Error Number-Translate
+description: исправление для ver:5.0.10
+published: true
+date: 2024-12-24T15:29:23.484Z
+tags: lua, error, freepbx, translate, number
+editor: ckeditor
+dateCreated: 2024-12-24T15:29:23.484Z
+-->
+
+<p>В LUA скриптах есть ошибка связана с <strong>Number Translations. </strong>Выражается она в том, что команда translate при выполнении в dial-plan(е), всегда начинает выдавать только один результат равный "<code><strong>1</strong></code>". Например эта проблема была описана <a href="https://www.pbxforums.com/threads/mod_translate-issue.7059/#post-28859">тут</a>, а также ее причина &nbsp;связанная с потери из регулярных выражений, включая выражение замены, символа “<code><strong>$</strong></code>”. &nbsp;</p>
+<p>Вот как это выглядит в консоле FreeSwitch:</p>
+<pre><code class="language-plaintext">2024-12-24 16:52:10.670905 88.10% [INFO] mod_translate.c:342 1 VATS_B_SIP_to_PSTN
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:128 translating [1] against [VATS_B_SIP_to_PSTN] profile
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^00787\d(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^007768\d(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^00995\d(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^0077[1-5]\d(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^007778(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^00779\d(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^007788(\d+)/
+2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:137 1 =~ /^(\d+)/
+2024-12-24 16:52:10.670905 88.10% [NOTICE] mod_translate.c:361 Translated: 1</code></pre>
+<p>Проблема скрывается в файле <a href="/files/translate.conf.lua.old"><strong>translate.conf.lua</strong></a>&nbsp;<br><br>Для решения проблемы, его надо заменить на другую <a href="/files/translate.conf.lua.ok"><strong>версию</strong></a> не использующею <strong>XML</strong> функцию описанную в &nbsp;<strong>resources.functions.xml</strong>.</p>
+<p>Далее, нада перезапустить FreeSwitch.</p>
