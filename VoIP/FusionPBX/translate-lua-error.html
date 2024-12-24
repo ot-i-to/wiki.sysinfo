@@ -2,13 +2,13 @@
 title: Error Number-Translate
 description: исправление для ver:5.0.10
 published: true
-date: 2024-12-24T15:30:27.785Z
+date: 2024-12-24T15:30:43.375Z
 tags: lua, error, freepbx, translate, number
 editor: ckeditor
 dateCreated: 2024-12-24T15:29:23.484Z
 -->
 
-<h4>В lua скриптах есть ошибка связана с <strong>Number Translations.&nbsp;</strong></h4>
+<h4>В lua скриптах FusionPBX есть ошибка связана с <strong>Number Translations.&nbsp;</strong></h4>
 <p>Выражается она в том, что команда translate при выполнении в dial-plan(е), всегда начинает выдавать только один результат равный "<code><strong>1</strong></code>".&nbsp;</p>
 <p>Например эта проблема была описана <a href="https://www.pbxforums.com/threads/mod_translate-issue.7059/#post-28859">тут</a>, а также ее причина &nbsp;связанная с потери из регулярных выражений, включая выражение замены, символа “<code><strong>$</strong></code>”. &nbsp;</p>
 <p>Вот как это выглядит в консоле FreeSwitch:</p>
