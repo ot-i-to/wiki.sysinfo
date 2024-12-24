@@ -2,7 +2,7 @@
 title: Error Number-Translate
 description: исправление для ver:5.0.10
 published: true
-date: 2024-12-24T15:30:43.375Z
+date: 2024-12-24T15:32:56.988Z
 tags: lua, error, freepbx, translate, number
 editor: ckeditor
 dateCreated: 2024-12-24T15:29:23.484Z
@@ -10,7 +10,7 @@ dateCreated: 2024-12-24T15:29:23.484Z
 
 <h4>В lua скриптах FusionPBX есть ошибка связана с <strong>Number Translations.&nbsp;</strong></h4>
 <p>Выражается она в том, что команда translate при выполнении в dial-plan(е), всегда начинает выдавать только один результат равный "<code><strong>1</strong></code>".&nbsp;</p>
-<p>Например эта проблема была описана <a href="https://www.pbxforums.com/threads/mod_translate-issue.7059/#post-28859">тут</a>, а также ее причина &nbsp;связанная с потери из регулярных выражений, включая выражение замены, символа “<code><strong>$</strong></code>”. &nbsp;</p>
+<p>Например эта проблема была описана <a href="https://www.pbxforums.com/threads/mod_translate-issue.7059/#post-28859">тут</a>, … ее причина &nbsp;связанная с потери из регулярных выражений, включая выражение замены, символа “<code><strong>$</strong></code>”. &nbsp;</p>
 <p>Вот как это выглядит в консоле FreeSwitch:</p>
 <pre><code class="language-plaintext">2024-12-24 16:52:10.670905 88.10% [INFO] mod_translate.c:342 1 VATS_B_SIP_to_PSTN
 2024-12-24 16:52:10.670905 88.10% [DEBUG] mod_translate.c:128 translating [1] against [VATS_B_SIP_to_PSTN] profile
