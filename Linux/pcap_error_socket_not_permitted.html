@@ -2,7 +2,7 @@
 title: pcap_error: socket:
 description: Operation not permitted
 published: true
-date: 2024-12-25T16:59:34.185Z
+date: 2024-12-25T17:07:41.761Z
 tags: linux, setcap, pcap_error, socket, not permitted, pcap_activate, tcpdump
 editor: ckeditor
 dateCreated: 2024-12-25T16:53:56.757Z
@@ -13,5 +13,14 @@ dateCreated: 2024-12-25T16:53:56.757Z
 <p>… для решения проблемы требуется предоставить разрешений двоичным файлам с помощью <strong>setcap</strong> на возможность захват необработанных пакетов (<strong>raw packet captures)</strong> и манипулирование сетевым интерфейсом (<strong>network interface manipulation</strong>):</p>
 <pre><code class="language-plaintext">$sudo setcap cap_net_raw,cap_net_admin=eip [полный путь до двоичного файла]</code></pre>
 <h6>Пример:&nbsp;</h6>
-<pre><code class="language-plaintext">$sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/tcpdump</code></pre>
+<pre><code class="language-plaintext">$sudo setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump</code></pre>
+<p><strong>Если этого не достаточно</strong>, добавьте группу захвата (если она отсутсвует) и добавьте в нее себя или требуемого пользователя:</p>
+<pre><code class="language-plaintext">sudo groupadd pcap
+sudo usermod -a -G pcap $USER</code></pre>
+<p>Далее измените группу двоичного файла (например tcpdump) и установите разрешения:</p>
+<pre><code class="language-plaintext">sudo chgrp pcap /usr/sbin/tcpdump
+sudo chmod 750 /usr/sbin/tcpdump</code></pre>
+<p>Наконец, используйте <strong>setcap</strong>, чтобы предоставить двоичному файлу необходимые разрешения:</p>
+<pre><code class="language-plaintext">sudo setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump</code></pre>
+<p>Нашел <a href="https://askubuntu.com/questions/1432914/executing-tcpdump-without-sudo-on-ubuntu-20-04">здесь</a>.</p>
 <p>&nbsp;</p>
