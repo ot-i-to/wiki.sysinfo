@@ -1,0 +1,17 @@
+<!--
+title: pcap_error: socket:
+description: Operation not permitted
+published: true
+date: 2024-12-25T16:53:56.757Z
+tags: linux, pcap_error, socket, not permitted, pcap_activate, tcpdump
+editor: ckeditor
+dateCreated: 2024-12-25T16:53:56.757Z
+-->
+
+<p>При возникновении такой или подобной ошибки <strong>socket</strong> в не привилегированном режиме, т.е. без прав root в консоле например через sudo:</p>
+<pre><code class="language-plaintext">fatal error: problem with interface ens3 (pcap_error: socket: Operation not permitted (pcap_activate))</code></pre>
+<p>… для решения проблемы требуется предоставить разрешений двоичным файлам с помощью <strong>setcap</strong>:</p>
+<pre><code class="language-plaintext">$sudo setcap cap_net_raw,cap_net_admin=eip [полный путь до двоичного файла]</code></pre>
+<h6>Пример:&nbsp;</h6>
+<pre><code class="language-plaintext">$sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/tcpdump</code></pre>
+<p>&nbsp;</p>
