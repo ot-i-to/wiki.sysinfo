@@ -2,7 +2,7 @@
 title: pcap_error: socket:
 description: Operation not permitted
 published: true
-date: 2024-12-25T17:07:41.761Z
+date: 2024-12-25T17:09:56.490Z
 tags: linux, setcap, pcap_error, socket, not permitted, pcap_activate, tcpdump
 editor: ckeditor
 dateCreated: 2024-12-25T16:53:56.757Z
@@ -22,5 +22,5 @@ sudo usermod -a -G pcap $USER</code></pre>
 sudo chmod 750 /usr/sbin/tcpdump</code></pre>
 <p>Наконец, используйте <strong>setcap</strong>, чтобы предоставить двоичному файлу необходимые разрешения:</p>
 <pre><code class="language-plaintext">sudo setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump</code></pre>
-<p>Нашел <a href="https://askubuntu.com/questions/1432914/executing-tcpdump-without-sudo-on-ubuntu-20-04">здесь</a>.</p>
+<p>Нашел <a href="https://gist.github.com/srugano/93df27f96a826a6bc1973e6b9a3d8244">здесь</a>.</p>
 <p>&nbsp;</p>
