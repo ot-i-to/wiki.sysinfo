@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:44:48.094Z
+date: 2025-01-01T19:55:59.188Z
 tags: linux, ssh, tunnel, windows, server, настройка, конфигурирование, команда, сервер
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -124,9 +124,11 @@ $ sudo ufw status verbose
 <pre><code class="language-diff">&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <p>Второй туннель создаем с виртуальной машины <code>web-server</code>, с удаленной точкой входа на виртуальной машине <code>ssh-server</code>. Открываем окно терминала на <code>web-server</code> и выполняем команду:</p>
 <pre><code class="language-plaintext">$ ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/2.jpg" alt=""></figure>
 <p>Открываем еще одно окно PowerShell и выполняем команду:</p>
 <pre><code class="language-plaintext">&gt; mysql -uroot -pqwerty -P 3307</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/3.jpg" alt=""></figure>
 <blockquote>
   <p>Эту задачу можно решить иначе, но для этого потребуется установить ssh-сервер на виртуальную машину <code>web-server</code> (подробности см. <a href="https://tokmakov.msk.ru/blog/item/441">здесь</a>):</p>
@@ -149,6 +151,7 @@ $ sudo systemctl restart ssh</code></pre>
 <pre><code class="language-plaintext">&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <p>Теперь открываем окно терминала на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
 <p>Открываем еще одно окно терминала на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ mysql -uroot -pqwerty -P 3307</code></pre>
@@ -157,6 +160,7 @@ $ sudo systemctl restart ssh</code></pre>
 <p>Дело в том, что хост по умолчанию для mysql-клиента — это <code>localhost</code>. А в этом случае подключение происходит с использованием unix-сокета. И порт может быть любым — он вообще не используется. Но нам нужно сетевое подключение, т.е. с использованием tcp-сокета. Тут есть два пути решения — либо указать протокол TCP, либо указать хост 127.0.0.1 (вместо значения по умолчанию <code>localhost</code>):</p>
 <pre><code class="language-plaintext">$ mysql -uroot -pqwerty -P 3307 --protocol=TCP
 $ mysql -uroot -pqwerty -P 3307 -h 127.0.0.1</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/7.jpg" alt=""></figure>
 <h2>Аутентификация по ключу</h2>
 <p>Чтобы не вводить пароль каждый раз при создании туннеля — настроим аутентификацию по ключу. Сначала для физического компьютера, потом для виртуальной машины <code>web-server</code>. Эти ключи будут нужны для построения двух туннелей через промежуточный сервер:</p>
@@ -164,6 +168,7 @@ $ mysql -uroot -pqwerty -P 3307 -h 127.0.0.1</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
 <p>Но перед этим надо изменить настройку ssh-сервера:</p>
 <pre><code class="language-plaintext">PubkeyAuthentication yes</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/8.jpg" alt=""></figure>
 <pre><code class="language-plaintext">$ sudo systemctl restart ssh</code></pre>
 <h3>Ключи для физического компьютера</h3>
@@ -223,12 +228,14 @@ Host local-forward-ssh-server
 <h2>Проверка активности соединения</h2>
 <p>Для этого отредактируем файл конфигурации <code>/etc/ssh/sshd_config</code> на виртуальной машине <code>ssh-server</code>:</p>
 <pre><code class="language-plaintext">$ sudo nano /etc/ssh/sshd_config</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext"># отключаем дефолтный механизм проверки активности соединения
 TCPKeepAlive no
 # проверять активность подключения клиента каждые 30 секунд
 ClientAliveInterval 30
 # сервер закроет соединение после трех неудачных попыток
 ClientAliveCountMax 3</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/3.jpg" alt=""></figure>
 <pre><code class="language-plaintext">$ sudo systemctl restart ssh.service</code></pre>
 <p>Если что-то произойдет с клиентом, например, компьютер просто отключится от сети, то через 90 секунд <code>ssh-server</code> закроет туннельное соединение.</p>
@@ -239,11 +246,13 @@ ClientAliveCountMax 3</code></pre>
 <p>При создании туннельного подключения со стороны клиента есть возможность указать аналогичные параметры <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>. Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ ssh -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
 &gt; -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p>Иногда возможна ситуация, когда порт не был проброшен, хотя туннель был поднят. То есть, со стороны ssh-сервера и ssh-клиента все будет выглядеть нормально, туннель будет существовать и работать, но вот порт не будет проброшен. Для этого случая предусмотрен дополнительный параметр <code>ExitOnForwardFailure yes</code>.</p>
 </blockquote>
 <p>Параметры на стороне клиента можно задавать как в командной строке, так и записать их в файл конфигурации:</p>
 <pre><code class="language-plaintext">$ nano ~/.ssh/config</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext"># Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12
 Host remote-forward-ssh-server
   HostName 192.168.110.8
@@ -281,6 +290,7 @@ ssh -N remote-forward-ssh-server
 <h2>Автоматическое восстанавление туннеля</h2>
 <p>Утилита <code>autossh</code> предназначена для мониторинга соединений ssh и их автоматического восстановления в случае разрыва. Она уже входит в репозитории Ubuntu, поэтому устанавливаем ее на виртуальную машину <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ sudo apt install autossh</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ autossh
 usage: autossh [-V] [-M monitor_port[:echo_port]] [-f] [SSH_OPTIONS]
 
@@ -313,14 +323,18 @@ Environment variables are:
 <p>Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ autossh -M 0 -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
 &gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ autossh -M 0 -N remote-forward-ssh-server</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p>Для <code>autossh</code> обязательна опция <code>-M</code>, которая задает порт для мониторинга соединения. Но ssh-клиент может и сам это делать (это опции <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>). Так что опцию <code>-M</code> будем всегда отключать.</p>
 </blockquote>
 <p>Чтобы запустить <code>autossh</code> в фоновом режиме, добавляем опцию <code>-f</code>:</p>
 <pre><code class="language-plaintext">$ autossh -M 0 -f -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
 &gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">$ autossh -M 0 -f -N remote-forward-ssh-server</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p>Здесь опции <code>-M</code> и <code>-f</code> относятся к <code>autossh</code>, а все остальные передаются <code>ssh</code>.</p>
 </blockquote>
@@ -342,9 +356,11 @@ evgeniy   4000  3210  0  12:26  ?        00:00:00  /usr/lib/autossh/autossh -M 0
 <pre><code class="language-plaintext">$ sudo apt install mysql-client</code></pre>
 <p>Теперь с виртуальной машины <code>web-server</code> выполним команду создания туннеля:</p>
 <pre><code class="language-plaintext">$ autossh -M 0 -N remote-forward-ssh-server</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/4.jpg" alt=""></figure>
 <p>А с виртуальной машины <code>ssh-server</code> соединяемся с сервером БД MySQL:</p>
 <pre><code class="language-plaintext">$ mysql -uroot -pqwerty --protocol=TCP</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/5.jpg" alt=""></figure>
 <p>Соединение прошло успешно. Теперь выключим сетевой интерфейс на виртуальной машине <code>ssh-server</code>:</p>
 <pre><code class="language-plaintext">$ sudo ip link set dev enp0s3 down</code></pre>
@@ -417,6 +433,7 @@ autossh[2756]: execing /usr/bin/ssh</code></pre>
 <h2>Запуск autossh при загрузке web-server</h2>
 <p>Для этого создаем новый unit-файл на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ sudo nano /etc/systemd/system/autossh-tunnel.service</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">[Unit]
 Description=Autossh tunnel to ssh-server at startup
 After=network-online.target
@@ -428,7 +445,8 @@ Environment="AUTOSSH_GATETIME=0"
 ExecStart=/usr/bin/autossh -M 0 -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
 
 [Install]
-WantedBy=multi-user.targetКопировать</code></pre>
+WantedBy=multi-user.target</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p>Переменная окружения <code>AUTOSSH_GATETIME</code> по умолчанию имеет значение 30 секунд. Она задает время, которое должно пройти, чтобы <code>autossh</code> считал первое соединение <code>ssh</code> успешным. При любых проблемах первого подключения в течение 30 секунд — <code>autossh</code> просто прекращает свою работу, не пытаясь запустить <code>ssh</code> повторно. Это особенно полезно на этапе настройки и тестирования <code>autossh</code> и <code>ssh</code>.</p>
 </blockquote>
@@ -439,10 +457,12 @@ WantedBy=multi-user.targetКопировать</code></pre>
 <pre><code class="language-plaintext">$ sudo systemctl enable autossh-tunnel.service</code></pre>
 <p>Перезагружаем систему и смотрим статус нашей службы:</p>
 <pre><code class="language-plaintext">$ sudo systemctl status autossh-tunnel.service</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/1.jpg" alt=""></figure>
 <h2>Альтернативный вариант восстановления туннеля</h2>
 <p>Разбираясь с созданием unit-файла, обнаружил, что поддерживать туннель в рабочем состоянии можно гораздо проще, без использования утилиты <code>autossh</code>:</p>
 <pre><code class="language-plaintext">$ sudo nano /etc/systemd/system/autossh-tunnel.service</code></pre>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext">[Unit]
 Description=Autossh tunnel to ssh-server at startup
 After=network-online.target
@@ -458,6 +478,7 @@ RestartSec=5
 WantedBy=multi-user.target</code></pre>
 <p>Перезагружаем систему и смотрим статус нашей службы:</p>
 <pre><code class="language-plaintext">$ sudo systemctl status autossh-tunnel.service</code></pre>
+<p>&nbsp;</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/2.jpg" alt=""></figure>
 <h2>Автозапуск туннеля при загрузке TKMCOMP</h2>
 <p>На физическом компьютере у нас уже создан файл <code>~/.ssh/config</code>:</p>
@@ -503,6 +524,7 @@ Host remote-forward-ssh-server
 <p>После этого скачиваем установщик Cygwin64 и запускаем установку. Обязательно выбираем для установки <code>OpenSSH</code> и <code>autossh</code>. Запускаем терминал Cygwin64 от имени администратора и выполняем команду:</p>
 <pre><code class="language-plaintext">$ cygrunsrv -I AutoSSH -p /bin/autossh -a "-M 0 -N -F C:/Users/Evgeniy/.ssh/config local-forward-ssh-server" \
 &gt; -e AUTOSSH_NTSERVICE=yes -e AUTOSSH_PATH=/bin/ssh</code></pre>
+<p>&nbsp;</p>
 <blockquote>
   <p>Справка по утилите <code>cygrunsrv</code>, которая добавляет службу</p>
   <pre><code class="language-plaintext">$ cygrunsrv --help
@@ -583,6 +605,7 @@ Informative output:
   -V, --verbose             When used with --query or --list, causes extra
   -h, --help                print this help, then exit.
   -v, --version             print cygrunsrv program version number, then exit.</code></pre>
+  <p>&nbsp;</p>
 </blockquote>
 <p>Тут два важных момента:</p>
 <ul>
