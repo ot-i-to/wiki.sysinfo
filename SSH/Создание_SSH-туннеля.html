@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:37:15.028Z
+date: 2025-01-01T19:38:48.589Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -416,26 +416,29 @@ autossh[2756]: execing /usr/bin/ssh</code></pre>
 <p>До этого момента мы создавали туннели сами, выполняя команды <code>ssh</code> или <code>autossh</code>. Гораздо удобнее, если туннель будет запускаться без нашего участия, во время загрузки операционной системы. Для первой задачи создадим две службы: на виртуальной машине <code>web-server</code> и на физической машине <code>TKMCOMP</code>. Каждая из этих служб будут запускаться во время загрузки Linux и Windows, создавая туннель к виртуальной машине <code>ssh-server</code>, и в дальнейшем поддерживать туннель в рабочем состоянии.</p>
 <h2>Запуск autossh при загрузке web-server</h2>
 <p>Для этого создаем новый unit-файл на виртуальной машине <code>web-server</code>:</p>
-<p>$ sudo nano /etc/systemd/system/autossh-tunnel.serviceКопировать [Unit]
-  Description=Autossh tunnel to ssh-server at startup
-  After=network-online.target
+<pre><code class="language-plaintext">$ sudo nano /etc/systemd/system/autossh-tunnel.service</code></pre>
+<pre><code class="language-plaintext">[Unit]
+Description=Autossh tunnel to ssh-server at startup
+After=network-online.target
 
-  [Service]
-  User=evgeniy
-  Group=evgeniy
-  Environment="AUTOSSH_GATETIME=0"
-  ExecStart=/usr/bin/autossh -M 0 -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
+[Service]
+User=evgeniy
+Group=evgeniy
+Environment="AUTOSSH_GATETIME=0"
+ExecStart=/usr/bin/autossh -M 0 -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
 
-  [Install]
-  WantedBy=multi-user.targetКопировать</p>
-<p>Переменная окружения <code>AUTOSSH_GATETIME</code> по умолчанию имеет значение 30 секунд. Она задает время, которое должно пройти, чтобы <code>autossh</code> считал первое соединение <code>ssh</code> успешным. При любых проблемах первого подключения в течение 30 секунд — <code>autossh</code> просто прекращает свою работу, не пытаясь запустить <code>ssh</code> повторно. Это особенно полезно на этапе настройки и тестирования <code>autossh</code> и <code>ssh</code>.</p>
+[Install]
+WantedBy=multi-user.targetКопировать</code></pre>
+<blockquote>
+  <p>Переменная окружения <code>AUTOSSH_GATETIME</code> по умолчанию имеет значение 30 секунд. Она задает время, которое должно пройти, чтобы <code>autossh</code> считал первое соединение <code>ssh</code> успешным. При любых проблемах первого подключения в течение 30 секунд — <code>autossh</code> просто прекращает свою работу, не пытаясь запустить <code>ssh</code> повторно. Это особенно полезно на этапе настройки и тестирования <code>autossh</code> и <code>ssh</code>.</p>
+</blockquote>
 <p>Если переменная окружения <code>AUTOSSH_GATETIME</code> имеет нулевое значение, такое поведение отключается. Даже если первое соединение <code>ssh</code> было неудачным, <code>autossh</code> не прекращает свою работу, а переходит в фоновый режим и пытается запустить <code>ssh</code> снова. Если использована опция <code>-f</code> для <code>autossh</code> — переменная <code>AUTOSSH_GATETIME</code> устанавливается в ноль.</p>
 <p>И сообщаем операционной системе про новый unit-файл:</p>
-<p>$ sudo systemctl daemon-reloadКопировать</p>
+<pre><code class="language-plaintext">$ sudo systemctl daemon-reload</code></pre>
 <p>Добавляем новую службу в автозагрузку:</p>
-<p>$ sudo systemctl enable autossh-tunnel.serviceКопировать</p>
+<pre><code class="language-plaintext">$ sudo systemctl enable autossh-tunnel.service</code></pre>
 <p>Перезагружаем систему и смотрим статус нашей службы:</p>
-<p>$ sudo systemctl status autossh-tunnel.serviceКопировать</p>
+<pre><code class="language-plaintext">$ sudo systemctl status autossh-tunnel.service</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/1.jpg" alt=""></figure>
 <h2>Альтернативный вариант восстановления туннеля</h2>
 <p>Разбираясь с созданием unit-файла, обнаружил, что поддерживать туннель в рабочем состоянии можно гораздо проще, без использования утилиты <code>autossh</code>:</p>
