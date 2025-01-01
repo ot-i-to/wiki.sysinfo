@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:21:22.875Z
+date: 2025-01-01T19:22:58.573Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -217,4 +217,178 @@ Host local-forward-ssh-server
 
 &gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.12 
 &gt; ssh local-forward-ssh-serverКопировать</code></pre>
-<p>&nbsp;</p>
+<p>Мы создавали ssh-туннели между виртуальными машинами, где сетевые соединения стабильны. Но в реальной жизни каналы связи оставляют желать много лучшего. Было бы разумно как-то отслеживать наличие соединения и автоматически его восстанавливать.</p>
+<p>В OpenSSH присутствует стандартная схема для мониторинга состояния подключения, причем как на стороне сервера, так и на стороне клиента. Суть ее заключается в том, что OpenSSH будет проверять наличие рабочего подключения и в случае отсутствия такового будет просто завершать ssh-сеанс, избавляя нас от зависших сессий.</p>
+<h2>Проверка активности соединения</h2>
+<p>Для этого отредактируем файл конфигурации <code>/etc/ssh/sshd_config</code> на виртуальной машине <code>ssh-server</code>:</p>
+<p>$ sudo nano /etc/ssh/sshd_configКопировать # отключаем дефолтный механизм проверки активности соединения
+  TCPKeepAlive no
+  # проверять активность подключения клиента каждые 30 секунд
+  ClientAliveInterval 30
+  # сервер закроет соединение после трех неудачных попыток
+  ClientAliveCountMax 3Копировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/3.jpg" alt=""></figure>
+<p>$ sudo systemctl restart ssh.serviceКопировать</p>
+<p>Если что-то произойдет с клиентом, например, компьютер просто отключится от сети, то через 90 секунд <code>ssh-server</code> закроет туннельное соединение.</p>
+<p>В файле <code>/etc/ssh/sshd_config</code> есть параметр <code>TCPKeepAlive</code>, который по умолчанию имеет значение <code>yes</code>. Он позволяет поддерживать TCP-соединение в активном состоянии, даже когда нет передачи пакетов. Эта решается на уровне протокола TCP/IP с помощью отправки специальных проверочных пакетов.</p>
+<p>Кроме того, OpenSSH имеет альтернативные средства контроля активности сеансов — <code>ClientAliveInterval</code> и <code>ClientAliveCountMax</code>. При использовании этих параметров, в отличие от <code>TCPKeepAlive</code>, запросы отправляются через защищённый ssh-канал и не могут быть подменены.</p>
+<p>При создании туннельного подключения со стороны клиента есть возможность указать аналогичные параметры <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>. Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
+<p>$ ssh -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+  &gt; -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</p>
+<p>Иногда возможна ситуация, когда порт не был проброшен, хотя туннель был поднят. То есть, со стороны ssh-сервера и ssh-клиента все будет выглядеть нормально, туннель будет существовать и работать, но вот порт не будет проброшен. Для этого случая предусмотрен дополнительный параметр <code>ExitOnForwardFailure yes</code>.</p>
+<p>Параметры на стороне клиента можно задавать как в командной строке, так и записать их в файл конфигурации:</p>
+<p>$ nano ~/.ssh/configКопировать # Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12
+  Host remote-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;TCPKeepAlive no
+  &nbsp;ServerAliveInterval 30
+  &nbsp;ServerAliveCountMax 3
+  &nbsp;ExitOnForwardFailure yes
+  &nbsp;RemoteForward 3306 127.0.0.1:3306
+
+  # Проброс соединения 192.168.110.8 &lt;==L== 192.168.110.12
+  Host local-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;TCPKeepAlive no
+  &nbsp;ServerAliveInterval 30
+  &nbsp;ServerAliveCountMax 3
+  &nbsp;ExitOnForwardFailure yes
+  &nbsp;LocalForward 3307 127.0.0.1:3306Копировать</p>
+<p>В этом случае команда создания туннеля будет проще:</p>
+<p>$ ssh remote-forward-ssh-serverКопировать</p>
+<p>Поскольку при создании туннеля не планируется выполнять команды на виртуальной машине <code>ssh-server</code>, можно добавить опцию</p>
+<p>$ ssh -N remote-forward-ssh-serverКопировать</p>
+<p>Но в этом случае терминал у нас зависнет, т.к. будет ожидать окончания выполнения этой команды. И для дальнейшей работы нам потребуется еще один терминал. Но мы можем запустить эту команду в фоновом режиме:</p>
+<p>$ ssh -N remote-forward-ssh-server &amp;
+  [1] 3949Копировать</p>
+<p>Чтобы завершить фоновый процесс, надо переместить его на передний план, а потом завершить с помощью <code>Ctrl+C</code>:</p>
+<p>$ fg 1
+  ssh -N remote-forward-ssh-server
+  ^CКопировать</p>
+<h2>Автоматическое восстанавление туннеля</h2>
+<p>Утилита <code>autossh</code> предназначена для мониторинга соединений ssh и их автоматического восстановления в случае разрыва. Она уже входит в репозитории Ubuntu, поэтому устанавливаем ее на виртуальную машину <code>web-server</code>:</p>
+<p>$ sudo apt install autosshКопировать $ autossh
+  usage: autossh [-V] [-M monitor_port[:echo_port]] [-f] [SSH_OPTIONS]
+
+  &nbsp; &nbsp;-M specifies monitor port. Overrides the environment
+  &nbsp; &nbsp; &nbsp; variable AUTOSSH_PORT. 0 turns monitoring loop off.
+  &nbsp; &nbsp; &nbsp; Alternatively, a port for an echo service on the remote
+  &nbsp; &nbsp; &nbsp; machine may be specified. (Normally port 7.)
+  &nbsp; &nbsp;-f run in background (autossh handles this, and does not
+  &nbsp; &nbsp; &nbsp; pass it to ssh.)
+  &nbsp; &nbsp;-V print autossh version and exit.
+
+  Environment variables are:
+  &nbsp; &nbsp;AUTOSSH_GATETIME &nbsp; &nbsp;- how long must an ssh session be established
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;before we decide it really was established
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(in seconds). Default is 30 seconds; use of -f
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;flag sets this to 0.
+  &nbsp; &nbsp;AUTOSSH_LOGFILE &nbsp; &nbsp; - file to log to (default is to use the syslog
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;facility)
+  &nbsp; &nbsp;AUTOSSH_LOGLEVEL &nbsp; &nbsp;- level of log verbosity
+  &nbsp; &nbsp;AUTOSSH_MAXLIFETIME - set the maximum time to live (seconds)
+  &nbsp; &nbsp;AUTOSSH_MAXSTART &nbsp; &nbsp;- max times to restart (default is no limit)
+  &nbsp; &nbsp;AUTOSSH_MESSAGE &nbsp; &nbsp; - message to append to echo string (max 64 bytes)
+  &nbsp; &nbsp;AUTOSSH_PATH &nbsp; &nbsp; &nbsp; &nbsp;- path to ssh if not default
+  &nbsp; &nbsp;AUTOSSH_PIDFILE &nbsp; &nbsp; - write pid to this file
+  &nbsp; &nbsp;AUTOSSH_POLL &nbsp; &nbsp; &nbsp; &nbsp;- how often to check the connection (seconds)
+  &nbsp; &nbsp;AUTOSSH_FIRST_POLL &nbsp;- time before first connection check (seconds)
+  &nbsp; &nbsp;AUTOSSH_PORT &nbsp; &nbsp; &nbsp; &nbsp;- port to use for monitor connection
+  &nbsp; &nbsp;AUTOSSH_DEBUG &nbsp; &nbsp; &nbsp; - turn logging to maximum verbosity and log to
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;stderrКопировать</p>
+<p>Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
+<p>$ autossh -M 0 -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+  &gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать $ autossh -M 0 -N remote-forward-ssh-serverКопировать</p>
+<p>Для <code>autossh</code> обязательна опция <code>-M</code>, которая задает порт для мониторинга соединения. Но ssh-клиент может и сам это делать (это опции <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>). Так что опцию <code>-M</code> будем всегда отключать.</p>
+<p>Чтобы запустить <code>autossh</code> в фоновом режиме, добавляем опцию <code>-f</code>:</p>
+<p>$ autossh -M 0 -f -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+  &gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать $ autossh -M 0 -f -N remote-forward-ssh-serverКопировать</p>
+<p>Здесь опции <code>-M</code> и <code>-f</code> относятся к <code>autossh</code>, а все остальные передаются <code>ssh</code>.</p>
+<p>Проверим, что туннель работает, воспользовавшись командой <code>ps</code>:</p>
+<p>$ ps -f -C autossh
+  UID &nbsp; &nbsp; &nbsp; &nbsp;PID &nbsp;PPID &nbsp;C &nbsp;STIME &nbsp;TTY &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;TIME &nbsp;CMD
+  evgeniy &nbsp; 4000 &nbsp;3210 &nbsp;0 &nbsp;12:26 &nbsp;? &nbsp; &nbsp; &nbsp; &nbsp;00:00:00 &nbsp;/usr/lib/autossh/autossh -M 0 -N remote-forward-ssh-serverКопировать</p>
+<p>Чтобы завершить процесс, используем команду <code>pkill</code>:</p>
+<p>$ pkill autosshКопировать</p>
+<h2>Проверяем, как работает autossh</h2>
+<p>Во второй части мы решали две задачи:</p>
+<ol>
+  <li>Пробросить ssh-туннель от <code>TKMCOMP</code> до <code>web-server</code> через промежуточный <code>ssh-server</code>, чтобы иметь возможность подключаться с физической машины <code>TKMCOMP</code> к серверу БД на виртуальной машине <code>web-server</code></li>
+  <li>Пробросить ssh-туннель от <code>web-server</code> до <code>TKMCOMP</code> через промежуточный <code>ssh-server</code>, чтобы иметь возможность подключаться с виртуальной машины <code>web-server</code> к серверу БД на физической машине <code>TKMCOMP</code></li>
+</ol>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/1.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/2.jpg" alt=""></figure>
+<p>Мы сейчас посмотрим, как работает <code>autossh</code>, пробрасывая туннель от <code>web-server</code> до <code>ssh-server</code> (правая половина первого рисунка). Для проверки того, что туннель работает, установим на виртуальную машину <code>ssh-server</code> клиент БД MySQL:</p>
+<p>$ sudo apt install mysql-clientКопировать</p>
+<p>Теперь с виртуальной машины <code>web-server</code> выполним команду создания туннеля:</p>
+<p>$ autossh -M 0 -N remote-forward-ssh-serverКопировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/4.jpg" alt=""></figure>
+<p>А с виртуальной машины <code>ssh-server</code> соединяемся с сервером БД MySQL:</p>
+<p>$ mysql -uroot -pqwerty --protocol=TCPКопировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/5.jpg" alt=""></figure>
+<p>Соединение прошло успешно. Теперь выключим сетевой интерфейс на виртуальной машине <code>ssh-server</code>:</p>
+<p>$ sudo ip link set dev enp0s3 downКопировать</p>
+<p>Удостоверимся, что подключиться к серверу БД MySQL теперь нельзя:</p>
+<p>$ mysql -uroot -pqwerty --protocol=TCP
+  mysql: [Warning] Using a password on the command line interface can be insecure.
+  ERROR 2003 (HY000): Can't connect to MySQL server on 'localhost' (111)Копировать</p>
+<p>И посмотрим, как отреагирует утилита <code>autossh</code> на машине <code>web-server</code>:</p>
+<p>$ autossh -M 0 -N remote-forward-ssh-server
+  Timeout, server 192.168.110.8 not responding. # прошло 90 секунд, сервер не отвечает
+  ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером
+  ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером
+  ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с серверомКопировать</p>
+<p>При включении сетевого интерфейса на виртуальной машине <code>ssh-server</code>:</p>
+<p>$ sudo ip link set dev enp0s3 upКопировать</p>
+<p>Туннель будет восстановлен. Это можно проверить, если выполнить команду на <code>ssh-server</code>:</p>
+<p>$ mysql -uroot -pqwerty --protocol=TCP
+  mysql: [Warning] Using a password on the command line interface can be insecure.
+  Welcome to the MySQL monitor. &nbsp;Commands end with ; or \g.
+  Your MySQL connection id is 12
+  Server version: 5.7.28-0ubuntu0.18.04.4 (Ubuntu)
+  ..........Копировать</p>
+<p>Если возникли какие-то проблемы с <code>autossh</code>, можно запустить утилиту в режиме отладки:</p>
+<p>$ AUTOSSH_DEBUG=1 autossh -M 0 -N remote-forward-ssh-server
+  autossh[2744]: port set to 0, monitoring disabled # мы отключили мониторинг
+  autossh[2744]: checking for grace period, tries = 0
+  autossh[2744]: starting ssh (count 1) # запуск ssh (попытка 1)
+  autossh[2744]: ssh child pid is 2747
+  autossh[2744]: check on child 2747
+  autossh[2744]: set alarm for 600 secs
+  autossh[2747]: execing /usr/bin/ssh
+  Timeout, server 192.168.110.8 not responding.
+  autossh[2744]: check on child 2747
+  autossh[2744]: ssh exited with error status 255; restarting ssh
+  autossh[2744]: expired child, returning 1
+  autossh[2744]: checking for grace period, tries = 1
+  autossh[2744]: starting ssh (count 2) # запуск ssh (попытка 2)
+  autossh[2744]: ssh child pid is 2754
+  autossh[2744]: check on child 2754
+  autossh[2744]: set alarm for 559 secs
+  autossh[2754]: execing /usr/bin/ssh
+  ssh: connect to host 192.168.110.8 port 2222: No route to host
+  autossh[2744]: check on child 2754
+  autossh[2744]: ssh exited with error status 255; restarting ssh
+  autossh[2744]: expired child, returning 1
+  autossh[2744]: checking for grace period, tries = 2
+  autossh[2744]: starting ssh (count 3) # запуск ssh (попытка 3)
+  autossh[2744]: ssh child pid is 2755
+  autossh[2744]: check on child 2755
+  autossh[2744]: set alarm for 524 secs
+  autossh[2755]: execing /usr/bin/ssh
+  ssh: connect to host 192.168.110.8 port 2222: No route to host
+  autossh[2744]: check on child 2755
+  autossh[2744]: ssh exited with error status 255; restarting ssh
+  autossh[2744]: expired child, returning 1
+  autossh[2744]: checking for grace period, tries = 3
+  autossh[2744]: starting ssh (count 4) # запуск ssh (попытка 4)
+  autossh[2744]: ssh child pid is 2756
+  autossh[2744]: check on child 2756
+  autossh[2744]: set alarm for 521 secs
+  autossh[2756]: execing /usr/bin/ssh</p>
