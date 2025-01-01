@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:16:12.359Z
+date: 2025-01-01T19:17:28.943Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -187,7 +187,11 @@ Host remote-forward-ssh-server
   IdentityFile ~/.ssh/tcp-forward-ssh-server  
   RemoteForward 3306 127.0.0.1:3306</code></pre>
 <p>Теперь можно упростить команды построения туннелей:</p>
-<p>&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды &gt; ssh local-forward-ssh-server # теперь можно использовать такуюКопировать &gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды &gt; ssh remote-forward-ssh-server # теперь можно использовать такуюКопировать</p>
+<pre><code class="language-plaintext">&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды
+&gt; ssh local-forward-ssh-server # теперь можно использовать такую
+
+&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды 
+&gt; ssh remote-forward-ssh-server # теперь можно использовать такую</code></pre>
 <h3>Ключи для виртуальной машины</h3>
 <p>Открываем окно терминала на виртуальной машине и создаем пару ключей с именем <code>tcp-forward-ssh-server</code>:</p>
 <p>&gt; ssh-keygenКопировать</p>
