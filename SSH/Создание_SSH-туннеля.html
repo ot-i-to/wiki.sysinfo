@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:12:49.293Z
+date: 2025-01-01T19:16:12.359Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -163,16 +163,29 @@ $ mysql -uroot -pqwerty -P 3307 -h 127.0.0.1</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/2.jpg" alt=""></figure>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
 <p>Но перед этим надо изменить настройку ssh-сервера:</p>
-<p>PubkeyAuthentication yes</p>
+<pre><code class="language-plaintext">PubkeyAuthentication yes</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/8.jpg" alt=""></figure>
-<p>$ sudo systemctl restart sshКопировать</p>
+<pre><code class="language-plaintext">$ sudo systemctl restart ssh</code></pre>
 <h3>Ключи для физического компьютера</h3>
 <p>Открываем окно PowerShell на физической машине и создаем пару ключей с именем <code>tcp-forward-ssh-server</code>:</p>
-<p>&gt; ssh-keygenКопировать</p>
+<pre><code class="language-plaintext">&gt; ssh-keygen</code></pre>
 <p>Копируем публичный ключ на <code>ssh-server</code>:</p>
-<p>&gt; cat .\.ssh\tcp-forward-ssh-server.pub | ssh -p 2222 evgeniy@192.168.110.8 ` &gt; 'cat &gt;&gt; ./.ssh/authorized_keys'Копировать</p>
+<pre><code class="language-plaintext">&gt; cat .\.ssh\tcp-forward-ssh-server.pub | ssh -p 2222 evgeniy@192.168.110.8 ` &gt; 'cat &gt;&gt; ./.ssh/authorized_keys'</code></pre>
 <p>Создаем или редактируем файл <code>~/.ssh/config</code></p>
-<p># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8 Host local-forward-ssh-server &nbsp;HostName 192.168.110.8 &nbsp;Port 2222 &nbsp;User evgeniy &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server &nbsp;LocalForward 3307 127.0.0.1:3306 # Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8 Host remote-forward-ssh-server &nbsp;HostName 192.168.110.8 &nbsp;Port 2222 &nbsp;User evgeniy &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server &nbsp;RemoteForward 3306 127.0.0.1:3306Копировать</p>
+<pre><code class="language-plaintext"># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8 
+Host local-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile ~/.ssh/tcp-forward-ssh-server
+  LocalForward 3307 127.0.0.1:3306
+      
+# Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8 
+Host remote-forward-ssh-server
+  HostName 192.168.110.8  
+  Port 2222  User evgeniy  
+  IdentityFile ~/.ssh/tcp-forward-ssh-server  
+  RemoteForward 3306 127.0.0.1:3306</code></pre>
 <p>Теперь можно упростить команды построения туннелей:</p>
 <p>&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды &gt; ssh local-forward-ssh-server # теперь можно использовать такуюКопировать &gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды &gt; ssh remote-forward-ssh-server # теперь можно использовать такуюКопировать</p>
 <h3>Ключи для виртуальной машины</h3>
