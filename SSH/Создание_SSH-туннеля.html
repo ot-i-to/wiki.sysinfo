@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:35:58.044Z
+date: 2025-01-01T19:37:15.028Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -406,4 +406,189 @@ autossh[2744]: ssh child pid is 2756
 autossh[2744]: check on child 2756
 autossh[2744]: set alarm for 521 secs
 autossh[2756]: execing /usr/bin/ssh</code></pre>
-<p>&nbsp;</p>
+<p>Ранее, мы решали две задачи:</p>
+<ol>
+  <li>Пробросить ssh-туннель от <code>TKMCOMP</code> до <code>web-server</code> через промежуточный <code>ssh-server</code>, чтобы иметь возможность подключаться с физической машины <code>TKMCOMP</code> к серверу БД на виртуальной машине <code>web-server</code></li>
+  <li>Пробросить ssh-туннель от <code>web-server</code> до <code>TKMCOMP</code> через промежуточный <code>ssh-server</code>, чтобы иметь возможность подключаться с виртуальной машины <code>web-server</code> к серверу БД на физической машине <code>TKMCOMP</code></li>
+</ol>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/3.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/4.jpg" alt=""></figure>
+<p>До этого момента мы создавали туннели сами, выполняя команды <code>ssh</code> или <code>autossh</code>. Гораздо удобнее, если туннель будет запускаться без нашего участия, во время загрузки операционной системы. Для первой задачи создадим две службы: на виртуальной машине <code>web-server</code> и на физической машине <code>TKMCOMP</code>. Каждая из этих служб будут запускаться во время загрузки Linux и Windows, создавая туннель к виртуальной машине <code>ssh-server</code>, и в дальнейшем поддерживать туннель в рабочем состоянии.</p>
+<h2>Запуск autossh при загрузке web-server</h2>
+<p>Для этого создаем новый unit-файл на виртуальной машине <code>web-server</code>:</p>
+<p>$ sudo nano /etc/systemd/system/autossh-tunnel.serviceКопировать [Unit]
+  Description=Autossh tunnel to ssh-server at startup
+  After=network-online.target
+
+  [Service]
+  User=evgeniy
+  Group=evgeniy
+  Environment="AUTOSSH_GATETIME=0"
+  ExecStart=/usr/bin/autossh -M 0 -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
+
+  [Install]
+  WantedBy=multi-user.targetКопировать</p>
+<p>Переменная окружения <code>AUTOSSH_GATETIME</code> по умолчанию имеет значение 30 секунд. Она задает время, которое должно пройти, чтобы <code>autossh</code> считал первое соединение <code>ssh</code> успешным. При любых проблемах первого подключения в течение 30 секунд — <code>autossh</code> просто прекращает свою работу, не пытаясь запустить <code>ssh</code> повторно. Это особенно полезно на этапе настройки и тестирования <code>autossh</code> и <code>ssh</code>.</p>
+<p>Если переменная окружения <code>AUTOSSH_GATETIME</code> имеет нулевое значение, такое поведение отключается. Даже если первое соединение <code>ssh</code> было неудачным, <code>autossh</code> не прекращает свою работу, а переходит в фоновый режим и пытается запустить <code>ssh</code> снова. Если использована опция <code>-f</code> для <code>autossh</code> — переменная <code>AUTOSSH_GATETIME</code> устанавливается в ноль.</p>
+<p>И сообщаем операционной системе про новый unit-файл:</p>
+<p>$ sudo systemctl daemon-reloadКопировать</p>
+<p>Добавляем новую службу в автозагрузку:</p>
+<p>$ sudo systemctl enable autossh-tunnel.serviceКопировать</p>
+<p>Перезагружаем систему и смотрим статус нашей службы:</p>
+<p>$ sudo systemctl status autossh-tunnel.serviceКопировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/1.jpg" alt=""></figure>
+<h2>Альтернативный вариант восстановления туннеля</h2>
+<p>Разбираясь с созданием unit-файла, обнаружил, что поддерживать туннель в рабочем состоянии можно гораздо проще, без использования утилиты <code>autossh</code>:</p>
+<p>$ sudo nano /etc/systemd/system/autossh-tunnel.serviceКопировать [Unit]
+  Description=Autossh tunnel to ssh-server at startup
+  After=network-online.target
+
+  [Service]
+  User=evgeniy
+  Group=evgeniy
+  ExecStart=/usr/bin/ssh -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
+  Restart=always
+  RestartSec=5
+
+  [Install]
+  WantedBy=multi-user.targetКопировать</p>
+<p>Перезагружаем систему и смотрим статус нашей службы:</p>
+<p>$ sudo systemctl status autossh-tunnel.serviceКопировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/2.jpg" alt=""></figure>
+<h2>Автозапуск туннеля при загрузке TKMCOMP</h2>
+<p>На физическом компьютере у нас уже создан файл <code>~/.ssh/config</code>:</p>
+<p># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
+  Host local-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;LocalForward 3307 127.0.0.1:3306
+
+  # Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
+  Host remote-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;RemoteForward 3306 127.0.0.1:3306Копировать</p>
+<p>По аналогии с файлом <code>~/.ssh/config</code> на виртуальной машине <code>web-server</code> добавляем в него опции мониторинга ssh-туннеля. Кроме того, указываем абсолютный путь к файлу ключа (зачем — станет понятно чуть ниже):</p>
+<p># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
+  Host local-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile C:/Users/Evgeniy/.ssh/tcp-forward-ssh-server
+  &nbsp;TCPKeepAlive no
+  &nbsp;ServerAliveInterval 30
+  &nbsp;ServerAliveCountMax 3
+  &nbsp;ExitOnForwardFailure yes
+  &nbsp;LocalForward 3307 127.0.0.1:3306
+
+  # Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
+  Host remote-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile C:/Users/Evgeniy/.ssh/tcp-forward-ssh-server
+  &nbsp;TCPKeepAlive no
+  &nbsp;ServerAliveInterval 30
+  &nbsp;ServerAliveCountMax 3
+  &nbsp;ExitOnForwardFailure yes
+  &nbsp;RemoteForward 3306 127.0.0.1:3306Копировать</p>
+<p>После этого скачиваем установщик Cygwin64 и запускаем установку. Обязательно выбираем для установки <code>OpenSSH</code> и <code>autossh</code>. Запускаем терминал Cygwin64 от имени администратора и выполняем команду:</p>
+<p>$ cygrunsrv -I AutoSSH -p /bin/autossh -a "-M 0 -N -F C:/Users/Evgeniy/.ssh/config local-forward-ssh-server" \
+  &gt; -e AUTOSSH_NTSERVICE=yes -e AUTOSSH_PATH=/bin/sshКопировать</p>
+<p>Справка по утилите <code>cygrunsrv</code>, которая добавляет службу</p>
+<p>$ cygrunsrv --help
+  Usage: cygrunsrv [OPTION]...
+
+  Main options: Exactly one is required.
+
+  &nbsp;-I, --install &lt;svc_name&gt; &nbsp;Installes a new service named &lt;svc_name&gt;.
+  &nbsp;-R, --remove &lt;svc_name&gt; &nbsp; Removes a service named &lt;svc_name&gt;.
+  &nbsp;-S, --start &lt;svc_name&gt; &nbsp; &nbsp;Starts a service named &lt;svc_name&gt;.
+  &nbsp;-E, --stop &lt;svc_name&gt; &nbsp; &nbsp; Stops a service named &lt;svc_name&gt;.
+  &nbsp;-Q, --query &lt;svc_name&gt; &nbsp; &nbsp;Queries a service named &lt;svc_name&gt;.
+  &nbsp;-L, --list [server] &nbsp; &nbsp; &nbsp; Lists services that have been installed
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;with cygrunsrv.
+  &nbsp;&lt;svc_name&gt; can be a local service or "server/svc_name" or "server\svc_name".
+
+  Required install options:
+  &nbsp;-p, --path &lt;app_path&gt; &nbsp; &nbsp; Application path which is run as a service.
+
+  Miscellaneous install options:
+  &nbsp;-P, --crs-path &lt;path&gt; &nbsp; &nbsp; Path to cygrunsrv. This is useful for testing or
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;when installing a service on a remote machine.
+  &nbsp;-a, --args &lt;args&gt; &nbsp; &nbsp; &nbsp; &nbsp; Optional string with command line options which
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;is given to the service application on startup.
+  &nbsp;-c, --chdir &lt;directory&gt; &nbsp; Optional directory which will be used as working
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;directory for the application.
+  &nbsp;-e, --env &lt;VAR=VALUE&gt; &nbsp; &nbsp; Optional environment strings which are added
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;to the environment when service is started.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;You can add up to 255 environment strings using
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;the `--env' option.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Note: /bin is always added to $PATH to allow all
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;started applications to find cygwin DLLs.
+  &nbsp;-d, --disp &lt;display name&gt; Optional string which contains the display name
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;of the service. Defaults to service name.
+  &nbsp;-f, --desc &lt;description&gt; &nbsp;Optional string which contains the service
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;description.
+  &nbsp;-t, --type [auto|manual] &nbsp;Optional start type of service. Defaults to `auto'.
+  &nbsp;-u, --user &lt;user name&gt; &nbsp; &nbsp;Optional user name to start service as.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Defaults to SYSTEM account.
+  &nbsp;-w, --passwd &lt;password&gt; &nbsp; Optional password for user. Only needed
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if a user is given. If a user has an empty
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;password, enter `-w '. If a user is given but
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;no password, cygrunsrv will ask for a password
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;interactively.
+  &nbsp;-s, --termsig &lt;signal&gt; &nbsp; &nbsp;Optional signal to send to service application
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;when service is stopped. &nbsp;&lt;signal&gt; can be a number
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;or a signal name such as HUP, INT, QUIT, etc.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is TERM.
+  &nbsp;-z, --shutsig &lt;signal&gt; &nbsp; &nbsp;Optional signal to send to service application
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;when shutdown has been initiated. &nbsp;Default is the
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;same signal as defined as termination signal.
+  &nbsp;-y, --dep &lt;svc_name2&gt; &nbsp; &nbsp; Optional name of service that must be started
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;before this new service. &nbsp;The --dep option may
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;be given up to 16 times, listing another dependent
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;service each time.
+  &nbsp;-0, --stdin &lt;file&gt; &nbsp; &nbsp; &nbsp; &nbsp;Optional input file used for stdin redirection.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is /dev/null.
+  &nbsp;-1, --stdout &lt;file&gt; &nbsp; &nbsp; &nbsp; Optional output file used for stdout redirection.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is /var/log/&lt;svc_name&gt;.log.
+  &nbsp;-2, --stderr &lt;file&gt; &nbsp; &nbsp; &nbsp; Optional output file used for stderr redirection.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is /var/log/&lt;svc_name&gt;.log.
+  &nbsp;-x, --pidfile &lt;file&gt; &nbsp; &nbsp; &nbsp;Optional path for .pid file written by application
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;after fork().
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is that application must not fork().
+  &nbsp;-n, --neverexits &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Service should never exit by itself.
+  &nbsp;-O, --preshutdown &nbsp; &nbsp; &nbsp; &nbsp; Stop service application during system preshutdown.
+  &nbsp;-o, --shutdown &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Stop service application during system shutdown.
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(Only one of --preshutdown and --shutdown is
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; accepted. &nbsp;Preshutdown is preferred, but only
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; available since Windows Vista/Longhorn. &nbsp;On earlier
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; OS versions it's silently converted to --shutdown).
+  &nbsp;-i, --interactive &nbsp; &nbsp; &nbsp; &nbsp; Allow service to interact with the desktop
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(No effect since Windows Vista/Longhorn).
+  &nbsp;-j, --nohide &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Don't hide console window when service interacts
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;with desktop.
+
+  Informative output:
+  &nbsp;-V, --verbose &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; When used with --query or --list, causes extra
+  &nbsp;-h, --help &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;print this help, then exit.
+  &nbsp;-v, --version &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; print cygrunsrv program version number, then exit.Копировать</p>
+<p>Тут два важных момента:</p>
+<ul>
+  <li>В системе могут существовать две утилиты <code>ssh</code>: одна — из поставки Windows 10, а вторая — из поставки Cygwin64. Утилита <code>autossh</code> будет работать с <code>ssh</code> из поставки Cygwin64 — мы указываем это явно с помощью переменной окружения <code>AUTOSSH_PATH</code>.</li>
+  <li>Утилита <code>ssh</code> из состава Cygwin64 ищет файл конфигурации <code>~/.ssh/config</code> не в директории <code>C:/Users/Evgeniy/</code>, а в директории <code>C:/cygwin64/home/Evgeniy/</code>. Мы указываем явно, какой файл конфигурации использовать. И с самом файле конфигурации задали полный путь к файлу ключа.</li>
+</ul>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/5.jpg" alt=""></figure>
+<p>Дальше открываем список служб Windows, находим <code>AutoSSH</code>. Задаем пользователя, от которого будет запускаться служба и устанавливаем тип запуска Автоматический:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/6.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/7.jpg" alt=""></figure>
+<p>Удалить службу <code>AutoSSH</code> можно с помощью команды:</p>
+<p>$ cygrunsrv --remove AutoSSHКопировать</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
