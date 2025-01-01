@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:28:15.480Z
+date: 2025-01-01T19:32:23.266Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -280,49 +280,55 @@ ssh -N remote-forward-ssh-server
 ^C</code></pre>
 <h2>Автоматическое восстанавление туннеля</h2>
 <p>Утилита <code>autossh</code> предназначена для мониторинга соединений ssh и их автоматического восстановления в случае разрыва. Она уже входит в репозитории Ubuntu, поэтому устанавливаем ее на виртуальную машину <code>web-server</code>:</p>
-<p>$ sudo apt install autosshКопировать $ autossh
-  usage: autossh [-V] [-M monitor_port[:echo_port]] [-f] [SSH_OPTIONS]
+<pre><code class="language-plaintext">$ sudo apt install autossh</code></pre>
+<pre><code class="language-plaintext">$ autossh
+usage: autossh [-V] [-M monitor_port[:echo_port]] [-f] [SSH_OPTIONS]
 
-  &nbsp; &nbsp;-M specifies monitor port. Overrides the environment
-  &nbsp; &nbsp; &nbsp; variable AUTOSSH_PORT. 0 turns monitoring loop off.
-  &nbsp; &nbsp; &nbsp; Alternatively, a port for an echo service on the remote
-  &nbsp; &nbsp; &nbsp; machine may be specified. (Normally port 7.)
-  &nbsp; &nbsp;-f run in background (autossh handles this, and does not
-  &nbsp; &nbsp; &nbsp; pass it to ssh.)
-  &nbsp; &nbsp;-V print autossh version and exit.
+    -M specifies monitor port. Overrides the environment
+       variable AUTOSSH_PORT. 0 turns monitoring loop off.
+       Alternatively, a port for an echo service on the remote
+       machine may be specified. (Normally port 7.)
+    -f run in background (autossh handles this, and does not
+       pass it to ssh.)
+    -V print autossh version and exit.
 
-  Environment variables are:
-  &nbsp; &nbsp;AUTOSSH_GATETIME &nbsp; &nbsp;- how long must an ssh session be established
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;before we decide it really was established
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(in seconds). Default is 30 seconds; use of -f
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;flag sets this to 0.
-  &nbsp; &nbsp;AUTOSSH_LOGFILE &nbsp; &nbsp; - file to log to (default is to use the syslog
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;facility)
-  &nbsp; &nbsp;AUTOSSH_LOGLEVEL &nbsp; &nbsp;- level of log verbosity
-  &nbsp; &nbsp;AUTOSSH_MAXLIFETIME - set the maximum time to live (seconds)
-  &nbsp; &nbsp;AUTOSSH_MAXSTART &nbsp; &nbsp;- max times to restart (default is no limit)
-  &nbsp; &nbsp;AUTOSSH_MESSAGE &nbsp; &nbsp; - message to append to echo string (max 64 bytes)
-  &nbsp; &nbsp;AUTOSSH_PATH &nbsp; &nbsp; &nbsp; &nbsp;- path to ssh if not default
-  &nbsp; &nbsp;AUTOSSH_PIDFILE &nbsp; &nbsp; - write pid to this file
-  &nbsp; &nbsp;AUTOSSH_POLL &nbsp; &nbsp; &nbsp; &nbsp;- how often to check the connection (seconds)
-  &nbsp; &nbsp;AUTOSSH_FIRST_POLL &nbsp;- time before first connection check (seconds)
-  &nbsp; &nbsp;AUTOSSH_PORT &nbsp; &nbsp; &nbsp; &nbsp;- port to use for monitor connection
-  &nbsp; &nbsp;AUTOSSH_DEBUG &nbsp; &nbsp; &nbsp; - turn logging to maximum verbosity and log to
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;stderrКопировать</p>
+Environment variables are:
+    AUTOSSH_GATETIME    - how long must an ssh session be established
+                          before we decide it really was established
+                          (in seconds). Default is 30 seconds; use of -f
+                          flag sets this to 0.
+    AUTOSSH_LOGFILE     - file to log to (default is to use the syslog
+                          facility)
+    AUTOSSH_LOGLEVEL    - level of log verbosity
+    AUTOSSH_MAXLIFETIME - set the maximum time to live (seconds)
+    AUTOSSH_MAXSTART    - max times to restart (default is no limit)
+    AUTOSSH_MESSAGE     - message to append to echo string (max 64 bytes)
+    AUTOSSH_PATH        - path to ssh if not default
+    AUTOSSH_PIDFILE     - write pid to this file
+    AUTOSSH_POLL        - how often to check the connection (seconds)
+    AUTOSSH_FIRST_POLL  - time before first connection check (seconds)
+    AUTOSSH_PORT        - port to use for monitor connection
+    AUTOSSH_DEBUG       - turn logging to maximum verbosity and log to
+                          stderr</code></pre>
 <p>Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
-<p>$ autossh -M 0 -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
-  &gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать $ autossh -M 0 -N remote-forward-ssh-serverКопировать</p>
-<p>Для <code>autossh</code> обязательна опция <code>-M</code>, которая задает порт для мониторинга соединения. Но ssh-клиент может и сам это делать (это опции <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>). Так что опцию <code>-M</code> будем всегда отключать.</p>
+<pre><code class="language-plaintext">$ autossh -M 0 -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+&gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать $ autossh -M 0 -N remote-forward-ssh-server</code></pre>
+<blockquote>
+  <p>Для <code>autossh</code> обязательна опция <code>-M</code>, которая задает порт для мониторинга соединения. Но ssh-клиент может и сам это делать (это опции <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>). Так что опцию <code>-M</code> будем всегда отключать.</p>
+</blockquote>
 <p>Чтобы запустить <code>autossh</code> в фоновом режиме, добавляем опцию <code>-f</code>:</p>
-<p>$ autossh -M 0 -f -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
-  &gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать $ autossh -M 0 -f -N remote-forward-ssh-serverКопировать</p>
-<p>Здесь опции <code>-M</code> и <code>-f</code> относятся к <code>autossh</code>, а все остальные передаются <code>ssh</code>.</p>
+<pre><code class="language-plaintext">$ autossh -M 0 -f -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+&gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<pre><code class="language-plaintext">$ autossh -M 0 -f -N remote-forward-ssh-server</code></pre>
+<blockquote>
+  <p>Здесь опции <code>-M</code> и <code>-f</code> относятся к <code>autossh</code>, а все остальные передаются <code>ssh</code>.</p>
+</blockquote>
 <p>Проверим, что туннель работает, воспользовавшись командой <code>ps</code>:</p>
-<p>$ ps -f -C autossh
-  UID &nbsp; &nbsp; &nbsp; &nbsp;PID &nbsp;PPID &nbsp;C &nbsp;STIME &nbsp;TTY &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;TIME &nbsp;CMD
-  evgeniy &nbsp; 4000 &nbsp;3210 &nbsp;0 &nbsp;12:26 &nbsp;? &nbsp; &nbsp; &nbsp; &nbsp;00:00:00 &nbsp;/usr/lib/autossh/autossh -M 0 -N remote-forward-ssh-serverКопировать</p>
+<pre><code class="language-plaintext">$ ps -f -C autossh
+UID        PID  PPID  C  STIME  TTY          TIME  CMD
+evgeniy   4000  3210  0  12:26  ?        00:00:00  /usr/lib/autossh/autossh -M 0 -N remote-forward-ssh-server</code></pre>
 <p>Чтобы завершить процесс, используем команду <code>pkill</code>:</p>
-<p>$ pkill autosshКопировать</p>
+<pre><code class="language-plaintext">$ pkill autossh</code></pre>
 <h2>Проверяем, как работает autossh</h2>
 <p>Во второй части мы решали две задачи:</p>
 <ol>
