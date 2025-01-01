@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:10:06.678Z
+date: 2025-01-01T19:12:49.293Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -146,23 +146,24 @@ $ sudo systemctl restart ssh</code></pre>
 <h2>Проброс соединения TKMCOMP &lt;= ssh-server &lt;= web-server</h2>
 <p>А теперь решим обратную задачу — пробросим соединение от виртуальной машины <code>web-server</code> к физической машине через промежуточный сервер <code>ssh-server</code>. Чтобы с виртуальной машины <code>web-server</code> можно было подключится к серверу БД на физической машине.</p>
 <p>Итак, открываем окно PowerShell на физической машине и выполняем команду:</p>
-<p>&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</p>
+<pre><code class="language-plaintext">&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <p>Теперь открываем окно терминала на виртуальной машине <code>web-server</code>:</p>
-<p>$ ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</p>
+<pre><code class="language-plaintext">$ ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
 <p>Открываем еще одно окно терминала на виртуальной машине <code>web-server</code>:</p>
-<p>$ mysql -uroot -pqwerty -P 3307Копировать</p>
+<pre><code class="language-plaintext">$ mysql -uroot -pqwerty -P 3307</code></pre>
 <p>И получаем совершенно неожиданный результат. Вместо того, чтобы подключиться к серверу БД на физической машине <code>TKMCOMP</code>, мы подключились к серверу БД на виртуальной машине <code>web-server</code>. Причем еще ухитрились подключиться на порту 3307, хотя порт по умолчанию для MySQL — 3306.</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/6.jpg" alt=""></figure>
 <p>Дело в том, что хост по умолчанию для mysql-клиента — это <code>localhost</code>. А в этом случае подключение происходит с использованием unix-сокета. И порт может быть любым — он вообще не используется. Но нам нужно сетевое подключение, т.е. с использованием tcp-сокета. Тут есть два пути решения — либо указать протокол TCP, либо указать хост 127.0.0.1 (вместо значения по умолчанию <code>localhost</code>):</p>
-<p>$ mysql -uroot -pqwerty -P 3307 --protocol=TCPКопировать $ mysql -uroot -pqwerty -P 3307 -h 127.0.0.1Копировать</p>
+<pre><code class="language-plaintext">$ mysql -uroot -pqwerty -P 3307 --protocol=TCP
+$ mysql -uroot -pqwerty -P 3307 -h 127.0.0.1</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/7.jpg" alt=""></figure>
 <h2>Аутентификация по ключу</h2>
 <p>Чтобы не вводить пароль каждый раз при создании туннеля — настроим аутентификацию по ключу. Сначала для физического компьютера, потом для виртуальной машины <code>web-server</code>. Эти ключи будут нужны для построения двух туннелей через промежуточный сервер:</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/2.jpg" alt=""></figure>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
 <p>Но перед этим надо изменить настройку ssh-сервера:</p>
-<p>PubkeyAuthentication yesКопировать</p>
+<p>PubkeyAuthentication yes</p>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/8.jpg" alt=""></figure>
 <p>$ sudo systemctl restart sshКопировать</p>
 <h3>Ключи для физического компьютера</h3>
