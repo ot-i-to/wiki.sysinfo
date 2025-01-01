@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:32:23.266Z
+date: 2025-01-01T19:34:11.711Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -338,70 +338,70 @@ evgeniy   4000  3210  0  12:26  ?        00:00:00  /usr/lib/autossh/autossh -M 0
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/1.jpg" alt=""></figure>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/2.jpg" alt=""></figure>
 <p>Мы сейчас посмотрим, как работает <code>autossh</code>, пробрасывая туннель от <code>web-server</code> до <code>ssh-server</code> (правая половина первого рисунка). Для проверки того, что туннель работает, установим на виртуальную машину <code>ssh-server</code> клиент БД MySQL:</p>
-<p>$ sudo apt install mysql-clientКопировать</p>
+<pre><code class="language-plaintext">$ sudo apt install mysql-client</code></pre>
 <p>Теперь с виртуальной машины <code>web-server</code> выполним команду создания туннеля:</p>
-<p>$ autossh -M 0 -N remote-forward-ssh-serverКопировать</p>
+<pre><code class="language-plaintext">$ autossh -M 0 -N remote-forward-ssh-server</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/4.jpg" alt=""></figure>
 <p>А с виртуальной машины <code>ssh-server</code> соединяемся с сервером БД MySQL:</p>
-<p>$ mysql -uroot -pqwerty --protocol=TCPКопировать</p>
+<pre><code class="language-plaintext">$ mysql -uroot -pqwerty --protocol=TCP</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/5.jpg" alt=""></figure>
 <p>Соединение прошло успешно. Теперь выключим сетевой интерфейс на виртуальной машине <code>ssh-server</code>:</p>
-<p>$ sudo ip link set dev enp0s3 downКопировать</p>
+<pre><code class="language-plaintext">$ sudo ip link set dev enp0s3 down</code></pre>
 <p>Удостоверимся, что подключиться к серверу БД MySQL теперь нельзя:</p>
-<p>$ mysql -uroot -pqwerty --protocol=TCP
-  mysql: [Warning] Using a password on the command line interface can be insecure.
-  ERROR 2003 (HY000): Can't connect to MySQL server on 'localhost' (111)Копировать</p>
+<pre><code class="language-plaintext">$ mysql -uroot -pqwerty --protocol=TCP
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 2003 (HY000): Can't connect to MySQL server on 'localhost' (111)</code></pre>
 <p>И посмотрим, как отреагирует утилита <code>autossh</code> на машине <code>web-server</code>:</p>
-<p>$ autossh -M 0 -N remote-forward-ssh-server
-  Timeout, server 192.168.110.8 not responding. # прошло 90 секунд, сервер не отвечает
-  ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером
-  ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером
-  ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с серверомКопировать</p>
+<pre><code class="language-plaintext">$ autossh -M 0 -N remote-forward-ssh-server
+Timeout, server 192.168.110.8 not responding. # прошло 90 секунд, сервер не отвечает
+ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером
+ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером
+ssh: connect to host 192.168.110.8 port 2222: No route to host # попытка соединения с сервером</code></pre>
 <p>При включении сетевого интерфейса на виртуальной машине <code>ssh-server</code>:</p>
-<p>$ sudo ip link set dev enp0s3 upКопировать</p>
+<pre><code class="language-plaintext">$ sudo ip link set dev enp0s3 up</code></pre>
 <p>Туннель будет восстановлен. Это можно проверить, если выполнить команду на <code>ssh-server</code>:</p>
-<p>$ mysql -uroot -pqwerty --protocol=TCP
-  mysql: [Warning] Using a password on the command line interface can be insecure.
-  Welcome to the MySQL monitor. &nbsp;Commands end with ; or \g.
-  Your MySQL connection id is 12
-  Server version: 5.7.28-0ubuntu0.18.04.4 (Ubuntu)
-  ..........Копировать</p>
+<pre><code class="language-plaintext">$ mysql -uroot -pqwerty --protocol=TCP
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 5.7.28-0ubuntu0.18.04.4 (Ubuntu)
+..........</code></pre>
 <p>Если возникли какие-то проблемы с <code>autossh</code>, можно запустить утилиту в режиме отладки:</p>
-<p>$ AUTOSSH_DEBUG=1 autossh -M 0 -N remote-forward-ssh-server
-  autossh[2744]: port set to 0, monitoring disabled # мы отключили мониторинг
-  autossh[2744]: checking for grace period, tries = 0
-  autossh[2744]: starting ssh (count 1) # запуск ssh (попытка 1)
-  autossh[2744]: ssh child pid is 2747
-  autossh[2744]: check on child 2747
-  autossh[2744]: set alarm for 600 secs
-  autossh[2747]: execing /usr/bin/ssh
-  Timeout, server 192.168.110.8 not responding.
-  autossh[2744]: check on child 2747
-  autossh[2744]: ssh exited with error status 255; restarting ssh
-  autossh[2744]: expired child, returning 1
-  autossh[2744]: checking for grace period, tries = 1
-  autossh[2744]: starting ssh (count 2) # запуск ssh (попытка 2)
-  autossh[2744]: ssh child pid is 2754
-  autossh[2744]: check on child 2754
-  autossh[2744]: set alarm for 559 secs
-  autossh[2754]: execing /usr/bin/ssh
-  ssh: connect to host 192.168.110.8 port 2222: No route to host
-  autossh[2744]: check on child 2754
-  autossh[2744]: ssh exited with error status 255; restarting ssh
-  autossh[2744]: expired child, returning 1
-  autossh[2744]: checking for grace period, tries = 2
-  autossh[2744]: starting ssh (count 3) # запуск ssh (попытка 3)
-  autossh[2744]: ssh child pid is 2755
-  autossh[2744]: check on child 2755
-  autossh[2744]: set alarm for 524 secs
-  autossh[2755]: execing /usr/bin/ssh
-  ssh: connect to host 192.168.110.8 port 2222: No route to host
-  autossh[2744]: check on child 2755
-  autossh[2744]: ssh exited with error status 255; restarting ssh
-  autossh[2744]: expired child, returning 1
-  autossh[2744]: checking for grace period, tries = 3
-  autossh[2744]: starting ssh (count 4) # запуск ssh (попытка 4)
-  autossh[2744]: ssh child pid is 2756
-  autossh[2744]: check on child 2756
-  autossh[2744]: set alarm for 521 secs
-  autossh[2756]: execing /usr/bin/ssh</p>
+<pre><code class="language-plaintext">$ AUTOSSH_DEBUG=1 autossh -M 0 -N remote-forward-ssh-server
+autossh[2744]: port set to 0, monitoring disabled # мы отключили мониторинг
+autossh[2744]: checking for grace period, tries = 0
+autossh[2744]: starting ssh (count 1) # запуск ssh (попытка 1)
+autossh[2744]: ssh child pid is 2747
+autossh[2744]: check on child 2747
+autossh[2744]: set alarm for 600 secs
+autossh[2747]: execing /usr/bin/ssh
+Timeout, server 192.168.110.8 not responding.
+autossh[2744]: check on child 2747
+autossh[2744]: ssh exited with error status 255; restarting ssh
+autossh[2744]: expired child, returning 1
+autossh[2744]: checking for grace period, tries = 1
+autossh[2744]: starting ssh (count 2) # запуск ssh (попытка 2)
+autossh[2744]: ssh child pid is 2754
+autossh[2744]: check on child 2754
+autossh[2744]: set alarm for 559 secs
+autossh[2754]: execing /usr/bin/ssh
+ssh: connect to host 192.168.110.8 port 2222: No route to host
+autossh[2744]: check on child 2754
+autossh[2744]: ssh exited with error status 255; restarting ssh
+autossh[2744]: expired child, returning 1
+autossh[2744]: checking for grace period, tries = 2
+autossh[2744]: starting ssh (count 3) # запуск ssh (попытка 3)
+autossh[2744]: ssh child pid is 2755
+autossh[2744]: check on child 2755
+autossh[2744]: set alarm for 524 secs
+autossh[2755]: execing /usr/bin/ssh
+ssh: connect to host 192.168.110.8 port 2222: No route to host
+autossh[2744]: check on child 2755
+autossh[2744]: ssh exited with error status 255; restarting ssh
+autossh[2744]: expired child, returning 1
+autossh[2744]: checking for grace period, tries = 3
+autossh[2744]: starting ssh (count 4) # запуск ssh (попытка 4)
+autossh[2744]: ssh child pid is 2756
+autossh[2744]: check on child 2756
+autossh[2744]: set alarm for 521 secs
+autossh[2756]: execing /usr/bin/ssh</code></pre>
