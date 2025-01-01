@@ -1,0 +1,215 @@
+<!--
+title: Создание SSH-туннеля
+description: 
+published: true
+date: 2025-01-01T19:08:58.253Z
+tags: linux, ssh, tunnel
+editor: ckeditor
+dateCreated: 2025-01-01T19:08:58.253Z
+-->
+
+<p>SSH туннель — это туннель, создаваемый посредством SSH соединения и используемый для шифрования туннелированных данных. Используется для того, чтобы обезопасить передачу данных в интернете. Особенность состоит в том, что незашифрованный трафик какого-либо протокола шифруется на одном конце SSH соединения и расшифровывается на другом.</p>
+<p>Строго говоря, SSH-туннели не являются полноценными туннелями и это название следует рассматривать как сложившееся в профессиональной среде устойчивое наименование. Официальное название технологии — SSH Port Forwarding — это опциональная возможность протокола SSH, которая позволяет передать TCP-пакет с одной стороны SSH-соединения на другую и произвести в процессе передачи трансляцию IP-заголовка по заранее определенному правилу.</p>
+<p>Понять, как работает SSH туннель очень просто: если представить его в виде point-to-point соединения. Так же как и в PPP, любой пакет, попавший в один конец соединения, будет передан и получен на другом конце туннеля. Дальше, в зависимости от адреса получателя, заданного в IP заголовке, пакет будет либо обработан принимающей стороной туннеля (если пакет предназначается непосредственно ей), либо смаршрутизирован дальше в сеть (если адресатом является другой узел сети).</p>
+<blockquote>
+  <p>За TCP Port Forwarding отвечает опция <code>AllowTcpForwarding</code> в файле конфигурации SSH-сервера. По умолчанию она имеет значение <code>yes</code>, так что дополнительные настройки не нужны.</p>
+</blockquote>
+<h2>Проброс локального соединения на удаленную машину</h2>
+<p>Синтаксис команды:</p>
+<pre><code class="language-plaintext">$ ssh -L [ЛокальныйАдрес:]ЛокальныйПорт:АдресНазначения:ПортНазначения Пользователь@УдаленныйСервер
+         \_____________  _____________/ \_____________  _____________/              \______  _____/
+                       \/                             \/                                   \/
+                   точка входа                пункт назначения                        точка выхода</code></pre>
+<p>После этого все соединения на <code>ЛокальныйАдрес:ЛокальныйПорт</code> будут перебрасываться удаленному серверу, который будет соединяться с <code>АдресНазначения:ПортНазначения</code> от своего имени.</p>
+<h2>Проброс удаленного соединения на локальную машину</h2>
+<p>Для совершения обратного действия нужно выполнить команду с ключом <code>-R</code>:</p>
+<pre><code class="language-plaintext">$ ssh -R [УдаленныйАдрес:]УдаленныйПорт:АдресНазначения:ПортНазначения Пользователь@УдаленныйСервер
+         \_____________  _____________/ \_____________  _____________/
+                       \/                             \/               точка выхода — хост, где
+                   точка входа                пункт назначения         выполняется эта команда      </code></pre>
+<p>Команда работает также, как и в вышеописанном случае, только соединения перебрасываются с удаленной машины на локальную.</p>
+<blockquote>
+  <p>Для OpenSSH точка входа всегда совпадает с локальным интерфейсом <code>127.0.0.1</code>, поэтому его можно опустить, сразу начиная команду с порта точки входа.</p>
+</blockquote>
+<h2>Примеры проброса соединения</h2>
+<p>У меня физический компьютер с двумя виртуальными машинами. На физической машине — Windows 10 и установлены web-сервер Apache и сервер БД MySQL. На виртуальной машине <code>ssh-server</code> — Ubuntu 18.04 и установлен SSH-сервер. На виртуальной машине <code>web-server</code> — Ubuntu 18.04 и установлен web-сервер Apache и сервер БД MySQL.</p>
+<ul>
+  <li>Физическая машина <code>TKMCOMP</code>, ОС Windows 10, ip-адрес 192.168.110.2</li>
+  <li>Виртуальная машина <code>ssh-server</code>, ОС Ubuntu 18.04, ip-адрес 192.168.110.8</li>
+  <li>Виртуальная машина <code>web-server</code>, ОС Ubuntu 18.04, ip-адрес 192.168.110.12</li>
+</ul>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/1.jpg" alt=""></figure>
+<p>Все машины находятся в одной локальной сети — для удобства проведения экспериментов с построением туннелей. Хотя с практической точки зрения нужен компьютер с белым ip-адресом и с установленным ssh-сервером — который будет посредником между двумя компьютерами с серыми ip-адресами.</p>
+<p>На виртуальной машине <code>web-server</code> работает web-сервер Apache — если на физическом компьютере открыть в браузере страницу <code>http://192.168.110.12</code>, то увидим дефолтную страницу Apache:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/2.jpg" alt=""></figure>
+<p>На физической машине <code>TKMCOMP</code> тоже работает web-сервер Apache — если открыть в браузере страницу <code>http://127.0.0.1</code>, то увидим вывод php-функции <code>phpinfo()</code>:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/3.jpg" alt=""></figure>
+<blockquote>
+  <p>На виртуальной машине <code>ssh-server</code> необходимо открыть порт для ssh-соединений. У меня это — 2222:</p>
+  <pre><code class="language-plaintext">$ sudo ufw allow 2222/tcp
+Правило добавлено
+Правило добавлено (v6)
+
+$ sudo ufw status verbose
+Состояние: активен
+Журналирование: on (low)
+По умолчанию: deny (входящие), allow (исходящие), disabled (маршрутизированные)
+
+В                          Действие    Из
+----------------------------------------------------
+2222/tcp                   ALLOW IN    Anywhere
+2222/tcp (v6)              ALLOW IN    Anywhere (v6)</code></pre>
+</blockquote>
+<h3>Проброс локального соединения на удаленную машину</h3>
+<p>Открываем на физической машине PowerShell и выполняем команду:</p>
+<pre><code class="language-plaintext">&gt; ssh -p 2222 -L 127.0.0.1:8080:192.168.110.12:80 evgeniy@192.168.110.8</code></pre>
+<ul>
+  <li>точка входа в туннель — физическая машина <code>TKMCOMP</code>, интерфейс <code>localhost</code></li>
+  <li>точка выхода из туннеля — виртуальная машина <code>ssh-server</code>, интерфейс <code>localhost</code></li>
+  <li>пункт назначения tcp-пакетов — виртуальная машина <code>web-server</code></li>
+</ul>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/4.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/5.jpg" alt=""></figure>
+<p>Теперь у нас есть туннель от 192.168.110.2 до 192.168.110.8: пакеты от физической машины попадают в туннель и будут получены виртуальной машиной <code>ssh-server</code>. А поскольку пункт назначения 192.168.110.12 — пакеты будут направлены дальше в сеть, к виртуальной машине <code>web-server</code>.</p>
+<p>На физической машине открываем в браузере страницу <code>http://127.0.0.1:8080</code> — и видим дефолтную страницу Apache:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/6.jpg" alt=""></figure>
+<h3>Проброс удаленного соединения на локальную машину</h3>
+<p>Открываем на физической машине PowerShell и выполняем команду:</p>
+<pre><code class="language-plaintext">&gt; ssh -p 2222 -R 127.0.0.1:8080:127.0.0.1:80 evgeniy@192.168.110.8</code></pre>
+<ul>
+  <li>точка входа в туннель — виртуальная машина <code>ssh-server</code>, интерфейс <code>localhost</code></li>
+  <li>точка выхода из туннеля — физическая машина <code>TKMCOMP</code>, интерфейс <code>localhost</code></li>
+  <li>пункт назначения tcp-пакетов — физическая машина <code>TKMCOMP</code> (пакеты предназначены ей)</li>
+</ul>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/7.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/13.jpg" alt=""></figure>
+<p>Теперь у нас есть туннель от 192.168.110.8 до 192.168.110.2: пакеты от виртуальной машины <code>ssh-server</code> попадут в туннель и будут получены физической машиной. Откроем на виртуальной машине <code>ssh-server</code> браузер и наберем в адресной строке <code>http://192.168.110.8:8080</code> или <code>http://127.0.01:8080</code>. Мы видим вывод функции <code>phpinfo()</code> от web-сервера физической машины:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/8.jpg" alt=""></figure>
+<p>Однако, если мы откроем браузер на виртуальной машине <code>web-server</code> и наберем в адресной строке <code>http://192.168.110.8:8080</code> — то ничего не увидим:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/10.jpg" alt=""></figure>
+<p>Пакеты от виртуальной машины <code>web-server</code> придут на сетевой интерфейс <code>enp0s3</code> (<code>192.168.110.8</code>) виртуальной машины <code>ssh-server</code>. А перенаправляются в туннель только те пакеты, которые пришли на интерфейс обратной петли <code>loopback</code> (<code>127.0.0.1</code>). Чтобы это исправить, нужно изменить настройки ssh-сервера — отредактировать файл конфигурации <code>/etc/ssh/sshd_config</code>:</p>
+<pre><code class="language-plaintext">GatewayPorts yes</code></pre>
+<pre><code class="language-plaintext">$ sudo systemctl restart ssh</code></pre>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/11.jpg" alt=""></figure>
+<p>Но это очень радикальный путь, лучше использовать опцию <code>-g</code> в команде создания туннеля. Она действует аналогично <code>GatewayPorts</code>, но уменьшает риск забыть об этой настройке ssh-сервера, когда в ней уже не будет необходимости.</p>
+<p>Обновляем страницу <code>http://192.168.110.8:8080</code> на виртуальной машине <code>web-server</code>:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/12.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/455/9.jpg" alt=""></figure>
+<p>Наша следующая задача — с помощью mysql-клиента на физическом компьютере <code>TKMCOMP</code> подключиться к mysql-серверу на виртуальной машине <code>web-server</code>. Для этого пробросим TCP-соединение от <code>TKMCOMP</code> к <code>web-server</code> через промежуточный сервер <code>ssh-server</code>.</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/1.jpg" alt=""></figure>
+<blockquote>
+  <p>На виртуальной машине <code>ssh-server</code> необходимо открыть порт для ssh-соединений. У меня это — 2222:</p>
+  <pre><code class="language-plaintext">$ sudo ufw allow 2222/tcp
+Правило добавлено
+Правило добавлено (v6)
+
+$ sudo ufw status verbose
+Состояние: активен
+Журналирование: on (low)
+По умолчанию: deny (входящие), allow (исходящие), disabled (маршрутизированные)
+
+В                          Действие    Из
+----------------------------------------------------
+2222/tcp                   ALLOW IN    Anywhere
+2222/tcp (v6)              ALLOW IN    Anywhere (v6)</code></pre>
+</blockquote>
+<h2>Проброс соединения TKMCOMP =&gt; ssh-server =&gt; web-server</h2>
+<p>Первый туннель — от физического компьютера до виртуальной машины <code>ssh-server</code>. Открываем окно PowerShell и выполняем команду:</p>
+<pre><code class="language-diff">&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<p>Второй туннель создаем с виртуальной машины <code>web-server</code>, с удаленной точкой входа на виртуальной машине <code>ssh-server</code>. Открываем окно терминала на <code>web-server</code> и выполняем команду:</p>
+<pre><code class="language-plaintext">$ ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</code></pre>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/2.jpg" alt=""></figure>
+<p>Открываем еще одно окно PowerShell и выполняем команду:</p>
+<pre><code class="language-plaintext">&gt; mysql -uroot -pqwerty -P 3307</code></pre>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/3.jpg" alt=""></figure>
+<blockquote>
+  <p>Эту задачу можно решить иначе, но для этого потребуется установить ssh-сервер на виртуальную машину <code>web-server</code> (подробности см. <a href="https://tokmakov.msk.ru/blog/item/441">здесь</a>):</p>
+  <pre><code class="language-plaintext">$ sudo apt install openssh-server
+$ sudo nano /etc/ssh/sshd_config
+$ sudo systemctl restart ssh</code></pre>
+  <p>Теперь открываем окно PowerShell и выполняем команду:</p>
+  <pre><code class="language-plaintext">&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+  <p>Тем самым мы создаем туннель и подключаемся к виртуальной машине <code>ssh-server</code>. И создаем еще один туннель (а заодно подключаемся к виртуальной машине <code>web-server</code>):</p>
+  <pre><code class="language-plaintext">$ ssh -p 2222 -L 3306:127.0.0.1:3306 evgeniy@192.168.110.12</code></pre>
+  <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/4.jpg" alt=""></figure>
+  <p>Открываем еще одно окно PowerShell и выполняем команду:</p>
+  <pre><code class="language-plaintext">&gt; mysql -uroot -pqwerty -P 3307</code></pre>
+  <p>Такое решение не всегда возможно. Как правило, два туннеля нужны, чтобы пробросить соединение между двумя машинами с серыми ip-адресами, расположенными далеко друг от друга. Поскольку напрямую это сделать нельзя, нужен ssh-сервер с белым ip-адресом, который будет посредником.</p>
+</blockquote>
+<h2>Проброс соединения TKMCOMP &lt;= ssh-server &lt;= web-server</h2>
+<p>А теперь решим обратную задачу — пробросим соединение от виртуальной машины <code>web-server</code> к физической машине через промежуточный сервер <code>ssh-server</code>. Чтобы с виртуальной машины <code>web-server</code> можно было подключится к серверу БД на физической машине.</p>
+<p>Итак, открываем окно PowerShell на физической машине и выполняем команду:</p>
+<p>&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</p>
+<p>Теперь открываем окно терминала на виртуальной машине <code>web-server</code>:</p>
+<p>$ ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
+<p>Открываем еще одно окно терминала на виртуальной машине <code>web-server</code>:</p>
+<p>$ mysql -uroot -pqwerty -P 3307Копировать</p>
+<p>И получаем совершенно неожиданный результат. Вместо того, чтобы подключиться к серверу БД на физической машине <code>TKMCOMP</code>, мы подключились к серверу БД на виртуальной машине <code>web-server</code>. Причем еще ухитрились подключиться на порту 3307, хотя порт по умолчанию для MySQL — 3306.</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/6.jpg" alt=""></figure>
+<p>Дело в том, что хост по умолчанию для mysql-клиента — это <code>localhost</code>. А в этом случае подключение происходит с использованием unix-сокета. И порт может быть любым — он вообще не используется. Но нам нужно сетевое подключение, т.е. с использованием tcp-сокета. Тут есть два пути решения — либо указать протокол TCP, либо указать хост 127.0.0.1 (вместо значения по умолчанию <code>localhost</code>):</p>
+<p>$ mysql -uroot -pqwerty -P 3307 --protocol=TCPКопировать $ mysql -uroot -pqwerty -P 3307 -h 127.0.0.1Копировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/7.jpg" alt=""></figure>
+<h2>Аутентификация по ключу</h2>
+<p>Чтобы не вводить пароль каждый раз при создании туннеля — настроим аутентификацию по ключу. Сначала для физического компьютера, потом для виртуальной машины <code>web-server</code>. Эти ключи будут нужны для построения двух туннелей через промежуточный сервер:</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/2.jpg" alt=""></figure>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/5.jpg" alt=""></figure>
+<p>Но перед этим надо изменить настройку ssh-сервера:</p>
+<p>PubkeyAuthentication yesКопировать</p>
+<figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/8.jpg" alt=""></figure>
+<p>$ sudo systemctl restart sshКопировать</p>
+<h3>Ключи для физического компьютера</h3>
+<p>Открываем окно PowerShell на физической машине и создаем пару ключей с именем <code>tcp-forward-ssh-server</code>:</p>
+<p>&gt; ssh-keygenКопировать</p>
+<p>Копируем публичный ключ на <code>ssh-server</code>:</p>
+<p>&gt; cat .\.ssh\tcp-forward-ssh-server.pub | ssh -p 2222 evgeniy@192.168.110.8 `
+  &gt; 'cat &gt;&gt; ./.ssh/authorized_keys'Копировать</p>
+<p>Создаем или редактируем файл <code>~/.ssh/config</code></p>
+<p># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
+  Host local-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;LocalForward 3307 127.0.0.1:3306
+
+  # Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
+  Host remote-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;RemoteForward 3306 127.0.0.1:3306Копировать</p>
+<p>Теперь можно упростить команды построения туннелей:</p>
+<p>&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды
+  &gt; ssh local-forward-ssh-server # теперь можно использовать такуюКопировать &gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8 # вместо этой команды
+  &gt; ssh remote-forward-ssh-server # теперь можно использовать такуюКопировать</p>
+<h3>Ключи для виртуальной машины</h3>
+<p>Открываем окно терминала на виртуальной машине и создаем пару ключей с именем <code>tcp-forward-ssh-server</code>:</p>
+<p>&gt; ssh-keygenКопировать</p>
+<p>Копируем публичный ключ на <code>ssh-server</code>:</p>
+<p>$ ssh-copy-id -p 2222 -i ~/.ssh/tcp-forward-ssh-server.pub \
+  &gt; evgeniy@192.168.110.8Копировать</p>
+<p>Создаем или редактируем файл <code>~/.ssh/config</code></p>
+<p># Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12
+  Host remote-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;RemoteForward 3306 127.0.0.1:3306
+
+  # Проброс соединения 192.168.110.8 &lt;==L== 192.168.110.12
+  Host local-forward-ssh-server
+  &nbsp;HostName 192.168.110.8
+  &nbsp;Port 2222
+  &nbsp;User evgeniy
+  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
+  &nbsp;LocalForward 3307 127.0.0.1:3306Копировать</p>
+<p>Теперь можно упростить команды построения туннелей:</p>
+<p>&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8
+  &gt; ssh remote-forward-ssh-serverКопировать &gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.12
+  &gt; ssh local-forward-ssh-serverКопировать</p>
+<ul>
+  <li>&nbsp;</li>
+</ul>
