@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:38:48.589Z
+date: 2025-01-01T19:39:31.388Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -442,21 +442,22 @@ WantedBy=multi-user.targetКопировать</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/1.jpg" alt=""></figure>
 <h2>Альтернативный вариант восстановления туннеля</h2>
 <p>Разбираясь с созданием unit-файла, обнаружил, что поддерживать туннель в рабочем состоянии можно гораздо проще, без использования утилиты <code>autossh</code>:</p>
-<p>$ sudo nano /etc/systemd/system/autossh-tunnel.serviceКопировать [Unit]
-  Description=Autossh tunnel to ssh-server at startup
-  After=network-online.target
+<pre><code class="language-plaintext">$ sudo nano /etc/systemd/system/autossh-tunnel.service</code></pre>
+<pre><code class="language-plaintext">[Unit]
+Description=Autossh tunnel to ssh-server at startup
+After=network-online.target
 
-  [Service]
-  User=evgeniy
-  Group=evgeniy
-  ExecStart=/usr/bin/ssh -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
-  Restart=always
-  RestartSec=5
+[Service]
+User=evgeniy
+Group=evgeniy
+ExecStart=/usr/bin/ssh -N -F /home/evgeniy/.ssh/config remote-forward-ssh-server
+Restart=always
+RestartSec=5
 
-  [Install]
-  WantedBy=multi-user.targetКопировать</p>
+[Install]
+WantedBy=multi-user.target</code></pre>
 <p>Перезагружаем систему и смотрим статус нашей службы:</p>
-<p>$ sudo systemctl status autossh-tunnel.serviceКопировать</p>
+<pre><code class="language-plaintext">$ sudo systemctl status autossh-tunnel.service</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/2.jpg" alt=""></figure>
 <h2>Автозапуск туннеля при загрузке TKMCOMP</h2>
 <p>На физическом компьютере у нас уже создан файл <code>~/.ssh/config</code>:</p>
