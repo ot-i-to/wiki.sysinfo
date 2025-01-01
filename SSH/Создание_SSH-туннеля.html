@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:24:20.945Z
+date: 2025-01-01T19:26:17.612Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -196,7 +196,8 @@ Host remote-forward-ssh-server
 <p>Открываем окно терминала на виртуальной машине и создаем пару ключей с именем <code>tcp-forward-ssh-server</code>:</p>
 <pre><code class="language-plaintext">&gt; ssh-keygen</code></pre>
 <p>Копируем публичный ключ на <code>ssh-server</code>:</p>
-<pre><code class="language-plaintext">$ ssh-copy-id -p 2222 -i ~/.ssh/tcp-forward-ssh-server.pub &gt; evgeniy@192.168.110.8</code></pre>
+<pre><code class="language-plaintext">$ ssh-copy-id -p 2222 -i ~/.ssh/tcp-forward-ssh-server.pub \
+&gt; evgeniy@192.168.110.8</code></pre>
 <p>Создаем или редактируем файл <code>~/.ssh/config</code></p>
 <pre><code class="language-plaintext"># Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12 
 Host remote-forward-ssh-server
@@ -229,13 +230,15 @@ ClientAliveInterval 30
 # сервер закроет соединение после трех неудачных попыток
 ClientAliveCountMax 3</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/3.jpg" alt=""></figure>
-<p>$ sudo systemctl restart ssh.serviceКопировать</p>
+<pre><code class="language-plaintext">$ sudo systemctl restart ssh.service</code></pre>
 <p>Если что-то произойдет с клиентом, например, компьютер просто отключится от сети, то через 90 секунд <code>ssh-server</code> закроет туннельное соединение.</p>
-<p>В файле <code>/etc/ssh/sshd_config</code> есть параметр <code>TCPKeepAlive</code>, который по умолчанию имеет значение <code>yes</code>. Он позволяет поддерживать TCP-соединение в активном состоянии, даже когда нет передачи пакетов. Эта решается на уровне протокола TCP/IP с помощью отправки специальных проверочных пакетов.</p>
-<p>Кроме того, OpenSSH имеет альтернативные средства контроля активности сеансов — <code>ClientAliveInterval</code> и <code>ClientAliveCountMax</code>. При использовании этих параметров, в отличие от <code>TCPKeepAlive</code>, запросы отправляются через защищённый ssh-канал и не могут быть подменены.</p>
+<blockquote>
+  <p>В файле <code>/etc/ssh/sshd_config</code> есть параметр <code>TCPKeepAlive</code>, который по умолчанию имеет значение <code>yes</code>. Он позволяет поддерживать TCP-соединение в активном состоянии, даже когда нет передачи пакетов. Эта решается на уровне протокола TCP/IP с помощью отправки специальных проверочных пакетов.</p>
+  <p>Кроме того, OpenSSH имеет альтернативные средства контроля активности сеансов — <code>ClientAliveInterval</code> и <code>ClientAliveCountMax</code>. При использовании этих параметров, в отличие от <code>TCPKeepAlive</code>, запросы отправляются через защищённый ssh-канал и не могут быть подменены.</p>
+</blockquote>
 <p>При создании туннельного подключения со стороны клиента есть возможность указать аналогичные параметры <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>. Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
-<p>$ ssh -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
-  &gt; -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</p>
+<pre><code class="language-plaintext">$ ssh -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
+&gt; -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <p>Иногда возможна ситуация, когда порт не был проброшен, хотя туннель был поднят. То есть, со стороны ssh-сервера и ssh-клиента все будет выглядеть нормально, туннель будет существовать и работать, но вот порт не будет проброшен. Для этого случая предусмотрен дополнительный параметр <code>ExitOnForwardFailure yes</code>.</p>
 <p>Параметры на стороне клиента можно задавать как в командной строке, так и записать их в файл конфигурации:</p>
 <p>$ nano ~/.ssh/configКопировать # Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12
