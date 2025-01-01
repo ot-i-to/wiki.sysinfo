@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:17:28.943Z
+date: 2025-01-01T19:19:18.538Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -194,9 +194,9 @@ Host remote-forward-ssh-server
 &gt; ssh remote-forward-ssh-server # теперь можно использовать такую</code></pre>
 <h3>Ключи для виртуальной машины</h3>
 <p>Открываем окно терминала на виртуальной машине и создаем пару ключей с именем <code>tcp-forward-ssh-server</code>:</p>
-<p>&gt; ssh-keygenКопировать</p>
+<pre><code class="language-plaintext">&gt; ssh-keygen</code></pre>
 <p>Копируем публичный ключ на <code>ssh-server</code>:</p>
-<p>$ ssh-copy-id -p 2222 -i ~/.ssh/tcp-forward-ssh-server.pub \ &gt; evgeniy@192.168.110.8Копировать</p>
+<pre><code class="language-plaintext">$ ssh-copy-id -p 2222 -i ~/.ssh/tcp-forward-ssh-server.pub &gt; evgeniy@192.168.110.8</code></pre>
 <p>Создаем или редактируем файл <code>~/.ssh/config</code></p>
 <p># Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12 Host remote-forward-ssh-server &nbsp;HostName 192.168.110.8 &nbsp;Port 2222 &nbsp;User evgeniy &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server &nbsp;RemoteForward 3306 127.0.0.1:3306 # Проброс соединения 192.168.110.8 &lt;==L== 192.168.110.12 Host local-forward-ssh-server &nbsp;HostName 192.168.110.8 &nbsp;Port 2222 &nbsp;User evgeniy &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server &nbsp;LocalForward 3307 127.0.0.1:3306Копировать</p>
 <p>Теперь можно упростить команды построения туннелей:</p>
