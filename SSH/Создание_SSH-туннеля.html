@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:34:20.821Z
+date: 2025-01-01T19:35:58.044Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -123,7 +123,7 @@ $ sudo ufw status verbose
 <p>Первый туннель — от физического компьютера до виртуальной машины <code>ssh-server</code>. Открываем окно PowerShell и выполняем команду:</p>
 <pre><code class="language-diff">&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <p>Второй туннель создаем с виртуальной машины <code>web-server</code>, с удаленной точкой входа на виртуальной машине <code>ssh-server</code>. Открываем окно терминала на <code>web-server</code> и выполняем команду:</p>
-<pre><code class="language-plaintext">$ ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать</code></pre>
+<pre><code class="language-plaintext">$ ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/456/2.jpg" alt=""></figure>
 <p>Открываем еще одно окно PowerShell и выполняем команду:</p>
 <pre><code class="language-plaintext">&gt; mysql -uroot -pqwerty -P 3307</code></pre>
@@ -217,7 +217,7 @@ Host local-forward-ssh-server
 &gt; ssh remote-forward-ssh-server
 
 &gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.12 
-&gt; ssh local-forward-ssh-serverКопировать</code></pre>
+&gt; ssh local-forward-ssh-server</code></pre>
 <p>Мы создавали ssh-туннели между виртуальными машинами, где сетевые соединения стабильны. Но в реальной жизни каналы связи оставляют желать много лучшего. Было бы разумно как-то отслеживать наличие соединения и автоматически его восстанавливать.</p>
 <p>В OpenSSH присутствует стандартная схема для мониторинга состояния подключения, причем как на стороне сервера, так и на стороне клиента. Суть ее заключается в том, что OpenSSH будет проверять наличие рабочего подключения и в случае отсутствия такового будет просто завершать ssh-сеанс, избавляя нас от зависших сессий.</p>
 <h2>Проверка активности соединения</h2>
@@ -312,7 +312,8 @@ Environment variables are:
                           stderr</code></pre>
 <p>Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ autossh -M 0 -N -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
-&gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8Копировать $ autossh -M 0 -N remote-forward-ssh-server</code></pre>
+&gt; -o "ExitOnForwardFailure yes" -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
+<pre><code class="language-plaintext">$ autossh -M 0 -N remote-forward-ssh-server</code></pre>
 <blockquote>
   <p>Для <code>autossh</code> обязательна опция <code>-M</code>, которая задает порт для мониторинга соединения. Но ssh-клиент может и сам это делать (это опции <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>). Так что опцию <code>-M</code> будем всегда отключать.</p>
 </blockquote>
