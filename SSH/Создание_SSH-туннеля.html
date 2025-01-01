@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:22:58.573Z
+date: 2025-01-01T19:24:20.945Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -221,12 +221,13 @@ Host local-forward-ssh-server
 <p>В OpenSSH присутствует стандартная схема для мониторинга состояния подключения, причем как на стороне сервера, так и на стороне клиента. Суть ее заключается в том, что OpenSSH будет проверять наличие рабочего подключения и в случае отсутствия такового будет просто завершать ssh-сеанс, избавляя нас от зависших сессий.</p>
 <h2>Проверка активности соединения</h2>
 <p>Для этого отредактируем файл конфигурации <code>/etc/ssh/sshd_config</code> на виртуальной машине <code>ssh-server</code>:</p>
-<p>$ sudo nano /etc/ssh/sshd_configКопировать # отключаем дефолтный механизм проверки активности соединения
-  TCPKeepAlive no
-  # проверять активность подключения клиента каждые 30 секунд
-  ClientAliveInterval 30
-  # сервер закроет соединение после трех неудачных попыток
-  ClientAliveCountMax 3Копировать</p>
+<pre><code class="language-plaintext">$ sudo nano /etc/ssh/sshd_config</code></pre>
+<pre><code class="language-plaintext"># отключаем дефолтный механизм проверки активности соединения
+TCPKeepAlive no
+# проверять активность подключения клиента каждые 30 секунд
+ClientAliveInterval 30
+# сервер закроет соединение после трех неудачных попыток
+ClientAliveCountMax 3</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/468/3.jpg" alt=""></figure>
 <p>$ sudo systemctl restart ssh.serviceКопировать</p>
 <p>Если что-то произойдет с клиентом, например, компьютер просто отключится от сети, то через 90 секунд <code>ssh-server</code> закроет туннельное соединение.</p>
