@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:26:17.612Z
+date: 2025-01-01T19:28:15.480Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -239,42 +239,45 @@ ClientAliveCountMax 3</code></pre>
 <p>При создании туннельного подключения со стороны клиента есть возможность указать аналогичные параметры <code>ServerAliveInterval</code> и <code>ServerAliveCountMax</code>. Команда создания туннеля на виртуальной машине <code>web-server</code>:</p>
 <pre><code class="language-plaintext">$ ssh -p 2222 -o "TCPKeepAlive no" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" \
 &gt; -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8</code></pre>
-<p>Иногда возможна ситуация, когда порт не был проброшен, хотя туннель был поднят. То есть, со стороны ssh-сервера и ssh-клиента все будет выглядеть нормально, туннель будет существовать и работать, но вот порт не будет проброшен. Для этого случая предусмотрен дополнительный параметр <code>ExitOnForwardFailure yes</code>.</p>
+<blockquote>
+  <p>Иногда возможна ситуация, когда порт не был проброшен, хотя туннель был поднят. То есть, со стороны ssh-сервера и ssh-клиента все будет выглядеть нормально, туннель будет существовать и работать, но вот порт не будет проброшен. Для этого случая предусмотрен дополнительный параметр <code>ExitOnForwardFailure yes</code>.</p>
+</blockquote>
 <p>Параметры на стороне клиента можно задавать как в командной строке, так и записать их в файл конфигурации:</p>
-<p>$ nano ~/.ssh/configКопировать # Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12
-  Host remote-forward-ssh-server
-  &nbsp;HostName 192.168.110.8
-  &nbsp;Port 2222
-  &nbsp;User evgeniy
-  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
-  &nbsp;TCPKeepAlive no
-  &nbsp;ServerAliveInterval 30
-  &nbsp;ServerAliveCountMax 3
-  &nbsp;ExitOnForwardFailure yes
-  &nbsp;RemoteForward 3306 127.0.0.1:3306
+<pre><code class="language-plaintext">$ nano ~/.ssh/config</code></pre>
+<pre><code class="language-plaintext"># Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12
+Host remote-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile ~/.ssh/tcp-forward-ssh-server
+  TCPKeepAlive no
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+  ExitOnForwardFailure yes
+  RemoteForward 3306 127.0.0.1:3306
 
-  # Проброс соединения 192.168.110.8 &lt;==L== 192.168.110.12
-  Host local-forward-ssh-server
-  &nbsp;HostName 192.168.110.8
-  &nbsp;Port 2222
-  &nbsp;User evgeniy
-  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
-  &nbsp;TCPKeepAlive no
-  &nbsp;ServerAliveInterval 30
-  &nbsp;ServerAliveCountMax 3
-  &nbsp;ExitOnForwardFailure yes
-  &nbsp;LocalForward 3307 127.0.0.1:3306Копировать</p>
+# Проброс соединения 192.168.110.8 &lt;==L== 192.168.110.12
+Host local-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile ~/.ssh/tcp-forward-ssh-server
+  TCPKeepAlive no
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+  ExitOnForwardFailure yes
+  LocalForward 3307 127.0.0.1:3306</code></pre>
 <p>В этом случае команда создания туннеля будет проще:</p>
-<p>$ ssh remote-forward-ssh-serverКопировать</p>
+<pre><code class="language-plaintext">$ ssh remote-forward-ssh-server</code></pre>
 <p>Поскольку при создании туннеля не планируется выполнять команды на виртуальной машине <code>ssh-server</code>, можно добавить опцию</p>
-<p>$ ssh -N remote-forward-ssh-serverКопировать</p>
+<pre><code class="language-plaintext">$ ssh -N remote-forward-ssh-server</code></pre>
 <p>Но в этом случае терминал у нас зависнет, т.к. будет ожидать окончания выполнения этой команды. И для дальнейшей работы нам потребуется еще один терминал. Но мы можем запустить эту команду в фоновом режиме:</p>
-<p>$ ssh -N remote-forward-ssh-server &amp;
-  [1] 3949Копировать</p>
+<pre><code class="language-plaintext">$ ssh -N remote-forward-ssh-server &amp;
+[1] 3949</code></pre>
 <p>Чтобы завершить фоновый процесс, надо переместить его на передний план, а потом завершить с помощью <code>Ctrl+C</code>:</p>
-<p>$ fg 1
-  ssh -N remote-forward-ssh-server
-  ^CКопировать</p>
+<pre><code class="language-plaintext">$ fg 1
+ssh -N remote-forward-ssh-server
+^C</code></pre>
 <h2>Автоматическое восстанавление туннеля</h2>
 <p>Утилита <code>autossh</code> предназначена для мониторинга соединений ssh и их автоматического восстановления в случае разрыва. Она уже входит в репозитории Ubuntu, поэтому устанавливаем ее на виртуальную машину <code>web-server</code>:</p>
 <p>$ sudo apt install autosshКопировать $ autossh
