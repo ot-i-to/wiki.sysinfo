@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:39:31.388Z
+date: 2025-01-01T19:40:54.796Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -461,127 +461,129 @@ WantedBy=multi-user.target</code></pre>
 <figure class="image"><img src="https://tokmakov.msk.ru/files/blog/472/2.jpg" alt=""></figure>
 <h2>Автозапуск туннеля при загрузке TKMCOMP</h2>
 <p>На физическом компьютере у нас уже создан файл <code>~/.ssh/config</code>:</p>
-<p># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
-  Host local-forward-ssh-server
-  &nbsp;HostName 192.168.110.8
-  &nbsp;Port 2222
-  &nbsp;User evgeniy
-  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
-  &nbsp;LocalForward 3307 127.0.0.1:3306
+<pre><code class="language-plaintext"># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
+Host local-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile ~/.ssh/tcp-forward-ssh-server
+  LocalForward 3307 127.0.0.1:3306
 
-  # Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
-  Host remote-forward-ssh-server
-  &nbsp;HostName 192.168.110.8
-  &nbsp;Port 2222
-  &nbsp;User evgeniy
-  &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server
-  &nbsp;RemoteForward 3306 127.0.0.1:3306Копировать</p>
+# Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
+Host remote-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile ~/.ssh/tcp-forward-ssh-server
+  RemoteForward 3306 127.0.0.1:3306</code></pre>
 <p>По аналогии с файлом <code>~/.ssh/config</code> на виртуальной машине <code>web-server</code> добавляем в него опции мониторинга ssh-туннеля. Кроме того, указываем абсолютный путь к файлу ключа (зачем — станет понятно чуть ниже):</p>
-<p># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
-  Host local-forward-ssh-server
-  &nbsp;HostName 192.168.110.8
-  &nbsp;Port 2222
-  &nbsp;User evgeniy
-  &nbsp;IdentityFile C:/Users/Evgeniy/.ssh/tcp-forward-ssh-server
-  &nbsp;TCPKeepAlive no
-  &nbsp;ServerAliveInterval 30
-  &nbsp;ServerAliveCountMax 3
-  &nbsp;ExitOnForwardFailure yes
-  &nbsp;LocalForward 3307 127.0.0.1:3306
+<pre><code class="language-plaintext"># Проброс соединения 192.168.110.2 ==L==&gt; 192.168.110.8
+Host local-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile C:/Users/Evgeniy/.ssh/tcp-forward-ssh-server
+  TCPKeepAlive no
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+  ExitOnForwardFailure yes
+  LocalForward 3307 127.0.0.1:3306
 
-  # Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
-  Host remote-forward-ssh-server
-  &nbsp;HostName 192.168.110.8
-  &nbsp;Port 2222
-  &nbsp;User evgeniy
-  &nbsp;IdentityFile C:/Users/Evgeniy/.ssh/tcp-forward-ssh-server
-  &nbsp;TCPKeepAlive no
-  &nbsp;ServerAliveInterval 30
-  &nbsp;ServerAliveCountMax 3
-  &nbsp;ExitOnForwardFailure yes
-  &nbsp;RemoteForward 3306 127.0.0.1:3306Копировать</p>
+# Проброс соединения 192.168.110.2 &lt;==R== 192.168.110.8
+Host remote-forward-ssh-server
+  HostName 192.168.110.8
+  Port 2222
+  User evgeniy
+  IdentityFile C:/Users/Evgeniy/.ssh/tcp-forward-ssh-server
+  TCPKeepAlive no
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+  ExitOnForwardFailure yes
+  RemoteForward 3306 127.0.0.1:3306</code></pre>
 <p>После этого скачиваем установщик Cygwin64 и запускаем установку. Обязательно выбираем для установки <code>OpenSSH</code> и <code>autossh</code>. Запускаем терминал Cygwin64 от имени администратора и выполняем команду:</p>
-<p>$ cygrunsrv -I AutoSSH -p /bin/autossh -a "-M 0 -N -F C:/Users/Evgeniy/.ssh/config local-forward-ssh-server" \
-  &gt; -e AUTOSSH_NTSERVICE=yes -e AUTOSSH_PATH=/bin/sshКопировать</p>
-<p>Справка по утилите <code>cygrunsrv</code>, которая добавляет службу</p>
-<p>$ cygrunsrv --help
-  Usage: cygrunsrv [OPTION]...
+<pre><code class="language-plaintext">$ cygrunsrv -I AutoSSH -p /bin/autossh -a "-M 0 -N -F C:/Users/Evgeniy/.ssh/config local-forward-ssh-server" \
+&gt; -e AUTOSSH_NTSERVICE=yes -e AUTOSSH_PATH=/bin/ssh</code></pre>
+<blockquote>
+  <p>Справка по утилите <code>cygrunsrv</code>, которая добавляет службу</p>
+  <pre><code class="language-plaintext">$ cygrunsrv --help
+Usage: cygrunsrv [OPTION]...
 
-  Main options: Exactly one is required.
+Main options: Exactly one is required.
 
-  &nbsp;-I, --install &lt;svc_name&gt; &nbsp;Installes a new service named &lt;svc_name&gt;.
-  &nbsp;-R, --remove &lt;svc_name&gt; &nbsp; Removes a service named &lt;svc_name&gt;.
-  &nbsp;-S, --start &lt;svc_name&gt; &nbsp; &nbsp;Starts a service named &lt;svc_name&gt;.
-  &nbsp;-E, --stop &lt;svc_name&gt; &nbsp; &nbsp; Stops a service named &lt;svc_name&gt;.
-  &nbsp;-Q, --query &lt;svc_name&gt; &nbsp; &nbsp;Queries a service named &lt;svc_name&gt;.
-  &nbsp;-L, --list [server] &nbsp; &nbsp; &nbsp; Lists services that have been installed
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;with cygrunsrv.
-  &nbsp;&lt;svc_name&gt; can be a local service or "server/svc_name" or "server\svc_name".
+  -I, --install &lt;svc_name&gt;  Installes a new service named &lt;svc_name&gt;.
+  -R, --remove &lt;svc_name&gt;   Removes a service named &lt;svc_name&gt;.
+  -S, --start &lt;svc_name&gt;    Starts a service named &lt;svc_name&gt;.
+  -E, --stop &lt;svc_name&gt;     Stops a service named &lt;svc_name&gt;.
+  -Q, --query &lt;svc_name&gt;    Queries a service named &lt;svc_name&gt;.
+  -L, --list [server]       Lists services that have been installed
+                            with cygrunsrv.
+  &lt;svc_name&gt; can be a local service or "server/svc_name" or "server\svc_name".
 
-  Required install options:
-  &nbsp;-p, --path &lt;app_path&gt; &nbsp; &nbsp; Application path which is run as a service.
+Required install options:
+  -p, --path &lt;app_path&gt;     Application path which is run as a service.
 
-  Miscellaneous install options:
-  &nbsp;-P, --crs-path &lt;path&gt; &nbsp; &nbsp; Path to cygrunsrv. This is useful for testing or
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;when installing a service on a remote machine.
-  &nbsp;-a, --args &lt;args&gt; &nbsp; &nbsp; &nbsp; &nbsp; Optional string with command line options which
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;is given to the service application on startup.
-  &nbsp;-c, --chdir &lt;directory&gt; &nbsp; Optional directory which will be used as working
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;directory for the application.
-  &nbsp;-e, --env &lt;VAR=VALUE&gt; &nbsp; &nbsp; Optional environment strings which are added
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;to the environment when service is started.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;You can add up to 255 environment strings using
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;the `--env' option.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Note: /bin is always added to $PATH to allow all
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;started applications to find cygwin DLLs.
-  &nbsp;-d, --disp &lt;display name&gt; Optional string which contains the display name
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;of the service. Defaults to service name.
-  &nbsp;-f, --desc &lt;description&gt; &nbsp;Optional string which contains the service
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;description.
-  &nbsp;-t, --type [auto|manual] &nbsp;Optional start type of service. Defaults to `auto'.
-  &nbsp;-u, --user &lt;user name&gt; &nbsp; &nbsp;Optional user name to start service as.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Defaults to SYSTEM account.
-  &nbsp;-w, --passwd &lt;password&gt; &nbsp; Optional password for user. Only needed
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if a user is given. If a user has an empty
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;password, enter `-w '. If a user is given but
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;no password, cygrunsrv will ask for a password
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;interactively.
-  &nbsp;-s, --termsig &lt;signal&gt; &nbsp; &nbsp;Optional signal to send to service application
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;when service is stopped. &nbsp;&lt;signal&gt; can be a number
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;or a signal name such as HUP, INT, QUIT, etc.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is TERM.
-  &nbsp;-z, --shutsig &lt;signal&gt; &nbsp; &nbsp;Optional signal to send to service application
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;when shutdown has been initiated. &nbsp;Default is the
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;same signal as defined as termination signal.
-  &nbsp;-y, --dep &lt;svc_name2&gt; &nbsp; &nbsp; Optional name of service that must be started
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;before this new service. &nbsp;The --dep option may
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;be given up to 16 times, listing another dependent
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;service each time.
-  &nbsp;-0, --stdin &lt;file&gt; &nbsp; &nbsp; &nbsp; &nbsp;Optional input file used for stdin redirection.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is /dev/null.
-  &nbsp;-1, --stdout &lt;file&gt; &nbsp; &nbsp; &nbsp; Optional output file used for stdout redirection.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is /var/log/&lt;svc_name&gt;.log.
-  &nbsp;-2, --stderr &lt;file&gt; &nbsp; &nbsp; &nbsp; Optional output file used for stderr redirection.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is /var/log/&lt;svc_name&gt;.log.
-  &nbsp;-x, --pidfile &lt;file&gt; &nbsp; &nbsp; &nbsp;Optional path for .pid file written by application
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;after fork().
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Default is that application must not fork().
-  &nbsp;-n, --neverexits &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Service should never exit by itself.
-  &nbsp;-O, --preshutdown &nbsp; &nbsp; &nbsp; &nbsp; Stop service application during system preshutdown.
-  &nbsp;-o, --shutdown &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Stop service application during system shutdown.
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(Only one of --preshutdown and --shutdown is
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; accepted. &nbsp;Preshutdown is preferred, but only
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; available since Windows Vista/Longhorn. &nbsp;On earlier
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; OS versions it's silently converted to --shutdown).
-  &nbsp;-i, --interactive &nbsp; &nbsp; &nbsp; &nbsp; Allow service to interact with the desktop
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(No effect since Windows Vista/Longhorn).
-  &nbsp;-j, --nohide &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Don't hide console window when service interacts
-  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;with desktop.
+Miscellaneous install options:
+  -P, --crs-path &lt;path&gt;     Path to cygrunsrv. This is useful for testing or
+                            when installing a service on a remote machine.
+  -a, --args &lt;args&gt;         Optional string with command line options which
+                            is given to the service application on startup.
+  -c, --chdir &lt;directory&gt;   Optional directory which will be used as working
+                            directory for the application.
+  -e, --env &lt;VAR=VALUE&gt;     Optional environment strings which are added
+                            to the environment when service is started.
+                            You can add up to 255 environment strings using
+                            the `--env' option.
+                            Note: /bin is always added to $PATH to allow all
+                            started applications to find cygwin DLLs.
+  -d, --disp &lt;display name&gt; Optional string which contains the display name
+                            of the service. Defaults to service name.
+  -f, --desc &lt;description&gt;  Optional string which contains the service
+                            description.
+  -t, --type [auto|manual]  Optional start type of service. Defaults to `auto'.
+  -u, --user &lt;user name&gt;    Optional user name to start service as.
+                            Defaults to SYSTEM account.
+  -w, --passwd &lt;password&gt;   Optional password for user. Only needed
+                            if a user is given. If a user has an empty
+                            password, enter `-w '. If a user is given but
+                            no password, cygrunsrv will ask for a password
+                            interactively.
+  -s, --termsig &lt;signal&gt;    Optional signal to send to service application
+                            when service is stopped.  &lt;signal&gt; can be a number
+                            or a signal name such as HUP, INT, QUIT, etc.
+                            Default is TERM.
+  -z, --shutsig &lt;signal&gt;    Optional signal to send to service application
+                            when shutdown has been initiated.  Default is the
+                            same signal as defined as termination signal.
+  -y, --dep &lt;svc_name2&gt;     Optional name of service that must be started
+                            before this new service.  The --dep option may
+                            be given up to 16 times, listing another dependent
+                            service each time.
+  -0, --stdin &lt;file&gt;        Optional input file used for stdin redirection.
+                            Default is /dev/null.
+  -1, --stdout &lt;file&gt;       Optional output file used for stdout redirection.
+                            Default is /var/log/&lt;svc_name&gt;.log.
+  -2, --stderr &lt;file&gt;       Optional output file used for stderr redirection.
+                            Default is /var/log/&lt;svc_name&gt;.log.
+  -x, --pidfile &lt;file&gt;      Optional path for .pid file written by application
+                            after fork().
+                            Default is that application must not fork().
+  -n, --neverexits          Service should never exit by itself.
+  -O, --preshutdown         Stop service application during system preshutdown.
+  -o, --shutdown            Stop service application during system shutdown.
+                            (Only one of --preshutdown and --shutdown is
+                             accepted.  Preshutdown is preferred, but only
+                             available since Windows Vista/Longhorn.  On earlier
+                             OS versions it's silently converted to --shutdown).
+  -i, --interactive         Allow service to interact with the desktop
+                            (No effect since Windows Vista/Longhorn).
+  -j, --nohide              Don't hide console window when service interacts
+                            with desktop.
 
-  Informative output:
-  &nbsp;-V, --verbose &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; When used with --query or --list, causes extra
-  &nbsp;-h, --help &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;print this help, then exit.
-  &nbsp;-v, --version &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; print cygrunsrv program version number, then exit.Копировать</p>
+Informative output:
+  -V, --verbose             When used with --query or --list, causes extra
+  -h, --help                print this help, then exit.
+  -v, --version             print cygrunsrv program version number, then exit.</code></pre>
+</blockquote>
 <p>Тут два важных момента:</p>
 <ul>
   <li>В системе могут существовать две утилиты <code>ssh</code>: одна — из поставки Windows 10, а вторая — из поставки Cygwin64. Утилита <code>autossh</code> будет работать с <code>ssh</code> из поставки Cygwin64 — мы указываем это явно с помощью переменной окружения <code>AUTOSSH_PATH</code>.</li>
