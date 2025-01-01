@@ -2,7 +2,7 @@
 title: Создание SSH-туннеля
 description: 
 published: true
-date: 2025-01-01T19:19:18.538Z
+date: 2025-01-01T19:19:53.109Z
 tags: linux, ssh, tunnel
 editor: ckeditor
 dateCreated: 2025-01-01T19:08:58.253Z
@@ -200,7 +200,11 @@ Host remote-forward-ssh-server
 <p>Создаем или редактируем файл <code>~/.ssh/config</code></p>
 <p># Проброс соединения 192.168.110.8 ==R==&gt; 192.168.110.12 Host remote-forward-ssh-server &nbsp;HostName 192.168.110.8 &nbsp;Port 2222 &nbsp;User evgeniy &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server &nbsp;RemoteForward 3306 127.0.0.1:3306 # Проброс соединения 192.168.110.8 &lt;==L== 192.168.110.12 Host local-forward-ssh-server &nbsp;HostName 192.168.110.8 &nbsp;Port 2222 &nbsp;User evgeniy &nbsp;IdentityFile ~/.ssh/tcp-forward-ssh-server &nbsp;LocalForward 3307 127.0.0.1:3306Копировать</p>
 <p>Теперь можно упростить команды построения туннелей:</p>
-<p>&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8 &gt; ssh remote-forward-ssh-serverКопировать &gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.12 &gt; ssh local-forward-ssh-serverКопировать</p>
+<pre><code class="language-plaintext">&gt; ssh -p 2222 -R 3306:127.0.0.1:3306 evgeniy@192.168.110.8 
+&gt; ssh remote-forward-ssh-server
+
+&gt; ssh -p 2222 -L 3307:127.0.0.1:3306 evgeniy@192.168.110.12 
+&gt; ssh local-forward-ssh-serverКопировать</code></pre>
 <ul>
   <li>&nbsp;</li>
 </ul>
