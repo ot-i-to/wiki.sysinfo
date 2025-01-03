@@ -1,0 +1,44 @@
+<!--
+title: Продолжительные транзакции
+description: pg_stat_statements
+published: true
+date: 2025-01-03T08:21:40.767Z
+tags: postgresql, pg_stat_statements
+editor: ckeditor
+dateCreated: 2025-01-03T08:21:40.767Z
+-->
+
+<h5>Для использовать расширение <strong>pg_stat_statements</strong> для отслеживания медленных запросов в PostgreSQL, вам необходимо:</h5>
+<p>1. Установить расширение <strong>pg_stat_statements</strong>. Это можно сделать, выполнив следующую команду в командной строке SQL:&nbsp;</p>
+<pre><code class="language-plaintext">CREATE EXTENSION pg_stat_statements; </code></pre>
+<blockquote>
+  <p>Дополнительно вы можете установить значение параметра <strong>pg_stat_statements.track_utility</strong> в <strong>true</strong>, чтобы отслеживать статистику для таких функций утилиты, как<strong> pg_sleep() </strong>и <strong>pg_stat_statements_reset()</strong>.</p>
+</blockquote>
+<p>2. В зависимости от версии ядра базы данных перезапустите PostgreSQL, чтобы изменения вступили в силу, или используйте<strong> pg_reload_conf()</strong> для эффективной установки.</p>
+<p>После включения <strong>pg_stat_statements</strong> оно начнет собирать статистику обо всех операторах SQL, выполняемых сервером. Эта статистика включает следующее:</p>
+<ul>
+  <li>Число выполнений оператора</li>
+  <li>Общее время выполнения</li>
+  <li>Среднее время выполнения</li>
+  <li>Минимальное время выполнения</li>
+  <li>Максимальное время выполнения</li>
+</ul>
+<p>Вы можете посмотреть статистику для всех операторов SQL, выполнив следующий запрос:</p>
+<pre><code class="language-plaintext">SELECT *
+FROM pg_stat_statements;</code></pre>
+<p>Можно также увидеть статистику для конкретного оператора SQL, выполнив следующий запрос:</p>
+<pre><code class="language-plaintext">SELECT *
+FROM pg_stat_statements
+WHERE query = 'SELECT * FROM table';</code></pre>
+<p>Вы можете использовать статистику из <strong>pg_stat_statements</strong> для выявления запросов, которые вызывали наибольшие проблемы в базе данных. Например, вы можете найти запросы, которые имели максимальное время выполнения или максимальное число исполнений.</p>
+<p>После обнаружения медленных запросов вы можете принять меры по улучшению их производительности. Это можно сделать оптимизацией самого запроса или добавлением соответствующих индексов.</p>
+<h5><strong>Пример</strong></h5>
+<p>Следующий пример показывает, как использовать <strong>pg_stat_statements</strong> для выявления медленных запросов в базе данных:</p>
+<pre><code class="language-plaintext">SELECT
+total_exec_time /1000 * interval '1second', 
+query
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 10;</code></pre>
+<p>Этот запрос вернет 10 самых медленных запросов в базе данных, упорядоченных по времени выполнения.</p>
+<p>&nbsp;</p>
