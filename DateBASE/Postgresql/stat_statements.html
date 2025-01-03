@@ -2,7 +2,7 @@
 title: Продолжительные транзакции
 description: pg_stat_statements
 published: true
-date: 2025-01-03T08:21:40.767Z
+date: 2025-01-03T08:22:11.907Z
 tags: postgresql, pg_stat_statements
 editor: ckeditor
 dateCreated: 2025-01-03T08:21:40.767Z
@@ -35,7 +35,7 @@ WHERE query = 'SELECT * FROM table';</code></pre>
 <h5><strong>Пример</strong></h5>
 <p>Следующий пример показывает, как использовать <strong>pg_stat_statements</strong> для выявления медленных запросов в базе данных:</p>
 <pre><code class="language-plaintext">SELECT
-total_exec_time /1000 * interval '1second', 
+total_exec_time / 1000 * interval '1second', 
 query
 FROM pg_stat_statements
 ORDER BY total_exec_time DESC
