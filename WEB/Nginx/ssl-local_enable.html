@@ -2,7 +2,7 @@
 title: SSL-сертификат самоподписанный
 description: Создание
 published: true
-date: 2025-01-10T12:23:09.292Z
+date: 2025-01-10T12:23:31.793Z
 tags: nginx, ssl, create
 editor: ckeditor
 dateCreated: 2025-01-10T12:21:15.314Z
@@ -78,7 +78,7 @@ dateCreated: 2025-01-10T12:21:15.314Z
 <p>Затем добавьте второй блок server в этот файл (после закрывающей фигурной скобки (}) первого блока):</p>
 <p><code>. . .</code><br><code>server {</code><br><code>listen 80;</code><br><code>listen [::]:80;</code><br><code>server_name example.com www.example.com;</code><br><code>return 302 https://$server_name$request_uri;</code><br><code>}</code></p>
 <p>Сохраните и закройте файл.</p>
-<h2>4: Постоянный редирект</h2>
+<h2>3: Постоянный редирект</h2>
 <p>Если шифрование работает должным образом, настройте постоянный редирект вместо временного.</p>
 <p>Откройте файл блока server:</p>
 <p><code>sudo nano /etc/nginx/sites-available/example.com</code></p>
