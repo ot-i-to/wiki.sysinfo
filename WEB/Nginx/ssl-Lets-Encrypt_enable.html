@@ -1,0 +1,56 @@
+<!--
+title: Let’s Encrypt
+description: Создание сертификата
+published: true
+date: 2025-01-10T12:35:40.948Z
+tags: nginx, ssl, let’s encrypt
+editor: ckeditor
+dateCreated: 2025-01-10T12:35:40.948Z
+-->
+
+<h1>Создание сертификата Let’s Encrypt для Nginx</h1>
+<p>Let’s Encrypt – это центр сертификации (ЦС, или Certificate Authority, CA), который предоставляет простой способ создания бесплатных сертификатов TLS/SSL, тем самым позволяя шифровать HTTPS на веб-серверах. Этот ЦС упрощает процесс создания сертификатов путём автоматизации большинства необходимых действий при помощи клиентского ПО. Процесс получения и установки сертификата полностью автоматизирован на веб-серверах Apache и Nginx.</p>
+<p>Данный мануал поможет вам получить SSL-сертификат для Nginx в системе Ubuntu 18.04 с помощью Certbot и покажет, как обновлять этот сертификат.</p>
+<p>В мануале используется отдельный виртуальный хост Nginx, а не хост по умолчанию. Рекомендуем вам создать такой хост для каждого домена, чтобы избежать общих ошибок и иметь возможность использовать стандартные конфигурации в случае сбоя.</p>
+<h2>1: Установка Certbot</h2>
+<p>Для начала нужно установить клиент Certbot.</p>
+<p>Certbot очень активно разрабатывается, потому его пакеты в стандартных репозиториях систем быстро устаревают. Однако разработчики Certbot предлагают специальный репозиторий для Ubuntu, где можно найти актуальные версии пакетов.</p>
+<p>Добавьте этот репозиторий:</p>
+<p><code>sudo add-apt-repository ppa:certbot/certbot</code></p>
+<p>Чтобы продолжить, нажмите Enter. Обновите индекс пакетов:</p>
+<p><code>sudo apt update</code></p>
+<p>Теперь установите пакет certbot для Nginx:</p>
+<p><code>sudo apt install python-certbot-nginx</code></p>
+<p>Теперь Certbot готов к использованию, но для того, чтобы настроить SSL для Nginx, нужно проверить некоторые параметры конфигурации.</p>
+<h2>2: Проверка параметров Nginx</h2>
+<p>Certbot должен иметь возможность найти целевой виртуальный хост (блок server) в конфигурации Nginx, чтобы автоматически настроить сертификат SSL. Для этого Certbot ищет директиву server_name, где указан домен, для которого предназначен запрашиваемый сертификат.</p>
+<p>Чтобы проверить это, откройте файл виртуального хоста, используя nano или другой текстовый редактор:</p>
+<p><code>sudo nano /etc/nginx/sites-available/example.com</code></p>
+<p>Найдите строку server_name:</p>
+<p><code>...</code><br><code>server_name example.com www.example.com;</code><br><code>...</code></p>
+<p>Если она выглядит так, можете закрыть редактор.</p>
+<p>Если нет, вам нужно обновить ее. Укажите в ней свой домен, а затем сохраните и закройте файл. После этого нужно проверить синтаксис конфигурации.</p>
+<p><code>sudo nginx -t</code></p>
+<p>Если команда сообщила об ошибке, вам нужно снова открыть файл и исправить ее. После этого повторите проверку.</p>
+<p>Если ошибок в конфигурации нет, перезапустите веб-сервер.</p>
+<p><code>sudo systemctl reload nginx</code></p>
+<p>Теперь Certbot сможет найти правильный блок server.</p>
+<h2>3: Получение SSL-сертификата</h2>
+<p>Certbot предлагает различные способы получения сертификатов SSL через плагины. Плагин Nginx позаботится о реконфигурации Nginx и при необходимости перезагрузит конфигурацию. Чтобы использовать этот плагин, введите:</p>
+<p><code>sudo certbot --nginx -d example.com -d www.example.com</code></p>
+<p>Эта команда запустит certbot с плагином — nginx, а флаг –d определит имена, для которых предназначен сертификат.</p>
+<p>Если вы запускаете certbot впервые, вам будет предложено ввести адрес электронной почты и принять условия обслуживания. После этого certbot свяжется с сервером Let’s Encrypt, а затем отправит запрос, чтобы убедиться, что вы контролируете домен, для которого запрашиваете сертификат.</p>
+<p>Если проверка пройдет успешно, certbot спросит, как вы хотите настроить HTTPS:</p>
+<p><code>Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</code><br><code>-------------------------------------------------------------------------------</code><br><code>1: No redirect - Make no further changes to the webserver configuration.</code><br><code>2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for</code><br><code>new sites, or if you're confident your site works on HTTPS. You can undo this</code><br><code>change by editing your web server's configuration.</code><br><code>-------------------------------------------------------------------------------</code><br><code>Select the appropriate number [1-2] then [enter] (press 'c' to cancel):</code></p>
+<p>Сделайте свой выбор, затем нажмите Enter. Конфигурация будет обновлена, и Nginx перезагрузится, чтобы использовать новые настройки. Клиент certbot выведет сообщение о том, что процесс был выполнен успешно и скажет, где хранятся ваши сертификаты:</p>
+<p><code>IMPORTANT NOTES:</code><br><code>- Congratulations! Your certificate and chain have been saved at:</code><br><code>/etc/letsencrypt/live/example.com/fullchain.pem</code><br><code>Your key file has been saved at:</code><br><code>/etc/letsencrypt/live/example.com/privkey.pem</code><br><code>Your cert will expire on 2018-07-23. To obtain a new or tweaked</code><br><code>version of this certificate in the future, simply run certbot again</code><br><code>with the "certonly" option. To non-interactively renew *all* of</code><br><code>your certificates, run "certbot renew"</code><br><code>- Your account credentials have been saved in your Certbot</code><br><code>configuration directory at /etc/letsencrypt. You should make a</code><br><code>secure backup of this folder now. This configuration directory will</code><br><code>also contain certificates and private keys obtained by Certbot so</code><br><code>making regular backups of this folder is ideal.</code><br><code>- If you like Certbot, please consider supporting our work by:</code><br><code>Donating to ISRG / Let's Encrypt:&nbsp;&nbsp; https://letsencrypt.org/donate</code><br><code>Donating to EFF:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; https://eff.org/donate-le</code></p>
+<p>Сертификаты будут загружены и установлены. Попробуйте перезагрузить свой сайт, указав https://, и обратите внимание на индикатор безопасности в браузере. Он должен указывать, что сайт надежно защищен (как правило, для этого используется зеленый замочек в адресной строке). Если вы протестируете свой сервер с помощью <a href="https://www.ssllabs.com/ssltest/">SSL Labs Server Test</a>, он получит оценку A.</p>
+<p>Теперь давайте протестируем процесс обновления сертификата.</p>
+<h2>4: Проверка автоматического обновления сертификата</h2>
+<p>Сертификаты Let’s Encrypt действительны только в течение девяноста дней. Потому пользователи должны автоматизировать процесс продления сертификата. Установленный вами пакет certbot позаботится об этом, добавив сценарий обновления в /etc/cron.d. Этот скрипт запускается два раза в день и автоматически обновляет сертификат, срок действия которого истекает через тридцать дней.</p>
+<p>Чтобы протестировать процесс обновления, вы можете выполнить сухой прогон certbot:</p>
+<p><code>sudo certbot renew --dry-run</code></p>
+<p>Если вы не видите ошибок, все настроено правильно. При необходимости Certbot обновит ваши сертификаты и перезагрузит Apache, чтобы активировать изменения. Если процесс автоматического обновления не срабатывает, Let’s Encrypt отправит сообщение на указанный вами адрес электронной почты, предупредив вас о завершении срока действия вашего сертификата.</p>
+<h2>Заключение</h2>
+<p>Если у вас есть дополнительные вопросы по использованию Certbot, обратитесь к <a href="https://certbot.eff.org/docs/">документации клиента</a>.</p>
+<p>&nbsp;</p>
