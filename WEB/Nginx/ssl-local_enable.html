@@ -1,0 +1,93 @@
+<!--
+title: SSL-сертификат самоподписанный
+description: Создание
+published: true
+date: 2025-01-10T12:21:15.314Z
+tags: nginx, ssl, create
+editor: ckeditor
+dateCreated: 2025-01-10T12:21:15.314Z
+-->
+
+<h2><a href="https://www.8host.com/blog/sozdanie-samopodpisannogo-ssl-sertifikata-dlya-nginx-v-ubuntu-18-04/">Создание самоподписанного SSL-сертификата для Nginx</a></h2>
+<p>TLS&nbsp; (Transport Layer Security) и его предшественник SSL (Secure Socket Layers) – это криптографические протоколы, которые используются для защиты передачи данных в Интернете.</p>
+<p>Эта технология позволяет защитить обмен данными между сервером и клиентом и предотвратить перехват или несанкционированный доступ к передаваемой информации. Кроме того, эти протоколы предоставляют систему сертификатов, которая помогает пользователям проверить подлинность сайтов, на которые они заходят.</p>
+<p>Данный мануал поможет создать самоподписанный SSL-сертификат для веб-сервера Nginx .</p>
+<p><strong>Примечание</strong>: Самоподписанный сертификат не сможет подтвердить подлинности сервера, так как он не подписан проверенным центром сертификации (ЦС); тем не менее, такой сертификат позволит шифровать взаимодействие с веб-клиентами. Самоподписанный сертификат подходит пользователям, у которых пока что нет доменного имени. При наличии домена рекомендуется обратиться за подписью сертификата к одному из надёжных ЦС. Также можно получить бесплатный доверенный сертификат от сервиса Let’s Encrypt.</p>
+<h3>1: Создание SSL-сертификата</h3>
+<p>Для работы TLS/SSL использует комбинацию открытого сертификата и закрытого ключа. Закрытый ключ хранится на сервере и не разглашается. SSL-сертификат используется открыто и доступен всем пользователям, запрашивающим контент.</p>
+<p>Чтобы создать самоподписанный сертификат и ключ, запустите команду:</p>
+<p><code>sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt</code></p>
+<p>Команда задаст ряд вопросов. Рассмотрим компоненты команды подробнее:</p>
+<ul>
+  <li>openssl: базовый инструмент командной строки для создания и управления сертификатами, ключами и другими файлами OpenSSL.</li>
+  <li><strong>req</strong>: эта подкоманда указывает, что на данном этапе нужно использовать запрос на подпись сертификата X.509 (CSR). X.509 – это стандарт инфраструктуры открытого ключа, которого придерживаются SSL и TLS при управлении ключами и сертификатами. То есть, данная команда позволяет создать новый сертификат X.509.</li>
+  <li><strong>-x509</strong>: эта опция вносит поправку в предыдущую субкоманду, сообщая утилите о том, что вместо запроса на подписание сертификата необходимо создать самоподписанный сертификат.</li>
+  <li><strong>-nodes</strong>: пропускает опцию защиты сертификата парольной фразой. Нужно, чтобы при запуске сервер Nginx имел возможность читать файл без вмешательства пользователя. Установив пароль, придется вводить его после каждой перезагрузки.</li>
+  <li><strong>-days 365</strong>: эта опция устанавливает срок действия сертификата (как видите, в данном случае сертификат действителен в течение года).</li>
+  <li><strong>-newkey rsa:2048</strong>: эта опция позволяет одновременно создать новый сертификат и новый ключ. Поскольку ключ, необходимый для подписания сертификата, не был создан ранее, нужно создать его вместе с сертификатом. Данная опция создаст ключ RSA на 2048 бит.</li>
+  <li><strong>-keyout</strong>: эта опция сообщает OpenSSL, куда поместить сгенерированный файл ключа.</li>
+  <li><strong>-out</strong>: сообщает OpenSSL, куда поместить созданный сертификат.</li>
+</ul>
+<p>Как уже было сказано, все эти опции сгенерируют ключ и сертификат. Заполните появившиеся поля данными о сервере, которые будут отображаться в сертификате.</p>
+<p>Самой важной строкой является Common Name (введите FQDN или свое имя). Как правило, в эту строку вносят доменное имя, с которым нужно связать сервер. В случае если доменного имени нет, внесите в эту строку IP-адрес сервера. В целом эти поля выглядят примерно так:</p>
+<p><code>Country Name (2 letter code) [AU]:US</code><br><code>State or Province Name (full name) [Some-State]:New York</code><br><code>Locality Name (eg, city) []:New York City</code><br><code>Organization Name (eg, company) [Internet Widgits Pty Ltd]:Bouncy Castles, Inc.</code><br><code>Organizational Unit Name (eg, section) []:Ministry of Water Slides</code><br><code>Common Name (e.g. server FQDN or YOUR name) []:server_IP_address</code><br><code>Email Address []:admin@your_domain.com</code></p>
+<p>Файлы ключа и сертификата будут помещены в каталог /etc/ssl.</p>
+<p>При использовании OpenSSL нужно также создать ключи Диффи-Хеллмана, которые нужны для поддержки PFS (<a href="https://ru.wikipedia.org/wiki/Perfect_forward_secrecy">совершенной прямой секретности</a>).</p>
+<p>Для этого введите:</p>
+<p><code>sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096</code></p>
+<p>Этот процесс займёт несколько минут. Ключи DH будут помещены в /etc/nginx/dhparam.pem.</p>
+<h2>2: Настройка Nginx для поддержки SSL</h2>
+<p>Итак, на данном этапе ключ и сертификат созданы и хранятся в каталоге /etc/ssl. Теперь нужно отредактировать настройки Nginx:</p>
+<ol>
+  <li>Создать сниппет, указывающий место хранения файлов SSL-сертификата и ключа.</li>
+  <li>Добавить настройки SSL.</li>
+  <li>Настроить блоки server для обслуживания запросов SSL и поддержки новых настроек.</li>
+</ol>
+<h3>Расположение ключа и сертификата</h3>
+<p>Создайте новый сниппет Nginx в каталоге /etc/nginx/snippets.</p>
+<p>Рекомендуется указать в названии файла его назначение (к примеру, self-signed.conf):</p>
+<p><code>sudo nano /etc/nginx/snippets/self-signed.conf</code></p>
+<p>В этот файл нужно добавить директиву ssl_certificate, которая будет указывать путь к сертификату, и директиву ssl_certificate_key, которая задаёт путь к соответствующему закрытому ключу.</p>
+<p><code>ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;</code><br><code>ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;</code></p>
+<p>Сохраните и закройте файл.</p>
+<h3>Настройка SSL</h3>
+<p>Теперь нужно создать другой сниппет, предназначенный для настроек SSL. Он позволит серверу Nginx использовать надёжный механизм шифрования и включит некоторые дополнительные функции безопасности.</p>
+<p>Эти установленные параметры можно повторно использовать в будущих конфигурациях Nginx, потому этому файлу лучше дать какое-нибудь общее имя:</p>
+<p><code>sudo nano /etc/nginx/snippets/ssl-params.conf</code></p>
+<p>Для безопасной настройки SSL обратимся к рекомендациям <a href="https://raymii.org/s/static/About.html">Remy van Elst</a>&nbsp;на сайте&nbsp;<a href="https://cipherli.st/">Cipherli.st</a>. Этот сайт предназначен для распространения простых и надёжных параметров шифрования для популярного программного обеспечения.</p>
+<p><strong>Примечание</strong>: Данный список настроек подходит для более новых клиентов. Чтобы получить настройки для других клиентов, перейдите по ссылке Yes, give me a ciphersuite that works with legacy / old software.</p>
+<p>Скопируйте все предложенные параметры. Остаётся только добавить в них DNS резолвер для upstream запросов. В руководстве для этого используется Google.</p>
+<p>Также нужно отключить заголовок Strict-Transport-Security (HSTS). Предварительная загрузка заголовка HSTS обеспечивает повышенную безопасность, но может иметь далеко идущие последствия, если заголовок был включен случайно или некорректно. В этом мануале мы не будем включать эту опцию, но вы можете изменить это позже, если уверены, что понимаете последствия.</p>
+<p>Перед тем, как принять решение, узнайте больше о <a href="https://ru.wikipedia.org/wiki/HSTS">HTTP Strict Transport Security, или HSTS</a>, и, в частности, о <a href="https://hstspreload.appspot.com/">функциях предварительной загрузки</a>.</p>
+<p>Скопируйте этот сниппет и вставьте его в ssl-params.conf:</p>
+<p><code>ssl_protocols TLSv1.2;</code><br><code>ssl_prefer_server_ciphers on;</code><br><code>ssl_dhparam /etc/nginx/dhparam.pem;</code><br><code>ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384;</code><br><code>ssl_ecdh_curve secp384r1; # Requires nginx &gt;= 1.1.0</code><br><code>ssl_session_timeout&nbsp; 10m;</code><br><code>ssl_session_cache shared:SSL:10m;</code><br><code>ssl_session_tickets off; # Requires nginx &gt;= 1.5.9</code><br><code>ssl_stapling on; # Requires nginx &gt;= 1.3.7</code><br><code>ssl_stapling_verify on; # Requires nginx =&gt; 1.3.7</code><br><code>resolver 8.8.8.8 8.8.4.4 valid=300s;</code><br><code>resolver_timeout 5s;</code><br><code># Disable strict transport security for now. You can uncomment the following</code><br><code># line if you understand the implications.</code><br><code># add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";</code><br><code>add_header X-Frame-Options DENY;</code><br><code>add_header X-Content-Type-Options nosniff;</code><br><code>add_header X-XSS-Protection "1; mode=block";</code></p>
+<p><strong>Примечание</strong>: Поскольку сертификат является самоподписанным, SSL stapling не будет использоваться. Nginx выдаст предупреждение, отключит stapling для данного сертификата и продолжит работу.</p>
+<p>Сохраните и закройте файл.</p>
+<h3>Настройка Nginx для поддержки SSL</h3>
+<p>В мануале предполагается, что вы используете виртуальный хост (блок server) default, который хранится в каталоге /etc/nginx/sites-available. Если вы используете другой файл, пожалуйста, укажите его имя.</p>
+<p>Для начала создайте резервную копию файла блока server.</p>
+<p><code>sudo cp /etc/nginx/sites-available/example.com /etc/nginx/sites-available/example.com.bak</code></p>
+<p>Затем откройте файл блока server в текстовом редакторе:</p>
+<p><code>sudo nano /etc/nginx/sites-available/default</code></p>
+<p>Файл должен выглядеть примерно так:</p>
+<p><code>server {</code><br><code>listen 80;</code><br><code>listen [::]:80;</code><br><code>server_name example.com www.example.com;</code><br><code>root /var/www/example.com/html;</code><br><code>index index.html index.htm index.nginx-debian.html;</code><br><code>. . .</code><br><code>}</code></p>
+<p>Ваш файл может быть составлен в другом порядке, и вместо директив root и index у вас может быть location, proxy_pass или другие пользовательские конфигурации. Это нормально, вам нужно только обновить директивы listen и включить сниппеты SSL. Этот блок нужно настроить для поддержки трафика SSL по порту 443, а затем создать новый блок server для обработки трафика по порту 80 и автоматической переадресации трафика на порт 443.</p>
+<p><strong>Примечание</strong>: Во время настройки рекомендуется использовать временный редирект 302. Убедившись в правильности настроек, можно включить постоянный редирект 301.</p>
+<p>В текущем файле обновите директивы listen для поддержки порта 443 и ssl, а затем включите два новых сниппета:</p>
+<p><code>server {</code><br><code>listen 443 ssl;</code><br><code>listen [::]:443 ssl;</code><br><code>include snippets/self-signed.conf;</code><br><br><code>include snippets/ssl-params.conf;</code><br><code>server_name example.com www.example.com;</code><br><code>root /var/www/example.com/html;</code><br><code>index index.html index.htm index.nginx-debian.html;</code><br><code>. . .</code><br><code>}</code></p>
+<p>Затем добавьте второй блок server в этот файл (после закрывающей фигурной скобки (}) первого блока):</p>
+<p><code>. . .</code><br><code>server {</code><br><code>listen 80;</code><br><code>listen [::]:80;</code><br><code>server_name example.com www.example.com;</code><br><code>return 302 https://$server_name$request_uri;</code><br><code>}</code></p>
+<p>Сохраните и закройте файл.</p>
+<h2>4: Постоянный редирект</h2>
+<p>Если шифрование работает должным образом, настройте постоянный редирект вместо временного.</p>
+<p>Откройте файл блока server:</p>
+<p><code>sudo nano /etc/nginx/sites-available/example.com</code></p>
+<p>Найдите в нём return 302 и замените значение строки на return 301.</p>
+<p><code>return 301 https://$server_name$request_uri;</code></p>
+<p>Сохраните и закройте файл.</p>
+<p>Проверьте синтаксис на ошибки:</p>
+<p><code>sudo nginx -t</code></p>
+<p>Если ошибок нет, перезапустите Nginx:</p>
+<p><code>sudo systemctl restart nginx</code></p>
+<h2>&nbsp;</h2>
+<p>&nbsp;</p>
